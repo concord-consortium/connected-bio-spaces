@@ -1,7 +1,7 @@
 {
-  "name": "starter-projects",
+  "name": "connected-bio-spaces",
   "version": "0.0.1",
-  "description": "Concord Consortium starter projects",
+  "description": "Concord Consortium Connected Bio Spaces",
   "main": "index.js",
   "jest": {
     "transform": {
@@ -50,14 +50,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/concord-consortium/starter-projects.git"
+    "url": "git+https://github.com/concord-consortium/connected-bio-spaces.git"
   },
   "author": "Concord Consortium",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/concord-consortium/starter-projects/issues"
+    "url": "https://github.com/concord-consortium/connected-bio-spaces/issues"
   },
-  "homepage": "https://github.com/concord-consortium/starter-projects#readme",
+  "homepage": "https://github.com/concord-consortium/connected-bio-spaces#readme",
   "devDependencies": {
     "@cypress/webpack-preprocessor": "^3.0.0",
     "@types/enzyme": "^3.1.14",
