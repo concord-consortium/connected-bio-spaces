@@ -4,6 +4,8 @@ import { BaseComponent, IBaseProps } from "./base";
 
 import "./app.sass";
 
+import { GridContainerComponent } from "./grid-container";
+
 interface IProps extends IBaseProps {}
 interface IState {}
 
@@ -14,9 +16,9 @@ export class AppComponent extends BaseComponent<IProps, IState> {
   public render() {
     const {ui} = this.stores;
     return (
-      <div className="app">
-        {ui.sampleText}
-      </div>
+      <GridContainerComponent>
+        {ui.showInvestigationModalSelect}
+      </GridContainerComponent>
     );
   }
 }
