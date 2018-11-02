@@ -20,7 +20,7 @@ export class InvestigationPanelComponent extends BaseComponent<IProps, IState> {
         </div>
         <div className="investigation-panel-content">
           <iframe src="https://connected-bio.concord.org/branch/populations-model/"
-                  height="650" width="1120" scrolling="no" frameborder="0">
+                  height="650" width="1120" scrolling="no">
             <p>Your browser does not support iframes.</p>
           </iframe>
         </div>
