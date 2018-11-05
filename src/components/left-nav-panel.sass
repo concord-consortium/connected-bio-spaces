@@ -19,24 +19,23 @@
 .left-nav-panel
   display: flex
   flex-direction: column
-  width: 120px
-  color: #242424
-  background-color: #ffffff
+  width: $left-nav-panel-width
+  background-color: $left-nav-bgcolor
 
 .left-nav-header
-  color: #ffffff
   text-align: center
   padding-top: 8px
   padding-bottom: 8px
   margin-bottom: 3px
-  font-family: Arial, Helvetica, sans-serif
+  color: $left-nav-header-color
+  font-family: $title-font-stack
   font-weight: bold
 
 .left-nav-header-investigate
-  background-color: #49B860
+  background-color: $left-nav-investigate-header-bgcolor
 
 .left-nav-header-collect
-  background-color: #00AAE2
+  background-color: $left-nav-collect-header-bgcolor
 
 .left-nav-button-holder
   padding-top: 6px
@@ -44,37 +43,38 @@
   margin-bottom: 3px
 
 .left-nav-button-holder-investigate
-  background-color: #D2EDD8
+  background-color: $left-nav-investigate-bgcolor
 
 .left-nav-button-holder-collect
-  background-color: #C0EAF8
-  overflow-y: auto
   flex-grow: 1
+  overflow-y: auto
+  background-color: $left-nav-collect-bgcolor
+
 
 .left-nav-button
-  border-style: dashed
-  border-color: #AEAEAE
-  background-color: #EEF9FC
+  text-align: center
   margin: auto
   margin-top: 10px
   margin-bottom: 10px
-  text-align: center
-  color: #AEAEAE
+  border-style: dashed
+  border-color: $button-border-color
+  color: $button-color
+  background-color: $button-bgcolor
 
 .left-nav-button:hover
-  border-color: #ffffff
+  border-color: $button-border-hover-color
 
 .left-nav-button-square
   border-radius: 5px
-  width: 80px
-  height: 60px
-  line-height: 60px
+  width: $button-width
+  height: $button-height
+  line-height: $button-height
 
 .left-nav-button-circle
   border-radius: 40px
-  width: 80px
-  height: 80px
-  line-height: 80px
+  width: $button-width
+  height: $circle-button-height
+  line-height: $circle-button-height
   font-size: 40px
 
 
