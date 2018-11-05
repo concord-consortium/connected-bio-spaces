@@ -7,13 +7,16 @@
   display: flex
   flex-direction: column
   background-color: $left-nav-bgcolor
-  margin-right: 3px;
+  margin-right: $component-margin
 
 .left-nav-header
-  text-align: center
-  padding-top: 8px
-  padding-bottom: 8px
-  margin-bottom: 3px
+  flex-grow: 0
+  flex-shrink: 0
+  flex-basis: $left-nav-header-height
+  display: flex
+  justify-content: center
+  align-items: center
+  margin-bottom: $component-margin
   color: $left-nav-header-color
   font-family: $title-font-stack
   font-weight: bold
@@ -25,11 +28,18 @@
   background-color: $left-nav-collect-header-bgcolor
 
 .left-nav-button-holder
-  padding-top: 6px
-  padding-bottom: 6px
-  margin-bottom: 3px
+  display: flex
+  flex-direction: column
+  align-items: center
+  padding: $double-component-padding
+  margin-bottom: $component-margin
 
 .left-nav-button-holder-investigate
+  flex-grow: 0
+  flex-shrink: 0
+  flex-basis: $left-nav-investigate-height
+  justify-content: center
+  align-items: center
   background-color: $left-nav-investigate-bgcolor
 
 .left-nav-button-holder-collect
@@ -39,9 +49,7 @@
 
 .left-nav-button
   text-align: center
-  margin: auto
-  margin-top: 10px
-  margin-bottom: 10px
+  margin: $double-component-margin
   border-style: dashed
   border-color: $button-border-color
   color: $button-color
@@ -51,13 +59,13 @@
   border-color: $button-border-hover-color
 
 .left-nav-button-square
-  border-radius: 5px
+  border-radius: $square-button-radius
   width: $button-width
   height: $button-height
   line-height: $button-height
 
 .left-nav-button-circle
-  border-radius: 40px
+  border-radius: $circle-button-radius
   width: $button-width
   height: $circle-button-height
   line-height: $circle-button-height
