@@ -1,21 +1,5 @@
 @import vars
 
-/* width */
-::-webkit-scrollbar
-  width: 6px;
-
-/* Track */
-::-webkit-scrollbar-track
-  background: #f1f1f1;
-
-/* Handle */
-::-webkit-scrollbar-thumb
-  background: #7DD4F0;
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover
-  background: #555;
-
 .left-nav-panel
   display: flex
   flex-direction: column
@@ -50,7 +34,6 @@
   overflow-y: auto
   background-color: $left-nav-collect-bgcolor
 
-
 .left-nav-button
   text-align: center
   margin: auto
@@ -76,6 +59,23 @@
   height: $circle-button-height
   line-height: $circle-button-height
   font-size: 40px
+
+/* SCROLLBAR */
+/* width */
+::-webkit-scrollbar
+  width: $scroll-bar-width
+
+/* Track */
+::-webkit-scrollbar-track
+  background: $scroll-bar-bgcolor
+
+/* Handle */
+::-webkit-scrollbar-thumb
+  background: $scroll-bar-thumb-color
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover
+  background: $scroll-bar-hover-color
 
 
 
