@@ -2,30 +2,33 @@
 
 .investigate-dialog
   display: grid
-  grid-template-rows: 50px auto 30px
-  grid-template-columns: 500px
-  grid-gap: 3px
+  grid-template-rows: $investigate-dialog-header-height auto $investigate-dialog-footer-height
+  grid-template-columns: $investigate-dialog-width
+  grid-gap: $component-margin
   justify-content: center
   text-align: center
-  background-color: #ffffff
-  width: 500px
-  height: 420px
-  border: 3px solid white
-  border-radius: 5px
+  background-color: $component-bgcolor
+  width: $investigate-dialog-width
+  height: $investigate-dialog-height
+  border: 3px solid $component-bgcolor
+  border-radius: $dialog-border-radius
 
 .investigate-dialog-header
   display: flex
   grid-column-start: 1
   grid-column-end: 2
-  font-family: Arial, Helvetica, sans-serif
+  font-family: $title-font-stack
   font-weight: bold
-  color: #ffffff
-  background-color: #49B860
+  color: $investigate-dialog-header-color
+  background-color: $investigate-dialog-header-bgcolor
+  border-top-left-radius: $dialog-border-radius
+  border-top-right-radius: $dialog-border-radius
 
 .investigate-dialog-title
   flex-grow: 1
-  text-align: center
-  padding: 15px
+  display: flex
+  justify-content: center
+  align-items: center
 
 .investigate-dialog-close
   width: 25px
@@ -35,11 +38,13 @@
   font-size: 28px
 
 .investigate-dialog-content
-  color: #000000
-  background-color: #D2EDD8
+  color: $investigate-dialog-color
+  background-color: $investigate-dialog-bgcolor
 
 .investigate-dialog-footer
-  background-color: #49B860
+  background-color: $investigate-dialog-header-bgcolor
+  border-bottom-left-radius: $dialog-border-radius
+  border-bottom-right-radius: $dialog-border-radius
 
 .investigate-dialog-message
   margin: 15px
@@ -63,13 +68,14 @@
   background-color: #D8E0B0
   text-align: center
   color: #949494
+  border-radius: $dialog-border-radius
 
 .investigate-dialog-button:hover
   border-color: #ffffff
 
 .investigate-dialog-button-footer
   width: 110px
-  color: #000000
+  color: $investigate-dialog-button-footer-color
   font-size: 11px
   margin-top: 5px
   margin-bottom: 10px
