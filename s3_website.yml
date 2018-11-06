@@ -5,7 +5,7 @@ s3_key_prefix: connected-bio-spaces
 s3_endpoint: us-east-1
 gzip: true
 
-cloudfront_distribution_id: E1YPVV3YLYS4J7
+cloudfront_distribution_id: E2WXV7MP51YFIF
 cloudfront_invalidate_root: true
 cloudfront_wildcard_invalidation: true
 
