@@ -50,13 +50,13 @@ export class InvestigateDialogComponent extends BaseComponent<IProps, IState> {
 
   private handleClickClose = () => {
     const {ui} = this.stores;
-    { ui.setShowInvestigationModalSelect(!ui.showInvestigationModalSelect); }
+    ui.setShowInvestigationModalSelect(!ui.showInvestigationModalSelect);
   }
 
   private handleClickInvestigatePopulation = () => {
     const {ui} = this.stores;
-    { ui.setShowInvestigationPanel(true); }
-    { ui.setShowInvestigationModalSelect(false); }
+    ui.setShowInvestigationPanel(true);
+    ui.setShowInvestigationModalSelect(false);
   }
 
 }
