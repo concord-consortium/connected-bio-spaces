@@ -1,6 +1,7 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { BaseComponent, IBaseProps } from "./base";
+import { ChartTest } from "./charts/chart-test";
 
 import "./two-up-display.sass";
 
@@ -56,6 +57,7 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
           <div className="title">{this.props.rightTitle}</div>
         </div>
         <div className="content">
+          <ChartTest />
           {this.props.rightPanel}
         </div>
       </div>
