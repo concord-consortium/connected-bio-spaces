@@ -7,6 +7,7 @@ import "./app.sass";
 import { TopBarComponent } from "./top-bar";
 import { LeftNavPanelComponent } from "./left-nav-panel";
 import { MainContentComponent } from "./main-content";
+import { urlParams } from "../utilities/url-params";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -16,10 +17,9 @@ interface IState {}
 export class AppComponent extends BaseComponent<IProps, IState> {
 
   public render() {
-    const {ui} = this.stores;
     return (
       <div className="app-container">
-        <TopBarComponent />
+        {urlParams.topBar && <TopBarComponent />}
         <div className="nav-and-content-container">
           <LeftNavPanelComponent />
           <MainContentComponent />

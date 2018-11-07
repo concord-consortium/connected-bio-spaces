@@ -22,6 +22,7 @@ export class AuthoringComponent extends BaseComponent<IProps, IState> {
             title: "Connected Bio Parameters",
             type: "object",
             properties: {
+              topBar: {type: "boolean", title: "Show Top Bar?", default: true},
               appMode: {type: "string", title: "App Mode", default: "dev", enum: [
                 "dev",
                 "authed"
