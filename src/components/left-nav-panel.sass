@@ -1,0 +1,94 @@
+@import vars
+
+.left-nav-panel
+  flex-grow: 0
+  flex-shrink: 0
+  flex-basis: $left-nav-panel-width
+  display: flex
+  flex-direction: column
+  background-color: $left-nav-bgcolor
+  margin-right: $component-margin
+
+  .header
+    flex-grow: 0
+    flex-shrink: 0
+    flex-basis: $left-nav-header-height
+    display: flex
+    justify-content: center
+    align-items: center
+    margin-bottom: $component-margin
+    color: $left-nav-header-color
+    font-family: $title-font-stack
+    font-weight: bold
+
+    &.investigate
+      background-color: $left-nav-investigate-header-bgcolor
+
+    &.collect
+      background-color: $left-nav-collect-header-bgcolor
+
+  .button-holder
+    display: flex
+    flex-direction: column
+    align-items: center
+    padding: $double-component-padding
+    margin-bottom: $component-margin
+
+    &.investigate
+      flex-grow: 0
+      flex-shrink: 0
+      flex-basis: $left-nav-investigate-height
+      justify-content: center
+      align-items: center
+      background-color: $left-nav-investigate-bgcolor
+
+    &.collect
+      flex-grow: 1
+      overflow-y: auto
+      background-color: $left-nav-collect-bgcolor
+
+  .button
+    text-align: center
+    margin: $double-component-margin
+    border-style: dashed
+    border-color: $button-border-color
+    color: $button-color
+    background-color: $button-bgcolor
+    transition: .1s
+
+    &.square
+      border-radius: $square-button-radius
+      width: $button-width
+      height: $button-height
+      line-height: $button-height
+
+    &.circle
+      border-radius: $circle-button-radius
+      width: $button-width
+      height: $circle-button-height
+      line-height: $circle-button-height
+      font-size: 40px
+
+  .button:hover
+    border-color: $button-border-hover-color
+
+
+/* SCROLLBAR */
+/* width */
+::-webkit-scrollbar
+  width: $scroll-bar-width
+
+/* Track */
+::-webkit-scrollbar-track
+  background: $scroll-bar-bgcolor
+
+/* Handle */
+::-webkit-scrollbar-thumb
+  background: $scroll-bar-thumb-color
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover
+  background: $scroll-bar-hover-color
+
+
+

@@ -1,0 +1,33 @@
+@import vars
+
+.top-bar
+  width: 100%
+  height: $top-bar-height
+  margin-bottom: $component-margin
+
+  .container
+    display: flex
+    height: 100%
+
+  .icon-holder
+    flex-grow: 0
+    flex-shrink: 0
+    flex-basis: $left-nav-panel-width
+    display: flex;
+    justify-content: center
+    align-items: center
+    margin-right: $component-margin
+    background-color: $top-bar-icon-bgcolor
+
+  .icon
+    height: 26px
+
+  .title-holder
+    flex-grow: 1
+    display: flex
+    justify-content: center
+    align-items: center
+    color: $top-bar-title-color
+    font-family: $title-font-stack
+    font-weight: bold
+    background-color: $top-bar-title-bgcolor
