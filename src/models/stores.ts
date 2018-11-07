@@ -1,5 +1,9 @@
 import { UIModel, UIModelType } from "./ui";
-import { PopulationsModelType, PopulationsModel } from "./spaces/populations/populations";
+import { PopulationsModelType, createPopulationsModel } from "./spaces/populations/populations";
+
+export type Curriculum = "mouse";
+
+const currentCurriculum = "mouse";
 
 export interface IStores {
   ui: UIModelType;
@@ -14,6 +18,6 @@ export interface ICreateStores {
 export function createStores(params?: ICreateStores): IStores {
   return {
     ui: params && params.ui || UIModel.create({}),
-    populations: params && params.populations || PopulationsModel.create({})
+    populations: params && params.populations || createPopulationsModel(currentCurriculum)
   };
 }
