@@ -9,6 +9,11 @@ import { PopulationsSpaceComponent } from "./spaces/populations-space";
 interface IProps extends IBaseProps {}
 interface IState {}
 
+const SpaceComponents: any = {
+  populations: PopulationsSpaceComponent,
+  none: null
+};
+
 @inject("stores")
 @observer
 export class MainContentComponent extends BaseComponent<IProps, IState> {
@@ -22,13 +27,17 @@ export class MainContentComponent extends BaseComponent<IProps, IState> {
   }
 
   private renderDialog() {
-    const {ui} = this.stores;
-    const {showInvestigationModalSelect} = this.stores.ui;
+    const {showInvestigationModalSelect, investigationPanelSpace} = this.stores.ui;
     const {showInvestigationPanel} = this.stores.ui;
+    console.log("investigationPanelSpace", investigationPanelSpace);
+
+    // stawman code
+    const SpaceComponent = SpaceComponents[investigationPanelSpace];
+
     if (showInvestigationModalSelect) {
       return <InvestigateDialogComponent/>;
-    } else if (showInvestigationPanel) {
-      return <PopulationsSpaceComponent/>;
+    } else if (showInvestigationPanel && SpaceComponent) {
+      return <SpaceComponent/>;
     }
   }
 }
