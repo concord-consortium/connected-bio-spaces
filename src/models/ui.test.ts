@@ -8,24 +8,24 @@ describe("ui model", () => {
   });
 
   it("has default values", () => {
-		expect(ui.showInvestigationModalSelect).toBe(false);
-		expect(ui.showInvestigationPanel).toBe(false);
+    expect(ui.showInvestigationModalSelect).toBe(false);
+    expect(ui.showInvestigationPanel).toBe(false);
   });
 
   it("uses override values", () => {
     ui = UIModel.create({
-			showInvestigationModalSelect: true,
-			showInvestigationPanel: true
+      showInvestigationModalSelect: true,
+      showInvestigationPanel: true
     });
-		expect(ui.showInvestigationModalSelect).toBe(true);
-		expect(ui.showInvestigationPanel).toBe(true);		
+    expect(ui.showInvestigationModalSelect).toBe(true);
+    expect(ui.showInvestigationPanel).toBe(true);
   });
 
   it("sets new values", () => {
-		ui.setShowInvestigationModalSelect(true);
-		expect(ui.showInvestigationModalSelect).toBe(true);
-		ui.setShowInvestigationPanel(true);
-		expect(ui.showInvestigationPanel).toBe(true);		
+    ui.setShowInvestigationModalSelect(true);
+    expect(ui.showInvestigationModalSelect).toBe(true);
+    ui.setShowInvestigationPanel(true);
+    expect(ui.showInvestigationPanel).toBe(true);
   });
 
 });
