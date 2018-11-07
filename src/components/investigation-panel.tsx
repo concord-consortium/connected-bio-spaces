@@ -14,17 +14,17 @@ export class InvestigationPanelComponent extends BaseComponent<IProps, IState> {
   public render() {
     return (
       <div className="investigation-panel">
-        <div className="investigation-panel-header">
-          <div className="investigation-panel-title">Investigate: Population</div>
-          <div className="investigation-panel-close" onClick={this.handleClickClose}>x</div>
+        <div className="header">
+          <div className="title">Investigate: Population</div>
+          <div className="close" onClick={this.handleClickClose}>x</div>
         </div>
-        <div className="investigation-panel-content">
+        <div className="content">
           <iframe src="https://connected-bio.concord.org/branch/populations-model/"
                   height="650" width="1120" scrolling="no">
             <p>Your browser does not support iframes.</p>
           </iframe>
         </div>
-        <div className="investigation-panel-footer"/>
+        <div className="footer"/>
       </div>
     );
   }

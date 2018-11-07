@@ -8,19 +8,24 @@ describe("ui model", () => {
   });
 
   it("has default values", () => {
-    expect(ui.sampleText).toBe("Hello World");
+		expect(ui.showInvestigationModalSelect).toBe(false);
+		expect(ui.showInvestigationPanel).toBe(false);
   });
 
   it("uses override values", () => {
     ui = UIModel.create({
-      sampleText: "foo"
+			showInvestigationModalSelect: true,
+			showInvestigationPanel: true
     });
-    expect(ui.sampleText).toBe("foo");
+		expect(ui.showInvestigationModalSelect).toBe(true);
+		expect(ui.showInvestigationPanel).toBe(true);		
   });
 
   it("sets new values", () => {
-    ui.setSampleText("bar");
-    expect(ui.sampleText).toBe("bar");
+		ui.setShowInvestigationModalSelect(true);
+		expect(ui.showInvestigationModalSelect).toBe(true);
+		ui.setShowInvestigationPanel(true);
+		expect(ui.showInvestigationPanel).toBe(true);		
   });
 
 });

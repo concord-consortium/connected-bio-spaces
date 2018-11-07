@@ -9,68 +9,69 @@
   background-color: $left-nav-bgcolor
   margin-right: $component-margin
 
-.left-nav-header
-  flex-grow: 0
-  flex-shrink: 0
-  flex-basis: $left-nav-header-height
-  display: flex
-  justify-content: center
-  align-items: center
-  margin-bottom: $component-margin
-  color: $left-nav-header-color
-  font-family: $title-font-stack
-  font-weight: bold
+  .header
+    flex-grow: 0
+    flex-shrink: 0
+    flex-basis: $left-nav-header-height
+    display: flex
+    justify-content: center
+    align-items: center
+    margin-bottom: $component-margin
+    color: $left-nav-header-color
+    font-family: $title-font-stack
+    font-weight: bold
 
-.left-nav-header-investigate
-  background-color: $left-nav-investigate-header-bgcolor
+    &.investigate
+      background-color: $left-nav-investigate-header-bgcolor
 
-.left-nav-header-collect
-  background-color: $left-nav-collect-header-bgcolor
+    &.collect
+      background-color: $left-nav-collect-header-bgcolor
 
-.left-nav-button-holder
-  display: flex
-  flex-direction: column
-  align-items: center
-  padding: $double-component-padding
-  margin-bottom: $component-margin
+  .button-holder
+    display: flex
+    flex-direction: column
+    align-items: center
+    padding: $double-component-padding
+    margin-bottom: $component-margin
 
-.left-nav-button-holder-investigate
-  flex-grow: 0
-  flex-shrink: 0
-  flex-basis: $left-nav-investigate-height
-  justify-content: center
-  align-items: center
-  background-color: $left-nav-investigate-bgcolor
+    &.investigate
+      flex-grow: 0
+      flex-shrink: 0
+      flex-basis: $left-nav-investigate-height
+      justify-content: center
+      align-items: center
+      background-color: $left-nav-investigate-bgcolor
 
-.left-nav-button-holder-collect
-  flex-grow: 1
-  overflow-y: auto
-  background-color: $left-nav-collect-bgcolor
+    &.collect
+      flex-grow: 1
+      overflow-y: auto
+      background-color: $left-nav-collect-bgcolor
 
-.left-nav-button
-  text-align: center
-  margin: $double-component-margin
-  border-style: dashed
-  border-color: $button-border-color
-  color: $button-color
-  background-color: $button-bgcolor
-  transition: .1s
+  .button
+    text-align: center
+    margin: $double-component-margin
+    border-style: dashed
+    border-color: $button-border-color
+    color: $button-color
+    background-color: $button-bgcolor
+    transition: .1s
 
-.left-nav-button:hover
-  border-color: $button-border-hover-color
+    &.square
+      border-radius: $square-button-radius
+      width: $button-width
+      height: $button-height
+      line-height: $button-height
 
-.left-nav-button-square
-  border-radius: $square-button-radius
-  width: $button-width
-  height: $button-height
-  line-height: $button-height
+    &.circle
+      border-radius: $circle-button-radius
+      width: $button-width
+      height: $circle-button-height
+      line-height: $circle-button-height
+      font-size: 40px
 
-.left-nav-button-circle
-  border-radius: $circle-button-radius
-  width: $button-width
-  height: $circle-button-height
-  line-height: $circle-button-height
-  font-size: 40px
+  .button:hover
+    border-color: $button-border-hover-color
+
 
 /* SCROLLBAR */
 /* width */

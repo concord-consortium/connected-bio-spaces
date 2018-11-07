@@ -25,13 +25,10 @@ export class MainContentComponent extends BaseComponent<IProps, IState> {
     const {ui} = this.stores;
     const {showInvestigationModalSelect} = this.stores.ui;
     const {showInvestigationPanel} = this.stores.ui;
-    // {return ui.showInvestigationModalSelect ? "true" : "false"}
     if (showInvestigationModalSelect) {
       return <InvestigateDialogComponent/>;
     } else if (showInvestigationPanel) {
       return <InvestigationPanelComponent/>;
-    } else {
-      return <div/>;
     }
   }
 }

@@ -15,11 +15,11 @@ export class TopBarComponent extends BaseComponent<IProps, IState> {
 
     return (
       <div className="top-bar">
-        <div className="top-bar-container">
-          <div className="top-bar-icon-holder">
-            <img src="assets/connected-bio-logo.png" className="top-bar-icon" />
+        <div className="container">
+          <div className="icon-holder">
+            <img src="assets/connected-bio-logo.png" className="icon" />
           </div>
-          <div className="top-bar-title-holder">
+          <div className="title-holder">
             Beach Mice
           </div>
         </div>
