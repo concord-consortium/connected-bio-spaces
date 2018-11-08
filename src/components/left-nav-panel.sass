@@ -46,6 +46,7 @@
       flex-grow: 1
       overflow-y: auto
       background-color: $left-nav-collect-bgcolor
+      margin-bottom: 0px
 
   .button
     text-align: center
@@ -72,6 +73,17 @@
   .button:hover
     border-color: $button-border-hover-color
 
+  .footer
+    flex-grow: 0
+    flex-shrink: 0
+    flex-basis: $left-nav-footer-height
+    display: flex
+    justify-content: center
+    align-items: center
+    margin-bottom: $component-margin
+    color: $left-nav-footer-color
+    background-color: $left-nav-footer-bgcolor
+
 
 /* SCROLLBAR */
 /* width */
@@ -89,6 +101,4 @@
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover
   background: $scroll-bar-hover-color
-
-
 

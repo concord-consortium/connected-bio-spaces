@@ -3,6 +3,7 @@ import * as React from "react";
 import { BaseComponent, IBaseProps } from "./base";
 
 import "./left-nav-panel.sass";
+import { LegendComponent } from "./legend";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -37,6 +38,9 @@ export class LeftNavPanelComponent extends BaseComponent<IProps, IState> {
           <div className="button circle">+</div>
           <div className="button circle">+</div>
           <div className="button circle">+</div>
+        </div>
+        <div className="footer">
+          <LegendComponent/>
         </div>
       </div>
     );
