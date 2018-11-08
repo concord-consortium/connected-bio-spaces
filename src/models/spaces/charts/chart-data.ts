@@ -58,6 +58,19 @@ export const ChartDataModel = types
     },
     get maxA2(): number | undefined {
       return Math.max(...self.data.map(p => p.a2));
+    },
+    get minA1(): number | undefined {
+      return Math.min(...self.data.map(p => p.a1));
+    },
+    get minA2(): number | undefined {
+      return Math.min(...self.data.map(p => p.a2));
+    },
+    get dataAsXY() {
+      const xyData: any = [];
+      self.data.forEach((d) => {
+        xyData.push({ x: d.a1, y: d.a2 });
+      });
+      return xyData;
     }
   }))
   .extend(self => {

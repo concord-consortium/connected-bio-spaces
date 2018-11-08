@@ -1,11 +1,15 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 import { HorizontalBar, Bar } from "react-chartjs-2";
+import { ChartDataModelType } from "../../models/spaces/charts/chart-data";
 
 interface BarProps {
+  chartData: ChartDataModelType;
 }
 
-interface BarState { }
+interface BarState {
+  chartDisplay: any;
+}
 
 const kSampleData = {
   labels: ["January", "February", "March", "April", "May", "June", "July"],
@@ -56,30 +60,91 @@ const kDefaultOptions: any = {
   }
 };
 
-@observer
-export class HorizontalBarChart extends React.Component<BarProps, BarState> {
+const barData = (chartData: ChartDataModelType) => {
+  const kChartData = {
+    labels: chartData.dataLabels,
+    datasets: [
+      {
+        label: "My First dataset",
+        fill: false,
+        backgroundColor: "rgba(75,192,192,0.4)",
+        pointBorderColor: "rgba(75,192,192,1)",
+        pointBackgroundColor: "#fff",
+        pointBorderWidth: 1,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: "rgba(75,192,192,1)",
+        pointHoverBorderColor: "rgba(220,220,220,1)",
+        pointHoverBorderWidth: 2,
+        pointRadius: 1,
+        pointHitRadius: 10,
+        data: chartData.dataA1
+      }
+    ]
+  };
+  return kChartData;
+};
 
+@observer
+export class BarChart extends React.Component<BarProps, BarState> {
+  constructor(props: BarProps) {
+    super(props);
+    const chartDisplay = barData(props.chartData);
+    this.state = {
+      chartDisplay
+    };
+  }
   public render() {
-    const options = kDefaultOptions;
-    const data = kSampleData;
+    const { chartData } = this.props;
+    const { chartDisplay } = this.state;
+
+    const options: any = Object.assign({}, kDefaultOptions, {
+      scales: {
+        xAxes: [{
+          ticks: {
+            min: 0,
+            max: chartData.maxA1
+          },
+          stacked: true
+        }]
+      }
+    });
     return (
-        <HorizontalBar
-          data={data}
+        <Bar
+          data={chartDisplay}
           options={options}
           height={400}
         />
     );
   }
 }
-@observer
-export class BarChart extends React.Component<BarProps, BarState> {
 
+@observer
+export class HorizontalBarChart extends React.Component<BarProps, BarState> {
+  constructor(props: BarProps) {
+    super(props);
+    const chartDisplay = barData(props.chartData);
+    this.state = {
+      chartDisplay
+    };
+  }
   public render() {
-    const options = kDefaultOptions;
-    const data = kSampleData;
+    const { chartData } = this.props;
+    const { chartDisplay } = this.state;
+
+    const options: any = Object.assign({}, kDefaultOptions, {
+      scales: {
+        xAxes: [{
+          ticks: {
+            min: 0,
+            max: chartData.maxA1
+          },
+          stacked: true
+        }]
+      }
+    });
     return (
-        <Bar
-          data={data}
+        <HorizontalBar
+          data={chartDisplay}
           options={options}
           height={400}
         />
