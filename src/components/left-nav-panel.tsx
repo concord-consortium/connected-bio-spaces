@@ -16,21 +16,21 @@ export class LeftNavPanelComponent extends BaseComponent<IProps, IState> {
     return (
       <div className="left-nav-panel">
 
-        <div className="header investigate">
+        <div className="header investigate" >
         Investigate
         </div>
 
         <div className="button-holder investigate">
-          <div className="button square"
+          <div className="button square" data-test="investigate-select-button"
             onClick={this.handleClickInvestigate}>
             select
           </div>
         </div>
 
-        <div className="header collect">
+        <div className="header collect" data-test="backpack">
         Collect
         </div>
-        <div className="button-holder collect">
+        <div className="button-holder collect" data-test="backpack-items">
           <div className="button circle">+</div>
           <div className="button circle">+</div>
           <div className="button circle">+</div>

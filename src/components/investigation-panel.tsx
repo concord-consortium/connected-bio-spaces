@@ -13,14 +13,14 @@ export class InvestigationPanelComponent extends BaseComponent<IProps, IState> {
 
   public render() {
     return (
-      <div className="investigation-panel">
+      <div className="investigation-panel" data-test="investigation-panel">
         <div className="header">
           <div className="title">Investigate: Population</div>
           <div className="close" onClick={this.handleClickClose}>x</div>
         </div>
-        <div className="content">
+        <div className="content" data-test="investigation-content">
           <iframe src="https://connected-bio.concord.org/branch/populations-model/"
-                  height="650" width="1120" scrolling="no">
+                  height="650" width="1120" scrolling="no" data-test="investigation-iframe">
             <p>Your browser does not support iframes.</p>
           </iframe>
         </div>

@@ -15,7 +15,7 @@ export class MainContentComponent extends BaseComponent<IProps, IState> {
 
   public render() {
     return (
-      <div className="main-content">
+      <div className="main-content" data-test="main-content">
         {this.renderDialog()}
       </div>
     );
