@@ -2,7 +2,6 @@
 
 .population-space
   display: flex
-  flex-direction: row
   width: 100%
   height: 100%
   justify-content: center
@@ -13,7 +12,6 @@
   flex-basis: 50%
   display: flex
   flex-direction: column
-  align-items: top
   background-color: $component-bgcolor
   border: $component-border-width solid white
   border-radius: $component-border-radius
@@ -41,6 +39,8 @@
 
     .button
       height: $population-graph-button-icon-height
+      width: $population-graph-button-icon-width
+      fill: $population-graph-button-icon-color
 
   .content
     flex-grow: 1

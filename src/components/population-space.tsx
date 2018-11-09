@@ -34,17 +34,17 @@ export class PopulationSpaceComponent extends BaseComponent<IProps, IState> {
   private RenderRightPanel() {
     const {ui} = this.stores;
     const showPopulationGraph: boolean = ui.showPopulationGraph;
-    const imageName: string = showPopulationGraph ? "assets/button-show-data.png" :
-                                                    "assets/button-show-graph.png";
+    const iconId: string = showPopulationGraph ? "#icon-show-data" : "#icon-show-graph";
     const titleText: string = showPopulationGraph ? "Graph" : "Data";
     const contentText: string = showPopulationGraph ? "Graph goes here" :
                                                      "Data goes here";
     return (
       <div className="population-panel right-abutment">
-
         <div className="header">
           <div className="button-holder" onClick={this.handleClickMode}>
-            <img src={imageName} className="button" />
+            <svg className="button">
+              <use xlinkHref={iconId} />
+            </svg>
           </div>
           <div className="title">{titleText}</div>
         </div>
