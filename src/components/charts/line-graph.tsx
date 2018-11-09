@@ -1,30 +1,22 @@
 import * as React from "react";
-import { Scatter } from "react-chartjs-2";
+import { Scatter, ChartData } from "react-chartjs-2";
 import { observer } from "mobx-react";
 import { ChartDataModelType } from "../../models/spaces/charts/chart-data";
 
-interface LineProps {
+interface ILineProps {
   chartData: ChartDataModelType;
 }
 
-interface LineState {
-  chartDisplay: any;
-}
-
-const chartTitle = {
-  display: true,
-  text: "Sample Line Chart",
-  fontSize: 22
-};
-
-const chartLegend = {
-  display: true,
-  position: "bottom",
-};
-
 const kDefaultOptions: any = {
-  title: chartTitle,
-  legend: chartLegend,
+  title: {
+    display: true,
+    text: "",
+    fontSize: 22
+  },
+  legend: {
+    display: true,
+    position: "bottom",
+  },
   scales: {
     display: false,
     yAxes: [{
@@ -45,28 +37,56 @@ const kDefaultOptions: any = {
   showLines: true
 };
 
+const lineDatasetDefaults: ChartData<any> = {
+  label: "",
+  fill: false,
+  backgroundColor: "rgba(75,192,192,0.4)",
+  pointBorderColor: "rgba(75,192,192,1)",
+  pointBackgroundColor: "#fff",
+  pointBorderWidth: 1,
+  pointHoverRadius: 5,
+  pointHoverBackgroundColor: "rgba(75,192,192,1)",
+  pointHoverBorderColor: "rgba(220,220,220,1)",
+  pointHoverBorderWidth: 2,
+  pointRadius: 1,
+  pointHitRadius: 10,
+  data: [0]
+};
+
+const lineData = (chartData: ChartDataModelType) => {
+  const lineDatasets = [];
+  for (const d of chartData.data) {
+    const dset = Object.assign({}, lineDatasetDefaults, {
+      label: d.name,
+      data: d.dataAsXY
+    });
+    lineDatasets.push(dset);
+  }
+
+  const linePlotData = {
+    labels: chartData.dataLabels,
+    datasets: lineDatasets
+  };
+
+  return linePlotData;
+};
+
 const kEdgePadding = 0.1;
 @observer
-export class LineGraph extends React.Component<LineProps, LineState> {
-  constructor(props: LineProps) {
+export class LineGraph extends React.Component<ILineProps> {
+  constructor(props: ILineProps) {
     super(props);
-    const chartDisplay = this.lineData(props.chartData);
-    this.state = {
-      chartDisplay
-    };
   }
 
   public render() {
     const { chartData } = this.props;
-    const { chartDisplay } = this.state;
+    const chartDisplay = lineData(chartData);
     const graphs: JSX.Element[] = [];
-    const minMaxValues = {
-      minA1: chartData.minA1 || 0,
-      minA2: chartData.minA2 || 0,
-      maxA1: chartData.maxA1 || 100,
-      maxA2: chartData.maxA2 || 100
-    };
+    const minMaxValues = chartData.minMaxAll;
     const options: any = Object.assign({}, kDefaultOptions, {
+      title: {
+        text: chartData.name
+      },
       scales: {
         display: false,
         yAxes: [{
@@ -88,7 +108,6 @@ export class LineGraph extends React.Component<LineProps, LineState> {
         }]
       }
     });
-
     graphs.push(
       <Scatter
         key={3}
@@ -104,30 +123,6 @@ export class LineGraph extends React.Component<LineProps, LineState> {
         {graphs}
       </div>
     );
-  }
-
-  private lineData = (chartData: ChartDataModelType) => {
-    const kChartData = {
-      labels: ["Scatter"],
-      datasets: [
-        {
-          label: "My First dataset",
-          fill: false,
-          backgroundColor: "rgba(75,192,192,0.4)",
-          pointBorderColor: "rgba(75,192,192,1)",
-          pointBackgroundColor: "#fff",
-          pointBorderWidth: 1,
-          pointHoverRadius: 5,
-          pointHoverBackgroundColor: "rgba(75,192,192,1)",
-          pointHoverBorderColor: "rgba(220,220,220,1)",
-          pointHoverBorderWidth: 2,
-          pointRadius: 1,
-          pointHitRadius: 10,
-          data: chartData.dataAsXY
-        }
-      ]
-    };
-    return kChartData;
   }
 }
 

@@ -2,27 +2,40 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { BaseComponent, IBaseProps } from "../base";
 import { Chart, ChartTypes } from "./chart";
-import { ChartDataModel, DataPoint, ChartDataModelType } from "../../models/spaces/charts/chart-data";
+import { ChartDataSetModel, DataPoint, ChartDataSetModelType } from "../../models/spaces/charts/chart-data-set";
+import { ChartDataModel, ChartDataModelType } from "../../models/spaces/charts/chart-data";
 
 interface IProps extends IBaseProps {}
 interface IState {
   chartType: number;
   chartData: ChartDataModelType;
  }
-
+let _interval;
 @inject("stores")
 @observer
 export class ChartTest extends BaseComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
-    const chartData = ChartDataModel.create({
-      name: "Sample Dataset",
+    const chartDataSets = [];
+    chartDataSets.push(ChartDataSetModel.create({
+      name: "Sample Dataset1",
       data: this.addTestDataPoints()
+    }));
+    chartDataSets.push(ChartDataSetModel.create({
+      name: "Sample Dataset2",
+      data: this.addTestDataPoints()
+    }));
+    const chartData: ChartDataModelType = ChartDataModel.create({
+      name: "Samples",
+      data: chartDataSets
     });
-
     this.state = { chartType: ChartTypes.Bar, chartData };
-
   }
+
+  public componentDidMount() {
+     _interval = setInterval(this.rngData, 3000);
+  }
+
   public render() {
     const { chartType, chartData } = this.state;
     return (
@@ -51,13 +64,28 @@ export class ChartTest extends BaseComponent<IProps, IState> {
 
   private addTestDataPoints = () => {
     const points = [];
-    points.push (DataPoint.create({ a1: 65, a2: 75, label: "alpha" }));
-    points.push (DataPoint.create({ a1: 59, a2: 49, label: "bravo" }));
-    points.push (DataPoint.create({ a1: 80, a2: 90, label: "charlie" }));
-    points.push (DataPoint.create({ a1: 81, a2: 29, label: "delta" }));
-    points.push (DataPoint.create({ a1: 56, a2: 36, label: "echo" }));
-    points.push (DataPoint.create({ a1: 55, a2: 25, label: "foxtrot" }));
-    points.push (DataPoint.create({ a1: 40, a2: 18, label: "golf" }));
+    points.push (DataPoint.create({ a1: this.rand(), a2: this.rand(), label: "alpha" }));
+    points.push (DataPoint.create({ a1: this.rand(), a2: this.rand(), label: "bravo" }));
+    points.push (DataPoint.create({ a1: this.rand(), a2: this.rand(), label: "charlie" }));
+    points.push (DataPoint.create({ a1: this.rand(), a2: this.rand(), label: "delta" }));
+    points.push (DataPoint.create({ a1: this.rand(), a2: this.rand(), label: "echo" }));
+    points.push (DataPoint.create({ a1: this.rand(), a2: this.rand(), label: "foxtrot" }));
+    points.push (DataPoint.create({ a1: this.rand(), a2: this.rand(), label: "golf" }));
     return points;
+  }
+
+  private rngData = () => {
+    const { chartData } = this.state;
+    // chartData is an array of chartDataSets
+    for (const cdata of chartData.data) {
+      for (let i = 0; i < cdata.data.length; i++) {
+        cdata.updateData(i, this.rand(), this.rand());
+      }
+    }
+    this.setState({ chartData });
+  }
+
+  private rand = () => {
+    return Math.round(Math.random() * 100);
   }
 }

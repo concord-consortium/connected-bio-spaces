@@ -1,88 +1,48 @@
 import { types, Instance } from "mobx-state-tree";
-
-export interface Color {
-  name: string;
-  hex: string;
-}
-
-export const colors: Color[] = [
-  {name: "Aqua",    hex: "#00FFFF"},
-  {name: "Black",   hex: "#000000"},
-  {name: "Blue",    hex: "#0000FF"},
-  {name: "Fuchsia", hex: "#FF00FF"},
-  {name: "Gray",    hex: "#808080"},
-  {name: "Green",   hex: "#008000"},
-  {name: "Lime",    hex: "#00FF00"},
-  {name: "Maroon",  hex: "#800000"},
-  {name: "Navy",    hex: "#000080"},
-  {name: "Olive",   hex: "#808000"},
-  {name: "Purple",  hex: "#800080"},
-  {name: "Red",     hex: "#FF0000"},
-  {name: "Silver",  hex: "#C0C0C0"},
-  {name: "Teal",    hex: "#008080"},
-  {name: "Yellow",  hex: "#FFFF00"}
-];
-
-export const DataPoint = types
-  .model("DataPoint", {
-    label: types.string,
-    a1: types.number,
-    a2: types.number
-  });
+import { ChartDataSetModel, ChartDataSetModelType } from "./chart-data-set";
 
 export const ChartDataModel = types
   .model("ChartData", {
     name: types.string,
-    data: types.array(DataPoint)
+    data: types.array(ChartDataSetModel)
   })
   .views(self => ({
     // labels for a data point - essential for a bar graph, optional for a line
     get dataLabels() {
-      return self.data.map(p => p.label);
+      if (self.data && self.data.length > 0) {
+        return self.data[0].dataLabels;
+      } else return [];
     },
-    // Axis 1 data, for a line will be point x value, for bar will be quantity
-    get dataA1() {
-      return self.data.map(p => p.a1);
-    },
-    // Axis 2 data for a line will be y value, for a bar will be label
-    get dataA2() {
-      if (self.data.length > 0 && self.data[0].a2) {
-        return self.data.map(p => p.a2);
-      } else {
-        return self.data.map(p => p.label);
-      }
-    },
-    // Determine maximum value of all data points on axis 1
-    get maxA1(): number | undefined {
-      return Math.max(...self.data.map(p => p.a1));
-    },
-    get maxA2(): number | undefined {
-      return Math.max(...self.data.map(p => p.a2));
-    },
-    get minA1(): number | undefined {
-      return Math.min(...self.data.map(p => p.a1));
-    },
-    get minA2(): number | undefined {
-      return Math.min(...self.data.map(p => p.a2));
-    },
-    get dataAsXY() {
-      const xyData: any = [];
+    get minMaxAll() {
+      const maxA1Values: number[] = [];
+      const maxA2Values: number[] = [];
+      const minA1Values: number[] = [];
+      const minA2Values: number[] = [];
+
       self.data.forEach((d) => {
-        xyData.push({ x: d.a1, y: d.a2 });
+        maxA1Values.push(d.maxA1 || 100);
+        maxA2Values.push(d.maxA2 || 100);
+        minA1Values.push(d.minA1 || 0);
+        minA2Values.push(d.minA2 || 0);
       });
-      return xyData;
+
+      return {
+        maxA1: Math.min(...maxA1Values),
+        maxA2: Math.min(...maxA2Values),
+        minA1: Math.min(...minA1Values),
+        minA2: Math.min(...minA2Values),
+      };
     }
   }))
   .extend(self => {
-
     // actions
-    function addPoint(a1: number, a2: number, label: string) {
-      self.data.push({a1, a2, label});
+    function addDataSet(dataSet: ChartDataSetModelType) {
+      self.data.push(dataSet);
     }
 
     return {
       actions: {
-        addPoint
+        addDataSet
       }
     };
   });
