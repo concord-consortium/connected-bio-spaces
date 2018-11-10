@@ -1,13 +1,10 @@
-import { AppMode } from "../models/stores";
 
 export interface QueryParams {
-  appMode?: AppMode;
   topBar?: boolean;
   authoring?: boolean;
 }
 
 export const defaultUrlParams: QueryParams = {
-  appMode: "dev",
   topBar: true,
   authoring: false
 };

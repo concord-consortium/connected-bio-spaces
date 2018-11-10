@@ -9,7 +9,7 @@ import "./index.sass";
 import { urlParams } from "./utilities/url-params";
 import { AuthoringComponent } from "./components/authoring";
 
-const stores = createStores({ appMode: urlParams.appMode });
+const stores = createStores({ });
 
 if (urlParams.authoring) {
   ReactDOM.render((

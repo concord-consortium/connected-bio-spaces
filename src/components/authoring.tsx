@@ -3,7 +3,6 @@ import { BaseComponent, IBaseProps } from "./base";
 
 import "./app.sass";
 import Form, { ISubmitEvent } from "react-jsonschema-form";
-import { AppMode } from "../models/stores";
 import { QueryParams } from "../utilities/url-params";
 
 interface IProps extends IBaseProps {}
@@ -22,11 +21,7 @@ export class AuthoringComponent extends BaseComponent<IProps, IState> {
             title: "Connected Bio Parameters",
             type: "object",
             properties: {
-              topBar: {type: "boolean", title: "Show Top Bar?", default: true},
-              appMode: {type: "string", title: "App Mode", default: "dev", enum: [
-                "dev",
-                "authed"
-              ]}
+              topBar: {type: "boolean", title: "Show Top Bar?", default: true}
             }
           }}
           onSubmit={onSubmit} />
