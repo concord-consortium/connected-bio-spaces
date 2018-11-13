@@ -2,7 +2,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { BaseComponent, IBaseProps } from "../base";
 import { Chart, ChartTypes } from "./chart";
-import { ChartDataSetModel, DataPoint, ChartDataSetModelType } from "../../models/spaces/charts/chart-data-set";
+import { ChartDataSetModel, DataPoint } from "../../models/spaces/charts/chart-data-set";
 import { ChartDataModel, ChartDataModelType } from "../../models/spaces/charts/chart-data";
 
 interface IProps extends IBaseProps {}

@@ -89,7 +89,7 @@ export const ChartDataSetModel = types
 
     function deleteDataPoint(pointIdx: number) {
       if (self.data.length > pointIdx) {
-        self.data.splice(pointIdx);
+        self.data.splice(pointIdx, 1);
       }
     }
 
