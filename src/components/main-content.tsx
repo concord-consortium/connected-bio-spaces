@@ -4,7 +4,7 @@ import { BaseComponent, IBaseProps } from "./base";
 
 import "./main-content.sass";
 import { InvestigateDialogComponent } from "./investigate-dialog";
-import { TwoUpDisplayComponent } from "./two-up-display";
+import { PopulationsSpaceComponent } from "./spaces/populations-space";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -28,7 +28,7 @@ export class MainContentComponent extends BaseComponent<IProps, IState> {
     if (showInvestigationModalSelect) {
       return <InvestigateDialogComponent/>;
     } else if (showInvestigationPanel) {
-      return <TwoUpDisplayComponent/>;
+      return <PopulationsSpaceComponent/>;
     }
   }
 }
