@@ -7,6 +7,10 @@ export const MousePopulationsModel = types
   .model("MousePopulations", {
     environment: "white" as EnvironmentColor,
     numHawks: 2,
+    addMiceByColor: true,
+    percentWhite: 0.5,
+    percentbb: 0.33,
+    percentBb: 0.33,
     showHeteroStack: false,
     showSexStack: false
   })
@@ -30,7 +34,16 @@ export const MousePopulationsModel = types
           buttons.push({
             title: "Add Mice",
             action: (e: any) => {
-              interactive.addInitialMicePopulation(20, true, {white: 0.5, brown: 0.5});
+              if (self.addMiceByColor) {
+                const white = self.percentWhite;
+                const brown = 1 - white;
+                interactive.addInitialMicePopulation(20, true, {white, brown});
+              } else {
+                const bb = self.percentbb;
+                const Bb = self.percentBb;
+                const BB = 1 - bb - Bb;
+                interactive.addInitialMicePopulation(20, false, {bb, Bb, BB});
+              }
             }
           });
 
