@@ -19,7 +19,7 @@ if (urlParams.authoring) {
 } else {
   ReactDOM.render(
     <Provider stores={stores}>
-      <AppComponent />
+      <AppComponent showTopBar={urlParams.topBar} />
     </Provider>,
     document.getElementById("app")
   );
