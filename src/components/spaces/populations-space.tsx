@@ -13,9 +13,6 @@ export class PopulationsSpaceComponent extends BaseComponent<IProps, IState> {
 
   public render() {
     const {ui} = this.stores;
-
-    const dummyPopulationsView = <div>Populations!</div>;
-
     const showPopulationGraph = ui.showPopulationGraph;
     const iconId = showPopulationGraph ? "#icon-show-data" : "#icon-show-graph";
     const graphTitle = showPopulationGraph ? "Graph" : "Data";
@@ -26,7 +23,7 @@ export class PopulationsSpaceComponent extends BaseComponent<IProps, IState> {
     return (
       <TwoUpDisplayComponent
         leftTitle="Investigate: Population"
-        leftPanel={dummyPopulationsView}
+        leftPanel={<PopulationsComponent />}
         rightTitle={graphTitle}
         rightIcon={iconId}
         rightPanel={graphPanel}
