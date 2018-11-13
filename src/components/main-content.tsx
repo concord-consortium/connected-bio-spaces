@@ -29,7 +29,6 @@ export class MainContentComponent extends BaseComponent<IProps, IState> {
   private renderDialog() {
     const {showInvestigationModalSelect, investigationPanelSpace} = this.stores.ui;
     const {showInvestigationPanel} = this.stores.ui;
-    console.log("investigationPanelSpace", investigationPanelSpace);
 
     // stawman code
     const SpaceComponent = SpaceComponents[investigationPanelSpace];

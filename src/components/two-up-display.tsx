@@ -28,7 +28,6 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
   }
 
   private renderLeftPanel() {
-    console.log("rendering left, ", this.props.leftTitle);
     return (
       <div className="two-up-panel left-abutment" data-test="two-up-left-panel">
         <div className="header" data-test="two-up-header">

@@ -1,4 +1,4 @@
-import { Interactive, Environment, ToolButton, Rule, Agent, Events, Species, Rect, Trait } from "populations.js";
+import { Interactive, Environment, Rule, Agent, Events, Species, Rect, Trait } from "populations.js";
 import { MousePopulationsModelType } from "./mouse-populations-model";
 import { getMouseSpecies } from "./mice";
 import { hawkSpecies } from "./hawks";
