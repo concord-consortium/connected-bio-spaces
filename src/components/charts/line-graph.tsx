@@ -55,7 +55,7 @@ const lineData = (chartData: ChartDataModelType) => {
   for (const d of chartData.data) {
     const dset = Object.assign({}, lineDatasetDefaults, {
       label: d.name,
-      data: d.dataAsXY,
+      data: d.timeSeriesXY,
       backgroundColor: "rgba(" + d.colorRGB + ",0.4)",
       borderColor: "rgba(" + d.colorRGB + ",1)",
       pointBorderColor: "rgba(" + d.colorRGB + ",1)",

@@ -6,6 +6,10 @@ export interface Color {
   hex: string;
 }
 
+interface XYPoint {
+  x: number;
+  y: number;
+}
 // As defined in vars.sass, no easy way to get these variables in here
 // so reluctantly duplicating the definitions.
 export const ChartColors: Color[] = [
@@ -30,6 +34,16 @@ function hexToRgb(hex: string) {
     g: parseInt(result[2], 16),
     b: parseInt(result[3], 16)
   } : null;
+}
+
+function timeSeriesSort(a: XYPoint, b: XYPoint) {
+  if (a.x < b.x) {
+    return -1;
+  }
+  if (a.x > b.x) {
+    return 1;
+  }
+  return 0;
 }
 
 export const DataPoint = types
@@ -75,12 +89,21 @@ export const ChartDataSetModel = types
     get minA2(): number | undefined {
       return Math.min(...self.data.map(p => p.a2));
     },
-    // Lines require X and Y coordinates
+    // Lines and scatter plots require X and Y coordinates
     get dataAsXY() {
-      const xyData: any = [];
+      const xyData: XYPoint[] = [];
       self.data.forEach((d) => {
         xyData.push({ x: d.a1, y: d.a2 });
       });
+      return xyData;
+    },
+    // Sort lines in increasing order of X for time-based plots
+    get timeSeriesXY() {
+      const xyData: XYPoint[] = [];
+      self.data.forEach((d) => {
+        xyData.push({ x: d.a1, y: d.a2 });
+      });
+      xyData.sort(timeSeriesSort);
       return xyData;
     },
     get colorRGB(): string {
