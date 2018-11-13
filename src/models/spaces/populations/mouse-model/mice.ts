@@ -3,17 +3,16 @@ import { MousePopulationsModelType } from "./mouse-populations-model";
 
 class Mouse extends BasicAnimal {
   public moving: boolean;
-  public _closestAgents: any[];
+  public _closestAgents: any[] | null;
 
   constructor(args: any) {
     super(args);
     this.label = "Mouse";
     this.moving = false;
-    this._closestAgents = [];
   }
 
   public step() {
-    this._closestAgents = [];
+    this._closestAgents = null;
     this._setSpeedAppropriateForAge();
     this._depleteEnergy();
     if (this.get("age") > this.species.defs.MATURITY_AGE && Math.random() < this.get("mating chance")) {
@@ -28,6 +27,7 @@ class Mouse extends BasicAnimal {
   public makeNewborn() {
     super.makeNewborn();
     this.set("age", Math.round(Math.random() * 10));
+    // if (this.alleles.color && this.alleles.color !==);
 
     // FIXME: Would like to call this.environment here, but it is not being set
     // correctly in populations.js
@@ -121,7 +121,8 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
               { name: "hawks" }
             ]
           }),
-          new Trait({ name: "color", possibleValues: [""], isGenetic: true, isNumeric: false }),
+          new Trait({ name: "color", possibleValues: [""],
+            isGenetic: true, isNumeric: false }),
           new Trait({ name: "vision distance", default: 200 }),
           new Trait({ name: "mating distance", default: 50 }),
           new Trait({ name: "max offspring", default: 3 }),
