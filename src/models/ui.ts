@@ -3,7 +3,8 @@ import { types } from "mobx-state-tree";
 export const UIModel = types
   .model("UI", {
     showInvestigationModalSelect: false,
-    showInvestigationPanel: false
+    showInvestigationPanel: false,
+    showPopulationGraph: false
   })
   .actions((self) => {
     return {
@@ -12,6 +13,9 @@ export const UIModel = types
       },
       setShowInvestigationPanel(val: boolean) {
         self.showInvestigationPanel = val;
+      },
+      setShowPopulationGraph(val: boolean) {
+        self.showPopulationGraph = val;
       }
     };
   });
