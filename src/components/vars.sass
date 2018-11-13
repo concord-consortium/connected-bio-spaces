@@ -20,10 +20,12 @@ $half-margin: $margin / 2
 $double-margin: $margin * 2
 $component-margin: 3px
 $double-component-margin: $component-margin * 2
+$triple-component-margin: $component-margin * 3
 $component-padding: 3px
 $double-component-padding: $component-padding * 2
 $triple-component-padding: $component-padding * 3
-
+$component-border-width: 3px
+$component-border-radius: 5px
 
 //
 // fonts
@@ -35,6 +37,9 @@ $title-font-stack: Arial, Helvetica, sans-serif
 //
 $color-black: #000000
 $color-white: #ffffff
+$color-red: #ff0000
+$color-yellow: #ffff00
+$color-blue: #0000ff
 $color-dark-green: #49B860
 $color-light-green: #D2EDD8
 $color-dark-blue: #00AAE2
@@ -44,6 +49,7 @@ $color-light-blue: #C0EAF8
 $color-gray-blue: #EEF9FC
 $color-dark-gold: #EBB936
 $color-light-gold: #D8E0B0
+$color-mouse-brown: #B18431
 
 $color-gray-36: #242424
 $color-gray-121: #797979
@@ -78,6 +84,14 @@ $left-nav-collect-bgcolor: $color-light-blue
 $left-nav-panel-width: 120px
 $left-nav-header-height: 30px
 $left-nav-investigate-height: 80px
+$left-nav-footer-height: 40px
+$left-nav-footer-color: $color-white
+$left-nav-footer-bgcolor: $color-dark-blue
+$left-nav-legend-circle-size: 6px
+$left-nav-legend-font-size: 10px
+$left-nav-legend-male-color: $color-red
+$left-nav-legend-female-color: $color-yellow
+$left-nav-legend-heterozygote-color: $color-blue
 $scroll-bar-width: 6px
 $scroll-bar-bgcolor: $color-gray-241
 $scroll-bar-thumb-color: $color-medium-blue
@@ -94,7 +108,7 @@ $button-width: 80px
 $button-height: 60px
 $circle-button-height: $button-width
 $circle-button-radius: $button-width / 2
-$square-button-radius: 5px
+$square-button-radius: $component-border-radius
 
 //
 // investigate dialog
@@ -108,11 +122,22 @@ $investigate-dialog-button-bgcolor: $color-light-gold
 $investigate-dialog-button-color: $color-gray-148
 $investigate-dialog-button-footer-color: $color-black
 $investigate-dialog-footer-bgcolor: $color-dark-green
-$dialog-border-radius: 6px
+$dialog-border-radius: $component-border-radius
 $investigate-dialog-height: 420px
 $investigate-dialog-width: 500px
 $investigate-dialog-header-height: 50px
 $investigate-dialog-footer-height: 24px
+
+//
+// two-up display
+//
+$two-up-header-height: 50px
+$two-up-bgcolor: $color-mouse-brown
+$two-up-header-color: $color-mouse-brown
+$two-up-header-bgcolor: $color-dark-gold
+$two-up-graph-button-icon-color: $color-white
+$two-up-graph-button-icon-height: 18px
+$two-up-graph-button-icon-width: $two-up-graph-button-icon-height
 
 $border-color: #FBF8E5
 
