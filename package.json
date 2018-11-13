@@ -71,6 +71,7 @@
     "autoprefixer": "^9.1.5",
     "babel-core": "^6.26.3",
     "babel-jest": "^23.6.0",
+    "canvas-prebuilt": "^1.6.11",
     "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^1.0.0",
     "cypress": "^3.1.1",
