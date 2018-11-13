@@ -13,7 +13,7 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
 
   public render() {
     return (
-      <div className="two-up-display">
+      <div className="two-up-display" data-test="two-up-display">
         {this.renderLeftPanel()}
         {this.renderRightPanel()}
       </div>
@@ -22,11 +22,11 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
 
   private renderLeftPanel() {
     return (
-      <div className="two-up-panel left-abutment">
-        <div className="header">
-          <div className="title">Investigate: Population</div>
+      <div className="two-up-panel left-abutment" data-test="two-up-left-panel">
+        <div className="header" data-test="two-up-header">
+          <div className="title" data-test="two-up-title">Investigate: Population</div>
         </div>
-        <div className="content">content here</div>
+        <div className="content" data-test="two-up-content">content here</div>
       </div>
     );
   }

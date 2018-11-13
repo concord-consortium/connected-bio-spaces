@@ -13,32 +13,34 @@ export class InvestigateDialogComponent extends BaseComponent<IProps, IState> {
 
   public render() {
     return (
-      <div className="investigate-dialog">
+      <div className="investigate-dialog" data-test="investigate-dialogue">
         <div className="header">
-          <div className="title">Investigate</div>
+          <div className="title" data-test="investigate-dialog-title">Investigate</div>
           <div className="close" onClick={this.handleClickClose}>x</div>
         </div>
         <div className="content">
-          <div className="message">Select a [space] to begin your investigation</div>
-          <div className="flex-container">
+          <div className="message" data-test="investigate-dialog-message">
+            Select a [space] to begin your investigation
+          </div>
+          <div className="flex-container" data-test="investigate-options">
             <div className="button-holder" onClick={this.handleClickInvestigatePopulation}>
-              <div className="button">Population</div>
+              <div className="button" data-test="investigate-option-population">Population</div>
               <div className="button-footer">Some descriptive text goes into this space</div>
             </div>
             <div className="button-holder">
-              <div className="button">Breeding</div>
+              <div className="button" data-test="investigate-option-breeding">Breeding</div>
               <div className="button-footer">Some descriptive text goes into this space</div>
             </div>
             <div className="button-holder">
-              <div className="button">Scope/Zoom</div>
+              <div className="button" data-test="investigate-option-scope-zoom">Scope/Zoom</div>
               <div className="button-footer">Some descriptive text goes into this space</div>
             </div>
             <div className="button-holder">
-              <div className="button">Protein/DNA</div>
+              <div className="button" data-test="investigate-option-protein">Protein/DNA</div>
               <div className="button-footer">Some descriptive text goes into this space</div>
             </div>
             <div className="button-holder">
-              <div className="button">Comparison</div>
+              <div className="button" data-test="investigate-option-comparison">Comparison</div>
               <div className="button-footer">Some descriptive text goes into this space</div>
             </div>
           </div>

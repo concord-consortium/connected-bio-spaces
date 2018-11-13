@@ -17,9 +17,9 @@ export class TopBarComponent extends BaseComponent<IProps, IState> {
       <div className="top-bar">
         <div className="container">
           <div className="icon-holder">
-            <img src="assets/connected-bio-logo.png" className="icon" />
+            <img src="assets/connected-bio-logo.png" className="icon" data-test="top-bar-img" />
           </div>
-          <div className="title-holder">
+          <div className="title-holder" data-test="top-bar-title">
             Beach Mice
           </div>
         </div>

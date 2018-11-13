@@ -1,4 +1,5 @@
 context("Test the overall app", () => {
+
   before(() => {
     cy.visit("");
   });
