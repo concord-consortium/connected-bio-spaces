@@ -49,14 +49,14 @@ export function createInteractive(model: MousePopulationsModelType) {
         imagePath: "curriculum/mouse/populations/sandrat-light.png",
         traits: [],
         limit: 100,
-        scatter: ((4 as unknown) as boolean)        // FIXME: type def is wrong
+        scatter: 4
       },
       {
         species: hawkSpecies,
         imagePath: "curriculum/mouse/populations/hawk.png",
         traits: [],
         limit: model.numHawks,
-        scatter: ((model.numHawks as unknown) as boolean)        // FIXME: type def is wrong
+        scatter: model.numHawks
       }
     ],
     toolButtons: [
@@ -96,7 +96,7 @@ export function createInteractive(model: MousePopulationsModelType) {
 
   function copyColorTraitOfRandomMouse(allMice: Agent[]) {
     const randomMouse = allMice[Math.floor(Math.random() * allMice.length)];
-    const alleleString = (randomMouse as any).organism.alleles;        // FIXME: Add to populations type def
+    const alleleString = randomMouse.organism.alleles;
     return new Trait({
       name: "color",
       default: alleleString,

@@ -13,20 +13,32 @@ interface IState {}
 export class PopulationsComponent extends BaseComponent<IProps, IState> {
 
   public render() {
-    const interactive = this.props.stores && this.props.stores.populations.interactive;
+    const populations = this.props.stores && this.props.stores.populations;
 
-    if (interactive) {
+    if (populations) {
       return (
         <div>
-          <PopulationsView interactive={interactive} />
+          <PopulationsView interactive={populations.interactive} />
+          <div className="populations-toolbar">
+            <button onClick={this.handleClickRunButton}>{populations.isPlaying ? "Pause" : "Run"}</button>
+            <button onClick={this.handleClickResetButton}>Reset</button>
+          </div>
         </div>
       );
     }
   }
 
-  private handleClickClose = () => {
-    const {ui} = this.stores;
-    { ui.setShowInvestigationPanel(!ui.setShowInvestigationPanel); }
+  private handleClickRunButton = () => {
+    const populations = this.props.stores && this.props.stores.populations;
+    if (populations) {
+      populations.togglePlay();
+    }
   }
 
+  private handleClickResetButton = () => {
+    const populations = this.props.stores && this.props.stores.populations;
+    if (populations) {
+      populations.reset();
+    }
+  }
 }
