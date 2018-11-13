@@ -1,11 +1,11 @@
-class InvestigateDialogue {
+class InvestigateDialog {
 
-  getInvestigateDialogueTitle() {
-    cy.get('[data-test=investigate-dialogue-title]');
+  getInvestigateDialogTitle() {
+    cy.get('[data-test=investigate-dialog-title]');
   }
 
-  getInvestigateDialogueMessage() {
-    cy.get('[data-test=investigate-dialogue-title]');
+  getInvestigatedialogMessage() {
+    cy.get('[data-test=investigate-dialog-title]');
   }
 
   getInvestigateOptionPopulation() {

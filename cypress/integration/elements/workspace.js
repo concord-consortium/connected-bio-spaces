@@ -1,11 +1,11 @@
 import LeftNav from './elements/LeftNav';
-import ViewBox from './elements/InvestigationDialogue';
+import ViewBox from './elements/InvestigationDialog';
 
 class Workspace{
 
     constructor() {
             this.leftNav = new LeftNav();
-            this.investigationDialogue = new InvestigateDialogue();
+            this.investigationDialog = new InvestigateDialog();
     }
 }
 

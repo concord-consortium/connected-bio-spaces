@@ -24,7 +24,7 @@ context("Test Default Conditions", () => {
 
     it("verifies investigate navigation functionality", () => {
       cy.get('[data-test=investigate-select-button]').click()
-      cy.get('[data-test=investigate-dialogue-message]').should('be.visible');
+      cy.get('[data-test=investigate-dialog-message]').should('be.visible');
     });
   });
 });
