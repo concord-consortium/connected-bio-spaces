@@ -16,6 +16,12 @@ export function createPopulationsModel(curriculumName: Curriculum): PopulationsM
   }
 }
 
+export interface ToolbarButton {
+  title: string;
+  // tslint:disable-next-line:ban-types
+  action: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
 export const PopulationsModel = types
   .model("Populations", {
     model: ModelsUnion,
@@ -34,6 +40,9 @@ export const PopulationsModel = types
       views: {
         get interactive(): Interactive {
           return self.model.interactive;
+        },
+        get toolbarButtons(): ToolbarButton[] {
+          return self.model.toolbarButtons;
         }
       },
       actions: {

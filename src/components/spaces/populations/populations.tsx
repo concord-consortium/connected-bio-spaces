@@ -3,7 +3,7 @@ import * as React from "react";
 import { PopulationsView } from "populations-react";
 import { BaseComponent, IBaseProps } from "../../base";
 
-// import "./investigation-panel.sass";
+import "./populations.sass";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -16,12 +16,17 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
     const populations = this.props.stores && this.props.stores.populations;
 
     if (populations) {
+
+      const buttons = populations.toolbarButtons.map( button =>
+        <button key={button.title} onClick={button.action}>{button.title}</button>
+      );
       return (
         <div>
           <PopulationsView interactive={populations.interactive} />
           <div className="populations-toolbar">
             <button onClick={this.handleClickRunButton}>{populations.isPlaying ? "Pause" : "Run"}</button>
             <button onClick={this.handleClickResetButton}>Reset</button>
+            { buttons }
           </div>
         </div>
       );

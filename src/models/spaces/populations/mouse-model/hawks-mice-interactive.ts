@@ -16,6 +16,23 @@ function createEnvironment(color: EnvironmentColor) {
   });
 }
 
+// all numbers below are floats representing percentages
+interface IInitialColorSpecs {
+  white: number;
+  brown: number;
+}
+interface IInitialGentotypeSpecs {
+  bb: number;
+  Bb: number;
+  BB: number;
+}
+
+export class HawksMiceInteractive extends Interactive {
+  public addInitialMicePopulation: (num: number, byColor: boolean,
+                                    initialSpecs: IInitialColorSpecs | IInitialGentotypeSpecs) => void;
+  public addInitialHawksPopulation: (num: number) => void;
+}
+
 export function createInteractive(model: MousePopulationsModelType) {
   const mouseSpecies = getMouseSpecies(model);
   environmentColor = model.environmentColor;
@@ -40,32 +57,10 @@ export function createInteractive(model: MousePopulationsModelType) {
     }
   ));
 
-  const interactive = new Interactive({
+  const interactive = new HawksMiceInteractive({
     environment: env,
     speedSlider: false,
-    addOrganismButtons: [
-      {
-        species: mouseSpecies,
-        imagePath: "curriculum/mouse/populations/sandrat-light.png",
-        traits: [],
-        limit: 100,
-        scatter: 4
-      },
-      {
-        species: hawkSpecies,
-        imagePath: "curriculum/mouse/populations/hawk.png",
-        traits: [],
-        limit: model.numHawks,
-        scatter: model.numHawks
-      }
-    ],
-    toolButtons: [
-      {
-        type: ToolButton.INFO_TOOL
-      }, {
-        type: ToolButton.CARRY_TOOL
-      }
-    ]
+    showToolbar: false
   });
 
   let addedMice: boolean;
@@ -130,18 +125,10 @@ export function createInteractive(model: MousePopulationsModelType) {
     return createColorTraitByGenotype(alleleString);
   }
 
-  // all numbers below are floats representing percentages
-  interface IInitialColorSpecs {
-    white: number;
-    brown: number;
-  }
-  interface IInitialGentotypeSpecs {
-    bb: number;
-    Bb: number;
-    BB: number;
-  }
   function addInitialMicePopulation(num: number, byColor: true,
                                     initialSpecs: IInitialColorSpecs | IInitialGentotypeSpecs) {
+    if (addedMice) return;
+
     for (let i = 0; i < num; i++) {
       let colorTrait;
       if (byColor && "white" in initialSpecs) {
@@ -171,8 +158,23 @@ export function createInteractive(model: MousePopulationsModelType) {
         ]);
       }
     }
+    if (num > 0) {
+      addedMice = true;
+    }
   }
-  (window as any).addInitialMicePopulation = addInitialMicePopulation;
+  interactive.addInitialMicePopulation = addInitialMicePopulation;
+
+  function addInitialHawksPopulation(num: number) {
+    if (addedHawks) return;
+
+    for (let i = 0; i < num; i++) {
+      addAgent(hawkSpecies, [], []);
+    }
+    if (num > 0) {
+      addedHawks = true;
+    }
+  }
+  interactive.addInitialHawksPopulation = addInitialHawksPopulation;
 
   function setProperty(agents: Agent[], prop: string, val: any) {
     const results = [];
@@ -187,14 +189,9 @@ export function createInteractive(model: MousePopulationsModelType) {
     for (const agent of env.agents) {
       if (agent.species === mouseSpecies) {
         allMice.push(agent);
-      } else {
-        addedHawks = true;
       }
     }
     const numMice = allMice.length;
-    if (!addedMice && numMice > 0) {
-      addedMice = true;
-    }
     if (addedMice && numMice < 5) {
       for (let i = 0; i < 4; i++) {
         addAgent(mouseSpecies, [], [copyColorTraitOfRandomMouse(allMice)]);
