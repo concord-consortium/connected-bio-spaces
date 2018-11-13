@@ -19,7 +19,9 @@ export class InvestigateDialogComponent extends BaseComponent<IProps, IState> {
           <div className="close" onClick={this.handleClickClose}>x</div>
         </div>
         <div className="content">
-          <div className="message" data-test="dialog-message">Select a [space] to begin your investigation</div>
+          <div className="message" data-test="investigate-dialog-message">
+            Select a [space] to begin your investigation
+          </div>
           <div className="flex-container" data-test="investigate-options">
             <div className="button-holder" onClick={this.handleClickInvestigatePopulation}>
               <div className="button" data-test="investigate-option-population">Population</div>
