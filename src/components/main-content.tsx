@@ -10,8 +10,7 @@ interface IProps extends IBaseProps {}
 interface IState {}
 
 const SpaceComponents: any = {
-  populations: PopulationsSpaceComponent,
-  none: null
+  populations: PopulationsSpaceComponent
 };
 
 @inject("stores")
@@ -21,12 +20,12 @@ export class MainContentComponent extends BaseComponent<IProps, IState> {
   public render() {
     return (
       <div className="main-content" data-test="main-content">
-        {this.renderDialog()}
+        {this.renderMainContent()}
       </div>
     );
   }
 
-  private renderDialog() {
+  private renderMainContent() {
     const {showInvestigationModalSelect, investigationPanelSpace} = this.stores.ui;
     const {showInvestigationPanel} = this.stores.ui;
 
@@ -35,7 +34,7 @@ export class MainContentComponent extends BaseComponent<IProps, IState> {
 
     if (showInvestigationModalSelect) {
       return <InvestigateDialogComponent/>;
-    } else if (showInvestigationPanel && SpaceComponent) {
+    } else if (showInvestigationPanel) {
       return <SpaceComponent/>;
     }
   }
