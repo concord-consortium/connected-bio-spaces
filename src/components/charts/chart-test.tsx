@@ -2,7 +2,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { BaseComponent, IBaseProps } from "../base";
 import { Chart, ChartTypes } from "./chart";
-import { ChartDataSetModel, DataPoint } from "../../models/spaces/charts/chart-data-set";
+import { ChartDataSetModel, DataPoint, ChartColors } from "../../models/spaces/charts/chart-data-set";
 import { ChartDataModel, ChartDataModelType } from "../../models/spaces/charts/chart-data";
 
 interface IProps extends IBaseProps {}
@@ -19,11 +19,13 @@ export class ChartTest extends BaseComponent<IProps, IState> {
     const chartDataSets = [];
     chartDataSets.push(ChartDataSetModel.create({
       name: "Sample Dataset1",
-      data: this.addTestDataPoints()
+      data: this.addTestDataPoints(),
+      color: ChartColors[0].hex
     }));
     chartDataSets.push(ChartDataSetModel.create({
       name: "Sample Dataset2",
-      data: this.addTestDataPoints()
+      data: this.addTestDataPoints(),
+      color: ChartColors[1].hex
     }));
     const chartData: ChartDataModelType = ChartDataModel.create({
       name: "Samples",

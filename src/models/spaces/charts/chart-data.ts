@@ -1,5 +1,5 @@
 import { types, Instance } from "mobx-state-tree";
-import { ChartDataSetModel, ChartDataSetModelType } from "./chart-data-set";
+import { ChartDataSetModel, ChartDataSetModelType, ChartColors } from "./chart-data-set";
 
 export const ChartDataModel = types
   .model("ChartData", {
@@ -32,6 +32,9 @@ export const ChartDataModel = types
         minA1: Math.min(...minA1Values),
         minA2: Math.min(...minA2Values),
       };
+    },
+    get nextDataSeriesColor() {
+      return ChartColors[self.data.length];
     }
   }))
   .extend(self => {

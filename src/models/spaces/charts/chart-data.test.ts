@@ -1,5 +1,5 @@
 import { ChartDataModel, ChartDataModelType } from "./chart-data";
-import { ChartDataSetModel, DataPoint, ChartDataSetModelType } from "./chart-data-set";
+import { ChartDataSetModel, DataPoint, ChartColors } from "./chart-data-set";
 
 describe("chart data model", () => {
   let chart: ChartDataModelType;
@@ -13,7 +13,8 @@ describe("chart data model", () => {
 
     chartDataSets.push(ChartDataSetModel.create({
       name: "Sample Dataset1",
-      data: points
+      data: points,
+      color: ChartColors[0].hex
     }));
 
     chart = ChartDataModel.create({
@@ -69,7 +70,8 @@ describe("chart data model", () => {
 
     chart.addDataSet(ChartDataSetModel.create({
       name: "Sample Dataset2",
-      data: points
+      data: points,
+      color: ChartColors[1].hex
     }));
 
     expect(chart.data.length).toEqual(2);
