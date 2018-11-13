@@ -2,18 +2,18 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { BaseComponent, IBaseProps } from "./base";
 
-import "./population-space.sass";
+import "./two-up-display.sass";
 
 interface IProps extends IBaseProps {}
 interface IState {}
 
 @inject("stores")
 @observer
-export class PopulationSpaceComponent extends BaseComponent<IProps, IState> {
+export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
 
   public render() {
     return (
-      <div className="population-space">
+      <div className="two-up-display">
         {this.renderLeftPanel()}
         {this.renderRightPanel()}
       </div>
@@ -22,7 +22,7 @@ export class PopulationSpaceComponent extends BaseComponent<IProps, IState> {
 
   private renderLeftPanel() {
     return (
-      <div className="population-panel left-abutment">
+      <div className="two-up-panel left-abutment">
         <div className="header">
           <div className="title">Investigate: Population</div>
         </div>
@@ -39,7 +39,7 @@ export class PopulationSpaceComponent extends BaseComponent<IProps, IState> {
     const contentText: string = showPopulationGraph ? "Graph goes here" :
                                                      "Data goes here";
     return (
-      <div className="population-panel right-abutment">
+      <div className="two-up-panel right-abutment">
         <div className="header">
           <div className="button-holder" onClick={this.handleClickMode}>
             <svg className="button">
