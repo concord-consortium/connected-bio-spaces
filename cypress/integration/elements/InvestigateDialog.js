@@ -27,3 +27,4 @@ class InvestigateDialog {
   getInvestigateOptionComparison() {
     cy.get('[data-test=investigate-option-comparison]');
   }
+}
