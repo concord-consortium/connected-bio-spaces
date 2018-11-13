@@ -14,13 +14,13 @@ export class PopulationSpaceComponent extends BaseComponent<IProps, IState> {
   public render() {
     return (
       <div className="population-space">
-        {this.RenderLeftPanel()}
-        {this.RenderRightPanel()}
+        {this.renderLeftPanel()}
+        {this.renderRightPanel()}
       </div>
     );
   }
 
-  private RenderLeftPanel() {
+  private renderLeftPanel() {
     return (
       <div className="population-panel left-abutment">
         <div className="header">
@@ -31,7 +31,7 @@ export class PopulationSpaceComponent extends BaseComponent<IProps, IState> {
     );
   }
 
-  private RenderRightPanel() {
+  private renderRightPanel() {
     const {ui} = this.stores;
     const showPopulationGraph: boolean = ui.showPopulationGraph;
     const iconId: string = showPopulationGraph ? "#icon-show-data" : "#icon-show-graph";
