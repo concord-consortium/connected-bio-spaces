@@ -56,53 +56,46 @@ export const DataPoint = types
 export const ChartDataSetModel = types
   .model("ChartDataSet", {
     name: types.string,
-    data: types.array(DataPoint),
+    dataPoints: types.array(DataPoint),
     color: types.string
   })
   .views(self => ({
     // labels for a data point - essential for a bar graph, optional for a line
     get dataLabels() {
-      return self.data.map(p => p.label);
+      return self.dataPoints.map(p => p.label);
     },
     // Axis 1 data, for a line will be point x value, for bar will be quantity
     get dataA1() {
-      return self.data.map(p => p.a1);
+      return self.dataPoints.map(p => p.a1);
     },
     // Axis 2 data for a line will be y value, for a bar will be label
     get dataA2() {
-      if (self.data.length > 0 && self.data[0].a2) {
-        return self.data.map(p => p.a2);
+      if (self.dataPoints.length > 0 && self.dataPoints[0].a2) {
+        return self.dataPoints.map(p => p.a2);
       } else {
-        return self.data.map(p => p.label);
+        return self.dataPoints.map(p => p.label);
       }
     },
     // Determine minimum and maximum values on each axis
     get maxA1(): number | undefined {
-      return Math.max(...self.data.map(p => p.a1));
+      return Math.max(...self.dataPoints.map(p => p.a1));
     },
     get maxA2(): number | undefined {
-      return Math.max(...self.data.map(p => p.a2));
+      return Math.max(...self.dataPoints.map(p => p.a2));
     },
     get minA1(): number | undefined {
-      return Math.min(...self.data.map(p => p.a1));
+      return Math.min(...self.dataPoints.map(p => p.a1));
     },
     get minA2(): number | undefined {
-      return Math.min(...self.data.map(p => p.a2));
+      return Math.min(...self.dataPoints.map(p => p.a2));
     },
     // Lines and scatter plots require X and Y coordinates
     get dataAsXY() {
-      const xyData: XYPoint[] = [];
-      self.data.forEach((d) => {
-        xyData.push({ x: d.a1, y: d.a2 });
-      });
-      return xyData;
+      return self.dataPoints.map(d => ({x: d.a1, y: d.a2}));
     },
     // Sort lines in increasing order of X for time-based plots
     get timeSeriesXY() {
-      const xyData: XYPoint[] = [];
-      self.data.forEach((d) => {
-        xyData.push({ x: d.a1, y: d.a2 });
-      });
+      const xyData = self.dataPoints.map(d => ({x: d.a1, y: d.a2}));
       xyData.sort(timeSeriesSort);
       return xyData;
     },
@@ -118,19 +111,19 @@ export const ChartDataSetModel = types
   .extend(self => {
     // actions
     function addPoint(a1: number, a2: number, label: string) {
-      self.data.push({a1, a2, label});
+      self.dataPoints.push({a1, a2, label});
     }
 
     function updateData(pointIdx: number, newValA1: number, newValA2: number) {
-      if (self.data[pointIdx]) {
-        self.data[pointIdx].a1 = newValA1;
-        self.data[pointIdx].a2 = newValA2;
+      if (self.dataPoints[pointIdx]) {
+        self.dataPoints[pointIdx].a1 = newValA1;
+        self.dataPoints[pointIdx].a2 = newValA2;
       }
     }
 
     function deleteDataPoint(pointIdx: number) {
-      if (self.data.length > pointIdx) {
-        self.data.splice(pointIdx, 1);
+      if (self.dataPoints.length > pointIdx) {
+        self.dataPoints.splice(pointIdx, 1);
       }
     }
 

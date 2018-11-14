@@ -13,13 +13,13 @@ describe("chart data model", () => {
 
     chartDataSets.push(ChartDataSetModel.create({
       name: "Sample Dataset1",
-      data: points,
+      dataPoints: points,
       color: ChartColors[0].hex
     }));
 
     chart = ChartDataModel.create({
       name: "Samples",
-      data: chartDataSets
+      dataSets: chartDataSets
     });
   });
 
@@ -36,7 +36,7 @@ describe("chart data model", () => {
   });
 
   it("can produce coordinate data", () => {
-    expect(chart.data[0].dataAsXY[0]).toEqual({ x: 0, y: 10 });
+    expect(chart.dataSets[0].dataAsXY[0]).toEqual({ x: 0, y: 10 });
   });
 
   it("can produce label data", () => {
@@ -44,22 +44,22 @@ describe("chart data model", () => {
   });
 
   it("can add new data", () => {
-    chart.data[0].addPoint(60, 75, "delta");
+    chart.dataSets[0].addPoint(60, 75, "delta");
 
-    expect(chart.data[0].data.length).toEqual(4);
-    expect(chart.data[0].dataAsXY[3]).toEqual({ x: 60, y: 75 });
+    expect(chart.dataSets[0].dataPoints.length).toEqual(4);
+    expect(chart.dataSets[0].dataAsXY[3]).toEqual({ x: 60, y: 75 });
   });
 
   it("can update data", () => {
-    chart.data[0].updateData(0, 0, 5);
-    expect(chart.data[0].dataAsXY[0]).toEqual({ x: 0, y: 5 });
+    chart.dataSets[0].updateData(0, 0, 5);
+    expect(chart.dataSets[0].dataAsXY[0]).toEqual({ x: 0, y: 5 });
   });
 
   it("can delete data", () => {
-    chart.data[0].deleteDataPoint(1);
+    chart.dataSets[0].deleteDataPoint(1);
 
-    expect(chart.data[0].data.length).toEqual(2);
-    expect(chart.data[0].dataAsXY[1]).toEqual({ x: 50, y: 70 });
+    expect(chart.dataSets[0].dataPoints.length).toEqual(2);
+    expect(chart.dataSets[0].dataAsXY[1]).toEqual({ x: 50, y: 70 });
   });
 
   it("can store multiple data sets", () => {
@@ -70,13 +70,13 @@ describe("chart data model", () => {
 
     chart.addDataSet(ChartDataSetModel.create({
       name: "Sample Dataset2",
-      data: points,
+      dataPoints: points,
       color: ChartColors[1].hex
     }));
 
-    expect(chart.data.length).toEqual(2);
-    expect(chart.data[1].data.length).toEqual(3);
-    expect(chart.data[1].dataAsXY[1]).toEqual({ x: 20, y: 15 });
+    expect(chart.dataSets.length).toEqual(2);
+    expect(chart.dataSets[1].dataPoints.length).toEqual(3);
+    expect(chart.dataSets[1].dataAsXY[1]).toEqual({ x: 20, y: 15 });
 
   });
 });

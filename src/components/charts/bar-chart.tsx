@@ -57,13 +57,13 @@ const barDatasetDefaults: ChartData<any> = {
 
 const barData = (chartData: ChartDataModelType) => {
   const barDatasets = [];
-  for (const d of chartData.data) {
+  for (const d of chartData.dataSets) {
     const dset = Object.assign({}, barDatasetDefaults, {
       label: d.name,
       data: d.dataA1,
-      backgroundColor: "rgba(" + d.colorRGB + ",0.4)",
-      pointBorderColor: "rgba(" + d.colorRGB + ",1)",
-      pointHoverBackgroundColor: "rgba(" + d.colorRGB + ",1)"
+      backgroundColor: `rgba(${d.colorRGB},0.4)`,
+      pointBorderColor: `rgba(${d.colorRGB},1)`,
+      pointHoverBackgroundColor: `rgba(${d.colorRGB},1)`
     });
     barDatasets.push(dset);
   }

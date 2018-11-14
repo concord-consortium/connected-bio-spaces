@@ -61,12 +61,12 @@ export const PopulationsModel = types
           const chartDataSets = [];
           chartDataSets.push(ChartDataSetModel.create({
             name: "Sample Dataset",
-            data: points,
+            dataPoints: points,
             color: ChartColors[0].hex
           }));
           const chartData: ChartDataModelType = ChartDataModel.create({
             name: "Samples",
-            data: chartDataSets
+            dataSets: chartDataSets
           });
           return chartData;
         }

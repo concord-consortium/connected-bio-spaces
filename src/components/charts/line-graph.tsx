@@ -54,15 +54,15 @@ const lineDatasetDefaults: ChartData<any> = {
 
 const lineData = (chartData: ChartDataModelType) => {
   const lineDatasets = [];
-  for (const d of chartData.data) {
+  for (const d of chartData.dataSets) {
     const dset = Object.assign({}, lineDatasetDefaults, {
       label: d.name,
       data: d.timeSeriesXY,
-      backgroundColor: "rgba(" + d.colorRGB + ",0.4)",
-      borderColor: "rgba(" + d.colorRGB + ",1)",
-      pointBorderColor: "rgba(" + d.colorRGB + ",1)",
-      pointHoverBackgroundColor: "rgba(" + d.colorRGB + ",1)",
-      pointHoverBorderColor: "rgba(" + d.colorRGB + ",1)",
+      backgroundColor: `rgba(${d.colorRGB},0.4)`,
+      borderColor: `rgba(${d.colorRGB},1)`,
+      pointBorderColor: `rgba(${d.colorRGB},1)`,
+      pointHoverBackgroundColor: `rgba(${d.colorRGB},1)`,
+      pointHoverBorderColor: `rgba(${d.colorRGB},1)`,
     });
     lineDatasets.push(dset);
   }

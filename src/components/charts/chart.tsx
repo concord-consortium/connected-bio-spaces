@@ -2,16 +2,16 @@ import * as React from "react";
 import { observer } from "mobx-react";
 import { HorizontalBarChart, BarChart } from "./bar-chart";
 import { LineGraph } from "./line-graph";
-import { ChartDataModel, ChartDataModelType } from "../../models/spaces/charts/chart-data";
+import { ChartDataModelType } from "../../models/spaces/charts/chart-data";
 
 import "./chart.sass";
 
-export const ChartTypes = {Line: 0, HorizontalBar: 1, Bar: 2};
+export type ChartType = "line" | "bar" | "horizontalBar";
 
 interface ChartProps {
   title: string;
   chartData: ChartDataModelType;
-  chartType: number;
+  chartType: ChartType;
   width?: number;
   height?: number;
 }
@@ -26,13 +26,13 @@ export class Chart extends React.Component<ChartProps, ChartState> {
     return (
       <div className="chart-container">
         <div className="chart-display">
-          {chartType === ChartTypes.Line &&
+          {chartType === "line" &&
             <LineGraph chartData={chartData} />
           }
-          {chartType === ChartTypes.HorizontalBar &&
+          {chartType === "horizontalBar" &&
             <HorizontalBarChart chartData={chartData} />
           }
-          {chartType === ChartTypes.Bar &&
+          {chartType === "bar" &&
             <BarChart chartData={chartData} />
           }
         </div>

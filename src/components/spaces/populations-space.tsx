@@ -3,7 +3,7 @@ import * as React from "react";
 import { BaseComponent, IBaseProps } from "../base";
 import { TwoUpDisplayComponent } from "../two-up-display";
 import { PopulationsComponent } from "./populations/populations";
-import { Chart, ChartTypes } from "../charts/chart";
+import { Chart, ChartType } from "../charts/chart";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -19,7 +19,7 @@ export class PopulationsSpaceComponent extends BaseComponent<IProps, IState> {
     const graphTitle = showPopulationGraph ? "Graph" : "Data";
     const contentText = showPopulationGraph ? "Graph goes here" :
                                                      "Data goes here";
-    const graphPanel = <Chart title="Chart Test" chartData={populations.currentData} chartType={ChartTypes.Line} />;
+    const graphPanel = <Chart title="Chart Test" chartData={populations.currentData} chartType={"line"} />;
 
     return (
       <TwoUpDisplayComponent

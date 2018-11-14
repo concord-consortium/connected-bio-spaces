@@ -4,13 +4,13 @@ import { ChartDataSetModel, ChartDataSetModelType, ChartColors } from "./chart-d
 export const ChartDataModel = types
   .model("ChartData", {
     name: types.string,
-    data: types.array(ChartDataSetModel)
+    dataSets: types.array(ChartDataSetModel)
   })
   .views(self => ({
     // labels for a data point - essential for a bar graph, optional for a line
     get dataLabels() {
-      if (self.data && self.data.length > 0) {
-        return self.data[0].dataLabels;
+      if (self.dataSets && self.dataSets.length > 0) {
+        return self.dataSets[0].dataLabels;
       } else return [];
     },
     get minMaxAll() {
@@ -19,7 +19,7 @@ export const ChartDataModel = types
       const minA1Values: number[] = [];
       const minA2Values: number[] = [];
 
-      self.data.forEach((d) => {
+      self.dataSets.forEach((d) => {
         maxA1Values.push(d.maxA1 || 100);
         maxA2Values.push(d.maxA2 || 100);
         minA1Values.push(d.minA1 || 0);
@@ -34,13 +34,13 @@ export const ChartDataModel = types
       };
     },
     get nextDataSeriesColor() {
-      return ChartColors[self.data.length];
+      return ChartColors[self.dataSets.length];
     }
   }))
   .extend(self => {
     // actions
     function addDataSet(dataSet: ChartDataSetModelType) {
-      self.data.push(dataSet);
+      self.dataSets.push(dataSet);
     }
 
     return {
