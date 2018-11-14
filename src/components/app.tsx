@@ -8,7 +8,9 @@ import { TopBarComponent } from "./top-bar";
 import { LeftNavPanelComponent } from "./left-nav-panel";
 import { MainContentComponent } from "./main-content";
 
-interface IProps extends IBaseProps {}
+interface IProps extends IBaseProps {
+  showTopBar?: boolean;
+}
 interface IState {}
 
 @inject("stores")
@@ -16,10 +18,9 @@ interface IState {}
 export class AppComponent extends BaseComponent<IProps, IState> {
 
   public render() {
-    const {ui} = this.stores;
     return (
       <div className="app-container">
-        <TopBarComponent />
+        {this.props.showTopBar && <TopBarComponent />}
         <div className="nav-and-content-container">
           <LeftNavPanelComponent />
           <MainContentComponent />

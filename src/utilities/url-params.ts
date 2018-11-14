@@ -1,17 +1,23 @@
-import { parse } from "query-string";
-import { AppMode } from "../models/stores";
 
 export interface QueryParams {
-  // appMode is "authed", "test" or "dev" with the default of dev
-  appMode?: AppMode;
+  topBar?: boolean;
+  authoring?: boolean;
 }
 
-const params = parse(location.search);
-// allows use of ?demo for url
-params.demo = typeof params.demo !== "undefined";
-
-export const DefaultUrlParams: QueryParams = {
-  appMode: "dev",
+export const defaultUrlParams: QueryParams = {
+  topBar: true,
+  authoring: false
 };
+
+let params = defaultUrlParams;
+try {
+  const queryString = location.search.length > 1 ? decodeURIComponent(location.search.substring(1)) : "{}";
+  params = Object.assign(defaultUrlParams, JSON.parse(queryString));
+} catch (e) {
+  // allows use of ?authoring for url
+  if (location.search === "?authoring") {
+    params.authoring = true;
+  }
+}
 
 export const urlParams: QueryParams = params;
