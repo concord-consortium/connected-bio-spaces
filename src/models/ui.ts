@@ -1,10 +1,13 @@
 import { types } from "mobx-state-tree";
 
+export type Spaces = "populations";     // eventually a union of all the spaces
+
 export const UIModel = types
   .model("UI", {
     showInvestigationModalSelect: false,
     showInvestigationPanel: false,
-    showPopulationGraph: false
+    showPopulationGraph: false,
+    investigationPanelSpace: "populations"
   })
   .actions((self) => {
     return {
@@ -16,6 +19,9 @@ export const UIModel = types
       },
       setShowPopulationGraph(val: boolean) {
         self.showPopulationGraph = val;
+      },
+      setInvestigationPanelSpace(space: Spaces) {
+        self.investigationPanelSpace = space;
       }
     };
   });

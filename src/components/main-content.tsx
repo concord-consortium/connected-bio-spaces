@@ -4,10 +4,14 @@ import { BaseComponent, IBaseProps } from "./base";
 
 import "./main-content.sass";
 import { InvestigateDialogComponent } from "./investigate-dialog";
-import { TwoUpDisplayComponent } from "./two-up-display";
+import { PopulationsSpaceComponent } from "./spaces/populations-space";
 
 interface IProps extends IBaseProps {}
 interface IState {}
+
+const SpaceComponents: any = {
+  populations: PopulationsSpaceComponent
+};
 
 @inject("stores")
 @observer
@@ -16,19 +20,22 @@ export class MainContentComponent extends BaseComponent<IProps, IState> {
   public render() {
     return (
       <div className="main-content" data-test="main-content">
-        {this.renderDialog()}
+        {this.renderMainContent()}
       </div>
     );
   }
 
-  private renderDialog() {
-    const {ui} = this.stores;
-    const {showInvestigationModalSelect} = this.stores.ui;
+  private renderMainContent() {
+    const {showInvestigationModalSelect, investigationPanelSpace} = this.stores.ui;
     const {showInvestigationPanel} = this.stores.ui;
+
+    // stawman code
+    const SpaceComponent = SpaceComponents[investigationPanelSpace];
+
     if (showInvestigationModalSelect) {
       return <InvestigateDialogComponent/>;
     } else if (showInvestigationPanel) {
-      return <TwoUpDisplayComponent/>;
+      return <SpaceComponent/>;
     }
   }
 }
