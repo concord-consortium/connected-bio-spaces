@@ -68,6 +68,8 @@
     "@types/react": "^16.4.14",
     "@types/react-dom": "^16.0.8",
     "@types/uuid": "^3.4.4",
+    "@types/react-jsonschema-form": "^1.0.11",
+    "@types/chart.js": "^2.7.40",
     "autoprefixer": "^9.1.5",
     "babel-core": "^6.26.3",
     "babel-jest": "^23.6.0",
@@ -103,8 +105,6 @@
     "webpack-dev-server": "^3.1.9"
   },
   "dependencies": {
-    "@types/react-jsonschema-form": "^1.0.11",
-    "@types/chart.js": "^2.7.40",
     "chart.js": "^2.7.3",
     "immutable": "^3.8.2",
     "lodash": "^4.17.11",
