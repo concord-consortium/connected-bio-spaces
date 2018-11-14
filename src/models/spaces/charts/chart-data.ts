@@ -27,8 +27,8 @@ export const ChartDataModel = types
       });
 
       return {
-        maxA1: Math.min(...maxA1Values),
-        maxA2: Math.min(...maxA2Values),
+        maxA1: Math.max(...maxA1Values),
+        maxA2: Math.max(...maxA2Values),
         minA1: Math.min(...minA1Values),
         minA2: Math.min(...minA2Values),
       };

@@ -27,13 +27,13 @@ export class Chart extends React.Component<ChartProps, ChartState> {
       <div className="chart-container">
         <div className="chart-display">
           {chartType === "line" &&
-            <LineGraph chartData={chartData} />
+            <LineGraph chartData={chartData} width={this.props.width} height={this.props.height}/>
           }
           {chartType === "horizontalBar" &&
-            <HorizontalBarChart chartData={chartData} />
+            <HorizontalBarChart chartData={chartData} width={this.props.width} height={this.props.height}/>
           }
           {chartType === "bar" &&
-            <BarChart chartData={chartData} />
+            <BarChart chartData={chartData} width={this.props.width} height={this.props.height}/>
           }
         </div>
       </div>

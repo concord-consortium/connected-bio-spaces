@@ -2,6 +2,7 @@ import * as React from "react";
 import { observer } from "mobx-react";
 import { HorizontalBar, Bar, ChartData } from "react-chartjs-2";
 import { ChartDataModelType } from "../../models/spaces/charts/chart-data";
+import { ChartOptions } from "chart.js";
 
 interface IBarProps {
   chartData: ChartDataModelType;
@@ -9,7 +10,7 @@ interface IBarProps {
   height?: number;
 }
 
-const defaultOptions: any = {
+const defaultOptions: ChartOptions = {
   title: {
     display: true,
     text: "",
@@ -17,14 +18,7 @@ const defaultOptions: any = {
   },
   legend: {
     display: true,
-    position: "bottom",
-    labels: {
-      filter: (legendItem: any, chartData: any) => {
-        // Hidden labels, like for "extra" bars, are marked with a "#"
-        return legendItem.text.indexOf("#") === -1;
-      },
-      boxWidth: 50
-    }
+    position: "bottom"
   },
   scales: {
     xAxes: [{
@@ -85,7 +79,7 @@ export class BarChart extends React.Component<IBarProps> {
   public render() {
     const { chartData, width, height } = this.props;
     const chartDisplay = barData(chartData);
-    const options: any = Object.assign({}, defaultOptions, {
+    const options: ChartOptions = Object.assign({}, defaultOptions, {
       scales: {
         xAxes: [{
           ticks: {
@@ -117,7 +111,7 @@ export class HorizontalBarChart extends React.Component<IBarProps> {
   public render() {
     const { chartData, width, height } = this.props;
     const chartDisplay = barData(chartData);
-    const options: any = Object.assign({}, defaultOptions, {
+    const options: ChartOptions = Object.assign({}, defaultOptions, {
       scales: {
         xAxes: [{
           ticks: {

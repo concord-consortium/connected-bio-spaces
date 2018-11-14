@@ -2,6 +2,7 @@ import * as React from "react";
 import { Scatter, ChartData } from "react-chartjs-2";
 import { observer } from "mobx-react";
 import { ChartDataModelType } from "../../models/spaces/charts/chart-data";
+import { ChartOptions } from "chart.js";
 
 interface ILineProps {
   chartData: ChartDataModelType;
@@ -9,7 +10,7 @@ interface ILineProps {
   height?: number;
 }
 
-const defaultOptions: any = {
+const defaultOptions: ChartOptions = {
   title: {
     display: true,
     text: "",
@@ -87,7 +88,7 @@ export class LineGraph extends React.Component<ILineProps> {
     const chartDisplay = lineData(chartData);
     const graphs: JSX.Element[] = [];
     const minMaxValues = chartData.minMaxAll;
-    const options: any = Object.assign({}, defaultOptions, {
+    const options: ChartOptions = Object.assign({}, defaultOptions, {
       title: {
         text: chartData.name
       },
