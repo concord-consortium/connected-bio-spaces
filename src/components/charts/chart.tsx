@@ -12,6 +12,8 @@ interface ChartProps {
   title: string;
   chartData: ChartDataModelType;
   chartType: number;
+  width?: number;
+  height?: number;
 }
 
 interface ChartState {}

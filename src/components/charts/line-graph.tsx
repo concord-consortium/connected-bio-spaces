@@ -5,9 +5,11 @@ import { ChartDataModelType } from "../../models/spaces/charts/chart-data";
 
 interface ILineProps {
   chartData: ChartDataModelType;
+  width?: number;
+  height?: number;
 }
 
-const kDefaultOptions: any = {
+const defaultOptions: any = {
   title: {
     display: true,
     text: "",
@@ -73,7 +75,7 @@ const lineData = (chartData: ChartDataModelType) => {
   return linePlotData;
 };
 
-const kEdgePadding = 0.1;
+const edgePadding = 0.1;
 @observer
 export class LineGraph extends React.Component<ILineProps> {
   constructor(props: ILineProps) {
@@ -81,11 +83,11 @@ export class LineGraph extends React.Component<ILineProps> {
   }
 
   public render() {
-    const { chartData } = this.props;
+    const { chartData, width, height } = this.props;
     const chartDisplay = lineData(chartData);
     const graphs: JSX.Element[] = [];
     const minMaxValues = chartData.minMaxAll;
-    const options: any = Object.assign({}, kDefaultOptions, {
+    const options: any = Object.assign({}, defaultOptions, {
       title: {
         text: chartData.name
       },
@@ -93,8 +95,8 @@ export class LineGraph extends React.Component<ILineProps> {
         display: false,
         yAxes: [{
           ticks: {
-            min: minMaxValues.minA2 - (minMaxValues.minA2 * kEdgePadding),
-            max: minMaxValues.maxA2 + (minMaxValues.maxA2 * kEdgePadding)
+            min: minMaxValues.minA2 - (minMaxValues.minA2 * edgePadding),
+            max: minMaxValues.maxA2 + (minMaxValues.maxA2 * edgePadding)
           },
           scaleLabel: {
             display: true,
@@ -104,19 +106,21 @@ export class LineGraph extends React.Component<ILineProps> {
         xAxes: [{
           display: false,
           ticks: {
-            min: minMaxValues.minA1 - (minMaxValues.minA1 * kEdgePadding),
-            max: minMaxValues.maxA1 + (minMaxValues.maxA1 * kEdgePadding)
+            min: minMaxValues.minA1 - (minMaxValues.minA1 * edgePadding),
+            max: minMaxValues.maxA1 + (minMaxValues.maxA1 * edgePadding)
           }
         }]
       }
     });
+    const w = width ? width : 400;
+    const h = height ? height : 400;
     graphs.push(
       <Scatter
         key={3}
         data={chartDisplay}
         options={options}
-        height={400}
-        width={400}
+        height={h}
+        width={w}
       />
     );
 

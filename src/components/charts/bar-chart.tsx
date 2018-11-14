@@ -5,9 +5,11 @@ import { ChartDataModelType } from "../../models/spaces/charts/chart-data";
 
 interface IBarProps {
   chartData: ChartDataModelType;
+  width?: number;
+  height?: number;
 }
 
-const kDefaultOptions: any = {
+const defaultOptions: any = {
   title: {
     display: true,
     text: "",
@@ -81,9 +83,9 @@ export class BarChart extends React.Component<IBarProps> {
   }
 
   public render() {
-    const { chartData } = this.props;
+    const { chartData, width, height } = this.props;
     const chartDisplay = barData(chartData);
-    const options: any = Object.assign({}, kDefaultOptions, {
+    const options: any = Object.assign({}, defaultOptions, {
       scales: {
         xAxes: [{
           ticks: {
@@ -94,12 +96,15 @@ export class BarChart extends React.Component<IBarProps> {
         }]
       }
     });
+    const w = width ? width : 400;
+    const h = height ? height : 400;
     return (
-        <Bar
-          data={chartDisplay}
-          options={options}
-          height={400}
-        />
+      <Bar
+        data={chartDisplay}
+        options={options}
+        height={h}
+        width={w}
+      />
     );
   }
 }
@@ -110,9 +115,9 @@ export class HorizontalBarChart extends React.Component<IBarProps> {
     super(props);
   }
   public render() {
-    const { chartData } = this.props;
+    const { chartData, width, height } = this.props;
     const chartDisplay = barData(chartData);
-    const options: any = Object.assign({}, kDefaultOptions, {
+    const options: any = Object.assign({}, defaultOptions, {
       scales: {
         xAxes: [{
           ticks: {
@@ -123,12 +128,15 @@ export class HorizontalBarChart extends React.Component<IBarProps> {
         }]
       }
     });
+    const w = width ? width : 400;
+    const h = height ? height : 400;
     return (
-        <HorizontalBar
-          data={chartDisplay}
-          options={options}
-          height={400}
-        />
+      <HorizontalBar
+        data={chartDisplay}
+        options={options}
+        height={h}
+        width={w}
+      />
     );
   }
 }
