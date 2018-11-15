@@ -5,12 +5,14 @@ import { BaseComponent, IBaseProps } from "./base";
 import "./main-content.sass";
 import { InvestigateDialogComponent } from "./investigate-dialog";
 import { PopulationsSpaceComponent } from "./spaces/populations-space";
+import { CellZoomSpaceComponent } from "./spaces/cell-zoom-space";
 
 interface IProps extends IBaseProps {}
 interface IState {}
 
 const SpaceComponents: any = {
-  populations: PopulationsSpaceComponent
+  populations: PopulationsSpaceComponent,
+  cellZoom: CellZoomSpaceComponent
 };
 
 @inject("stores")

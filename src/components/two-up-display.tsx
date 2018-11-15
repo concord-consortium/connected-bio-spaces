@@ -41,6 +41,9 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
   }
 
   private renderRightPanel() {
+    if (!this.props.rightPanel) {
+      return null;
+    }
     return (
       <div className="two-up-panel right-abutment">
         <div className="header">
