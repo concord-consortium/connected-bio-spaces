@@ -20,12 +20,14 @@ export class ChartTest extends BaseComponent<IProps, IState> {
     chartDataSets.push(ChartDataSetModel.create({
       name: "Sample Dataset1",
       dataPoints: this.addTestDataPoints(),
-      color: ChartColors[0].hex
+      color: ChartColors[0].hex,
+      maxPoints: 100
     }));
     chartDataSets.push(ChartDataSetModel.create({
       name: "Sample Dataset2",
       dataPoints: this.addTestDataPoints(),
-      color: ChartColors[1].hex
+      color: ChartColors[1].hex,
+      maxPoints: 100
     }));
     const chartData: ChartDataModelType = ChartDataModel.create({
       name: "Samples",
@@ -81,7 +83,7 @@ export class ChartTest extends BaseComponent<IProps, IState> {
     // chartData is an array of chartDataSets
     for (const cdata of chartData.dataSets) {
       for (let i = 0; i < cdata.dataPoints.length; i++) {
-        cdata.updateData(i, this.rand(), this.rand());
+        cdata.updateDataPoint(i, this.rand(), this.rand());
       }
     }
     this.setState({ chartData });

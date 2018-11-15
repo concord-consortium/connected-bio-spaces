@@ -14,7 +14,8 @@ describe("chart data model", () => {
     chartDataSets.push(ChartDataSetModel.create({
       name: "Sample Dataset1",
       dataPoints: points,
-      color: ChartColors[0].hex
+      color: ChartColors[0].hex,
+      maxPoints: 100
     }));
 
     chart = ChartDataModel.create({
@@ -44,14 +45,14 @@ describe("chart data model", () => {
   });
 
   it("can add new data", () => {
-    chart.dataSets[0].addPoint(60, 75, "delta");
+    chart.dataSets[0].addDataPoint(60, 75, "delta");
 
     expect(chart.dataSets[0].dataPoints.length).toEqual(4);
     expect(chart.dataSets[0].dataAsXY[3]).toEqual({ x: 60, y: 75 });
   });
 
   it("can update data", () => {
-    chart.dataSets[0].updateData(0, 0, 5);
+    chart.dataSets[0].updateDataPoint(0, 0, 5);
     expect(chart.dataSets[0].dataAsXY[0]).toEqual({ x: 0, y: 5 });
   });
 
@@ -71,7 +72,8 @@ describe("chart data model", () => {
     chart.addDataSet(ChartDataSetModel.create({
       name: "Sample Dataset2",
       dataPoints: points,
-      color: ChartColors[1].hex
+      color: ChartColors[1].hex,
+      maxPoints: 100
     }));
 
     expect(chart.dataSets.length).toEqual(2);

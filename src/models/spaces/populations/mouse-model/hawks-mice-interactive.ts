@@ -31,6 +31,7 @@ export class HawksMiceInteractive extends Interactive {
   public addInitialMicePopulation: (num: number, byColor: boolean,
                                     initialSpecs: IInitialColorSpecs | IInitialGentotypeSpecs) => void;
   public addInitialHawksPopulation: (num: number) => void;
+  public getData: () => any;
 }
 
 export function createInteractive(model: MousePopulationsModelType) {
@@ -65,10 +66,14 @@ export function createInteractive(model: MousePopulationsModelType) {
 
   let addedMice: boolean;
   let addedHawks: boolean;
+  let numWhite: number;
+  let numBrown: number;
 
   function resetVars() {
     addedMice = false;
     addedHawks = false;
+    numWhite = 0;
+    numBrown = 0;
   }
   resetVars();
 
@@ -176,6 +181,13 @@ export function createInteractive(model: MousePopulationsModelType) {
   }
   interactive.addInitialHawksPopulation = addInitialHawksPopulation;
 
+  interactive.getData = () => {
+    return {
+      numWhite,
+      numBrown
+    };
+  };
+
   function setProperty(agents: Agent[], prop: string, val: any) {
     const results = [];
     for (const agent of agents) {
@@ -197,18 +209,18 @@ export function createInteractive(model: MousePopulationsModelType) {
         addAgent(mouseSpecies, [], [copyColorTraitOfRandomMouse(allMice)]);
       }
     }
+    numWhite = 0;
+    allMice.forEach((mouse) => {
+      if (mouse.get("color") === "white") {
+        numWhite++;
+      }
+    });
+    numBrown = allMice.length - numWhite;
 
     // If there are no specific selective pressures (ie there are no hawks, or the hawks eat
     // everything with equal probability), the population should be 'stabilized', so that no
     // color of mouse dies out completely
     if (addedMice && (!addedHawks || environmentColor === "neutral")) {
-      let numWhite = 0;
-      allMice.forEach((mouse) => {
-        if (mouse.get("color") === "white") {
-          numWhite++;
-        }
-      });
-
       // Make sure there are *some* white mice to ensure white mice are possible
       if (numWhite > 0 && numWhite < 10) {
         for (let i = 0; i < 3; i++) {
@@ -216,7 +228,6 @@ export function createInteractive(model: MousePopulationsModelType) {
         }
       }
 
-      const numBrown = allMice.length - numWhite;
       if (numBrown > 0 && numBrown < 10) {
         for (let i = 0; i < 3; i++) {
           addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:B,b:B")]);

@@ -57,7 +57,8 @@ export const ChartDataSetModel = types
   .model("ChartDataSet", {
     name: types.string,
     dataPoints: types.array(DataPoint),
-    color: types.string
+    color: types.string,
+    maxPoints: types.number
   })
   .views(self => ({
     // labels for a data point - essential for a bar graph, optional for a line
@@ -110,11 +111,15 @@ export const ChartDataSetModel = types
   }))
   .extend(self => {
     // actions
-    function addPoint(a1: number, a2: number, label: string) {
-      self.dataPoints.push({a1, a2, label});
+    function addDataPoint(a1: number, a2: number, label: string) {
+      if (self.maxPoints && self.dataPoints && self.dataPoints.length === self.maxPoints) {
+        // limit maximum data points and remove oldest point before adding new point
+        self.dataPoints.splice(0, 1);
+      }
+      self.dataPoints.push({ a1, a2, label });
     }
 
-    function updateData(pointIdx: number, newValA1: number, newValA2: number) {
+    function updateDataPoint(pointIdx: number, newValA1: number, newValA2: number) {
       if (self.dataPoints[pointIdx]) {
         self.dataPoints[pointIdx].a1 = newValA1;
         self.dataPoints[pointIdx].a2 = newValA2;
@@ -131,12 +136,17 @@ export const ChartDataSetModel = types
       self.color = newColor;
     }
 
+    function clearDataPoints() {
+      self.dataPoints.splice(0, self.dataPoints.length);
+    }
+
     return {
       actions: {
-        addPoint,
-        updateData,
+        addDataPoint,
+        updateDataPoint,
         deleteDataPoint,
-        changeColor
+        changeColor,
+        clearDataPoints
       }
     };
   });
