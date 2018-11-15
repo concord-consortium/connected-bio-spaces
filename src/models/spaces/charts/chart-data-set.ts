@@ -1,7 +1,8 @@
 import { types, Instance } from "mobx-state-tree";
+// @ts-ignore
+import * as colors from "../../../components/colors.scss";
 
 export interface Color {
-  cssName: string;
   name: string;
   hex: string;
 }
@@ -10,21 +11,27 @@ interface XYPoint {
   x: number;
   y: number;
 }
-// As defined in vars.sass, no easy way to get these variables in here
-// so reluctantly duplicating the definitions.
+
 export const ChartColors: Color[] = [
   // bars
-  { name: "blue",   cssName: "color7",  hex: "#00aae2"},
-  { name: "orange", cssName: "color8",  hex: "#e98c42"},
-  { name: "purple", cssName: "color9",  hex: "#bd599d"},
-  { name: "green",  cssName: "color10", hex: "#49b860"},
+  { name: "blue", hex: colors.chartDataColor1},
+  { name: "orange", hex: colors.chartDataColor2},
+  { name: "purple", hex: colors.chartDataColor3},
+  { name: "green", hex: colors.chartDataColor4 },
+  { name: "sage", hex: colors.chartDataColor5},
+  { name: "rust", hex: colors.chartDataColor6},
+  { name: "cloud", hex: colors.chartDataColor7},
+  { name: "gold", hex: colors.chartDataColor8},
+  { name: "terra", hex: colors.chartDataColor9},
+  { name: "sky", hex: colors.chartDataColor10},
+
   // backgrounds
-  { name: "sage",   cssName: "color1",  hex: "#c9dab7"},
-  { name: "rust",   cssName: "color2",  hex: "#e0b1b3"},
-  { name: "cloud",  cssName: "color3",  hex: "#bfbfbf"},
-  { name: "gold",   cssName: "color4",  hex: "#e7e4b3"},
-  { name: "terra",  cssName: "color5",  hex: "#ecd8a5"},
-  { name: "sky",    cssName: "color6",  hex: "#a4cde9" }
+  { name: "sage", hex: colors.chartColor5},
+  { name: "rust", hex: colors.chartColor6},
+  { name: "cloud", hex: colors.chartColor7},
+  { name: "gold", hex: colors.chartColor8},
+  { name: "terra", hex: colors.chartColor9},
+  { name: "sky", hex: colors.chartColor10}
 ];
 
 function hexToRgb(hex: string) {

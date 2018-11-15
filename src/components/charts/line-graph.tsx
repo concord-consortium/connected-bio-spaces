@@ -107,8 +107,8 @@ export class LineGraph extends React.Component<ILineProps> {
         xAxes: [{
           display: false,
           ticks: {
-            min: minMaxValues.minA1 - (minMaxValues.minA1 * edgePadding),
-            max: minMaxValues.maxA1 + (minMaxValues.maxA1 * edgePadding)
+            min: minMaxValues.minA1,
+            max: minMaxValues.maxA1
           }
         }]
       }
