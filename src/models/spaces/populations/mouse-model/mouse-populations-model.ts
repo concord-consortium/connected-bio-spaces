@@ -38,6 +38,8 @@ export const MousePopulationsModel = types
     "numHawks": types.number,
     "initialPopulation.white": types.number,
     "initialPopulation.tan": types.number,
+    "showSwitchEnvironmentsButton": types.boolean,
+    "includeNeutralEnvironment": types.boolean,
     "showSexStack": false,
     "chartData": types.optional(ChartDataModel, chartData)
   })
@@ -84,6 +86,15 @@ export const MousePopulationsModel = types
               interactive.addInitialHawksPopulation(self.numHawks);
             }
           });
+
+          if (self.showSwitchEnvironmentsButton) {
+            buttons.push({
+              title: "Switch environments",
+              action: (e: any) => {
+                interactive.switchEnvironments(self.includeNeutralEnvironment);
+              }
+            });
+          }
 
           return buttons;
         },

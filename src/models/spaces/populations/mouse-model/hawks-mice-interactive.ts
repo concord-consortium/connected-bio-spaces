@@ -25,6 +25,7 @@ interface IInitialColorSpecs {
 export class HawksMiceInteractive extends Interactive {
   public addInitialMicePopulation: (num: number, initialSpecs: IInitialColorSpecs) => void;
   public addInitialHawksPopulation: (num: number) => void;
+  public switchEnvironments: (includeNeutralEnvironment: boolean) => void;
   public getData: () => any;
 }
 
@@ -167,6 +168,22 @@ export function createInteractive(model: MousePopulationsModelType) {
     }
   }
   interactive.addInitialHawksPopulation = addInitialHawksPopulation;
+
+  interactive.switchEnvironments = (includeNeutralEnvironment: boolean) => {
+    if (environmentColor === "white") {
+      if (includeNeutralEnvironment) {
+        environmentColor = "neutral";
+      } else {
+        environmentColor = "brown";
+      }
+    } else if (environmentColor === "neutral") {
+      environmentColor = "brown";
+    } else {
+      environmentColor = "white";
+    }
+    interactive.environment.setBackground(`curriculum/mouse/populations/${environmentColor}.png`);
+
+  };
 
   interactive.getData = () => {
     return {

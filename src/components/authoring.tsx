@@ -20,7 +20,7 @@ const schema: JSONSchema6 = {
         { enum: ["mouse"], title: "Mouse" }
       ]
     },
-    topBar: {type: "boolean", title: "Show Top Bar?"},
+    topBar: {type: "boolean", title: "Show Top Bar"},
     populations: {
       title: "Populations Model",
       type: "object",
@@ -38,6 +38,14 @@ const schema: JSONSchema6 = {
             "Neutral",
             "Brown"
           ]
+        },
+        showSwitchEnvironmentsButton: {
+          title: "Show switch environments button",
+          type: "boolean"
+        },
+        includeNeutralEnvironment: {
+          title: "Include neutral environment",
+          type: "boolean"
         },
         initialPopulation: {
           title: "Initial mouse population",
@@ -67,6 +75,8 @@ export const defaultAuthoring = {
   topBar: true,
   populations: {
     initialEnvironment: "white",
+    showSwitchEnvironmentsButton: true,
+    includeNeutralEnvironment: true,
     initialPopulation: {
       white: 33.33,
       tan: 33.33
