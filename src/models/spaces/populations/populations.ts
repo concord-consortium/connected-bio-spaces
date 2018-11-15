@@ -1,19 +1,17 @@
 import { types, Instance, detach } from "mobx-state-tree";
 import { MousePopulationsModel, MousePopulationsModelType } from "./mouse-model/mouse-populations-model";
-import { Curriculum } from "../../stores";
 import { Interactive, Events, Environment } from "populations.js";
-import { ChartDataModel, ChartDataModelType } from "../charts/chart-data";
-import { ChartDataSetModel, ChartDataSetModelType, ChartColors, DataPoint } from "../charts/chart-data-set";
+import { ChartDataModelType } from "../charts/chart-data";
 
 const ModelsUnion = types.union(MousePopulationsModel);
 type ModelsUnionType = MousePopulationsModelType;
 
-export function createPopulationsModel(curriculumName: Curriculum): PopulationsModelType {
+export function createPopulationsModel(curriculumName: string, authoring: any): PopulationsModelType {
   switch (curriculumName) {
     case "mouse":
     default:
       return PopulationsModel.create({
-        model: MousePopulationsModel.create({})
+        model: MousePopulationsModel.create(authoring)
       });
   }
 }
