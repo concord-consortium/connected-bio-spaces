@@ -96,7 +96,7 @@ export const ChartDataSetModel = types
     },
     // Sort lines in increasing order of X for time-based plots
     get timeSeriesXY() {
-      const xyData = self.dataPoints.map(d => ({x: d.a1, y: d.a2}));
+      const xyData = self.dataPoints.map(d => ({ x: d.a1, y: d.a2 }));
       xyData.sort(timeSeriesSort);
       return xyData;
     },

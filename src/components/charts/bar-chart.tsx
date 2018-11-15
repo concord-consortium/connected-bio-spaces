@@ -2,12 +2,13 @@ import * as React from "react";
 import { observer } from "mobx-react";
 import { HorizontalBar, Bar, ChartData } from "react-chartjs-2";
 import { ChartDataModelType } from "../../models/spaces/charts/chart-data";
-import { ChartOptions } from "chart.js";
+import { ChartOptions, ChartType } from "chart.js";
 
 interface IBarProps {
   chartData: ChartDataModelType;
   width?: number;
   height?: number;
+  barChartType: ChartType;
 }
 
 const defaultOptions: ChartOptions = {
@@ -77,7 +78,7 @@ export class BarChart extends React.Component<IBarProps> {
   }
 
   public render() {
-    const { chartData, width, height } = this.props;
+    const { chartData, width, height, barChartType } = this.props;
     const chartDisplay = barData(chartData);
     const options: ChartOptions = Object.assign({}, defaultOptions, {
       scales: {
@@ -92,46 +93,27 @@ export class BarChart extends React.Component<IBarProps> {
     });
     const w = width ? width : 400;
     const h = height ? height : 400;
-    return (
-      <Bar
-        data={chartDisplay}
-        options={options}
-        height={h}
-        width={w}
-      />
-    );
-  }
-}
 
-@observer
-export class HorizontalBarChart extends React.Component<IBarProps> {
-  constructor(props: IBarProps) {
-    super(props);
-  }
-  public render() {
-    const { chartData, width, height } = this.props;
-    const chartDisplay = barData(chartData);
-    const options: ChartOptions = Object.assign({}, defaultOptions, {
-      scales: {
-        xAxes: [{
-          ticks: {
-            min: 0,
-            max: chartData.minMaxAll.maxA1
-          },
-          stacked: true
-        }]
-      }
-    });
-    const w = width ? width : 400;
-    const h = height ? height : 400;
-    return (
-      <HorizontalBar
-        data={chartDisplay}
-        options={options}
-        height={h}
-        width={w}
-      />
-    );
+    if (barChartType === "bar") {
+      return (
+        <Bar
+          data={chartDisplay}
+          options={options}
+          height={h}
+          width={w}
+        />
+      );
+    } else {
+      return (
+        <HorizontalBar
+          data={chartDisplay}
+          options={options}
+          height={h}
+          width={w}
+        />
+      );
+    }
+
   }
 }
 
