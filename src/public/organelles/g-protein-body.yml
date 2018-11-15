@@ -1,0 +1,20 @@
+---
+name: gProteinBody
+image: assets/g-protein-2.svg
+spawn:
+  never: true
+dieWhenExitingWorld: false
+properties:
+  size: 1
+  speed: 0.7
+  drection: 172
+  image_selector: gbodypart2
+initialState: away
+rules:
+  away:
+  - follow:
+      selector: "#gprotein-paths-to-receptor path"
+      which: 0
+      direction: forward
+      finally:
+        die: true

@@ -106,6 +106,7 @@
   },
   "dependencies": {
     "chart.js": "^2.7.3",
+    "connected-bio": "^0.2.8",
     "immutable": "^3.8.2",
     "lodash": "^4.17.11",
     "mobx": "^5.5.0",

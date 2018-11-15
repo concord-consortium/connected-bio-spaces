@@ -2,6 +2,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { PopulationsView } from "populations-react";
 import { BaseComponent, IBaseProps } from "../../base";
+import ConnectedBio from "connected-bio";
 
 import "./populations.sass";
 
@@ -22,12 +23,13 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
       );
       return (
         <div>
-          <PopulationsView interactive={populations.interactive} />
+          {/* <PopulationsView interactive={populations.interactive} />
           <div className="populations-toolbar">
             <button onClick={this.handleClickRunButton}>{populations.isPlaying ? "Pause" : "Run"}</button>
             <button onClick={this.handleClickResetButton}>Reset</button>
             { buttons }
-          </div>
+          </div> */}
+          <ConnectedBio />
         </div>
       );
     }
