@@ -93,7 +93,8 @@ const MouseGeneticSpec = {
   traitRules: {
     color: {
       white: [["b", "b"]],
-      brown: [["B", "b"], ["B", "B"]]
+      tan: [["B", "b"]],
+      brown: [["B", "B"]]
     }
   }
 };
@@ -149,6 +150,18 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
             }
           }, {
             image: {
+              path: "curriculum/mouse/populations/sandrat-tan.png",
+              scale: 0.3,
+              anchor: {
+                x: 0.8,
+                y: 0.47
+              }
+            },
+            useIf(agent: Agent) {
+              return agent.get("color") === "tan";
+            }
+          }, {
+            image: {
               path: "curriculum/mouse/populations/sandrat-dark.png",
               scale: 0.3,
               anchor: {
@@ -192,24 +205,6 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
           }
         ]
       }, {
-        name: "genotype",
-        contexts: ["environment"],
-        rules: [
-          {
-            image: {
-              path: "curriculum/mouse/populations/heterozygous-stack.png",
-              scale: 0.4,
-              anchor: {
-                x: 0.75,
-                y: 0.5
-              }
-            },
-            useIf(agent: Agent) {
-              return model.showHeteroStack && (agent.alleles.color === "a:B,b:b" || agent.alleles.color === "a:b,b:B");
-            }
-          }
-        ]
-      }, {
         name: "mouse info tool",
         contexts: ["info-tool"],
         rules: [
@@ -224,6 +219,18 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
             },
             useIf(agent: Agent) {
               return agent.get("color") === "white";
+            }
+          }, {
+            image: {
+              path: "curriculum/mouse/populations/sandrat-tan.png",
+              scale: 0.4,
+              anchor: {
+                x: 0.4,
+                y: 0.5
+              }
+            },
+            useIf(agent: Agent) {
+              return agent.get("color") === "tan";
             }
           }, {
             image: {

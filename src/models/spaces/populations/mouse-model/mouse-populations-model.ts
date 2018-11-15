@@ -16,6 +16,12 @@ const chartData = {
       expandOnly: true
     },
     {
+      name: "Tan mice",
+      dataPoints: [],
+      color: "#db9e26",
+      maxPoints: 100
+    },
+    {
       name: "Brown mice",
       dataPoints: [],
       color: "#795423",
@@ -28,25 +34,26 @@ const chartData = {
 
 export const MousePopulationsModel = types
   .model("MousePopulations", {
-    environment: "white" as EnvironmentColor,
-    numHawks: 2,
-    addMiceByColor: true,
-    percentWhite: 0.5,
-    percentbb: 0.33,
-    percentBb: 0.33,
-    showHeteroStack: false,
-    showSexStack: false,
-    chartData: types.optional(ChartDataModel, chartData)
+    "initialEnvironment": "white" as EnvironmentColor,
+    "numHawks": 2,
+    "initialPopulation.white": 33.3,
+    "initialPopulation.tan": 33.3,
+    "showSexStack": false,
+    "chartData": types.optional(ChartDataModel, chartData)
   })
   .extend(self => {
     let interactive: HawksMiceInteractive;
-    function addData(datum: any) {
-      const date = interactive.environment.date;
-      self.chartData.dataSets[0].addDataPoint(date, datum.numWhite, "");
-      self.chartData.dataSets[1].addDataPoint(date, datum.numBrown, "");
+
+    function addData(time: number, datum: any) {
+      self.chartData.dataSets[0].addDataPoint(time, datum.numWhite, "");
+      self.chartData.dataSets[1].addDataPoint(time, datum.numTan, "");
+      self.chartData.dataSets[2].addDataPoint(time, datum.numBrown, "");
     }
     Events.addEventListener(Environment.EVENTS.STEP, () => {
-      addData(interactive.getData());
+      const date = interactive.environment.date;
+      if (date % 5 === 0) {
+        addData(date / 5, interactive.getData());
+      }
     });
 
     return {
@@ -66,16 +73,8 @@ export const MousePopulationsModel = types
           buttons.push({
             title: "Add Mice",
             action: (e: any) => {
-              if (self.addMiceByColor) {
-                const white = self.percentWhite;
-                const brown = 1 - white;
-                interactive.addInitialMicePopulation(20, true, {white, brown});
-              } else {
-                const bb = self.percentbb;
-                const Bb = self.percentBb;
-                const BB = 1 - bb - Bb;
-                interactive.addInitialMicePopulation(20, false, {bb, Bb, BB});
-              }
+              const {"initialPopulation.white": white, "initialPopulation.tan": tan} = self;
+              interactive.addInitialMicePopulation(30, {white, tan});
             }
           });
 
@@ -90,11 +89,11 @@ export const MousePopulationsModel = types
         },
 
         get environmentColor(): EnvironmentColor {
-          switch (self.environment) {
+          switch (self.initialEnvironment) {
             case "white":
             case "brown":
             case "neutral":
-              return self.environment;
+              return self.initialEnvironment;
             default:
               return "white";
           }
@@ -102,17 +101,13 @@ export const MousePopulationsModel = types
       },
       actions: {
         setEnvironmentColor(color: EnvironmentColor) {
-          self.environment = color;
+          self.initialEnvironment = color;
         },
         reset() {
           interactive.reset();
           self.chartData.dataSets[0].clearDataPoints();
           self.chartData.dataSets[1].clearDataPoints();
-        },
-         addData(datum: any) {
-          const date = interactive.environment.date;
-          self.chartData.dataSets[0].addDataPoint(date, datum.numWhite, "");
-          self.chartData.dataSets[1].addDataPoint(date, datum.numBrown, "");
+          self.chartData.dataSets[2].clearDataPoints();
         }
       }
     };
