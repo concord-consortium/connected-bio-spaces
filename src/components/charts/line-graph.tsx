@@ -2,7 +2,7 @@ import * as React from "react";
 import { Scatter, ChartData } from "react-chartjs-2";
 import { observer } from "mobx-react";
 import { ChartDataModelType } from "../../models/spaces/charts/chart-data";
-import { ChartOptions } from "chart.js";
+import { ChartOptions, ChartAnimationOptions } from "chart.js";
 
 interface ILineProps {
   chartData: ChartDataModelType;
@@ -11,6 +11,9 @@ interface ILineProps {
 }
 
 const defaultOptions: ChartOptions = {
+  animation: {
+    duration: 0
+  },
   title: {
     display: true,
     text: "",
