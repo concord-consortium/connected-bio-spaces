@@ -53,6 +53,9 @@ function timeSeriesSort(a: XYPoint, b: XYPoint) {
   return 0;
 }
 
+const defaultMax = 100;
+const defaultMin = 0;
+
 export const DataPoint = types
   .model("DataPoint", {
     label: types.string,
@@ -86,16 +89,32 @@ export const ChartDataSetModel = types
     },
     // Determine minimum and maximum values on each axis
     get maxA1(): number | undefined {
-      return Math.max(...self.dataPoints.map(p => p.a1));
+      if (!self.dataPoints || self.dataPoints.length === 0) {
+        return defaultMax;
+      } else {
+        return Math.max(...self.dataPoints.map(p => p.a1));
+      }
     },
     get maxA2(): number | undefined {
-      return Math.max(...self.dataPoints.map(p => p.a2));
+      if (!self.dataPoints || self.dataPoints.length === 0) {
+        return defaultMax;
+      } else {
+        return Math.max(...self.dataPoints.map(p => p.a2));
+      }
     },
     get minA1(): number | undefined {
-      return Math.min(...self.dataPoints.map(p => p.a1));
+      if (!self.dataPoints || self.dataPoints.length === 0) {
+        return defaultMin;
+      } else {
+        return Math.min(...self.dataPoints.map(p => p.a1));
+      }
     },
     get minA2(): number | undefined {
-      return Math.min(...self.dataPoints.map(p => p.a2));
+      if (!self.dataPoints || self.dataPoints.length === 0) {
+        return defaultMin;
+      } else {
+        return Math.min(...self.dataPoints.map(p => p.a2));
+      }
     },
     // Lines and scatter plots require X and Y coordinates
     get dataAsXY() {
