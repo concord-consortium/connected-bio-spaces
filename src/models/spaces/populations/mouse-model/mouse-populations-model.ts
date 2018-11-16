@@ -1,7 +1,26 @@
 import { types, Instance } from "mobx-state-tree";
 import { createInteractive, EnvironmentColor, HawksMiceInteractive } from "./hawks-mice-interactive";
-import { Interactive } from "populations.js";
+import { Interactive, Events, Environment } from "populations.js";
 import { ToolbarButton } from "../populations";
+import { ChartDataModel } from "../../charts/chart-data";
+
+const chartData = {
+  name: "Samples",
+  dataSets: [
+    {
+      name: "White mice",
+      dataPoints: [],
+      color: "#f4ce83",
+      maxPoints: 100
+    },
+    {
+      name: "Brown mice",
+      dataPoints: [],
+      color: "#795423",
+      maxPoints: 100
+    }
+  ]
+ };
 
 export const MousePopulationsModel = types
   .model("MousePopulations", {
@@ -12,10 +31,19 @@ export const MousePopulationsModel = types
     percentbb: 0.33,
     percentBb: 0.33,
     showHeteroStack: false,
-    showSexStack: false
+    showSexStack: false,
+    chartData: types.optional(ChartDataModel, chartData)
   })
   .extend(self => {
     let interactive: HawksMiceInteractive;
+    function addData(datum: any) {
+      const date = interactive.environment.date;
+      self.chartData.dataSets[0].addDataPoint(date, datum.numWhite, "");
+      self.chartData.dataSets[1].addDataPoint(date, datum.numBrown, "");
+    }
+    Events.addEventListener(Environment.EVENTS.STEP, () => {
+      addData(interactive.getData());
+    });
 
     return {
       views: {
@@ -71,6 +99,16 @@ export const MousePopulationsModel = types
       actions: {
         setEnvironmentColor(color: EnvironmentColor) {
           self.environment = color;
+        },
+        reset() {
+          interactive.reset();
+          self.chartData.dataSets[0].clearDataPoints();
+          self.chartData.dataSets[1].clearDataPoints();
+        },
+         addData(datum: any) {
+          const date = interactive.environment.date;
+          self.chartData.dataSets[0].addDataPoint(date, datum.numWhite, "");
+          self.chartData.dataSets[1].addDataPoint(date, datum.numBrown, "");
         }
       }
     };
