@@ -1,21 +1,13 @@
 import { types } from "mobx-state-tree";
-
-const CollectedMouse = types
-  .model("CollectedMouse", {
-    isCollected: false,
-    isBrown: false,
-    isMale: false,
-    isHeterozygote: false,
-    subTitle: ""
-  });
+import { MouseType, Mouse } from "./mouse";
 
 export const BackpackModel = types
   .model("Backpack", {
-    collectedMice: types.array(CollectedMouse)
+    collectedMice: types.array(Mouse)
   })
   .actions((self) => {
     return {
-      addCollectedMouse(mouse: CollectedMouse) {
+      addCollectedMouse(mouse: MouseType) {
         self.collectedMice.push(mouse);
       }
     };

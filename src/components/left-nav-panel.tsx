@@ -5,6 +5,7 @@ import { BaseComponent, IBaseProps } from "./base";
 import "./left-nav-panel.sass";
 import { CollectButtonComponent } from "./collect-button";
 import { LegendComponent } from "./legend";
+import { Mouse } from "../models/mouse";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -38,16 +39,10 @@ export class LeftNavPanelComponent extends BaseComponent<IProps, IState> {
 
   private addTestMiceToBackpack = () => {
     const {backpack} = this.stores;
-    backpack.addCollectedMouse({isCollected: true, isBrown: true, isMale: true,
-                    isHeterozygote: false, subTitle: "m"});
-    backpack.addCollectedMouse({isCollected: true, isBrown: false, isMale: true,
-                    isHeterozygote: false, subTitle: "m2"});
-    backpack.addCollectedMouse({isCollected: true, isBrown: true, isMale: false,
-                    isHeterozygote: false, subTitle: "f"});
-    backpack.addCollectedMouse({isCollected: true, isBrown: false, isMale: false,
-                    isHeterozygote: false, subTitle: "f2"});
-    backpack.addCollectedMouse({isCollected: true, isBrown: true, isMale: true,
-                    isHeterozygote: true, subTitle: "m"});
+    backpack.addCollectedMouse(Mouse.create({sex: "male", genotype: "BB"}));
+    backpack.addCollectedMouse(Mouse.create({sex: "male", genotype: "Bb"}));
+    backpack.addCollectedMouse(Mouse.create({sex: "female", genotype: "bB"}));
+    backpack.addCollectedMouse(Mouse.create({sex: "female", genotype: "bb"}));
   }
 
   private renderCollectButtons = () => {
@@ -58,11 +53,8 @@ export class LeftNavPanelComponent extends BaseComponent<IProps, IState> {
     const emptySlots = ui.availableBackpackSlots - collectedSlots;
     const buttons = backpack.collectedMice.map((slot, index) => {
                       return <CollectButtonComponent
-                               isCollected={slot.isCollected}
-                               isBrown={slot.isBrown}
-                               isMale={slot.isMale}
-                               isHeterozygote={slot.isHeterozygote}
-                               subTitle={slot.subTitle}
+                               mouse={slot}
+                               subTitle={"tbd"}
                                index={index}
                                key={index}
                              />;
@@ -80,10 +72,7 @@ export class LeftNavPanelComponent extends BaseComponent<IProps, IState> {
   private renderEmptyCollectButton = (index: number) => {
     return (
       <CollectButtonComponent
-        isCollected={false}
-        isBrown={false}
-        isMale={false}
-        isHeterozygote={false}
+        mouse={undefined}
         subTitle={""}
         index={index}
         key={index}

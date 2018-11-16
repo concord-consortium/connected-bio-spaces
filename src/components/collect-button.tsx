@@ -3,12 +3,10 @@ import * as React from "react";
 import { BaseComponent, IBaseProps } from "./base";
 
 import "./collect-button.sass";
+import { MouseType, UNCOLLECTED_IMAGE } from "../models/mouse";
 
 interface IProps extends IBaseProps {
-  isCollected: boolean;
-  isBrown: boolean;
-  isMale: boolean;
-  isHeterozygote: boolean;
+  mouse?: MouseType;
   subTitle: string;
   index: number;
 }
@@ -19,25 +17,37 @@ interface IState {}
 export class CollectButtonComponent extends BaseComponent<IProps, IState> {
 
   public render() {
-    let hasClose: boolean = false;
-    let buttonClass: string = "collect-button uncollected";
-    const innerOutlineClass: string = this.props.isHeterozygote ? "inner-outline heterozygote" : "inner-outline";
-    let iconPath: string = "assets/mouse_collect.png";
-    if (this.props.isCollected) {
-      buttonClass = this.props.isMale ? "collect-button male" : "collect-button female";
-      iconPath = this.props.isBrown ? "assets/mouse_field.png" : "assets/mouse_beach.png";
-      hasClose = true;
-    }
+    const { mouse } = this.props;
     return (
       <div className="collect-button-holder">
+        {mouse ? this.renderFull(mouse) : this.renderEmpty()}
+        <div className="index">{this.props.index + 1}</div>
+      </div>
+    );
+  }
+  private renderFull(mouse: MouseType) {
+    const buttonClass = mouse.sex === "male" ? "collect-button male" : "collect-button female";
+    const innerOutlineClass: string = mouse.isHeterozygote ? "inner-outline heterozygote" : "inner-outline";
+    return (
+      <div>
         <div className={buttonClass} onClick={this.handleClickButton}>
           <div className={innerOutlineClass}>
-            <img src={iconPath} className="icon"/>
+            <img src={mouse.baseImage} className="icon"/>
             <div className="label">{this.props.subTitle}</div>
           </div>
         </div>
-        {hasClose ? <div className="x-close" onClick={this.handleClickClose}>x</div> : null}
-        <div className="index">{this.props.index + 1}</div>
+        <div className="x-close" onClick={this.handleClickClose}>x</div>
+      </div>
+    );
+  }
+  private renderEmpty() {
+    return (
+      <div>
+        <div className={"collect-button uncollected"} onClick={this.handleClickButton}>
+          <div className={"inner-outline"}>
+            <img src={UNCOLLECTED_IMAGE} className="icon"/>
+          </div>
+        </div>
       </div>
     );
   }
