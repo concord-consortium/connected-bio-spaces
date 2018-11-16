@@ -1,3 +1,4 @@
+import { merge } from "lodash";
 import { defaultAuthoring } from "../components/authoring";
 
 export interface QueryParams {
@@ -9,7 +10,7 @@ let params: any;
 
 try {
   const queryString = location.search.length > 1 ? decodeURIComponent(location.search.substring(1)) : "{}";
-  params = Object.assign(defaultAuthoring, JSON.parse(queryString));
+  params = merge(defaultAuthoring, JSON.parse(queryString));
 } catch (e) {
   params = {
     authoring: false,

@@ -34,10 +34,10 @@ const chartData = {
 
 export const MousePopulationsModel = types
   .model("MousePopulations", {
-    "initialEnvironment": "white" as EnvironmentColor,
-    "numHawks": 2,
-    "initialPopulation.white": 33.3,
-    "initialPopulation.tan": 33.3,
+    "initialEnvironment": types.string,
+    "numHawks": types.number,
+    "initialPopulation.white": types.number,
+    "initialPopulation.tan": types.number,
     "showSexStack": false,
     "chartData": types.optional(ChartDataModel, chartData)
   })
