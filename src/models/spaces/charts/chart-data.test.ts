@@ -1,5 +1,5 @@
 import { ChartDataModel, ChartDataModelType } from "./chart-data";
-import { ChartDataSetModel, DataPoint, ChartColors } from "./chart-data-set";
+import { ChartDataSetModel, DataPoint } from "./chart-data-set";
 
 describe("chart data model", () => {
   let chart: ChartDataModelType;
@@ -14,7 +14,7 @@ describe("chart data model", () => {
     chartDataSets.push(ChartDataSetModel.create({
       name: "Sample Dataset1",
       dataPoints: points,
-      color: ChartColors[0].hex,
+      color: "#ff0000",
       maxPoints: 100
     }));
 
@@ -72,7 +72,7 @@ describe("chart data model", () => {
     chart.addDataSet(ChartDataSetModel.create({
       name: "Sample Dataset2",
       dataPoints: points,
-      color: ChartColors[1].hex,
+      color: "#00ff00",
       maxPoints: 100
     }));
 
