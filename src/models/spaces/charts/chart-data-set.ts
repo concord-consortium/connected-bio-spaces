@@ -68,61 +68,71 @@ export const ChartDataSetModel = types
     name: types.string,
     dataPoints: types.array(DataPoint),
     color: types.string,
-    maxPoints: types.number
+    maxPoints: types.maybe(types.number)
   })
+  .views(self => ({
+    get dataTail() {
+      if (self.maxPoints && self.maxPoints > 0 && self.dataPoints.length >= self.maxPoints) {
+        return self.dataPoints.slice(-self.maxPoints);
+      } else {
+        // If we don't set a max, don't use filtering
+        return self.dataPoints;
+      }
+    }
+  }))
   .views(self => ({
     // labels for a data point - essential for a bar graph, optional for a line
     get dataLabels() {
-      return self.dataPoints.map(p => p.label);
+      return self.dataTail.map(p => p.label);
     },
     // Axis 1 data, for a line will be point x value, for bar will be quantity
     get dataA1() {
-      return self.dataPoints.map(p => p.a1);
+      return self.dataTail.map(p => p.a1);
     },
     // Axis 2 data for a line will be y value, for a bar will be label
     get dataA2() {
-      if (self.dataPoints.length > 0 && self.dataPoints[0].a2) {
-        return self.dataPoints.map(p => p.a2);
+      if (self.dataTail.length > 0 && self.dataTail[0].a2) {
+        return self.dataTail.map(p => p.a2);
       } else {
-        return self.dataPoints.map(p => p.label);
+        return self.dataTail.map(p => p.label);
       }
     },
     // Determine minimum and maximum values on each axis
     get maxA1(): number | undefined {
-      if (!self.dataPoints || self.dataPoints.length === 0) {
+      if (!self.dataTail || self.dataTail.length === 0) {
         return defaultMax;
       } else {
-        return Math.max(...self.dataPoints.map(p => p.a1));
+        return Math.max(...self.dataTail.map(p => p.a1));
       }
     },
     get maxA2(): number | undefined {
-      if (!self.dataPoints || self.dataPoints.length === 0) {
+      if (!self.dataTail || self.dataTail.length === 0) {
         return defaultMax;
       } else {
-        return Math.max(...self.dataPoints.map(p => p.a2));
+        return Math.max(...self.dataTail.map(p => p.a2));
       }
     },
     get minA1(): number | undefined {
-      if (!self.dataPoints || self.dataPoints.length === 0) {
+      if (!self.dataTail || self.dataTail.length === 0) {
         return defaultMin;
       } else {
-        return Math.min(...self.dataPoints.map(p => p.a1));
+        return Math.min(...self.dataTail.map(p => p.a1));
       }
     },
     get minA2(): number | undefined {
-      if (!self.dataPoints || self.dataPoints.length === 0) {
+      if (!self.dataTail || self.dataTail.length === 0) {
         return defaultMin;
       } else {
-        return Math.min(...self.dataPoints.map(p => p.a2));
+        return Math.min(...self.dataTail.map(p => p.a2));
       }
     },
     // Lines and scatter plots require X and Y coordinates
     get dataAsXY() {
-      return self.dataPoints.map(d => ({x: d.a1, y: d.a2}));
+      return self.dataTail.map(d => ({x: d.a1, y: d.a2}));
     },
     // Sort lines in increasing order of X for time-based plots
     get timeSeriesXY() {
-      const xyData = self.dataPoints.map(d => ({ x: d.a1, y: d.a2 }));
+      const xyData = self.dataTail.map(d => ({ x: d.a1, y: d.a2 }));
       xyData.sort(timeSeriesSort);
       return xyData;
     },
@@ -138,10 +148,6 @@ export const ChartDataSetModel = types
   .extend(self => {
     // actions
     function addDataPoint(a1: number, a2: number, label: string) {
-      if (self.maxPoints && self.dataPoints && self.dataPoints.length === self.maxPoints) {
-        // limit maximum data points and remove oldest point before adding new point
-        self.dataPoints.splice(0, 1);
-      }
       self.dataPoints.push({ a1, a2, label });
     }
 
