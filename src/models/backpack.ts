@@ -9,6 +9,11 @@ export const BackpackModel = types
     return {
       addCollectedMouse(mouse: MouseType) {
         self.collectedMice.push(mouse);
+      },
+      removeCollectedMouse(index: number) {
+        if (index < self.collectedMice.length ) {
+          self.collectedMice.splice(index, 1);
+        }
       }
     };
   });
