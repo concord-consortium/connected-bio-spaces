@@ -1,0 +1,50 @@
+---
+name: hormoneDot
+image:
+  shape: rect
+  props:
+    height: 5
+    width: 5
+    fill: rgb(0,204,153)
+spawn:
+  'on':
+    selector: "#intercellular-paths path"
+    which: random
+  every: world.hormone_spawn_period
+  # never: true
+dieWhenExitingWorld: false
+properties:
+  speed: 1
+  size: 1
+initialState: flowing
+rules:
+  flowing:
+  - follow:
+      selector: "#intercellular-paths path"
+      which: nearest
+      direction: random
+      finally:
+        die: true
+  find_path_from_anywhere:
+  - move_to:
+      selector: "#intercellular-paths path"
+      at: nearest
+      which:
+        any_of_nearest: 2
+      finally:
+        switch_state: flowing_from_anywhere
+  flowing_from_anywhere:
+  - follow:
+      selector: "#intercellular-paths path"
+      which: nearest
+      at: nearest
+      direction: random
+      finally:
+        die: true
+  diffuse:
+  - diffuse:
+      for: 300
+      bounding_paths:
+        - "#surrounding_x5F_cells path"
+      finally:
+        die: true

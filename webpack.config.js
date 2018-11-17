@@ -85,6 +85,10 @@ module.exports = (env, argv) => {
       new CopyWebpackPlugin([{
         from: 'src/assets',
         to: 'assets'
+      }]),
+      new CopyWebpackPlugin([{
+        from: 'src/organelles',
+        to: 'organelles'
       }])
     ]
   };

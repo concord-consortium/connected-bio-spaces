@@ -7,8 +7,10 @@ import "./two-up-display.sass";
 interface IProps extends IBaseProps {
   leftTitle: string;
   leftPanel: React.ReactNode;
+  leftId?: string;
   rightTitle: string;
   rightIcon?: string;
+  rightId?: string;
   onClickRightIcon?: () => void;
   rightPanel: React.ReactNode;
 }
@@ -33,7 +35,7 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
         <div className="header" data-test="two-up-header">
           <div className="title" data-test="two-up-title">{this.props.leftTitle}</div>
         </div>
-        <div className="content" data-test="two-up-content">
+        <div className="content" data-test="two-up-content" id={this.props.leftId}>
           {this.props.leftPanel}
         </div>
       </div>
@@ -55,7 +57,7 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
             }
           <div className="title">{this.props.rightTitle}</div>
         </div>
-        <div className="content">
+        <div className="content" id={this.props.rightId}>
           {this.props.rightPanel}
         </div>
       </div>
