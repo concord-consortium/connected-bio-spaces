@@ -1,0 +1,369 @@
+import * as React from "react";
+import { autorun, IReactionDisposer, observable } from "mobx";
+import { observer } from "mobx-react";
+// import { IOrganism, OrganelleRef } from "../models/Organism";
+// import { OrganelleType, mysteryOrganelleNames } from "../models/Organelle";
+// import { View, appStore } from "../stores/AppStore";
+// import { rootStore, Mode } from "../stores/RootStore";
+import { createModel } from "organelle";
+import * as Cell from "./cell-models/cell.json";
+// import { SubstanceType } from "../models/Substance";
+// import "./OrganelleWrapper.css";
+
+interface OrganelleWrapperProps {
+  elementName: string;
+}
+
+interface OrganelleWrapperState {
+  hoveredOrganelle: any;
+  dropperCoords: any;
+}
+
+const SUBSTANCE_ADDITION_MS = 3500;
+
+@observer
+export class OrganelleWrapper extends React.Component<OrganelleWrapperProps, OrganelleWrapperState> {
+    private disposers: IReactionDisposer[] = [];
+    private model: any;
+    // private organelleSelectorInfo: any = {
+    //   [OrganelleType.Nucleus]: {
+    //     selector: "#nucleus",
+    //     visibleModes: [Mode.Normal]
+    //   },
+    //   [OrganelleType.Cytoplasm]: {
+    //     selector: `#cytoplasm`,
+    //     opaqueSelector: "#cellshape_0_Layer0_0_FILL, #intercell_zoom_bounds"
+    //   },
+    //   [OrganelleType.Golgi]: {
+    //     selector: "#golgi_x5F_apparatus",
+    //     visibleModes: [Mode.Normal]
+    //   },
+    //   [OrganelleType.Extracellular]: {
+    //     selector: `#intercell`,
+    //     opaqueSelector: "#Layer6_0_FILL"
+    //   },
+    //   [OrganelleType.Melanosomes]: {
+    //     selector: "#melanosome_2, #melanosome_4"
+    //   },
+    //   [OrganelleType.Receptor]: {
+    //     selector: "#receptor-broken, #receptor-working, #receptor-bound",
+    //     visibleModes: [Mode.Normal]
+    //   },
+    //   [OrganelleType.Gate]: {
+    //     selector: ".gate-a, .gate-b, .gate-c, .gate-d",
+    //     visibleModes: [Mode.Normal]
+    //   },
+    //   [OrganelleType.NearbyCells]: {
+    //     selector: "#other_cells",
+    //     opaqueSelector: "#backcell_x5F_color",
+    //     visibleModes: [Mode.Normal]
+    //   }
+    // };
+    // private modelDefs: any = {
+    //   Cell: CellModels.cell,
+    //   Protein: CellModels.receptor
+    // };
+
+  constructor(props: OrganelleWrapperProps) {
+    super(props);
+    this.state = {
+      hoveredOrganelle: null,
+      dropperCoords: []
+    };
+    this.completeLoad = this.completeLoad.bind(this);
+    this.resetHoveredOrganelle = this.resetHoveredOrganelle.bind(this);
+  }
+
+  public componentDidMount() {
+    // const box = appStore.boxes.get(this.props.boxId);
+    // const view = box.viewType;
+    // const {organism} = box;
+    // const {modelProperties} = organism;
+    const modelDef: any = Cell;
+
+    modelDef.container = {
+      elId: this.props.elementName,
+      width: 500,
+      height: 312
+    };
+
+    const modelProperties = observable.map({
+      albino: false,
+      working_tyr1: false,
+      working_myosin_5a: true,
+      open_gates: false,
+      eumelanin: true,
+      hormone_spawn_period: 40,
+      working_receptor: true
+    });
+    modelDef.properties = modelProperties.toJS();
+
+    createModel(modelDef).then((m: any) => {
+      // appStore.boxes.get(this.props.boxId).setModel(m);
+      this.model = m;
+      this.completeLoad();
+    });
+
+    // Update model properties as they change
+    // this.disposers.push(autorun(() => {
+    //   const newModelProperties = modelProperties;
+    //   if (this.getModel()) {
+    //     newModelProperties.keys().forEach((key: any) => {
+    //       this.getModel().world.setProperty(key, newModelProperties.get(key));
+    //     });
+    //   }
+    // }));
+  }
+
+  public componentWillUnmount() {
+    this.disposers.forEach(disposer => disposer());
+    this.getModel().destroy();
+    // appStore.boxes.get(this.props.boxId).setModel(null);
+  }
+
+  public updateReceptorImage() {
+    const model = this.getModel();
+    if (model.world.getProperty("working_receptor")) {
+      model.view.hide("#receptor-broken", true);
+      if (model.world.getProperty("hormone_bound")) {
+        model.view.hide("#receptor-working", true);
+        model.view.show("#receptor-bound", true);
+      } else {
+        model.view.show("#receptor-working", true);
+        model.view.hide("#receptor-bound", true);
+      }
+    } else {
+      model.view.hide("#receptor-working", true);
+      model.view.hide("#receptor-bound", true);
+      model.view.show("#receptor-broken", true);
+    }
+  }
+
+  // public organelleClick(organelleType: OrganelleType, location: {x: number, y: number}) {
+  //   const organism = appStore.getBoxOrganism(this.props.boxId);
+  //   if (rootStore.mode === Mode.Assay) {
+  //     const organelleInfo = OrganelleRef.create({
+  //       organism,
+  //       organelleType
+  //     });
+  //     rootStore.setActiveAssay(organelleInfo);
+  //   } else if (rootStore.mode === Mode.Add || rootStore.mode === Mode.Subtract) {
+  //     // update substance levels
+  //     rootStore.changeSubstanceLevel(OrganelleRef.create({ organism, organelleType }));
+  //     // show animation in model
+  //     const substanceType = rootStore.activeSubstance;
+  //     if (substanceType === SubstanceType.Hormone) {
+  //       this.addHormone(organelleType, location);
+  //     } else if (substanceType === SubstanceType.SignalProtein) {
+  //       this.addSignalProtein(organelleType, location);
+  //     }
+  //   }
+  // }
+
+  public addAgentsOverTime(species: string, state: string, props: object, countAtOnce: number, times: number) {
+    const period = SUBSTANCE_ADDITION_MS / times;
+    const addAgents = (model: any) => {
+      for (let i = 0; i < countAtOnce; i++) {
+        const a = model.world.createAgent(this.getModel().world.species[species]);
+        a.state = state;
+        a.setProperties(props);
+      }
+    };
+
+    const addAgentsAgent = (model: any, added: number) => {
+      addAgents(model);
+      if (added < times) {
+        model.setTimeout(addAgentsAgent.bind(this, model, added + 1), period);
+      }
+    };
+
+    // const matchingBoxes = Object.keys(appStore.boxes.toJS())
+    //   .map((key) => appStore.boxes.get(key))
+    //   .filter((otherBox: any) => {
+    //     return (
+    //       otherBox.organism.id === appStore.getBoxOrganism(this.props.boxId).id &&
+    //       (otherBox.viewType === View.Cell || otherBox.viewType === View.Protein)
+    //     );
+    // });
+
+    // matchingBoxes.forEach((box) => addAgentsAgent(box.model, 0));
+  }
+
+  // public addHormone(organelleType: OrganelleType, location: {x: number, y: number}) {
+  //   const inIntercell = organelleType === OrganelleType.Extracellular;
+  //   const species = "hexagon";
+  //   const state = inIntercell ? "find_path_from_anywhere" : "diffuse";
+  //   const props = inIntercell ? location : {speed: 0.4, x: location.x, y: location.y};
+  //   const count = inIntercell ? 3 : 2;
+  //   this.addAgentsOverTime(species, state, props, count, 9);
+  // }
+
+  // public addSignalProtein(organelleType: OrganelleType, location: {x: number, y: number}) {
+  //   const inIntercell = organelleType === OrganelleType.Extracellular;
+  //   const species = "gProteinPart";
+  //   const state = inIntercell ? "find_flowing_path" : "in_cell_from_click";
+  //   this.addAgentsOverTime(species, state, location, 1, 9);
+  // }
+
+  public isModeDropper(mode: string) {
+    // return mode === Mode.Assay || mode === Mode.Add || mode === Mode.Subtract;
+    return false;
+  }
+
+  public render() {
+    // const hoverLabel = appStore.mysteryLabels ?
+    //   mysteryOrganelleNames[this.state.hoveredOrganelle] : this.state.hoveredOrganelle;
+    const hoverLabel = "hover";
+    const hoverDiv = this.state.hoveredOrganelle
+      ? (
+        <div className="hover-location">
+          {hoverLabel}
+        </div>)
+      : null;
+
+    const droppers: any = this.state.dropperCoords.map((dropperCoord: any, i: number) => (
+      <div className="temp-dropper" key={i} style={{left: dropperCoord.x - 6, top: dropperCoord.y - 28}}>
+        <img src="assets/cell-zoom/dropper.png" width="32px"/>
+      </div>
+    ));
+    // const dropperCursor = this.state.hoveredOrganelle && this.isModeDropper(rootStore.mode);
+    const dropperCursor = false;
+    return (
+      <div className={"model-wrapper" + (dropperCursor ? " dropper" : "")}>
+        <div id={this.props.elementName} className="model" onMouseLeave={this.resetHoveredOrganelle}/>
+        {hoverDiv}
+        {droppers}
+      </div>
+    );
+  }
+
+  private getModel() {
+    // return appStore.boxes.get(this.props.boxId).model;
+    return this.model;
+  }
+
+  private completeLoad() {
+    const model = this.getModel();
+    model.on("view.loaded", () => {
+      this.updateReceptorImage();
+    });
+
+    model.setTimeout(
+      () => {
+        for (let i = 0; i < 3; i++) {
+          // The world could have been unmounted since the timeout was set
+          if (model && model.world) {
+            model.world.createAgent(model.world.species.gProtein);
+          }
+        }
+      },
+      1300);
+
+    model.on("hexagon.notify", () => this.updateReceptorImage());
+
+    model.on("gProtein.notify.break_time", (evt: any) => {
+      const proteinToBreak = evt.agent;
+      const location = {x: proteinToBreak.getProperty("x"), y: proteinToBreak.getProperty("y")};
+      const body = model.world.createAgent(model.world.species.gProteinBody);
+      body.setProperties(location);
+
+      const part = model.world.createAgent(model.world.species.gProteinPart);
+      part.setProperties(location);
+
+      proteinToBreak.die();
+
+      model.world.setProperty("g_protein_bound", false);
+
+      model.world.createAgent(model.world.species.gProtein);
+    });
+
+    model.on("model.step", () => {
+      // const organism: IOrganism = appStore.getBoxOrganism(this.props.boxId);
+      // let percentLightness = organism.lightness;
+      let percentLightness = .2;
+
+      if (percentLightness <= 0.19) {
+        percentLightness = 0;
+      } else if (percentLightness < 0.39) {
+        percentLightness = 0.2;
+      } else if (percentLightness < 0.59) {
+        percentLightness = 0.4;
+      } else if (percentLightness < 0.79) {
+        percentLightness = 0.6;
+      } else if (percentLightness < 0.99) {
+        percentLightness = 0.8;
+      } else {
+        percentLightness = 1;
+      }
+
+      // go from lightest to darkest in HSL space, which provides the best gradual transition
+
+      // lightest brown: rgb(244, 212, 141) : hsl(41°, 82%, 75%)
+      // darkest brown:  rgb(124, 81, 21)   : hsl(35°, 71%, 28%)
+
+      const light = [41, 82, 75];
+      const dark = [35, 71, 28];
+      const color = dark.map( (c, i) => Math.round(c + (light[i] - c) * percentLightness) );
+      const colorStr = `hsl(${color[0]},${color[1]}%,${color[2]}%)`;
+
+      const cellFill = model.view.getModelSvgObjectById("cellshape_0_Layer0_0_FILL");
+      if (cellFill) {
+        cellFill.setColor(colorStr);
+      }
+
+      // set lightness on model object so it can change organism image
+      // organism.setCellLightness(percentLightness);
+    });
+
+    // model.on("view.hover.enter", (evt: any) => {
+    //   const hoveredOrganelle = this.getOrganelleFromMouseEvent(evt);
+    //   this.setState({hoveredOrganelle});
+    // });
+
+    // model.on("view.click", (evt: any) => {
+    //   const clickTarget: OrganelleType = this.getOrganelleFromMouseEvent(evt);
+    //   if (clickTarget) {
+    //     // Keep the dropper displayed for substance additions
+    //     if (rootStore.mode === Mode.Add || rootStore.mode === Mode.Subtract) {
+    //       const newCoords = this.state.dropperCoords.slice(0);
+    //       newCoords.push({x: evt.e.layerX, y: evt.e.layerY});
+    //       this.setState({dropperCoords: newCoords});
+    //       rootStore.startTimer(() => {
+    //         const splicedCoords = this.state.dropperCoords.slice(0);
+    //         splicedCoords.splice(0, 1);
+    //         this.setState({dropperCoords: splicedCoords});
+    //       },                   SUBSTANCE_ADDITION_MS);
+    //     }
+
+    //     // Handle the click in the Organelle model
+    //     const location = model.view.transformToWorldCoordinates({x: evt.e.offsetX, y: evt.e.offsetY});
+    //     this.organelleClick(clickTarget, location);
+    //   }
+    // });
+  }
+
+  // private getOrganelleFromMouseEvent(evt: any) {
+  //   const possibleTargets: OrganelleType[] = Object.keys(OrganelleType)
+  //     .map(key => OrganelleType[key])
+  //     .filter(organelle => this.organelleSelectorInfo[organelle])
+  //     .filter(organelle => {
+  //       const visibleModes = this.organelleSelectorInfo[organelle].visibleModes;
+  //       return !visibleModes || visibleModes.indexOf(rootStore.mode) > -1;
+  //     });
+  //   return possibleTargets.find((t) => {
+  //     return evt.target._organelle.matches({selector: this.organelleSelectorInfo[t].selector});
+  //   });
+  // }
+
+  private resetHoveredOrganelle() {
+    this.setState({hoveredOrganelle: null});
+  }
+
+  // private getOpaqueSelector(organelleType: string) {
+  //   return this.organelleSelectorInfo[organelleType].opaqueSelector ?
+  //     this.organelleSelectorInfo[organelleType].opaqueSelector :
+  //     this.organelleSelectorInfo[organelleType].selector;
+  // }
+}
+
+export default OrganelleWrapper;

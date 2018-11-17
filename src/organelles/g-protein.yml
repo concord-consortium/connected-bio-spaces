@@ -1,0 +1,75 @@
+---
+name: gProtein
+image: assets/cell-zoom/g-protein-2.svg
+spawn:
+  'on':
+    selector: "#gprotein-paths-to-receptor path"
+    at: 1
+    which: random
+  # every: 60
+  never: true
+dieWhenExitingWorld: false
+properties:
+  size: 1.1
+  speed: [0.5, 0.8]
+initialState: towards
+rules:
+  towards:
+  - follow:
+      selector: "#gprotein-paths-to-receptor path"
+      which: random
+      direction: backward
+      finally:
+        switch_state: check_if_bound
+  check_if_bound:
+  - if:
+      all:
+      - fact: world.working_receptor
+      - fact:
+          not: world.g_protein_bound
+    then:
+      switch_state: bind_to_receptor
+    else:
+      switch_state: head_away
+  head_away:
+    if:
+      fact: world.working_receptor
+    then:
+      switch_state: away
+    else:
+      switch_state: pick_path_away
+  pick_path_away:
+  - move_to:
+      selector: "#gprotein-paths-to-receptor path"
+      which: random
+      finally:
+        switch_state: away
+  away:
+  - follow:
+      selector: "#gprotein-paths-to-receptor path"
+      which: nearest
+      direction: forward
+      finally:
+        switch_state: towards
+  bind_to_receptor:
+  - set:
+      world.g_protein_bound: true
+  - move_to:
+      selector: "#path-away-from-receptor-part"
+  - change:
+      prop: direction
+      by: 5
+      until: 172
+      finally:
+        switch_state: bound
+  bound:
+  - if:
+      fact: world.hormone_bound
+    then:
+        switch_state: waiting_to_break
+  - wait: forever
+  waiting_to_break:
+  - wait:
+      for: 30
+      finally:
+        notify: "break_time"
