@@ -33,7 +33,7 @@ export class CollectButtonComponent extends BaseComponent<IProps, IState> {
         <div className={buttonClass} onClick={this.handleClickButton}>
           <div className={innerOutlineClass}>
             <img src={mouse.baseImage} className="icon"/>
-            <div className="label">{this.props.subTitle}</div>
+            <div className="label">{mouse.label}</div>
           </div>
         </div>
         <div className="x-close" onClick={this.handleClickClose}>x</div>

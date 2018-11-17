@@ -13,7 +13,8 @@ export const UNCOLLECTED_IMAGE = "../assets/mouse_collect.png";
 export const Mouse = types
   .model("Mouse", {
     sex: SexTypeEnum,
-    genotype: GenotypeEnum
+    genotype: GenotypeEnum,
+    label: ""
   })
   .views(self => ({
     get baseColor(): ColorType {
@@ -38,6 +39,9 @@ export const Mouse = types
     },
     get isHeterozygote(): boolean {
       return (self.genotype === "Bb" || self.genotype === "bB");
+    },
+    setLabel(val: string) {
+      self.label = val;
     }
   }));
 
