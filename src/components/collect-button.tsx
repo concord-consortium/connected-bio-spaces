@@ -3,7 +3,7 @@ import * as React from "react";
 import { BaseComponent, IBaseProps } from "./base";
 
 import "./collect-button.sass";
-import { MouseType, UNCOLLECTED_IMAGE } from "../models/mouse";
+import { Mouse, MouseType, UNCOLLECTED_IMAGE } from "../models/mouse";
 
 interface IProps extends IBaseProps {
   mouse?: MouseType;
@@ -30,13 +30,13 @@ export class CollectButtonComponent extends BaseComponent<IProps, IState> {
     const innerOutlineClass: string = mouse.isHeterozygote ? "inner-outline heterozygote" : "inner-outline";
     return (
       <div>
-        <div className={buttonClass} onClick={this.handleClickButton}>
+        <div className={buttonClass}>
           <div className={innerOutlineClass}>
             <img src={mouse.baseImage} className="icon"/>
             <div className="label">{mouse.label}</div>
           </div>
         </div>
-        <div className="x-close" onClick={this.handleClickClose}>x</div>
+        <div className="x-close" onClick={this.handleClickRemove}>x</div>
       </div>
     );
   }
@@ -52,9 +52,17 @@ export class CollectButtonComponent extends BaseComponent<IProps, IState> {
     );
   }
   private handleClickButton = () => {
-   alert("handleClickButton, button index=" + this.props.index);
+   this.addTestMouseToBackpack();
   }
-  private handleClickClose = () => {
-    alert("handleClickClose, button index=" + this.props.index);
+  private addTestMouseToBackpack = () => {
+    const {backpack} = this.stores;
+    const randSex = Math.random() > .5 ? "male" : "female";
+    const randGenotype = Math.random() > .5 ? (Math.random() > .5 ? "BB" : "Bb") :
+                                                  (Math.random() > .5 ? "bB" : "bb");
+    backpack.addCollectedMouse(Mouse.create({sex: randSex, genotype: randGenotype, label: "lbl"}));
+  }
+  private handleClickRemove = () => {
+    const {backpack} = this.stores;
+    backpack.removeCollectedMouse(this.props.index);
   }
 }

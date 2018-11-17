@@ -8,7 +8,7 @@ export type SexType = typeof SexTypeEnum.Type;
 export const GenotypeEnum = types.enumeration("type", ["BB", "Bb", "bB", "bb"]);
 export type Genotype = typeof GenotypeEnum.Type;
 
-export const UNCOLLECTED_IMAGE = "../assets/mouse_collect.png";
+export const UNCOLLECTED_IMAGE = "assets/mouse_collect.png";
 
 export const Mouse = types
   .model("Mouse", {
@@ -30,11 +30,11 @@ export const Mouse = types
     get baseImage(): string {
       switch (self.genotype) {
         case "BB":
-          return "../assets/mouse_field.png";
+          return "assets/mouse_field.png";
         case "bb":
-          return "../assets/mouse_beach.png";
+          return "assets/mouse_beach.png";
         default:
-          return "../assets/sandrat-tan.png";
+          return "assets/sandrat-tan.png";
       }
     },
     get isHeterozygote(): boolean {

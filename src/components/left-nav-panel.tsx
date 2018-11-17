@@ -37,16 +37,7 @@ export class LeftNavPanelComponent extends BaseComponent<IProps, IState> {
     );
   }
 
-  private addTestMiceToBackpack = () => {
-    const {backpack} = this.stores;
-    backpack.addCollectedMouse(Mouse.create({sex: "male", genotype: "BB", label: "lbl"}));
-    backpack.addCollectedMouse(Mouse.create({sex: "male", genotype: "Bb", label: "lbl"}));
-    backpack.addCollectedMouse(Mouse.create({sex: "female", genotype: "bB", label: "lbl"}));
-    backpack.addCollectedMouse(Mouse.create({sex: "female", genotype: "bb", label: "lbl"}));
-  }
-
   private renderCollectButtons = () => {
-    this.addTestMiceToBackpack();
     const {backpack} = this.stores;
     const {ui} = this.stores;
     const collectedSlots = backpack.collectedMice.length;
