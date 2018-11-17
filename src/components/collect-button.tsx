@@ -7,7 +7,6 @@ import { Mouse, MouseType, UNCOLLECTED_IMAGE } from "../models/mouse";
 
 interface IProps extends IBaseProps {
   mouse?: MouseType;
-  subTitle: string;
   index: number;
 }
 interface IState {}

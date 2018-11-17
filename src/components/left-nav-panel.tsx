@@ -45,7 +45,6 @@ export class LeftNavPanelComponent extends BaseComponent<IProps, IState> {
     const buttons = backpack.collectedMice.map((slot, index) => {
                       return <CollectButtonComponent
                                mouse={slot}
-                               subTitle={"tbd"}
                                index={index}
                                key={index}
                              />;
@@ -64,7 +63,6 @@ export class LeftNavPanelComponent extends BaseComponent<IProps, IState> {
     return (
       <CollectButtonComponent
         mouse={undefined}
-        subTitle={""}
         index={index}
         key={index}
       />
