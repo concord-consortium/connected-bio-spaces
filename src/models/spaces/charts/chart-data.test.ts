@@ -81,4 +81,20 @@ describe("chart data model", () => {
     expect(chart.dataSets[1].dataAsXY[1]).toEqual({ x: 20, y: 15 });
 
   });
+
+  it("can retrieve a subset of data", () => {
+    chart.dataSets[0].addDataPoint(65, 75, "delta");
+    chart.dataSets[0].addDataPoint(70, 85, "echo");
+    chart.dataSets[0].addDataPoint(75, 80, "foxtrot");
+
+    chart.setDataSetSubset(2, 2);
+
+    expect(chart.dataSets[0].dataPoints.length).toEqual(6);
+    expect(chart.dataSets[0].dataA1.length).toEqual(2);
+    expect(chart.dataSets[0].dataA1[0]).toEqual(50);
+    expect(chart.dataSets[0].dataA2[0]).toEqual(70);
+
+    // try getting a point from an index beyond the subset length
+    expect(chart.dataSets[0].dataA1[2]).toBeUndefined;
+  });
 });
