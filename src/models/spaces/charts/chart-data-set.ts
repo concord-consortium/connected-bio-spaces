@@ -71,12 +71,18 @@ export const ChartDataSetModel = types
     maxPoints: types.maybe(types.number),
     fixedMin: types.maybe(types.number),
     fixedMax: types.maybe(types.number),
-    expandOnly: false
+    expandOnly: false,
+    dataStartIdx: types.maybe(types.number)
   })
   .views(self => ({
-    get dataTail() {
+    get visibleDataPoints() {
       if (self.maxPoints && self.maxPoints > 0 && self.dataPoints.length >= self.maxPoints) {
-        return self.dataPoints.slice(-self.maxPoints);
+        if (self.dataStartIdx !== undefined && self.dataStartIdx > -1) {
+          return self.dataPoints.slice(self.dataStartIdx, self.dataStartIdx + self.maxPoints);
+        } else {
+          // just get the tail of most recent data
+          return self.dataPoints.slice(-self.maxPoints);
+        }
       } else {
         // If we don't set a max, don't use filtering
         return self.dataPoints;
@@ -86,32 +92,32 @@ export const ChartDataSetModel = types
   .views(self => ({
     // labels for a data point - essential for a bar graph, optional for a line
     get dataLabels() {
-      return self.dataTail.map(p => p.label);
+      return self.visibleDataPoints.map(p => p.label);
     },
     // Axis 1 data, for a line will be point x value, for bar will be quantity
     get dataA1() {
-      return self.dataTail.map(p => p.a1);
+      return self.visibleDataPoints.map(p => p.a1);
     },
     // Axis 2 data for a line will be y value, for a bar will be label
     get dataA2() {
-      if (self.dataTail.length > 0 && self.dataTail[0].a2) {
-        return self.dataTail.map(p => p.a2);
+      if (self.visibleDataPoints.length > 0 && self.visibleDataPoints[0].a2) {
+        return self.visibleDataPoints.map(p => p.a2);
       } else {
-        return self.dataTail.map(p => p.label);
+        return self.visibleDataPoints.map(p => p.label);
       }
     },
     // Determine minimum and maximum values on each axis
     get maxA1(): number | undefined {
-      if (!self.dataTail || self.dataTail.length === 0) {
+      if (!self.visibleDataPoints || self.visibleDataPoints.length === 0) {
         return defaultMax;
       } else {
-        return Math.max(...self.dataTail.map(p => p.a1));
+        return Math.max(...self.visibleDataPoints.map(p => p.a1));
       }
     },
     get maxA2(): number | undefined {
       if (self.fixedMax !== undefined) {
         return self.fixedMax;
-      } else if (!self.dataTail || self.dataTail.length === 0) {
+      } else if (!self.visibleDataPoints || self.visibleDataPoints.length === 0) {
         return defaultMax;
       }
       else if (self.expandOnly) {
@@ -119,32 +125,32 @@ export const ChartDataSetModel = types
         return Math.max(...self.dataPoints.map(p => p.a2));
       } else {
         // only return max of visible subset of data
-        return Math.max(...self.dataTail.map(p => p.a2));
+        return Math.max(...self.visibleDataPoints.map(p => p.a2));
       }
     },
     get minA1(): number | undefined {
-      if (!self.dataTail || self.dataTail.length === 0) {
+      if (!self.visibleDataPoints || self.visibleDataPoints.length === 0) {
         return defaultMin;
       } else {
-        return Math.min(...self.dataTail.map(p => p.a1));
+        return Math.min(...self.visibleDataPoints.map(p => p.a1));
       }
     },
     get minA2(): number | undefined {
       if (self.fixedMin !== undefined) {
         return self.fixedMin;
-      } else if (!self.dataTail || self.dataTail.length === 0) {
+      } else if (!self.visibleDataPoints || self.visibleDataPoints.length === 0) {
         return defaultMin;
       } else {
-        return Math.min(...self.dataTail.map(p => p.a2));
+        return Math.min(...self.visibleDataPoints.map(p => p.a2));
       }
     },
     // Lines and scatter plots require X and Y coordinates
     get dataAsXY() {
-      return self.dataTail.map(d => ({x: d.a1, y: d.a2}));
+      return self.visibleDataPoints.map(d => ({x: d.a1, y: d.a2}));
     },
     // Sort lines in increasing order of X for time-based plots
     get timeSeriesXY() {
-      const xyData = self.dataTail.map(d => ({ x: d.a1, y: d.a2 }));
+      const xyData = self.visibleDataPoints.map(d => ({ x: d.a1, y: d.a2 }));
       xyData.sort(timeSeriesSort);
       return xyData;
     },
@@ -159,6 +165,10 @@ export const ChartDataSetModel = types
   }))
   .extend(self => {
     // actions
+    function subsetPoints(idx: number) {
+      self.dataStartIdx = idx;
+    }
+
     function addDataPoint(a1: number, a2: number, label: string) {
       self.dataPoints.push({ a1, a2, label });
     }
@@ -184,13 +194,19 @@ export const ChartDataSetModel = types
       self.dataPoints.splice(0, self.dataPoints.length);
     }
 
+    function setMaxDataPoints(maxPoints: number) {
+      self.maxPoints = maxPoints;
+    }
+
     return {
       actions: {
         addDataPoint,
         updateDataPoint,
         deleteDataPoint,
         changeColor,
-        clearDataPoints
+        clearDataPoints,
+        subsetPoints,
+        setMaxDataPoints
       }
     };
   });

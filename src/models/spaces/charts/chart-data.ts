@@ -42,10 +42,24 @@ export const ChartDataModel = types
     function addDataSet(dataSet: ChartDataSetModelType) {
       self.dataSets.push(dataSet);
     }
+    function setDataSetSubset(idx: number, maxPoints: number) {
+      self.dataSets.forEach(d => {
+        d.subsetPoints(idx);
+        d.setMaxDataPoints(maxPoints);
+      });
+    }
+    function allData() {
+      self.dataSets.forEach(d => {
+        d.subsetPoints(-1);
+        d.setMaxDataPoints(-1);
+      });
+    }
 
     return {
       actions: {
-        addDataSet
+        allData,
+        addDataSet,
+        setDataSetSubset
       }
     };
   });
