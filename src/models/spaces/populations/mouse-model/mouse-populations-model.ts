@@ -11,13 +11,17 @@ const chartData = {
       name: "White mice",
       dataPoints: [],
       color: "#f4ce83",
-      maxPoints: 100
+      maxPoints: 100,
+      fixedMin: 0,
+      expandOnly: true
     },
     {
       name: "Brown mice",
       dataPoints: [],
       color: "#795423",
-      maxPoints: 100
+      maxPoints: 100,
+      fixedMin: 0,
+      expandOnly: true
     }
   ]
  };
