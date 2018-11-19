@@ -1,0 +1,76 @@
+@import vars
+
+.collect-button-holder
+  position: relative
+  display: flex
+  flex-shrink: 0
+  height: $collect-button-holder-width
+  width: $collect-button-holder-height
+  justify-content: center
+  align-items: center
+  margin-bottom: $double-component-margin
+
+  .x-close
+    position: absolute
+    top: 0px
+    left: 88px
+    padding: 1px
+    color: $color-white
+    font-family: $title-font-stack
+    font-weight: bold
+
+  .x-close:hover
+    color: $color-nav-cerulean-dark2
+
+  .index
+    position: absolute
+    top: 0px
+    left: 0px
+    padding: 1px
+    font-family: $title-font-stack
+    font-size: $font-size-header
+    font-weight: bold
+    color: $color-nav-cinder-light1
+
+  .collect-button
+    display: flex
+    justify-content: center
+    align-items: center
+    width: $collect-button-width
+    height: $collect-button-height
+    border: $collect-button-border-width solid $color-black
+    border-radius: $collect-button-radius
+    background-color: $color-white
+
+    &.uncollected
+      border-style: dashed
+      border-color: $color-nav-cinder-light1
+      background-color: $color-nav-cerulean-light3
+
+    &.male
+      border-color: $color-key-red
+
+    &.female
+      border-color: $color-key-yellow
+
+    .inner-outline
+      display: flex
+      flex-direction: column
+      justify-content: center
+      align-items: center
+      width: $collect-button-inner-border-width
+      height: $collect-button-inner-border-height
+
+      &.heterozygote
+        border-radius: $collect-button-inner-border-radius
+        border: $collect-button-border-width dashed $color-key-blue
+
+    .icon
+      height: $collect-button-icon-height
+
+    .label
+      font-size: $font-size-label1
+      color: $color-nav-cinder-dark2
+
+  .collect-button:hover
+    border-color: $color-nav-cerulean-dark2

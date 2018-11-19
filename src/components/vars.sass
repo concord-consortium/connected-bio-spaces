@@ -19,6 +19,7 @@ $quarter-margin: $margin / 4
 $half-margin: $margin / 2
 $double-margin: $margin * 2
 $component-margin: 3px
+$internal-component-margin: 2px
 $double-component-margin: $component-margin * 2
 $triple-component-margin: $component-margin * 3
 $component-padding: 3px
@@ -31,6 +32,10 @@ $component-border-radius: 5px
 // fonts
 //
 $title-font-stack: Arial, Helvetica, sans-serif
+$font-size-header: 15px
+$font-size-normal: 12px
+$font-size-label1: 11px
+$font-size-label2: 10px
 
 //
 // colors
@@ -40,17 +45,36 @@ $color-white: #ffffff
 $color-red: #ff0000
 $color-yellow: #ffff00
 $color-blue: #0000ff
+$color-key-blue: #0099ff
+$color-key-red: #de444b
+$color-key-yellow: #ffff00
+$color-nav-cinder-dark3: #2c3840
+$color-nav-cinder-dark2: #434e56
+$color-nav-cinder-dark1: #5d6e77
+$color-nav-cinder: #8b989f
+$color-nav-cinder-light1: #aeb9bf
+$color-nav-cinder-light2: #dde2e5
+$color-nav-cinder-light3: #f1f3f6
+$color-nav-shamrock-dark3: #1a6330
+$color-nav-shamrock-dark2: #269246
+$color-nav-shamrock-dark1: #31bc5a
+$color-nav-shamrock: #5dd581
+$color-nav-shamrock-light1: #92e3aa
+$color-nav-shamrock-light2: #d1f3db
+$color-nav-shamrock-light3: #eefaf2
+$color-nav-cerulean-dark3: #065872
+$color-nav-cerulean-dark2: #0984ab
+$color-nav-cerulean-dark1: #0caadd
+$color-nav-cerulean: #3cc8f5
+$color-nav-cerulean-light1: #7ad9f8
+$color-nav-cerulean-light2: #c8effc
+$color-nav-cerulean-light3: #ebf9fe
 $color-dark-green: #49B860
 $color-light-green: #D2EDD8
-$color-dark-blue: #00AAE2
-$color-medium-blue: #7DD4F0
-$color-medium-blue-2: #5794A5
-$color-light-blue: #C0EAF8
 $color-gray-blue: #EEF9FC
 $color-dark-gold: #EBB936
 $color-light-gold: #D8E0B0
 $color-mouse-brown: #B18431
-
 $color-gray-36: #242424
 $color-gray-121: #797979
 $color-gray-148: #949494
@@ -67,7 +91,8 @@ $main-content-color: $color-gray-36
 //
 // top bar
 //
-$top-bar-height: 40px
+$top-bar-height: 29px
+$top-bar-icon-height: 16px
 $top-bar-icon-bgcolor: $color-gray-242
 $top-bar-title-bgcolor: $color-gray-228
 $top-bar-title-color: $color-gray-121
@@ -77,25 +102,39 @@ $top-bar-title-color: $color-gray-121
 //
 $left-nav-bgcolor: $color-white
 $left-nav-header-color: $color-white
-$left-nav-investigate-header-bgcolor: $color-dark-green
-$left-nav-collect-header-bgcolor: $color-dark-blue
-$left-nav-investigate-bgcolor: $color-light-green
-$left-nav-collect-bgcolor: $color-light-blue
-$left-nav-panel-width: 120px
+$left-nav-investigate-header-bgcolor: $color-nav-shamrock-dark1
+$left-nav-collect-header-bgcolor: $color-nav-cerulean-dark1
+$left-nav-investigate-bgcolor: $color-nav-shamrock-light2
+$left-nav-collect-bgcolor: $color-nav-cerulean-light2
+$left-nav-panel-width: 127px
 $left-nav-header-height: 30px
-$left-nav-investigate-height: 80px
+$left-nav-investigate-height: 104px
 $left-nav-footer-height: 40px
 $left-nav-footer-color: $color-white
-$left-nav-footer-bgcolor: $color-dark-blue
+$left-nav-footer-bgcolor: $color-nav-cerulean-dark1
 $left-nav-legend-circle-size: 6px
 $left-nav-legend-font-size: 10px
-$left-nav-legend-male-color: $color-red
-$left-nav-legend-female-color: $color-yellow
-$left-nav-legend-heterozygote-color: $color-blue
+$left-nav-legend-male-color: $color-key-red
+$left-nav-legend-female-color: $color-key-yellow
+$left-nav-legend-heterozygote-color: $color-key-blue
 $scroll-bar-width: 6px
 $scroll-bar-bgcolor: $color-gray-241
-$scroll-bar-thumb-color: $color-medium-blue
-$scroll-bar-hover-color: $color-medium-blue-2
+$scroll-bar-thumb-color: $color-nav-cerulean
+$scroll-bar-hover-color: $color-nav-cerulean-dark2
+
+//
+// collect buttons
+//
+$collect-button-holder-width: 100px
+$collect-button-holder-height: $collect-button-holder-width
+$collect-button-width: 88px
+$collect-button-height: $collect-button-width
+$collect-button-radius: $collect-button-width / 2
+$collect-button-inner-border-width: $collect-button-width - 10px
+$collect-button-inner-border-height: $collect-button-inner-border-width
+$collect-button-inner-border-radius: $collect-button-inner-border-width / 2
+$collect-button-border-width: 2px
+$collect-button-icon-height: 45px
 
 //
 // buttons

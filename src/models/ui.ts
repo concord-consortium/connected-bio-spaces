@@ -7,7 +7,8 @@ export const UIModel = types
     showInvestigationModalSelect: false,
     showInvestigationPanel: false,
     showPopulationGraph: false,
-    investigationPanelSpace: "populations"
+    investigationPanelSpace: "populations",
+    availableBackpackSlots: 6
   })
   .actions((self) => {
     return {
@@ -22,6 +23,9 @@ export const UIModel = types
       },
       setInvestigationPanelSpace(space: Spaces) {
         self.investigationPanelSpace = space;
+      },
+      setAvailableBackpackSlots(val: number) {
+        self.availableBackpackSlots = val;
       }
     };
   });
