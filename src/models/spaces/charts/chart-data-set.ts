@@ -68,7 +68,10 @@ export const ChartDataSetModel = types
     name: types.string,
     dataPoints: types.array(DataPoint),
     color: types.string,
-    maxPoints: types.maybe(types.number)
+    maxPoints: types.maybe(types.number),
+    fixedMin: types.maybe(types.number),
+    fixedMax: types.maybe(types.number),
+    expandOnly: false
   })
   .views(self => ({
     get dataTail() {
@@ -106,9 +109,16 @@ export const ChartDataSetModel = types
       }
     },
     get maxA2(): number | undefined {
-      if (!self.dataTail || self.dataTail.length === 0) {
+      if (self.fixedMax !== undefined) {
+        return self.fixedMax;
+      } else if (!self.dataTail || self.dataTail.length === 0) {
         return defaultMax;
+      }
+      else if (self.expandOnly) {
+        // always return max from all points so y axis only scales up, never down
+        return Math.max(...self.dataPoints.map(p => p.a2));
       } else {
+        // only return max of visible subset of data
         return Math.max(...self.dataTail.map(p => p.a2));
       }
     },
@@ -120,7 +130,9 @@ export const ChartDataSetModel = types
       }
     },
     get minA2(): number | undefined {
-      if (!self.dataTail || self.dataTail.length === 0) {
+      if (self.fixedMin !== undefined) {
+        return self.fixedMin;
+      } else if (!self.dataTail || self.dataTail.length === 0) {
         return defaultMin;
       } else {
         return Math.min(...self.dataTail.map(p => p.a2));
