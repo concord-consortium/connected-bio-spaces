@@ -2,7 +2,7 @@ import * as React from "react";
 import { Scatter, ChartData } from "react-chartjs-2";
 import { observer } from "mobx-react";
 import { ChartDataModelType } from "../../models/spaces/charts/chart-data";
-import { ChartOptions, ChartAnimationOptions } from "chart.js";
+import { ChartOptions } from "chart.js";
 
 interface ILineProps {
   chartData: ChartDataModelType;
@@ -79,7 +79,6 @@ const lineData = (chartData: ChartDataModelType) => {
   return linePlotData;
 };
 
-const edgePadding = 0.1;
 @observer
 export class LineGraph extends React.Component<ILineProps> {
   constructor(props: ILineProps) {
@@ -99,8 +98,8 @@ export class LineGraph extends React.Component<ILineProps> {
         display: false,
         yAxes: [{
           ticks: {
-            min: minMaxValues.minA2 - (minMaxValues.minA2 * edgePadding),
-            max: minMaxValues.maxA2 + (minMaxValues.maxA2 * edgePadding)
+            min: minMaxValues.minA2,
+            max: minMaxValues.maxA2
           },
           scaleLabel: {
             display: true,
@@ -129,7 +128,7 @@ export class LineGraph extends React.Component<ILineProps> {
     );
 
     return (
-      <div>
+      <div className="line-chart-container">
         {graphs}
       </div>
     );
