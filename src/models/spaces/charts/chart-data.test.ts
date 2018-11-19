@@ -93,6 +93,6 @@ describe("chart data model", () => {
     expect(chart.dataSets[0].dataA1.length).toEqual(2);
     expect(chart.dataSets[0].dataA1[0]).toEqual(50);
     expect(chart.dataSets[0].dataA2[0]).toEqual(70);
-    expect(chart.dataSets[0].dataA1[2]).toBeUndefined;
+    expect(chart.dataSets[0].dataA1[2]).toBeUndefined();
   });
 });
