@@ -87,16 +87,16 @@ export class OrganelleWrapper extends React.Component<OrganelleWrapperProps, Org
       height: 312
     };
 
-    const modelProperties = observable.map({
+    const modelProperties: any = {
       albino: false,
       working_tyr1: false,
       working_myosin_5a: true,
       open_gates: false,
-      eumelanin: true,
+      eumelanin: 50,
       hormone_spawn_period: 40,
       working_receptor: true
-    });
-    modelDef.properties = modelProperties.toJS();
+    };
+    modelDef.properties = modelProperties;
 
     createModel(modelDef).then((m: any) => {
       // appStore.boxes.get(this.props.boxId).setModel(m);
@@ -105,14 +105,13 @@ export class OrganelleWrapper extends React.Component<OrganelleWrapperProps, Org
     });
 
     // Update model properties as they change
-    // this.disposers.push(autorun(() => {
-    //   const newModelProperties = modelProperties;
-    //   if (this.getModel()) {
-    //     newModelProperties.keys().forEach((key: any) => {
-    //       this.getModel().world.setProperty(key, newModelProperties.get(key));
-    //     });
-    //   }
-    // }));
+    this.disposers.push(autorun(() => {
+      if (this.getModel()) {
+        Object.keys(modelProperties).forEach((key: string) => {
+          this.getModel().world.setProperty(key, modelProperties[key]);
+        });
+      }
+    }));
   }
 
   public componentWillUnmount() {
