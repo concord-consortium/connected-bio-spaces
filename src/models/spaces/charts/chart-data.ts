@@ -42,12 +42,17 @@ export const ChartDataModel = types
     function addDataSet(dataSet: ChartDataSetModelType) {
       self.dataSets.push(dataSet);
     }
+    // If we want to scrub back and forth along a timeline of data points, but still need
+    // to limit our data point quantity for performance, pass a start index and
+    // the number of required points to filter the data
     function setDataSetSubset(idx: number, maxPoints: number) {
       self.dataSets.forEach(d => {
         d.subsetPoints(idx);
         d.setMaxDataPoints(maxPoints);
       });
     }
+    // To fetch all data from all datasets, remove any subset index points and set the max number of points to -1
+    // to ensure all data is returned unfiltered
     function allData() {
       self.dataSets.forEach(d => {
         d.subsetPoints(-1);

@@ -68,9 +68,12 @@ export const ChartDataSetModel = types
     name: types.string,
     dataPoints: types.array(DataPoint),
     color: types.string,
-    maxPoints: types.maybe(types.number),
+    // If maxPoints is 0 we will always work with the entire data set
+    maxPoints: types.optional(types.number, -1),
     fixedMin: types.maybe(types.number),
     fixedMax: types.maybe(types.number),
+    // expandOnly is used for y-axis scaling. When requesting min/max point values,
+    // if this is set the a2 / y axis max returns the max of the full data set, not just the visiblePoints
     expandOnly: false,
     dataStartIdx: types.maybe(types.number)
   })
@@ -165,6 +168,8 @@ export const ChartDataSetModel = types
   }))
   .extend(self => {
     // actions
+    // fetching a subset of points is designed for scrubbing back and forth along a large set of data
+    // starting from a specified index. Set to -1 to remove the filter.
     function subsetPoints(idx: number) {
       self.dataStartIdx = idx;
     }
@@ -194,6 +199,7 @@ export const ChartDataSetModel = types
       self.dataPoints.splice(0, self.dataPoints.length);
     }
 
+    // used to filter data to a fixed number of points, or returns all points if set to -1
     function setMaxDataPoints(maxPoints: number) {
       self.maxPoints = maxPoints;
     }
