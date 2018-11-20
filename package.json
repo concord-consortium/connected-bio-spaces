@@ -124,6 +124,7 @@
     "react-chartjs-2": "^2.7.4",
     "react-dom": "^16.5.0",
     "react-jsonschema-form": "^1.0.5",
+    "react-sizeme": "^2.5.2",
     "uuid": "^3.3.2",
     "wait-on": "^3.0.1"
   }

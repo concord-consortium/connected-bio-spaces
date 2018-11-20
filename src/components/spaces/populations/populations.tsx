@@ -1,10 +1,18 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { PopulationsView } from "populations-react";
+import { SizeMe } from "react-sizeme";
 import { BaseComponent, IBaseProps } from "../../base";
 
 import "./populations.sass";
 import { ToolbarButton } from "../../../models/spaces/populations/populations";
+
+interface SizeMeProps {
+  size?: {
+    width: number | null;
+    height: number | null;
+  };
+}
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -37,15 +45,36 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
             return (<button key={button.title} onClick={button.action}>{button.title}</button>);
         }
       });
+
+      const runButtonLabel = populations.isPlaying ? "Pause" : "Run";
       return (
-        <div>
-          <PopulationsView interactive={populations.interactive} />
-          <div className="populations-toolbar">
-            <button onClick={this.handleClickRunButton}>{populations.isPlaying ? "Pause" : "Run"}</button>
-            <button onClick={this.handleClickResetButton}>Reset</button>
-            { buttons }
-          </div>
-        </div>
+        <SizeMe monitorHeight={true}>
+          {({ size }: SizeMeProps) => {
+            let zoomStyle = {};
+            if (size && size.width) {
+              zoomStyle = {
+                transform: `scale(${size.width / 450})`,
+                transformOrigin: "left top"
+              };
+            }
+            return (
+              <div>
+                {
+                  (size && size.width)
+                  ? (<div style={zoomStyle}>
+                      <PopulationsView interactive={populations.interactive}/>
+                    </div>)
+                  : null
+                }
+                <div className="populations-toolbar">
+                  <button onClick={this.handleClickRunButton}>{runButtonLabel}</button>
+                  <button onClick={this.handleClickResetButton}>Reset</button>
+                  { buttons }
+                </div>
+              </div>
+            );
+          }}
+        </SizeMe>
       );
     }
   }
