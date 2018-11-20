@@ -1,4 +1,6 @@
 import { types, Instance } from "mobx-state-tree";
+import { ChartDataModelType, ChartDataModel } from "../charts/chart-data";
+import { DataPoint, ChartDataSetModel, ChartColors } from "../charts/chart-data-set";
 
 export const Organelle = types.enumeration("type", [
   "nucleus",
@@ -52,6 +54,28 @@ export const CellZoomModel = types
     hoveredOrganelle: types.maybe(Organelle),
     mode: types.optional(Mode, "normal")
   })
+  .views(self => ({
+    get currentData(): ChartDataModelType {
+      const chartDataSets = [];
+      const points = [];
+      points.push (DataPoint.create({ a1: 40, a2: 0, label: "alpha" }));
+      points.push (DataPoint.create({ a1: 20, a2: 0, label: "bravo" }));
+      points.push(DataPoint.create({ a1: 50, a2: 0, label: "charlie" }));
+
+      chartDataSets.push(ChartDataSetModel.create({
+        name: "Sample Dataset1",
+        dataPoints: points,
+        color: ChartColors[0].hex,
+        maxPoints: 100
+      }));
+
+      const chart = ChartDataModel.create({
+        name: "Samples",
+        dataSets: chartDataSets
+      });
+      return chart;
+    }
+  }))
   .actions((self) => {
     return {
       setHoveredOrganelle(organelle: OrganelleType) {
