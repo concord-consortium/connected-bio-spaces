@@ -1,14 +1,16 @@
 import * as React from "react";
 import { autorun, IReactionDisposer, observable } from "mobx";
-import { observer } from "mobx-react";
+import { observer, inject } from "mobx-react";
 // import { IOrganism, OrganelleRef } from "../models/Organism";
 // import { OrganelleType, mysteryOrganelleNames } from "../models/Organelle";
 // import { View, appStore } from "../stores/AppStore";
 // import { rootStore, Mode } from "../stores/RootStore";
 import { createModel } from "organelle";
 import * as Cell from "./cell-models/cell.json";
+import { OrganelleType, ModeType, ORGANELLE_INFO } from "../../../models/spaces/cell-zoom/cell-zoom";
+import { BaseComponent } from "../../base";
 // import { SubstanceType } from "../models/Substance";
-// import "./OrganelleWrapper.css";
+import "./OrganelleWrapper.sass";
 
 interface OrganelleWrapperProps {
   elementName: string;
@@ -21,44 +23,53 @@ interface OrganelleWrapperState {
 
 const SUBSTANCE_ADDITION_MS = 3500;
 
+type SelectorInfo = {
+  [key in OrganelleType]: {
+    selector: string,
+    opaqueSelector?: string,
+    visibleModes?: ModeType[]
+  }
+};
+
+@inject("stores")
 @observer
-export class OrganelleWrapper extends React.Component<OrganelleWrapperProps, OrganelleWrapperState> {
+export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, OrganelleWrapperState> {
     private disposers: IReactionDisposer[] = [];
     private model: any;
-    // private organelleSelectorInfo: any = {
-    //   [OrganelleType.Nucleus]: {
-    //     selector: "#nucleus",
-    //     visibleModes: [Mode.Normal]
-    //   },
-    //   [OrganelleType.Cytoplasm]: {
-    //     selector: `#cytoplasm`,
-    //     opaqueSelector: "#cellshape_0_Layer0_0_FILL, #intercell_zoom_bounds"
-    //   },
-    //   [OrganelleType.Golgi]: {
-    //     selector: "#golgi_x5F_apparatus",
-    //     visibleModes: [Mode.Normal]
-    //   },
-    //   [OrganelleType.Extracellular]: {
-    //     selector: `#intercell`,
-    //     opaqueSelector: "#Layer6_0_FILL"
-    //   },
-    //   [OrganelleType.Melanosomes]: {
-    //     selector: "#melanosome_2, #melanosome_4"
-    //   },
-    //   [OrganelleType.Receptor]: {
-    //     selector: "#receptor-broken, #receptor-working, #receptor-bound",
-    //     visibleModes: [Mode.Normal]
-    //   },
-    //   [OrganelleType.Gate]: {
-    //     selector: ".gate-a, .gate-b, .gate-c, .gate-d",
-    //     visibleModes: [Mode.Normal]
-    //   },
-    //   [OrganelleType.NearbyCells]: {
-    //     selector: "#other_cells",
-    //     opaqueSelector: "#backcell_x5F_color",
-    //     visibleModes: [Mode.Normal]
-    //   }
-    // };
+    private organelleSelectorInfo: SelectorInfo = {
+      nucleus: {
+        selector: "#nucleus",
+        visibleModes: ["normal"]
+      },
+      cytoplasm: {
+        selector: `#cytoplasm`,
+        opaqueSelector: "#cellshape_0_Layer0_0_FILL, #intercell_zoom_bounds"
+      },
+      golgi: {
+        selector: "#golgi_x5F_apparatus",
+        visibleModes: ["normal"]
+      },
+      extracellular: {
+        selector: `#intercell`,
+        opaqueSelector: "#Layer6_0_FILL"
+      },
+      melanosome: {
+        selector: "#melanosome_2, #melanosome_4"
+      },
+      receptor: {
+        selector: "#receptor-broken, #receptor-working, #receptor-bound",
+        visibleModes: ["normal"]
+      },
+      gate: {
+        selector: ".gate-a, .gate-b, .gate-c, .gate-d",
+        visibleModes: ["normal"]
+      },
+      nearbyCell: {
+        selector: "#other_cells",
+        opaqueSelector: "#backcell_x5F_color",
+        visibleModes: ["normal"]
+      }
+    };
     // private modelDefs: any = {
     //   Cell: CellModels.cell,
     //   Protein: CellModels.receptor
@@ -210,10 +221,12 @@ export class OrganelleWrapper extends React.Component<OrganelleWrapperProps, Org
   }
 
   public render() {
+    const {cellZoom} = this.stores;
     // const hoverLabel = appStore.mysteryLabels ?
     //   mysteryOrganelleNames[this.state.hoveredOrganelle] : this.state.hoveredOrganelle;
-    const hoverLabel = "hover";
-    const hoverDiv = this.state.hoveredOrganelle
+    const {hoveredOrganelle} = cellZoom;
+    const hoverLabel = hoveredOrganelle ? ORGANELLE_INFO[hoveredOrganelle].displayName : undefined;
+    const hoverDiv = hoverLabel
       ? (
         <div className="hover-location">
           {hoverLabel}
@@ -314,10 +327,13 @@ export class OrganelleWrapper extends React.Component<OrganelleWrapperProps, Org
       // organism.setCellLightness(percentLightness);
     });
 
-    // model.on("view.hover.enter", (evt: any) => {
-    //   const hoveredOrganelle = this.getOrganelleFromMouseEvent(evt);
-    //   this.setState({hoveredOrganelle});
-    // });
+    model.on("view.hover.enter", (evt: any) => {
+      const {cellZoom} = this.stores;
+      const hoveredOrganelle = this.getOrganelleFromMouseEvent(evt);
+      if (hoveredOrganelle) {
+        cellZoom.setHoveredOrganelle(hoveredOrganelle);
+      }
+    });
 
     // model.on("view.click", (evt: any) => {
     //   const clickTarget: OrganelleType = this.getOrganelleFromMouseEvent(evt);
@@ -341,28 +357,28 @@ export class OrganelleWrapper extends React.Component<OrganelleWrapperProps, Org
     // });
   }
 
-  // private getOrganelleFromMouseEvent(evt: any) {
-  //   const possibleTargets: OrganelleType[] = Object.keys(OrganelleType)
-  //     .map(key => OrganelleType[key])
-  //     .filter(organelle => this.organelleSelectorInfo[organelle])
-  //     .filter(organelle => {
-  //       const visibleModes = this.organelleSelectorInfo[organelle].visibleModes;
-  //       return !visibleModes || visibleModes.indexOf(rootStore.mode) > -1;
-  //     });
-  //   return possibleTargets.find((t) => {
-  //     return evt.target._organelle.matches({selector: this.organelleSelectorInfo[t].selector});
-  //   });
-  // }
+  private getOrganelleFromMouseEvent(evt: any): OrganelleType | undefined {
+    const {cellZoom} = this.stores;
+    const possibleTargets: OrganelleType[] = (Object.keys(this.organelleSelectorInfo) as OrganelleType[])
+      .filter(organelle => {
+        const organelleInfo = this.organelleSelectorInfo[organelle];
+        const visibleModes = organelleInfo.visibleModes;
+        return !visibleModes || visibleModes.indexOf(cellZoom.mode) > -1;
+      });
+    return possibleTargets.find((t) => {
+      return evt.target._organelle.matches({selector: this.organelleSelectorInfo[t].selector});
+    });
+  }
 
   private resetHoveredOrganelle() {
     this.setState({hoveredOrganelle: null});
   }
 
-  // private getOpaqueSelector(organelleType: string) {
-  //   return this.organelleSelectorInfo[organelleType].opaqueSelector ?
-  //     this.organelleSelectorInfo[organelleType].opaqueSelector :
-  //     this.organelleSelectorInfo[organelleType].selector;
-  // }
+  private getOpaqueSelector(organelleType: OrganelleType) {
+    return this.organelleSelectorInfo[organelleType].opaqueSelector ?
+      this.organelleSelectorInfo[organelleType].opaqueSelector :
+      this.organelleSelectorInfo[organelleType].selector;
+  }
 }
 
 export default OrganelleWrapper;
