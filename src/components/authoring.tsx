@@ -129,8 +129,8 @@ export const defaultAuthoring = {
       showStudentControlOfInheritance: false,
       breedWithoutInheritance: false,
       randomOffspring: {
-        white: 0,
-        tan: 0
+        white: 33.33,
+        tan: 33.33
       }
     }
   }

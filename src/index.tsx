@@ -11,16 +11,19 @@ import { AuthoringComponent } from "./components/authoring";
 
 const stores = createStores( {}, urlParams );
 
+const appRoot = document.getElementById("app");
+
 if (urlParams.authoring) {
+  appRoot!.classList.add("authoring");
   ReactDOM.render((
     <AuthoringComponent />
-    ), document.getElementById("app")
+    ), appRoot
   );
 } else {
   ReactDOM.render(
     <Provider stores={stores}>
       <AppComponent showTopBar={urlParams.topBar} />
     </Provider>,
-    document.getElementById("app")
+    appRoot
   );
 }
