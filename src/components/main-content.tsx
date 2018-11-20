@@ -3,14 +3,15 @@ import * as React from "react";
 import { BaseComponent, IBaseProps } from "./base";
 
 import "./main-content.sass";
-import { InvestigateDialogComponent } from "./investigate-dialog";
 import { PopulationsSpaceComponent } from "./spaces/populations-space";
 
 interface IProps extends IBaseProps {}
 interface IState {}
 
 const SpaceComponents: any = {
-  populations: PopulationsSpaceComponent
+  populations: PopulationsSpaceComponent,
+  breeding: PopulationsSpaceComponent,
+  organism: PopulationsSpaceComponent
 };
 
 @inject("stores")
@@ -26,15 +27,13 @@ export class MainContentComponent extends BaseComponent<IProps, IState> {
   }
 
   private renderMainContent() {
-    const {showInvestigationModalSelect, investigationPanelSpace} = this.stores.ui;
+    const {investigationPanelSpace} = this.stores.ui;
     const {showInvestigationPanel} = this.stores.ui;
 
     // stawman code
     const SpaceComponent = SpaceComponents[investigationPanelSpace];
 
-    if (showInvestigationModalSelect) {
-      return <InvestigateDialogComponent/>;
-    } else if (showInvestigationPanel) {
+    if (showInvestigationPanel) {
       return <SpaceComponent/>;
     }
   }
