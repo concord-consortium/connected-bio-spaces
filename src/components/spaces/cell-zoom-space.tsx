@@ -2,7 +2,9 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { BaseComponent, IBaseProps } from "../base";
 import { TwoUpDisplayComponent } from "../two-up-display";
+import { FourUpDisplayComponent } from "../four-up-display";
 import OrganelleWrapper from "./cell-zoom/OrganelleWrapper";
+import { Chart } from "../charts/chart";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -12,15 +14,24 @@ interface IState {}
 export class CellZoomSpaceComponent extends BaseComponent<IProps, IState> {
 
   public render() {
-    const graphPanel = <div>Graph Placeholder</div>;
-
+    const {populations} = this.stores;
+    const graphTitle = "Graph";
+    // Add a fake chart for now
+    const graphPanel = <Chart title="Chart Test" chartData={populations.currentData} chartType={"line"} />;
+    const cellZoomComponent1 = <TwoUpDisplayComponent
+      leftTitle="Investigate: Cell"
+      leftPanel={<OrganelleWrapper elementName="organelle-wrapper-1" />}
+      rightTitle={graphTitle}
+      rightPanel={graphPanel}
+    />;
+    const cellZoomComponent2 = <TwoUpDisplayComponent
+      leftTitle="Investigate: Cell"
+      leftPanel={<OrganelleWrapper elementName="organelle-wrapper-2" />}
+      rightTitle={graphTitle}
+      rightPanel={graphPanel}
+    />;
     return (
-      <TwoUpDisplayComponent
-        leftTitle="Investigate: Cell"
-        leftPanel={<OrganelleWrapper elementName="organelle-wrapper" />}
-        rightTitle={"Graph"}
-        rightPanel={graphPanel}
-      />
+      <FourUpDisplayComponent topRow={cellZoomComponent1} bottomRow={cellZoomComponent2} />
     );
   }
 
