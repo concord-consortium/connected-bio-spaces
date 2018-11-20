@@ -3,6 +3,7 @@ import * as React from "react";
 import { BaseComponent, IBaseProps } from "./base";
 
 import "./left-nav-panel.sass";
+import { ExploreButtonComponent } from "./explore-button";
 import { CollectButtonComponent } from "./collect-button";
 import { LegendComponent } from "./legend";
 import { Mouse } from "../models/mouse";
@@ -18,14 +19,9 @@ export class LeftNavPanelComponent extends BaseComponent<IProps, IState> {
     return (
       <div className="left-nav-panel">
         <div className="header investigate" >
-        Investigate
+        Explore
         </div>
-        <div className="button-holder investigate">
-          <div className="button square" data-test="investigate-select-button"
-            onClick={this.handleClickInvestigate}>
-            select
-          </div>
-        </div>
+        {this.renderExploreButtons()}
         <div className="header collect" data-test="backpack">
         Collect
         </div>
@@ -33,6 +29,25 @@ export class LeftNavPanelComponent extends BaseComponent<IProps, IState> {
         <div className="footer">
           <LegendComponent/>
         </div>
+      </div>
+    );
+  }
+
+  private renderExploreButtons = () => {
+    return (
+      <div className="button-holder investigate">
+        <ExploreButtonComponent
+          space={"populations"}
+          title={"Population"}
+        />
+        <ExploreButtonComponent
+          space={"breeding"}
+          title={"Breeding"}
+        />
+        <ExploreButtonComponent
+          space={"organism"}
+          title={"Organism"}
+        />
       </div>
     );
   }
@@ -67,11 +82,6 @@ export class LeftNavPanelComponent extends BaseComponent<IProps, IState> {
         key={index}
       />
     );
-  }
-
-  private handleClickInvestigate = () => {
-    const {ui} = this.stores;
-    { ui.setShowInvestigationModalSelect(!ui.showInvestigationModalSelect); }
   }
 
 }
