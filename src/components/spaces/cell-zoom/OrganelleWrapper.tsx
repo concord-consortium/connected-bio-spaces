@@ -22,6 +22,8 @@ interface OrganelleWrapperState {
 }
 
 const SUBSTANCE_ADDITION_MS = 3500;
+const MODEL_HEIGHT = 362;
+const MODEL_WIDTH = 580;
 
 type SelectorInfo = {
   [key in OrganelleType]: {
@@ -94,8 +96,8 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
 
     modelDef.container = {
       elId: this.props.elementName,
-      width: 500,
-      height: 312
+      width: MODEL_WIDTH,
+      height: MODEL_HEIGHT
     };
 
     const modelProperties: any = {
@@ -240,8 +242,9 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     ));
     // const dropperCursor = this.state.hoveredOrganelle && this.isModeDropper(rootStore.mode);
     const dropperCursor = false;
+    const style = {height: MODEL_HEIGHT, width: MODEL_WIDTH};
     return (
-      <div className={"model-wrapper" + (dropperCursor ? " dropper" : "")}>
+      <div className={"model-wrapper" + (dropperCursor ? " dropper" : "")} style={style}>
         <div id={this.props.elementName} className="model" onMouseLeave={this.resetHoveredOrganelle}/>
         {hoverDiv}
         {droppers}
