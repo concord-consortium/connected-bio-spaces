@@ -7,7 +7,7 @@ import { observer, inject } from "mobx-react";
 // import { rootStore, Mode } from "../stores/RootStore";
 import { createModel } from "organelle";
 import * as Cell from "./cell-models/cell.json";
-import { OrganelleType, ModeType } from "../../../models/spaces/cell-zoom/cell-zoom.js";
+import { OrganelleType, ModeType, ORGANELLE_INFO } from "../../../models/spaces/cell-zoom/cell-zoom";
 import { BaseComponent } from "../../base";
 // import { SubstanceType } from "../models/Substance";
 import "./OrganelleWrapper.sass";
@@ -224,7 +224,8 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     const {cellZoom} = this.stores;
     // const hoverLabel = appStore.mysteryLabels ?
     //   mysteryOrganelleNames[this.state.hoveredOrganelle] : this.state.hoveredOrganelle;
-    const hoverLabel = cellZoom.hoveredOrganelle;
+    const {hoveredOrganelle} = cellZoom;
+    const hoverLabel = hoveredOrganelle ? ORGANELLE_INFO[hoveredOrganelle].displayName : undefined;
     const hoverDiv = hoverLabel
       ? (
         <div className="hover-location">
