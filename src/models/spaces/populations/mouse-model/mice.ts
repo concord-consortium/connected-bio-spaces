@@ -59,22 +59,19 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
       return this._checkSurvival();
     }
 
+    // note, populations.js is a little confusing here (FIXME...). makeNewborn is called twice, once before
+    // the organism object is created, and once after.
     public makeNewborn() {
       super.makeNewborn();
       this.set("age", Math.round(Math.random() * 10));
-      if (this.organism) {
-        this.mutateGenetics();
-      }
-      // if (this.alleles.color && this.alleles.color !==);
 
-      // FIXME: Would like to call this.environment here, but it is not being set
-      // correctly in populations.js
-      // const env = (this as any).environment;    // FIXME update populations types
-      // const sex = (env.agents.length &&
-      //             env.agents[env.agents.length - 1].species.speciesName === "mice" &&
-      //             env.agents[env.agents.length - 1].get("sex") === "female")
-      //           ? "male" : "female";
-      // this.set("sex", sex);
+      if (this.organism) {
+        if (!model["inheritance.breedWithoutInheritance"]) {
+          this.mutateGenetics();
+        } else {
+          this.setRandomColorGenetics();
+        }
+      }
     }
 
     public mate() {
@@ -123,6 +120,20 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
       // Note: biologica does not take well to modifying an existing organism object, which is
       // why we need to create a new one.
       this.alleles.color = this.organism.getAlleleString();
+      this.resetGeneticTraits();
+    }
+
+    private setRandomColorGenetics() {
+      const whiteChance = model["inheritance.randomOffspring.white"] / 100;
+      const tanChance = whiteChance + model["inheritance.randomOffspring.tan"] / 100;
+      const rand = Math.random();
+      if (rand < whiteChance) {
+        this.alleles.color = "a:b,b:b";
+      } else if (rand < tanChance) {
+        this.alleles.color = Math.random() < 0.5 ? "a:B,b:b" : "a:b,b:B";
+      } else {
+        this.alleles.color = "a:B,b:B";
+      }
       this.resetGeneticTraits();
     }
   }

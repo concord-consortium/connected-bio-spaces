@@ -69,17 +69,39 @@ const schema: JSONSchema6 = {
           title: "Inheritance",
           type: "object",
           properties: {
-            breedWithMutations: {
-              title: "Breed with mutations",
-              type: "boolean"
-            },
             showStudentControlOfMutations: {
               title: "Show student mutation control",
+              type: "boolean"
+            },
+            breedWithMutations: {
+              title: "Breed with mutations",
               type: "boolean"
             },
             chanceOfMutations: {
               title: "Chance of mutations (%)",
               type: "number"
+            },
+            showStudentControlOfInheritance: {
+              title: "Show student inheritance control",
+              type: "boolean"
+            },
+            breedWithoutInheritance: {
+              title: "Breed without inheritance",
+              type: "boolean"
+            },
+            randomOffspring: {
+              title: "Proportions of random offspring when breeding without inheritance",
+              type: "object",
+              properties: {
+                white: {
+                  title: "White (%)",
+                  type: "number"
+                },
+                tan: {
+                  title: "Tan (%)",
+                  type: "number"
+                }
+              }
             }
           }
         }
@@ -101,9 +123,15 @@ export const defaultAuthoring = {
     },
     numHawks: 2,
     inheritance: {
-      breedWithMutations: false,
       showStudentControlOfMutations: false,
-      chanceOfMutations: 2
+      breedWithMutations: false,
+      chanceOfMutations: 2,
+      showStudentControlOfInheritance: false,
+      breedWithoutInheritance: false,
+      randomOffspring: {
+        white: 0,
+        tan: 0
+      }
     }
   }
 };
@@ -114,13 +142,26 @@ const uiSchema = {
   },
   populations: {
     initialPopulation: {
+      classNames: "minor-group",
       tan: {
         "ui:help": "Brown will be remainder"
       }
     },
     inheritance: {
+      breedWithMutations: {
+        "ui:help": "Whether the model starts with mutations"
+      },
       chanceOfMutations: {
         "ui:help": "When either 'Breed with mutations' or 'Student control' is true"
+      },
+      breedWithoutInheritance: {
+        "ui:help": "Whether the model starts without inheritance"
+      },
+      randomOffspring: {
+        classNames: "minor-group",
+        tan: {
+          "ui:help": "Brown will be the remainder"
+        }
       }
     }
   }

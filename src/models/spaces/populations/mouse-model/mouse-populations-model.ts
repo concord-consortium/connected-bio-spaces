@@ -40,9 +40,13 @@ export const MousePopulationsModel = types
     "initialPopulation.tan": types.number,
     "showSwitchEnvironmentsButton": types.boolean,
     "includeNeutralEnvironment": types.boolean,
-    "inheritance.breedWithMutations": types.boolean,
     "inheritance.showStudentControlOfMutations": types.boolean,
+    "inheritance.breedWithMutations": types.boolean,
     "inheritance.chanceOfMutations": types.number,
+    "inheritance.showStudentControlOfInheritance": types.boolean,
+    "inheritance.breedWithoutInheritance": types.boolean,
+    "inheritance.randomOffspring.white": types.number,
+    "inheritance.randomOffspring.tan": types.number,
     "showSexStack": false,
     "chartData": types.optional(ChartDataModel, chartData)
   })
@@ -97,6 +101,9 @@ export const MousePopulationsModel = types
         setBreedWithMutations(value: boolean) {
           self["inheritance.breedWithMutations"] = value;
         },
+        setBreedWithoutInheritance(value: boolean) {
+          self["inheritance.breedWithoutInheritance"] = value;
+        },
         reset() {
           interactive.reset();
           self.chartData.dataSets[0].clearDataPoints();
@@ -143,6 +150,17 @@ export const MousePopulationsModel = types
               value: self["inheritance.breedWithMutations"],
               action: (val: boolean) => {
                 self.setBreedWithMutations(val);
+              }
+            });
+          }
+
+          if (self["inheritance.showStudentControlOfInheritance"]) {
+            buttons.push({
+              title: "Breed without inheritance",
+              type: "checkbox",
+              value: self["inheritance.breedWithoutInheritance"],
+              action: (val: boolean) => {
+                self.setBreedWithoutInheritance(val);
               }
             });
           }
