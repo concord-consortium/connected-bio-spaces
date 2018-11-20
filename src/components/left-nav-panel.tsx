@@ -48,6 +48,10 @@ export class LeftNavPanelComponent extends BaseComponent<IProps, IState> {
           space={"organism"}
           title={"Organism"}
         />
+        <ExploreButtonComponent
+          space={"dna"}
+          title={"Protein/DNA"}
+        />
       </div>
     );
   }

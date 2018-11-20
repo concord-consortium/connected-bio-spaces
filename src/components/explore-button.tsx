@@ -28,6 +28,9 @@ export class ExploreButtonComponent extends BaseComponent<IProps, IState> {
       case "breeding":
         classSuffix = "breeding " + classSuffix;
         break;
+      case "dna":
+        classSuffix = "dna " + classSuffix;
+        break;
     }
     const buttonClass = "explore-button " + classSuffix;
     const iconClass = "icon " + classSuffix;
@@ -43,6 +46,5 @@ export class ExploreButtonComponent extends BaseComponent<IProps, IState> {
   private handleClickButton = () => {
     const {ui} = this.stores;
     ui.setInvestigationPanelSpace(this.props.space);
-    ui.setShowInvestigationPanel(true);
   }
 }

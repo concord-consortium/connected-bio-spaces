@@ -41,6 +41,13 @@
       background-color: $explore-button-org-bgcolor
       color: $explore-button-org-color
 
+  &.dna
+    background-color: $explore-button-dna-active-bgcolor
+
+    &.clickable
+      background-color: $explore-button-dna-bgcolor
+      color: $explore-button-dna-color
+
   .icon
     width: $explore-button-icon-width
     height: $explore-button-icon-height
@@ -69,6 +76,12 @@
       &.clickable
         background-color: $explore-button-org-icon-bgcolor
 
+    &.dna
+      background-color: $explore-button-dna-active-icon-bgcolor
+
+      &.clickable
+        background-color: $explore-button-dna-icon-bgcolor
+
   .title
     display: flex
     justify-content: center
@@ -92,6 +105,10 @@
   background-color: $explore-button-org-hover-bgcolor
   color: $explore-button-org-hover-color
 
+.explore-button.clickable.dna:hover
+  background-color: $explore-button-dna-hover-bgcolor
+  color: $explore-button-dna-hover-color
+
 .explore-button.clickable:hover .icon.population
   background-color: $explore-button-pop-hover-icon-bgcolor
 
@@ -100,4 +117,7 @@
 
 .explore-button.clickable:hover .icon.organism
   background-color: $explore-button-org-hover-icon-bgcolor
+
+.explore-button.clickable:hover .icon.dna
+  background-color: $explore-button-dna-hover-icon-bgcolor
 
