@@ -6,6 +6,7 @@ import "./main-content.sass";
 import { PopulationsSpaceComponent } from "./spaces/populations-space";
 import { SpaceType } from "../models/ui";
 import { CellZoomSpaceComponent } from "./spaces/cell-zoom-space";
+import { SampleFourUpSpaceComponent } from "./spaces/sample-four-up-space";
 
 interface IProps extends IBaseProps {}
 interface IState {}

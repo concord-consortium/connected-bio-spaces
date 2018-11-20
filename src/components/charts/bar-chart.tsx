@@ -21,6 +21,7 @@ const defaultOptions: ChartOptions = {
     display: true,
     position: "bottom"
   },
+  maintainAspectRatio: false,
   scales: {
     xAxes: [{
       ticks: {
@@ -101,6 +102,7 @@ export class BarChart extends React.Component<IBarProps> {
           options={options}
           height={h}
           width={w}
+          redraw={true}
         />
       );
     } else {
@@ -110,6 +112,7 @@ export class BarChart extends React.Component<IBarProps> {
           options={options}
           height={h}
           width={w}
+          redraw={true}
         />
       );
     }
