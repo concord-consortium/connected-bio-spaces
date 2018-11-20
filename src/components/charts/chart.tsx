@@ -23,22 +23,22 @@ export class Chart extends React.Component<ChartProps, ChartState> {
 
   public render() {
     const { chartType, chartData } = this.props;
-    return (
-      <div className="chart-container">
-        <div className="chart-display">
-          {chartType === "line" &&
-            <LineGraph
-              chartData={chartData}
-              width={this.props.width}
-              height={this.props.height} />
-          }
-          {chartType === "horizontalBar" || chartType === "bar" &&
-            <BarChart
+    const chart = chartType === "line" ?
+      <LineGraph
+        chartData={chartData}
+        width={this.props.width}
+        height={this.props.height} />
+      :
+      <BarChart
               chartData={chartData}
               width={this.props.width}
               height={this.props.height}
-              barChartType={chartType} />
-          }
+              barChartType={chartType} />;
+
+    return (
+      <div className="chart-container">
+        <div className="chart-display">
+          {chart}
         </div>
       </div>
     );
