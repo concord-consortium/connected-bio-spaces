@@ -25,7 +25,6 @@ export class CellZoomSpaceComponent extends BaseComponent<IProps, IState> {
       <TwoUpDisplayComponent
         leftTitle="Investigate: Population"
         leftPanel={<OrganelleWrapper elementName="organelle-wrapper" />}
-        leftId="organelle-wrapper"
         rightTitle={graphTitle}
         rightIcon={iconId}
         rightPanel={graphPanel}
