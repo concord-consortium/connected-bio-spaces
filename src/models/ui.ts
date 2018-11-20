@@ -1,6 +1,6 @@
 import { types } from "mobx-state-tree";
 
-export type Spaces = "populations" | "cellZoom";     // eventually a union of all the spaces
+export type Spaces = "populations" | "cellZoom" | "comparison";     // eventually a union of all the spaces
 
 export const UIModel = types
   .model("UI", {

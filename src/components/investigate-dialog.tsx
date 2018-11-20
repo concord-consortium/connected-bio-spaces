@@ -39,7 +39,7 @@ export class InvestigateDialogComponent extends BaseComponent<IProps, IState> {
               <div className="button" data-test="investigate-option-protein">Protein/DNA</div>
               <div className="button-footer">Some descriptive text goes into this space</div>
             </div>
-            <div className="button-holder">
+            <div className="button-holder" onClick={this.handleClickComparison}>
               <div className="button" data-test="investigate-option-comparison">Comparison</div>
               <div className="button-footer">Some descriptive text goes into this space</div>
             </div>
@@ -63,8 +63,15 @@ export class InvestigateDialogComponent extends BaseComponent<IProps, IState> {
   }
 
   private handleClickCellZoom = () => {
-    const {ui} = this.stores;
+    const { ui } = this.stores;
     ui.setInvestigationPanelSpace("cellZoom");
+    ui.setShowInvestigationPanel(true);
+    ui.setShowInvestigationModalSelect(false);
+  }
+
+  private handleClickComparison = () => {
+    const { ui } = this.stores;
+    ui.setInvestigationPanelSpace("comparison");
     ui.setShowInvestigationPanel(true);
     ui.setShowInvestigationModalSelect(false);
   }

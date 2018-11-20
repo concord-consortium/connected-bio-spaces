@@ -23,6 +23,7 @@ const defaultOptions: ChartOptions = {
     display: true,
     position: "bottom",
   },
+  maintainAspectRatio: false,
   scales: {
     display: false,
     yAxes: [{
@@ -125,6 +126,7 @@ export class LineGraph extends React.Component<ILineProps> {
         options={options}
         height={h}
         width={w}
+        redraw={true}
       />
     );
 

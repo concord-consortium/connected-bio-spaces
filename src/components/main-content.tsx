@@ -6,13 +6,15 @@ import "./main-content.sass";
 import { InvestigateDialogComponent } from "./investigate-dialog";
 import { PopulationsSpaceComponent } from "./spaces/populations-space";
 import { CellZoomSpaceComponent } from "./spaces/cell-zoom-space";
+import { SampleFourUpSpaceComponent } from "./spaces/sample-four-up-space";
 
 interface IProps extends IBaseProps {}
 interface IState {}
 
 const SpaceComponents: any = {
   populations: PopulationsSpaceComponent,
-  cellZoom: CellZoomSpaceComponent
+  cellZoom: CellZoomSpaceComponent,
+  comparison: SampleFourUpSpaceComponent
 };
 
 @inject("stores")
