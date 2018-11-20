@@ -11,7 +11,8 @@ interface IState {}
 const SpaceComponents: any = {
   populations: PopulationsSpaceComponent,
   breeding: PopulationsSpaceComponent,
-  organism: PopulationsSpaceComponent
+  organism: PopulationsSpaceComponent,
+  dna: PopulationsSpaceComponent
 };
 
 @inject("stores")
@@ -28,12 +29,11 @@ export class MainContentComponent extends BaseComponent<IProps, IState> {
 
   private renderMainContent() {
     const {investigationPanelSpace} = this.stores.ui;
-    const {showInvestigationPanel} = this.stores.ui;
 
     // stawman code
     const SpaceComponent = SpaceComponents[investigationPanelSpace];
 
-    if (showInvestigationPanel) {
+    if (SpaceComponent) {
       return <SpaceComponent/>;
     }
   }
