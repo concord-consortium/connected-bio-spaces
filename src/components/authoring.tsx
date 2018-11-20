@@ -64,6 +64,24 @@ const schema: JSONSchema6 = {
         numHawks: {
           title: "Number of hawks",
           type: "number"
+        },
+        inheritance: {
+          title: "Inheritance",
+          type: "object",
+          properties: {
+            breedWithMutations: {
+              title: "Breed with mutations",
+              type: "boolean"
+            },
+            showStudentControlOfMutations: {
+              title: "Show student mutation control",
+              type: "boolean"
+            },
+            chanceOfMutations: {
+              title: "Chance of mutations (%)",
+              type: "number"
+            }
+          }
         }
       }
     }
@@ -81,7 +99,12 @@ export const defaultAuthoring = {
       white: 33.33,
       tan: 33.33
     },
-    numHawks: 2
+    numHawks: 2,
+    inheritance: {
+      breedWithMutations: false,
+      showStudentControlOfMutations: false,
+      chanceOfMutations: 2
+    }
   }
 };
 
@@ -93,6 +116,11 @@ const uiSchema = {
     initialPopulation: {
       tan: {
         "ui:help": "Brown will be remainder"
+      }
+    },
+    inheritance: {
+      chanceOfMutations: {
+        "ui:help": "When either 'Breed with mutations' or 'Student control' is true"
       }
     }
   }

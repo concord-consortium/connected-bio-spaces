@@ -40,6 +40,9 @@ export const MousePopulationsModel = types
     "initialPopulation.tan": types.number,
     "showSwitchEnvironmentsButton": types.boolean,
     "includeNeutralEnvironment": types.boolean,
+    "inheritance.breedWithMutations": types.boolean,
+    "inheritance.showStudentControlOfMutations": types.boolean,
+    "inheritance.chanceOfMutations": types.number,
     "showSexStack": false,
     "chartData": types.optional(ChartDataModel, chartData)
   })
@@ -60,43 +63,13 @@ export const MousePopulationsModel = types
 
     return {
       views: {
-        get interactive(): Interactive {
+        get interactive(): HawksMiceInteractive {
           if (interactive) {
             return interactive;
           } else {
             interactive = createInteractive(self as MousePopulationsModelType);
             return interactive;
           }
-        },
-
-        get toolbarButtons(): ToolbarButton[] {
-          const buttons = [];
-
-          buttons.push({
-            title: "Add Mice",
-            action: (e: any) => {
-              const {"initialPopulation.white": white, "initialPopulation.tan": tan} = self;
-              interactive.addInitialMicePopulation(30, {white, tan});
-            }
-          });
-
-          buttons.push({
-            title: "Add Hawks",
-            action: (e: any) => {
-              interactive.addInitialHawksPopulation(self.numHawks);
-            }
-          });
-
-          if (self.showSwitchEnvironmentsButton) {
-            buttons.push({
-              title: "Switch environments",
-              action: (e: any) => {
-                interactive.switchEnvironments(self.includeNeutralEnvironment);
-              }
-            });
-          }
-
-          return buttons;
         },
 
         get environmentColor(): EnvironmentColor {
@@ -108,17 +81,73 @@ export const MousePopulationsModel = types
             default:
               return "white";
           }
+        },
+
+        get chanceOfMutation() {
+          if (!self["inheritance.breedWithMutations"]) {
+            return 0;
+          }
+          return self["inheritance.chanceOfMutations"] / 100;
         }
       },
       actions: {
         setEnvironmentColor(color: EnvironmentColor) {
           self.initialEnvironment = color;
         },
+        setBreedWithMutations(value: boolean) {
+          self["inheritance.breedWithMutations"] = value;
+        },
         reset() {
           interactive.reset();
           self.chartData.dataSets[0].clearDataPoints();
           self.chartData.dataSets[1].clearDataPoints();
           self.chartData.dataSets[2].clearDataPoints();
+        }
+      }
+    };
+  })
+  .extend(self => {
+    return {
+      views: {
+        get toolbarButtons(): ToolbarButton[] {
+          const buttons = [];
+
+          buttons.push({
+            title: "Add Mice",
+            action: (e: any) => {
+              const {"initialPopulation.white": white, "initialPopulation.tan": tan} = self;
+              self.interactive.addInitialMicePopulation(30, {white, tan});
+            }
+          });
+
+          buttons.push({
+            title: "Add Hawks",
+            action: (e: any) => {
+              self.interactive.addInitialHawksPopulation(self.numHawks);
+            }
+          });
+
+          if (self.showSwitchEnvironmentsButton) {
+            buttons.push({
+              title: "Switch environments",
+              action: (e: any) => {
+                self.interactive.switchEnvironments(self.includeNeutralEnvironment);
+              }
+            });
+          }
+
+          if (self["inheritance.showStudentControlOfMutations"]) {
+            buttons.push({
+              title: "Breed with muations",
+              type: "checkbox",
+              value: self["inheritance.breedWithMutations"],
+              action: (val: boolean) => {
+                self.setBreedWithMutations(val);
+              }
+            });
+          }
+
+          return buttons;
         }
       }
     };

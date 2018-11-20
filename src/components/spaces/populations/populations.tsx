@@ -4,6 +4,7 @@ import { PopulationsView } from "populations-react";
 import { BaseComponent, IBaseProps } from "../../base";
 
 import "./populations.sass";
+import { ToolbarButton } from "../../../models/spaces/populations/populations";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -17,9 +18,25 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
 
     if (populations) {
 
-      const buttons = populations.toolbarButtons.map( button =>
-        <button key={button.title} onClick={button.action}>{button.title}</button>
-      );
+      const buttons = populations.toolbarButtons.map( button => {
+        const type = button.type || "button";
+        switch (type) {
+          case "checkbox":
+            return (
+              <label>
+                { button.title }
+                <input
+                  key={button.title}
+                  type="checkbox"
+                  checked={button.value}
+                  onChange={this.handleClickToolbarCheckbox(button)} />
+              </label>
+            );
+          case "button":
+          default:
+            return (<button key={button.title} onClick={button.action}>{button.title}</button>);
+        }
+      });
       return (
         <div>
           <PopulationsView interactive={populations.interactive} />
@@ -45,5 +62,12 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
     if (populations) {
       populations.reset();
     }
+  }
+
+  private handleClickToolbarCheckbox = (button: ToolbarButton) => {
+    return (event: React.ChangeEvent) => {
+      const target = event.target;
+      button.action((target as any).checked);
+    };
   }
 }

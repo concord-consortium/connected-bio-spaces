@@ -18,8 +18,9 @@ export function createPopulationsModel(curriculumName: string, authoring: any): 
 
 export interface ToolbarButton {
   title: string;
-  // tslint:disable-next-line:ban-types
-  action: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  type?: string;
+  value?: boolean;
+  action: (e: (React.MouseEvent<HTMLButtonElement> | boolean)) => void;
 }
 
 export const PopulationsModel = types
