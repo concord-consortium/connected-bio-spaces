@@ -12,6 +12,38 @@ export const Organelle = types.enumeration("type", [
 ]);
 export type OrganelleType = typeof Organelle.Type;
 
+type OrganelleInfo = {
+  [key in OrganelleType]: {
+    displayName: string;
+  };
+};
+export const ORGANELLE_INFO: OrganelleInfo = {
+  nucleus: {
+    displayName: "Nucleus"
+  },
+  cytoplasm: {
+    displayName: "Cytoplasm"
+  },
+  golgi: {
+    displayName: "Golgi"
+  },
+  extracellular: {
+    displayName: "Extracellular"
+  },
+  melanosome: {
+    displayName: "Melanosome"
+  },
+  receptor: {
+    displayName: "Receptor"
+  },
+  gate: {
+    displayName: "Gate"
+  },
+  nearbyCell: {
+    displayName: "Nearby Cell"
+  },
+};
+
 export const Mode = types.enumeration("type", ["add", "subtract", "assay", "normal"]);
 export type ModeType = typeof Mode.Type;
 
