@@ -2,7 +2,6 @@ import { types } from "mobx-state-tree";
 
 export const SpaceTypeEnum = types.enumeration("type", ["populations", "breeding", "organism", "dna", "none"]);
 export type SpaceType = typeof SpaceTypeEnum.Type;
-export type Space = "populations" | "breeding" | "organism" | "dna" | "none";
 
 export const UIModel = types
   .model("UI", {
