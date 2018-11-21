@@ -1,12 +1,11 @@
 import { Interactive, Environment, Rule, Agent, Events, Species, Rect, Trait } from "populations.js";
-import { MousePopulationsModelType } from "./mouse-populations-model";
-import { getMouseSpecies } from "./mice";
+import { MousePopulationsModelType, EnvironmentColorType } from "./mouse-populations-model";
+import { getMouseSpecies, MouseColors } from "./mice";
 import { hawkSpecies } from "./hawks";
 
-export type EnvironmentColor = "white" | "brown" | "neutral";
-let environmentColor: EnvironmentColor;
+let environmentColor: EnvironmentColorType;
 
-function createEnvironment(color: EnvironmentColor) {
+function createEnvironment(color: EnvironmentColorType) {
   return new Environment({
     columns: 45,
     rows: 45,
@@ -16,27 +15,22 @@ function createEnvironment(color: EnvironmentColor) {
   });
 }
 
-// all numbers below are floats representing percentages
+// all numbers below are floats representing percentages out of 100
 interface IInitialColorSpecs {
   white: number;
-  brown: number;
-}
-interface IInitialGentotypeSpecs {
-  bb: number;
-  Bb: number;
-  BB: number;
+  tan: number;
 }
 
 export class HawksMiceInteractive extends Interactive {
-  public addInitialMicePopulation: (num: number, byColor: boolean,
-                                    initialSpecs: IInitialColorSpecs | IInitialGentotypeSpecs) => void;
+  public addInitialMicePopulation: (num: number, initialSpecs: IInitialColorSpecs) => void;
   public addInitialHawksPopulation: (num: number) => void;
+  public switchEnvironments: (includeNeutralEnvironment: boolean) => void;
   public getData: () => any;
 }
 
 export function createInteractive(model: MousePopulationsModelType) {
   const mouseSpecies = getMouseSpecies(model);
-  environmentColor = model.environmentColor;
+  environmentColor = model.environment;
   const env = createEnvironment(environmentColor);
 
   env.addRule(new Rule({
@@ -50,6 +44,8 @@ export function createInteractive(model: MousePopulationsModelType) {
               : brownness = 1;
           if (agent.get("color") === "brown") {
             return agent.set("chance of being seen", 0.6 - (brownness * 0.6));
+          } else if (agent.get("color") === "tan") {
+            return agent.set("chance of being seen", 0.3);
           } else {
             return agent.set("chance of being seen", brownness * 0.6);
           }
@@ -67,12 +63,14 @@ export function createInteractive(model: MousePopulationsModelType) {
   let addedMice: boolean;
   let addedHawks: boolean;
   let numWhite: number;
+  let numTan: number;
   let numBrown: number;
 
   function resetVars() {
     addedMice = false;
     addedHawks = false;
     numWhite = 0;
+    numTan = 0;
     numBrown = 0;
   }
   resetVars();
@@ -112,56 +110,45 @@ export function createInteractive(model: MousePopulationsModelType) {
     });
   }
 
-  function createColorTraitByPhenotype(color: "white" | "brown") {
+  function createColorTraitByPhenotype(color: MouseColors) {
     let alleleString;
     switch (color) {
       case "white":
         alleleString = "a:b,b:b";
         break;
+      case "tan":
+        const rand = Math.random();
+        alleleString = rand < 0.5
+          ? "a:b,b:B"
+          : "a:B,b:b";
+        break;
       case "brown":
       default:
-        const rand = Math.random();
-        alleleString = rand < (1 / 3)
-          ? "a:b,b:B"
-          : rand < (2 / 3)
-            ? "a:B,b:b"
-            : "a:B,b:B";
+        alleleString = "a:B,b:B";
+        break;
     }
     return createColorTraitByGenotype(alleleString);
   }
 
-  function addInitialMicePopulation(num: number, byColor: true,
-                                    initialSpecs: IInitialColorSpecs | IInitialGentotypeSpecs) {
+  function addInitialMicePopulation(num: number, initialSpecs: IInitialColorSpecs) {
     if (addedMice) return;
 
     for (let i = 0; i < num; i++) {
       let colorTrait;
-      if (byColor && "white" in initialSpecs) {
-        const whiteCap = Math.round(num * initialSpecs.white);
-        if (i < whiteCap) {
-          colorTrait = createColorTraitByPhenotype("white");
-        } else {
-          colorTrait = createColorTraitByPhenotype("brown");
-        }
-      } else if (!byColor && "bb" in initialSpecs) {
-        const bbCap = Math.round(num * initialSpecs.bb);
-        const bBCap = bbCap + Math.round(num * initialSpecs.Bb);
-        if (i < bbCap) {
-          colorTrait = createColorTraitByGenotype("a:b,b:b");
-        } else if (i < bBCap) {
-          const alleleString = Math.random() < 0.5
-            ? "a:b,b:B"
-            : "a:B,b:b";
-          colorTrait = createColorTraitByGenotype(alleleString);
-        } else {
-          colorTrait = createColorTraitByGenotype("a:B,b:B");
-        }
+
+      const whiteCap = Math.round((num / 100) * initialSpecs.white);
+      const tanCap = whiteCap + Math.round((num / 100) * initialSpecs.tan);
+      if (i < whiteCap) {
+        colorTrait = createColorTraitByPhenotype("white");
+      } else if (i < tanCap) {
+        colorTrait = createColorTraitByPhenotype("tan");
+      } else {
+        colorTrait = createColorTraitByPhenotype("brown");
       }
-      if (colorTrait) {
-        addAgent(mouseSpecies, [], [
-          colorTrait
-        ]);
-      }
+
+      addAgent(mouseSpecies, [], [
+        colorTrait
+      ]);
     }
     if (num > 0) {
       addedMice = true;
@@ -181,9 +168,26 @@ export function createInteractive(model: MousePopulationsModelType) {
   }
   interactive.addInitialHawksPopulation = addInitialHawksPopulation;
 
+  interactive.switchEnvironments = (includeNeutralEnvironment: boolean) => {
+    if (environmentColor === "white") {
+      if (includeNeutralEnvironment) {
+        environmentColor = "neutral";
+      } else {
+        environmentColor = "brown";
+      }
+    } else if (environmentColor === "neutral") {
+      environmentColor = "brown";
+    } else {
+      environmentColor = "white";
+    }
+    interactive.environment.setBackground(`curriculum/mouse/populations/${environmentColor}.png`);
+
+  };
+
   interactive.getData = () => {
     return {
       numWhite,
+      numTan,
       numBrown
     };
   };
@@ -210,12 +214,17 @@ export function createInteractive(model: MousePopulationsModelType) {
       }
     }
     numWhite = 0;
+    numTan = 0;
+    numBrown = 0;
     allMice.forEach((mouse) => {
       if (mouse.get("color") === "white") {
         numWhite++;
+      } else if (mouse.get("color") === "tan") {
+        numTan++;
+      } else if (mouse.get("color") === "brown") {
+        numBrown++;
       }
     });
-    numBrown = allMice.length - numWhite;
 
     // If there are no specific selective pressures (ie there are no hawks, or the hawks eat
     // everything with equal probability), the population should be 'stabilized', so that no

@@ -1,7 +1,8 @@
 @import vars
 
 .two-up-display
-  display: flex
+  display: grid;
+  grid-template-columns: 50% 50%;
   width: 100%
   height: 100%
   justify-content: center
@@ -9,7 +10,6 @@
   background-color: $two-up-bgcolor
 
 .two-up-panel
-  flex-basis: 50%
   display: flex
   flex-direction: column
   background-color: $component-bgcolor
@@ -44,6 +44,7 @@
 
   .content
     flex-grow: 1
+    overflow: hidden
 
 .left-abutment
   margin-right: $component-margin
