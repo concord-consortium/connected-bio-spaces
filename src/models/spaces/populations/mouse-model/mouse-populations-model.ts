@@ -1,5 +1,5 @@
 import { types, Instance } from "mobx-state-tree";
-import { createInteractive, EnvironmentColor, HawksMiceInteractive } from "./hawks-mice-interactive";
+import { createInteractive, HawksMiceInteractive } from "./hawks-mice-interactive";
 import { Interactive, Events, Environment } from "populations.js";
 import { ToolbarButton } from "../populations";
 import { ChartDataModel } from "../../charts/chart-data";
@@ -32,9 +32,12 @@ const chartData = {
   ]
  };
 
+const EnvironmentColorTypeEnum = types.enumeration("environment", ["white", "neutral", "brown"]);
+export type EnvironmentColorType = typeof EnvironmentColorTypeEnum.Type;
+
 export const MousePopulationsModel = types
   .model("MousePopulations", {
-    "environment": types.enumeration("environment", ["white", "neutral", "brown"]),
+    "environment": EnvironmentColorTypeEnum,
     "numHawks": types.number,
     "initialPopulation.white": types.number,
     "initialPopulation.tan": types.number,
@@ -84,7 +87,7 @@ export const MousePopulationsModel = types
         }
       },
       actions: {
-        setEnvironmentColor(color: EnvironmentColor) {
+        setEnvironmentColor(color: EnvironmentColorType) {
           self.environment = color;
         },
         setBreedWithMutations(value: boolean) {

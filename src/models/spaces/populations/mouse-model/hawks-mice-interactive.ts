@@ -1,12 +1,11 @@
 import { Interactive, Environment, Rule, Agent, Events, Species, Rect, Trait } from "populations.js";
-import { MousePopulationsModelType } from "./mouse-populations-model";
+import { MousePopulationsModelType, EnvironmentColorType } from "./mouse-populations-model";
 import { getMouseSpecies, MouseColors } from "./mice";
 import { hawkSpecies } from "./hawks";
 
-export type EnvironmentColor = "white" | "brown" | "neutral";
-let environmentColor: EnvironmentColor;
+let environmentColor: EnvironmentColorType;
 
-function createEnvironment(color: EnvironmentColor) {
+function createEnvironment(color: EnvironmentColorType) {
   return new Environment({
     columns: 45,
     rows: 45,

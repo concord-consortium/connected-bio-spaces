@@ -18,7 +18,7 @@ describe("stores object", () => {
       expect(stores.populations.model).toBeDefined();
       const mouseModel = stores.populations.model as MousePopulationsModelType;
       expect(mouseModel.numHawks).toBe(2);
-      expect(mouseModel.initialEnvironment).toBe("white");
+      expect(mouseModel.environment).toBe("white");
     });
 
   });
