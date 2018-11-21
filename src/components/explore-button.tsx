@@ -3,10 +3,10 @@ import * as React from "react";
 import { BaseComponent, IBaseProps } from "./base";
 
 import "./explore-button.sass";
-import { Spaces } from "../models/ui";
+import { Space } from "../models/ui";
 
 interface IProps extends IBaseProps {
-  space: Spaces;
+  space: Space;
   title: string;
 }
 interface IState {}

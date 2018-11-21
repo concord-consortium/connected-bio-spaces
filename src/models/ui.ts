@@ -1,6 +1,6 @@
 import { types } from "mobx-state-tree";
 
-export type Spaces = "populations" | "breeding" | "organism" | "dna" | "none";
+export type Space = "populations" | "breeding" | "organism" | "dna" | "none";
 
 export const UIModel = types
   .model("UI", {
@@ -13,7 +13,7 @@ export const UIModel = types
       setShowPopulationGraph(val: boolean) {
         self.showPopulationGraph = val;
       },
-      setInvestigationPanelSpace(space: Spaces) {
+      setInvestigationPanelSpace(space: Space) {
         self.investigationPanelSpace = space;
       },
       setAvailableBackpackSlots(val: number) {
