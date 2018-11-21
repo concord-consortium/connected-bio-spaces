@@ -17,21 +17,8 @@ export class ExploreButtonComponent extends BaseComponent<IProps, IState> {
 
   public render() {
     const {ui} = this.stores;
-    let classSuffix: string = ((ui.investigationPanelSpace === this.props.space) ? "active" : "clickable");
-    switch (this.props.space) {
-      case "populations":
-        classSuffix = "population " + classSuffix;
-        break;
-      case "organism":
-        classSuffix = "organism " + classSuffix;
-        break;
-      case "breeding":
-        classSuffix = "breeding " + classSuffix;
-        break;
-      case "dna":
-        classSuffix = "dna " + classSuffix;
-        break;
-    }
+    let classSuffix: string = this.props.space;
+    classSuffix += ((ui.investigationPanelSpace === this.props.space) ? " active" : " clickable");
     const buttonClass = "explore-button " + classSuffix;
     const iconClass = "icon " + classSuffix;
     const titleClass = "title " + classSuffix;
