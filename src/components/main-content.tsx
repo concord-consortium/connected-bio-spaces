@@ -15,7 +15,7 @@ type SpaceTypeToComponent = {
   [key in SpaceType]: SpaceComponent | undefined
 };
 
-const SpaceComponents: SpaceTypeToComponent = {
+const kSpaceComponents: SpaceTypeToComponent = {
   populations: PopulationsSpaceComponent,
   breeding: undefined,
   organism: undefined,
@@ -39,7 +39,7 @@ export class MainContentComponent extends BaseComponent<IProps, IState> {
     const {investigationPanelSpace} = this.stores.ui;
 
     // stawman code
-    const ActiveSpaceComponent = SpaceComponents[investigationPanelSpace];
+    const ActiveSpaceComponent = kSpaceComponents[investigationPanelSpace];
     if (ActiveSpaceComponent) {
       return <ActiveSpaceComponent/>;
     }
