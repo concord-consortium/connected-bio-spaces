@@ -7,7 +7,7 @@ import { observer, inject } from "mobx-react";
 // import { rootStore, Mode } from "../stores/RootStore";
 import { createModel } from "organelle";
 import * as Cell from "./cell-models/cell.json";
-import { OrganelleType, ModeType, ORGANELLE_INFO } from "../../../models/spaces/cell-zoom/cell-zoom";
+import { OrganelleType, ModeType, kOrganelleInfo } from "../../../models/spaces/cell-zoom/cell-zoom";
 import { BaseComponent } from "../../base";
 // import { SubstanceType } from "../models/Substance";
 import "./OrganelleWrapper.sass";
@@ -151,26 +151,27 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     }
   }
 
-  // public organelleClick(organelleType: OrganelleType, location: {x: number, y: number}) {
-  //   const organism = appStore.getBoxOrganism(this.props.boxId);
-  //   if (rootStore.mode === Mode.Assay) {
-  //     const organelleInfo = OrganelleRef.create({
-  //       organism,
-  //       organelleType
-  //     });
-  //     rootStore.setActiveAssay(organelleInfo);
-  //   } else if (rootStore.mode === Mode.Add || rootStore.mode === Mode.Subtract) {
-  //     // update substance levels
-  //     rootStore.changeSubstanceLevel(OrganelleRef.create({ organism, organelleType }));
-  //     // show animation in model
-  //     const substanceType = rootStore.activeSubstance;
-  //     if (substanceType === SubstanceType.Hormone) {
-  //       this.addHormone(organelleType, location);
-  //     } else if (substanceType === SubstanceType.SignalProtein) {
-  //       this.addSignalProtein(organelleType, location);
-  //     }
-  //   }
-  // }
+  public organelleClick(organelleType: OrganelleType, location: {x: number, y: number}) {
+    const { cellZoom } = this.stores;
+    cellZoom.setActiveAssay(organelleType);
+    // if (rootStore.mode === Mode.Assay) {
+    //   const organelleInfo = OrganelleRef.create({
+    //     organism,
+    //     organelleType
+    //   });
+    //   rootStore.setActiveAssay(organelleInfo);
+    // } else if (rootStore.mode === Mode.Add || rootStore.mode === Mode.Subtract) {
+    //   // update substance levels
+    //   rootStore.changeSubstanceLevel(OrganelleRef.create({ organism, organelleType }));
+    //   // show animation in model
+    //   const substanceType = rootStore.activeSubstance;
+    //   if (substanceType === SubstanceType.Hormone) {
+    //     this.addHormone(organelleType, location);
+    //   } else if (substanceType === SubstanceType.SignalProtein) {
+    //     this.addSignalProtein(organelleType, location);
+    //   }
+    // }
+  }
 
   public addAgentsOverTime(species: string, state: string, props: object, countAtOnce: number, times: number) {
     const period = SUBSTANCE_ADDITION_MS / times;
@@ -227,7 +228,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     // const hoverLabel = appStore.mysteryLabels ?
     //   mysteryOrganelleNames[this.state.hoveredOrganelle] : this.state.hoveredOrganelle;
     const {hoveredOrganelle} = cellZoom;
-    const hoverLabel = hoveredOrganelle ? ORGANELLE_INFO[hoveredOrganelle].displayName : undefined;
+    const hoverLabel = hoveredOrganelle ? kOrganelleInfo[hoveredOrganelle].displayName : undefined;
     const hoverDiv = hoverLabel
       ? (
         <div className="hover-location">
@@ -338,26 +339,26 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
       }
     });
 
-    // model.on("view.click", (evt: any) => {
-    //   const clickTarget: OrganelleType = this.getOrganelleFromMouseEvent(evt);
-    //   if (clickTarget) {
-    //     // Keep the dropper displayed for substance additions
-    //     if (rootStore.mode === Mode.Add || rootStore.mode === Mode.Subtract) {
-    //       const newCoords = this.state.dropperCoords.slice(0);
-    //       newCoords.push({x: evt.e.layerX, y: evt.e.layerY});
-    //       this.setState({dropperCoords: newCoords});
-    //       rootStore.startTimer(() => {
-    //         const splicedCoords = this.state.dropperCoords.slice(0);
-    //         splicedCoords.splice(0, 1);
-    //         this.setState({dropperCoords: splicedCoords});
-    //       },                   SUBSTANCE_ADDITION_MS);
-    //     }
+    model.on("view.click", (evt: any) => {
+      const clickTarget = this.getOrganelleFromMouseEvent(evt);
+      if (clickTarget) {
+        // Keep the dropper displayed for substance additions
+        // if (rootStore.mode === Mode.Add || rootStore.mode === Mode.Subtract) {
+        //   const newCoords = this.state.dropperCoords.slice(0);
+        //   newCoords.push({x: evt.e.layerX, y: evt.e.layerY});
+        //   this.setState({dropperCoords: newCoords});
+        //   rootStore.startTimer(() => {
+        //     const splicedCoords = this.state.dropperCoords.slice(0);
+        //     splicedCoords.splice(0, 1);
+        //     this.setState({dropperCoords: splicedCoords});
+        //   },                   SUBSTANCE_ADDITION_MS);
+        // }
 
-    //     // Handle the click in the Organelle model
-    //     const location = model.view.transformToWorldCoordinates({x: evt.e.offsetX, y: evt.e.offsetY});
-    //     this.organelleClick(clickTarget, location);
-    //   }
-    // });
+        // Handle the click in the Organelle model
+        const location = model.view.transformToWorldCoordinates({x: evt.e.offsetX, y: evt.e.offsetY});
+        this.organelleClick(clickTarget, location);
+      }
+    });
   }
 
   private getOrganelleFromMouseEvent(evt: any): OrganelleType | undefined {
