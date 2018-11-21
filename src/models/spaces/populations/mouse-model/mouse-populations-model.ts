@@ -1,5 +1,5 @@
 import { types, Instance } from "mobx-state-tree";
-import { createInteractive, EnvironmentColor, HawksMiceInteractive } from "./hawks-mice-interactive";
+import { createInteractive, HawksMiceInteractive } from "./hawks-mice-interactive";
 import { Interactive, Events, Environment } from "populations.js";
 import { ToolbarButton } from "../populations";
 import { ChartDataModel } from "../../charts/chart-data";
@@ -11,43 +11,66 @@ const chartData = {
       name: "White mice",
       dataPoints: [],
       color: "#f4ce83",
+      maxPoints: 100,
+      fixedMin: 0,
+      expandOnly: true
+    },
+    {
+      name: "Tan mice",
+      dataPoints: [],
+      color: "#db9e26",
       maxPoints: 100
     },
     {
       name: "Brown mice",
       dataPoints: [],
       color: "#795423",
-      maxPoints: 100
+      maxPoints: 100,
+      fixedMin: 0,
+      expandOnly: true
     }
   ]
  };
 
+const EnvironmentColorTypeEnum = types.enumeration("environment", ["white", "neutral", "brown"]);
+export type EnvironmentColorType = typeof EnvironmentColorTypeEnum.Type;
+
 export const MousePopulationsModel = types
   .model("MousePopulations", {
-    environment: "white" as EnvironmentColor,
-    numHawks: 2,
-    addMiceByColor: true,
-    percentWhite: 0.5,
-    percentbb: 0.33,
-    percentBb: 0.33,
-    showHeteroStack: false,
-    showSexStack: false,
-    chartData: types.optional(ChartDataModel, chartData)
+    "environment": EnvironmentColorTypeEnum,
+    "numHawks": types.number,
+    "initialPopulation.white": types.number,
+    "initialPopulation.tan": types.number,
+    "showSwitchEnvironmentsButton": types.boolean,
+    "includeNeutralEnvironment": types.boolean,
+    "inheritance.showStudentControlOfMutations": types.boolean,
+    "inheritance.breedWithMutations": types.boolean,
+    "inheritance.chanceOfMutations": types.number,
+    "inheritance.showStudentControlOfInheritance": types.boolean,
+    "inheritance.breedWithoutInheritance": types.boolean,
+    "inheritance.randomOffspring.white": types.number,
+    "inheritance.randomOffspring.tan": types.number,
+    "showSexStack": false,
+    "chartData": types.optional(ChartDataModel, chartData)
   })
   .extend(self => {
     let interactive: HawksMiceInteractive;
-    function addData(datum: any) {
-      const date = interactive.environment.date;
-      self.chartData.dataSets[0].addDataPoint(date, datum.numWhite, "");
-      self.chartData.dataSets[1].addDataPoint(date, datum.numBrown, "");
+
+    function addData(time: number, datum: any) {
+      self.chartData.dataSets[0].addDataPoint(time, datum.numWhite, "");
+      self.chartData.dataSets[1].addDataPoint(time, datum.numTan, "");
+      self.chartData.dataSets[2].addDataPoint(time, datum.numBrown, "");
     }
     Events.addEventListener(Environment.EVENTS.STEP, () => {
-      addData(interactive.getData());
+      const date = interactive.environment.date;
+      if (date % 5 === 0) {
+        addData(date / 5, interactive.getData());
+      }
     });
 
     return {
       views: {
-        get interactive(): Interactive {
+        get interactive(): HawksMiceInteractive {
           if (interactive) {
             return interactive;
           } else {
@@ -56,59 +79,85 @@ export const MousePopulationsModel = types
           }
         },
 
+        get chanceOfMutation() {
+          if (!self["inheritance.breedWithMutations"]) {
+            return 0;
+          }
+          return self["inheritance.chanceOfMutations"] / 100;
+        }
+      },
+      actions: {
+        setEnvironmentColor(color: EnvironmentColorType) {
+          self.environment = color;
+        },
+        setBreedWithMutations(value: boolean) {
+          self["inheritance.breedWithMutations"] = value;
+        },
+        setBreedWithoutInheritance(value: boolean) {
+          self["inheritance.breedWithoutInheritance"] = value;
+        },
+        reset() {
+          interactive.reset();
+          self.chartData.dataSets[0].clearDataPoints();
+          self.chartData.dataSets[1].clearDataPoints();
+          self.chartData.dataSets[2].clearDataPoints();
+        }
+      }
+    };
+  })
+  .extend(self => {
+    return {
+      views: {
         get toolbarButtons(): ToolbarButton[] {
           const buttons = [];
 
           buttons.push({
             title: "Add Mice",
             action: (e: any) => {
-              if (self.addMiceByColor) {
-                const white = self.percentWhite;
-                const brown = 1 - white;
-                interactive.addInitialMicePopulation(20, true, {white, brown});
-              } else {
-                const bb = self.percentbb;
-                const Bb = self.percentBb;
-                const BB = 1 - bb - Bb;
-                interactive.addInitialMicePopulation(20, false, {bb, Bb, BB});
-              }
+              const {"initialPopulation.white": white, "initialPopulation.tan": tan} = self;
+              self.interactive.addInitialMicePopulation(30, {white, tan});
             }
           });
 
           buttons.push({
             title: "Add Hawks",
             action: (e: any) => {
-              interactive.addInitialHawksPopulation(self.numHawks);
+              self.interactive.addInitialHawksPopulation(self.numHawks);
             }
           });
 
-          return buttons;
-        },
-
-        get environmentColor(): EnvironmentColor {
-          switch (self.environment) {
-            case "white":
-            case "brown":
-            case "neutral":
-              return self.environment;
-            default:
-              return "white";
+          if (self.showSwitchEnvironmentsButton) {
+            buttons.push({
+              title: "Switch environments",
+              action: (e: any) => {
+                self.interactive.switchEnvironments(self.includeNeutralEnvironment);
+              }
+            });
           }
-        }
-      },
-      actions: {
-        setEnvironmentColor(color: EnvironmentColor) {
-          self.environment = color;
-        },
-        reset() {
-          interactive.reset();
-          self.chartData.dataSets[0].clearDataPoints();
-          self.chartData.dataSets[1].clearDataPoints();
-        },
-         addData(datum: any) {
-          const date = interactive.environment.date;
-          self.chartData.dataSets[0].addDataPoint(date, datum.numWhite, "");
-          self.chartData.dataSets[1].addDataPoint(date, datum.numBrown, "");
+
+          if (self["inheritance.showStudentControlOfMutations"]) {
+            buttons.push({
+              title: "Breed with muations",
+              type: "checkbox",
+              value: self["inheritance.breedWithMutations"],
+              action: (val: boolean) => {
+                self.setBreedWithMutations(val);
+              }
+            });
+          }
+
+          if (self["inheritance.showStudentControlOfInheritance"]) {
+            buttons.push({
+              title: "Breed without inheritance",
+              type: "checkbox",
+              value: self["inheritance.breedWithoutInheritance"],
+              action: (val: boolean) => {
+                self.setBreedWithoutInheritance(val);
+              }
+            });
+          }
+
+          return buttons;
         }
       }
     };

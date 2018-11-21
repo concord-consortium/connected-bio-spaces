@@ -68,61 +68,92 @@ export const ChartDataSetModel = types
     name: types.string,
     dataPoints: types.array(DataPoint),
     color: types.string,
-    maxPoints: types.number
+    // If maxPoints is 0 we will always work with the entire data set
+    maxPoints: types.optional(types.number, -1),
+    fixedMin: types.maybe(types.number),
+    fixedMax: types.maybe(types.number),
+    // expandOnly is used for y-axis scaling. When requesting min/max point values,
+    // if this is set the a2 / y axis max returns the max of the full data set, not just the visiblePoints
+    expandOnly: false,
+    dataStartIdx: types.maybe(types.number)
   })
+  .views(self => ({
+    get visibleDataPoints() {
+      if (self.maxPoints && self.maxPoints > 0 && self.dataPoints.length >= self.maxPoints) {
+        if (self.dataStartIdx !== undefined && self.dataStartIdx > -1) {
+          return self.dataPoints.slice(self.dataStartIdx, self.dataStartIdx + self.maxPoints);
+        } else {
+          // just get the tail of most recent data
+          return self.dataPoints.slice(-self.maxPoints);
+        }
+      } else {
+        // If we don't set a max, don't use filtering
+        return self.dataPoints;
+      }
+    }
+  }))
   .views(self => ({
     // labels for a data point - essential for a bar graph, optional for a line
     get dataLabels() {
-      return self.dataPoints.map(p => p.label);
+      return self.visibleDataPoints.map(p => p.label);
     },
     // Axis 1 data, for a line will be point x value, for bar will be quantity
     get dataA1() {
-      return self.dataPoints.map(p => p.a1);
+      return self.visibleDataPoints.map(p => p.a1);
     },
     // Axis 2 data for a line will be y value, for a bar will be label
     get dataA2() {
-      if (self.dataPoints.length > 0 && self.dataPoints[0].a2) {
-        return self.dataPoints.map(p => p.a2);
+      if (self.visibleDataPoints.length > 0 && self.visibleDataPoints[0].a2) {
+        return self.visibleDataPoints.map(p => p.a2);
       } else {
-        return self.dataPoints.map(p => p.label);
+        return self.visibleDataPoints.map(p => p.label);
       }
     },
     // Determine minimum and maximum values on each axis
     get maxA1(): number | undefined {
-      if (!self.dataPoints || self.dataPoints.length === 0) {
+      if (!self.visibleDataPoints || self.visibleDataPoints.length === 0) {
         return defaultMax;
       } else {
-        return Math.max(...self.dataPoints.map(p => p.a1));
+        return Math.max(...self.visibleDataPoints.map(p => p.a1));
       }
     },
     get maxA2(): number | undefined {
-      if (!self.dataPoints || self.dataPoints.length === 0) {
+      if (self.fixedMax !== undefined) {
+        return self.fixedMax;
+      } else if (!self.visibleDataPoints || self.visibleDataPoints.length === 0) {
         return defaultMax;
-      } else {
+      }
+      else if (self.expandOnly) {
+        // always return max from all points so y axis only scales up, never down
         return Math.max(...self.dataPoints.map(p => p.a2));
+      } else {
+        // only return max of visible subset of data
+        return Math.max(...self.visibleDataPoints.map(p => p.a2));
       }
     },
     get minA1(): number | undefined {
-      if (!self.dataPoints || self.dataPoints.length === 0) {
+      if (!self.visibleDataPoints || self.visibleDataPoints.length === 0) {
         return defaultMin;
       } else {
-        return Math.min(...self.dataPoints.map(p => p.a1));
+        return Math.min(...self.visibleDataPoints.map(p => p.a1));
       }
     },
     get minA2(): number | undefined {
-      if (!self.dataPoints || self.dataPoints.length === 0) {
+      if (self.fixedMin !== undefined) {
+        return self.fixedMin;
+      } else if (!self.visibleDataPoints || self.visibleDataPoints.length === 0) {
         return defaultMin;
       } else {
-        return Math.min(...self.dataPoints.map(p => p.a2));
+        return Math.min(...self.visibleDataPoints.map(p => p.a2));
       }
     },
     // Lines and scatter plots require X and Y coordinates
     get dataAsXY() {
-      return self.dataPoints.map(d => ({x: d.a1, y: d.a2}));
+      return self.visibleDataPoints.map(d => ({x: d.a1, y: d.a2}));
     },
     // Sort lines in increasing order of X for time-based plots
     get timeSeriesXY() {
-      const xyData = self.dataPoints.map(d => ({ x: d.a1, y: d.a2 }));
+      const xyData = self.visibleDataPoints.map(d => ({ x: d.a1, y: d.a2 }));
       xyData.sort(timeSeriesSort);
       return xyData;
     },
@@ -137,11 +168,13 @@ export const ChartDataSetModel = types
   }))
   .extend(self => {
     // actions
+    // fetching a subset of points is designed for scrubbing back and forth along a large set of data
+    // starting from a specified index. Set to -1 to remove the filter.
+    function subsetPoints(idx: number) {
+      self.dataStartIdx = idx;
+    }
+
     function addDataPoint(a1: number, a2: number, label: string) {
-      if (self.maxPoints && self.dataPoints && self.dataPoints.length === self.maxPoints) {
-        // limit maximum data points and remove oldest point before adding new point
-        self.dataPoints.splice(0, 1);
-      }
       self.dataPoints.push({ a1, a2, label });
     }
 
@@ -166,13 +199,20 @@ export const ChartDataSetModel = types
       self.dataPoints.splice(0, self.dataPoints.length);
     }
 
+    // used to filter data to a fixed number of points, or returns all points if set to -1
+    function setMaxDataPoints(maxPoints: number) {
+      self.maxPoints = maxPoints;
+    }
+
     return {
       actions: {
         addDataPoint,
         updateDataPoint,
         deleteDataPoint,
         changeColor,
-        clearDataPoints
+        clearDataPoints,
+        subsetPoints,
+        setMaxDataPoints
       }
     };
   });
