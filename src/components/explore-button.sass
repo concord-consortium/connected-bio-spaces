@@ -1,0 +1,123 @@
+@import vars
+
+.explore-button
+  display: flex
+  flex-direction: row
+  width: $explore-button-width
+  height: $explore-button-height
+  margin: $component-margin
+  border-top-left-radius: $explore-button-left-radius
+  border-bottom-left-radius: $explore-button-left-radius
+  border-top-right-radius: $explore-button-right-radius
+  border-bottom-right-radius: $explore-button-right-radius
+  font-size: $font-size-label1
+  background-color: $color-nav-cinder-light3
+  color: $color-nav-cinder-light1
+
+  &.active
+    color: $color-white
+
+  &.clickable
+    color: $color-black
+
+  &.populations
+    background-color: $explore-button-pop-active-bgcolor
+
+    &.clickable
+      background-color: $explore-button-pop-bgcolor
+      color: $explore-button-pop-color
+
+  &.breeding
+    background-color: $explore-button-breed-active-bgcolor
+
+    &.clickable
+      background-color: $explore-button-breed-bgcolor
+      color: $explore-button-breed-color
+
+  &.organism
+    background-color: $explore-button-org-active-bgcolor
+
+    &.clickable
+      background-color: $explore-button-org-bgcolor
+      color: $explore-button-org-color
+
+  &.dna
+    background-color: $explore-button-dna-active-bgcolor
+
+    &.clickable
+      background-color: $explore-button-dna-bgcolor
+      color: $explore-button-dna-color
+
+  .icon
+    width: $explore-button-icon-width
+    height: $explore-button-icon-height
+    margin: $internal-component-margin
+    border-top-right-radius: 0px
+    border-bottom-right-radius: 0px
+    border-top-left-radius: $explore-button-icon-left-radius
+    border-bottom-left-radius: $explore-button-icon-left-radius
+    background-color: $color-nav-cinder-light2
+
+    &.populations
+      background-color: $explore-button-pop-active-icon-bgcolor
+
+      &.clickable
+        background-color: $explore-button-pop-icon-bgcolor
+
+    &.breeding
+      background-color: $explore-button-breed-active-icon-bgcolor
+
+      &.clickable
+        background-color: $explore-button-breed-icon-bgcolor
+
+    &.organism
+      background-color: $explore-button-org-active-icon-bgcolor
+
+      &.clickable
+        background-color: $explore-button-org-icon-bgcolor
+
+    &.dna
+      background-color: $explore-button-dna-active-icon-bgcolor
+
+      &.clickable
+        background-color: $explore-button-dna-icon-bgcolor
+
+  .title
+    display: flex
+    justify-content: center
+    align-items: center
+    width: $explore-button-title-width
+    height: $explore-button-title-height
+    margin: $internal-component-margin
+
+.explore-button.clickable:hover
+  cursor: pointer
+
+.explore-button.clickable.populations:hover
+  background-color: $explore-button-pop-hover-bgcolor
+  color: $explore-button-pop-hover-color
+
+.explore-button.clickable.breeding:hover
+  background-color: $explore-button-breed-hover-bgcolor
+  color: $explore-button-breed-hover-color
+
+.explore-button.clickable.organism:hover
+  background-color: $explore-button-org-hover-bgcolor
+  color: $explore-button-org-hover-color
+
+.explore-button.clickable.dna:hover
+  background-color: $explore-button-dna-hover-bgcolor
+  color: $explore-button-dna-hover-color
+
+.explore-button.clickable:hover .icon.populations
+  background-color: $explore-button-pop-hover-icon-bgcolor
+
+.explore-button.clickable:hover .icon.breeding
+  background-color: $explore-button-breed-hover-icon-bgcolor
+
+.explore-button.clickable:hover .icon.organism
+  background-color: $explore-button-org-hover-icon-bgcolor
+
+.explore-button.clickable:hover .icon.dna
+  background-color: $explore-button-dna-hover-icon-bgcolor
+

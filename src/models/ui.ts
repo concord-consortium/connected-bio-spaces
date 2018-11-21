@@ -1,27 +1,20 @@
 import { types } from "mobx-state-tree";
 
-export type Spaces = "populations";     // eventually a union of all the spaces
+export const SpaceTypeEnum = types.enumeration("type", ["populations", "breeding", "organism", "dna", "none"]);
+export type SpaceType = typeof SpaceTypeEnum.Type;
 
 export const UIModel = types
   .model("UI", {
-    showInvestigationModalSelect: false,
-    showInvestigationPanel: false,
     showPopulationGraph: false,
-    investigationPanelSpace: "populations",
+    investigationPanelSpace: SpaceTypeEnum,
     availableBackpackSlots: 6
   })
   .actions((self) => {
     return {
-      setShowInvestigationModalSelect(val: boolean) {
-        self.showInvestigationModalSelect = val;
-      },
-      setShowInvestigationPanel(val: boolean) {
-        self.showInvestigationPanel = val;
-      },
       setShowPopulationGraph(val: boolean) {
         self.showPopulationGraph = val;
       },
-      setInvestigationPanelSpace(space: Spaces) {
+      setInvestigationPanelSpace(space: SpaceType) {
         self.investigationPanelSpace = space;
       },
       setAvailableBackpackSlots(val: number) {

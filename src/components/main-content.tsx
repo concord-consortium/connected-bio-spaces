@@ -3,14 +3,24 @@ import * as React from "react";
 import { BaseComponent, IBaseProps } from "./base";
 
 import "./main-content.sass";
-import { InvestigateDialogComponent } from "./investigate-dialog";
 import { PopulationsSpaceComponent } from "./spaces/populations-space";
+import { SpaceType } from "../models/ui";
 
 interface IProps extends IBaseProps {}
 interface IState {}
 
-const SpaceComponents: any = {
-  populations: PopulationsSpaceComponent
+type SpaceComponent = typeof PopulationsSpaceComponent;
+
+type SpaceTypeToComponent = {
+  [key in SpaceType]: SpaceComponent | undefined
+};
+
+const kSpaceComponents: SpaceTypeToComponent = {
+  populations: PopulationsSpaceComponent,
+  breeding: undefined,
+  organism: undefined,
+  dna: undefined,
+  none: undefined
 };
 
 @inject("stores")
@@ -26,16 +36,12 @@ export class MainContentComponent extends BaseComponent<IProps, IState> {
   }
 
   private renderMainContent() {
-    const {showInvestigationModalSelect, investigationPanelSpace} = this.stores.ui;
-    const {showInvestigationPanel} = this.stores.ui;
+    const {investigationPanelSpace} = this.stores.ui;
 
     // stawman code
-    const SpaceComponent = SpaceComponents[investigationPanelSpace];
-
-    if (showInvestigationModalSelect) {
-      return <InvestigateDialogComponent/>;
-    } else if (showInvestigationPanel) {
-      return <SpaceComponent/>;
+    const ActiveSpaceComponent = kSpaceComponents[investigationPanelSpace];
+    if (ActiveSpaceComponent) {
+      return <ActiveSpaceComponent/>;
     }
   }
 }

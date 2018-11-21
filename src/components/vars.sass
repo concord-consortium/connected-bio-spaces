@@ -69,33 +69,46 @@ $color-nav-cerulean: #3cc8f5
 $color-nav-cerulean-light1: #7ad9f8
 $color-nav-cerulean-light2: #c8effc
 $color-nav-cerulean-light3: #ebf9fe
-$color-dark-green: #49B860
-$color-light-green: #D2EDD8
-$color-gray-blue: #EEF9FC
+$color-khaki-yellow: #FFD56D
+$color-khaki-yellow-light1: #FFDF91
+$color-khaki-yellow-light2: #FFECC0
+$color-khaki-yellow-dark1: #F0CA6E
+$color-khaki-yellow-dark2: #EBB93E
+$color-khaki-yellow-dark3: #DFB03F
+$color-khaki-yellow-dark4: #D49600
+$color-khaki-yellow-dark5: #976B00
+$color-plum-purple: #CD88E4
+$color-plum-purple-light1: #D9A5EB
+$color-plum-purple-light2: #F2CDED
+$color-plum-purple-dark1: #C486D8
+$color-plum-purple-dark2: #B05ECB
+$color-plum-purple-dark3: #A95CC1
+$color-plum-purple-dark4: #8D27AD
+$color-plum-purple-dark5: #641C7C
+$color-salmon-orange: #FFA56D
+$color-salmon-orange-light1: #FFBB91
+$color-salmon-orange-light2: #F9DAC6
+$color-salmon-orange-dark1: #F0A06E
+$color-salmon-orange-dark2: #EB813E
+$color-salmon-orange-dark3: #DF7D3F
+$color-salmon-orange-dark4: #D45200
+$color-salmon-orange-dark5: #973B00
 $color-dark-gold: #EBB936
 $color-light-gold: #D8E0B0
 $color-mouse-brown: #B18431
-$color-gray-36: #242424
-$color-gray-121: #797979
-$color-gray-148: #949494
-$color-gray-174: #AEAEAE
-$color-gray-201: #c9c9c9
-$color-gray-228: #e4e4e4
-$color-gray-241: #f1f1f1
-$color-gray-242: #f2f2f2
 
 $component-bgcolor: $color-white
-$main-content-bgcolor: $color-gray-201
-$main-content-color: $color-gray-36
+$main-content-bgcolor: $color-nav-cinder-light2
+$main-content-color: $color-nav-cinder-dark3
 
 //
 // top bar
 //
 $top-bar-height: 29px
 $top-bar-icon-height: 16px
-$top-bar-icon-bgcolor: $color-gray-242
-$top-bar-title-bgcolor: $color-gray-228
-$top-bar-title-color: $color-gray-121
+$top-bar-icon-bgcolor: $color-nav-cinder-light3
+$top-bar-title-bgcolor: $color-nav-cinder-light2
+$top-bar-title-color: $color-nav-cinder-dark2
 
 //
 // left nav panel
@@ -118,9 +131,63 @@ $left-nav-legend-male-color: $color-key-red
 $left-nav-legend-female-color: $color-key-yellow
 $left-nav-legend-heterozygote-color: $color-key-blue
 $scroll-bar-width: 6px
-$scroll-bar-bgcolor: $color-gray-241
+$scroll-bar-bgcolor: $color-nav-cinder-light3
 $scroll-bar-thumb-color: $color-nav-cerulean
 $scroll-bar-hover-color: $color-nav-cerulean-dark2
+
+//
+// explore buttons
+//
+$explore-button-width: 110px
+$explore-button-height: 25px
+$explore-button-icon-width: 25px
+$explore-button-icon-height: $explore-button-height - (2 * $internal-component-margin)
+$explore-button-title-width: 65px
+$explore-button-title-height: $explore-button-height - (2 * $internal-component-margin)
+$explore-button-left-radius: 10px
+$explore-button-right-radius: 25px
+$explore-button-icon-left-radius: $explore-button-left-radius / 2
+
+$explore-button-pop-bgcolor: $color-khaki-yellow
+$explore-button-pop-icon-bgcolor: $color-khaki-yellow-light1
+$explore-button-pop-color: $color-khaki-yellow-dark5
+$explore-button-pop-hover-bgcolor: $color-khaki-yellow-dark2
+$explore-button-pop-hover-icon-bgcolor: $color-khaki-yellow-dark1
+$explore-button-pop-hover-color: $color-khaki-yellow-light2
+$explore-button-pop-active-bgcolor: $color-khaki-yellow-dark4
+$explore-button-pop-active-icon-bgcolor: $color-khaki-yellow-dark3
+$explore-button-pop-active-color: $color-white
+
+$explore-button-breed-bgcolor: $color-plum-purple
+$explore-button-breed-icon-bgcolor: $color-plum-purple-light1
+$explore-button-breed-color: $color-plum-purple-dark5
+$explore-button-breed-hover-bgcolor: $color-plum-purple-dark2
+$explore-button-breed-hover-icon-bgcolor: $color-plum-purple-dark1
+$explore-button-breed-hover-color: $color-plum-purple-light2
+$explore-button-breed-active-bgcolor: $color-plum-purple-dark4
+$explore-button-breed-active-icon-bgcolor: $color-plum-purple-dark3
+$explore-button-breed-active-color: $color-white
+
+$explore-button-org-bgcolor: $color-salmon-orange
+$explore-button-org-icon-bgcolor: $color-salmon-orange-light1
+$explore-button-org-color: $color-salmon-orange-dark5
+$explore-button-org-hover-bgcolor: $color-salmon-orange-dark2
+$explore-button-org-hover-icon-bgcolor: $color-salmon-orange-dark1
+$explore-button-org-hover-color: $color-salmon-orange-light2
+$explore-button-org-active-bgcolor: $color-salmon-orange-dark4
+$explore-button-org-active-icon-bgcolor: $color-salmon-orange-dark3
+$explore-button-org-active-color: $color-white
+
+$explore-button-dna-bgcolor: $color-nav-cerulean
+$explore-button-dna-icon-bgcolor: $color-nav-cerulean-light1
+$explore-button-dna-color: $color-plum-purple-dark5
+$explore-button-dna-hover-bgcolor: $color-nav-cerulean-dark2
+$explore-button-dna-hover-icon-bgcolor: $color-nav-cerulean-dark1
+$explore-button-dna-hover-color: $color-nav-cerulean-light2
+$explore-button-dna-active-bgcolor: $color-plum-purple-dark4
+$explore-button-dna-active-icon-bgcolor: $color-nav-cerulean-dark3
+$explore-button-dna-active-color: $color-white
+
 
 //
 // collect buttons
@@ -135,37 +202,6 @@ $collect-button-inner-border-height: $collect-button-inner-border-width
 $collect-button-inner-border-radius: $collect-button-inner-border-width / 2
 $collect-button-border-width: 2px
 $collect-button-icon-height: 45px
-
-//
-// buttons
-//
-$button-color: $color-gray-174
-$button-bgcolor: $color-gray-blue
-$button-border-color: $color-gray-174
-$button-border-hover-color: $color-white
-$button-width: 80px
-$button-height: 60px
-$circle-button-height: $button-width
-$circle-button-radius: $button-width / 2
-$square-button-radius: $component-border-radius
-
-//
-// investigate dialog
-//
-$investigate-dialog-header-color: $color-white
-$investigate-dialog-header-bgcolor: $color-dark-green
-$investigate-dialog-bgcolor: $color-light-green
-$investigate-dialog-color: $color-black
-$investigate-dialog-button-border-color: $color-dark-gold
-$investigate-dialog-button-bgcolor: $color-light-gold
-$investigate-dialog-button-color: $color-gray-148
-$investigate-dialog-button-footer-color: $color-black
-$investigate-dialog-footer-bgcolor: $color-dark-green
-$dialog-border-radius: $component-border-radius
-$investigate-dialog-height: 420px
-$investigate-dialog-width: 500px
-$investigate-dialog-header-height: 50px
-$investigate-dialog-footer-height: 24px
 
 //
 // two-up display
