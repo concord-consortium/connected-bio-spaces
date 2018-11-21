@@ -35,6 +35,8 @@ const MouseGeneticSpec = {
   }
 };
 
+export type MouseColors = "white" | "tan" | "brown";
+
 export function getMouseSpecies(model: MousePopulationsModelType) {
   class Mouse extends BasicAnimal {
     public moving: boolean;

@@ -1,6 +1,6 @@
 import { Interactive, Environment, Rule, Agent, Events, Species, Rect, Trait } from "populations.js";
 import { MousePopulationsModelType } from "./mouse-populations-model";
-import { getMouseSpecies } from "./mice";
+import { getMouseSpecies, MouseColors } from "./mice";
 import { hawkSpecies } from "./hawks";
 
 export type EnvironmentColor = "white" | "brown" | "neutral";
@@ -31,7 +31,7 @@ export class HawksMiceInteractive extends Interactive {
 
 export function createInteractive(model: MousePopulationsModelType) {
   const mouseSpecies = getMouseSpecies(model);
-  environmentColor = model.environmentColor;
+  environmentColor = model.environment;
   const env = createEnvironment(environmentColor);
 
   env.addRule(new Rule({
@@ -111,7 +111,7 @@ export function createInteractive(model: MousePopulationsModelType) {
     });
   }
 
-  function createColorTraitByPhenotype(color: "white" | "tan" | "brown") {
+  function createColorTraitByPhenotype(color: MouseColors) {
     let alleleString;
     switch (color) {
       case "white":

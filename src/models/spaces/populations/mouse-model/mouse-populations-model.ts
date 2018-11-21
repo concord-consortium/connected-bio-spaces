@@ -34,7 +34,7 @@ const chartData = {
 
 export const MousePopulationsModel = types
   .model("MousePopulations", {
-    "initialEnvironment": types.string,
+    "environment": types.enumeration("environment", ["white", "neutral", "brown"]),
     "numHawks": types.number,
     "initialPopulation.white": types.number,
     "initialPopulation.tan": types.number,
@@ -76,17 +76,6 @@ export const MousePopulationsModel = types
           }
         },
 
-        get environmentColor(): EnvironmentColor {
-          switch (self.initialEnvironment) {
-            case "white":
-            case "brown":
-            case "neutral":
-              return self.initialEnvironment;
-            default:
-              return "white";
-          }
-        },
-
         get chanceOfMutation() {
           if (!self["inheritance.breedWithMutations"]) {
             return 0;
@@ -96,7 +85,7 @@ export const MousePopulationsModel = types
       },
       actions: {
         setEnvironmentColor(color: EnvironmentColor) {
-          self.initialEnvironment = color;
+          self.environment = color;
         },
         setBreedWithMutations(value: boolean) {
           self["inheritance.breedWithMutations"] = value;

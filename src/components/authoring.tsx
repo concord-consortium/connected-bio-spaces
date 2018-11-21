@@ -25,7 +25,7 @@ const schema: JSONSchema6 = {
       title: "Populations Model",
       type: "object",
       properties: {
-        initialEnvironment: {
+        environment: {
           title: "Initial environment",
           type: "string",
           enum: [
@@ -114,7 +114,7 @@ export const defaultAuthoring = {
   curriculum: "mouse",
   topBar: true,
   populations: {
-    initialEnvironment: "white",
+    environment: "white",
     showSwitchEnvironmentsButton: true,
     includeNeutralEnvironment: true,
     initialPopulation: {
