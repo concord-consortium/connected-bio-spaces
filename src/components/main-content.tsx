@@ -4,15 +4,23 @@ import { BaseComponent, IBaseProps } from "./base";
 
 import "./main-content.sass";
 import { PopulationsSpaceComponent } from "./spaces/populations-space";
+import { SpaceType } from "../models/ui";
 
 interface IProps extends IBaseProps {}
 interface IState {}
 
-const SpaceComponents: any = {
+type SpaceComponent = typeof PopulationsSpaceComponent;
+
+type SpaceTypeToComponent = {
+  [key in SpaceType]: SpaceComponent | undefined
+};
+
+const SpaceComponents: SpaceTypeToComponent = {
   populations: PopulationsSpaceComponent,
-  breeding: PopulationsSpaceComponent,
-  organism: PopulationsSpaceComponent,
-  dna: PopulationsSpaceComponent
+  breeding: undefined,
+  organism: undefined,
+  dna: undefined,
+  none: undefined
 };
 
 @inject("stores")
@@ -31,10 +39,9 @@ export class MainContentComponent extends BaseComponent<IProps, IState> {
     const {investigationPanelSpace} = this.stores.ui;
 
     // stawman code
-    const SpaceComponent = SpaceComponents[investigationPanelSpace];
-
-    if (SpaceComponent) {
-      return <SpaceComponent/>;
+    const ActiveSpaceComponent = SpaceComponents[investigationPanelSpace];
+    if (ActiveSpaceComponent) {
+      return <ActiveSpaceComponent/>;
     }
   }
 }
