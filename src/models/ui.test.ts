@@ -1,10 +1,12 @@
-import { UIModel, UIModelType } from "./ui";
+import { UIModel, UIModelType, SpaceTypeEnum } from "./ui";
 
 describe("ui model", () => {
   let ui: UIModelType;
 
   beforeEach(() => {
-    ui = UIModel.create({});
+    ui = UIModel.create({
+      investigationPanelSpace: "none"
+    });
   });
 
   it("has default values", () => {
@@ -16,9 +18,11 @@ describe("ui model", () => {
   it("uses override values", () => {
     ui = UIModel.create({
       showPopulationGraph: true,
+      investigationPanelSpace: "populations",
       availableBackpackSlots: 5
     });
     expect(ui.showPopulationGraph).toBe(true);
+    expect(ui.investigationPanelSpace).toBe("populations");
     expect(ui.availableBackpackSlots).toBe(5);
   });
 

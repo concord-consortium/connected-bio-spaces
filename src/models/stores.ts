@@ -20,7 +20,7 @@ export interface ICreateStores {
 
 export function createStores(params?: ICreateStores): IStores {
   return {
-    ui: params && params.ui || UIModel.create({}),
+    ui: params && params.ui || UIModel.create({investigationPanelSpace: "none"}),
     populations: params && params.populations || createPopulationsModel(currentCurriculum),
     backpack: params && params.backpack || BackpackModel.create({})
   };

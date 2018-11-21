@@ -1,11 +1,13 @@
 import { types } from "mobx-state-tree";
 
+export const SpaceTypeEnum = types.enumeration("type", ["populations", "breeding", "organism", "dna", "none"]);
+export type SpaceType = typeof SpaceTypeEnum.Type;
 export type Space = "populations" | "breeding" | "organism" | "dna" | "none";
 
 export const UIModel = types
   .model("UI", {
     showPopulationGraph: false,
-    investigationPanelSpace: "none",
+    investigationPanelSpace: SpaceTypeEnum,
     availableBackpackSlots: 6
   })
   .actions((self) => {
@@ -13,7 +15,7 @@ export const UIModel = types
       setShowPopulationGraph(val: boolean) {
         self.showPopulationGraph = val;
       },
-      setInvestigationPanelSpace(space: Space) {
+      setInvestigationPanelSpace(space: SpaceType) {
         self.investigationPanelSpace = space;
       },
       setAvailableBackpackSlots(val: number) {
