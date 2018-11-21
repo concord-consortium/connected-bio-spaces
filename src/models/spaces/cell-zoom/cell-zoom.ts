@@ -1,6 +1,7 @@
 import { types, Instance } from "mobx-state-tree";
 import { ChartDataModelType, ChartDataModel } from "../charts/chart-data";
 import { DataPoint, ChartDataSetModel, ChartColors } from "../charts/chart-data-set";
+import { ColorType } from "../../mouse";
 
 export const Organelle = types.enumeration("type", [
   "nucleus",
@@ -14,35 +15,79 @@ export const Organelle = types.enumeration("type", [
 ]);
 export type OrganelleType = typeof Organelle.Type;
 
+export const SubstanceEnum = types.enumeration("type", [
+  "pheomelanin",
+  "signalProtein",
+  "eumelanin",
+  "hormone"
+]);
+export type SubstanceType = typeof SubstanceEnum.Type;
+
 type OrganelleInfo = {
-  [key in OrganelleType]: {
+  [organelle in OrganelleType]: {
     displayName: string;
+    substances: {
+      [substance in SubstanceType]?: {
+        [color in ColorType]: number;
+      };
+    };
   };
 };
-export const ORGANELLE_INFO: OrganelleInfo = {
+export const kOrganelleInfo: OrganelleInfo = {
   nucleus: {
-    displayName: "Nucleus"
+    displayName: "Nucleus",
+    substances: {}
   },
   cytoplasm: {
-    displayName: "Cytoplasm"
+    displayName: "Cytoplasm",
+    substances: {
+      signalProtein: {
+        white: 170,
+        tan: 100,
+        brown: 0
+      }
+    }
   },
   golgi: {
-    displayName: "Golgi"
+    displayName: "Golgi",
+    substances: {}
   },
   extracellular: {
-    displayName: "Extracellular"
+    displayName: "Extracellular",
+    substances: {
+      hormone: {
+        white: 125,
+        tan: 125,
+        brown: 125
+      }
+    }
   },
   melanosome: {
-    displayName: "Melanosome"
+    displayName: "Melanosome",
+    substances: {
+      eumelanin: {
+        white: 0,
+        tan: 170,
+        brown: 340
+      },
+      pheomelanin: {
+        white: 316,
+        tan: 232,
+        brown: 147
+      }
+    }
   },
   receptor: {
-    displayName: "Receptor"
+    displayName: "Receptor",
+    substances: {}
   },
   gate: {
-    displayName: "Gate"
+    displayName: "Gate",
+    substances: {}
   },
   nearbyCell: {
-    displayName: "Nearby Cell"
+    displayName: "Nearby Cell",
+    substances: {}
   },
 };
 
@@ -52,7 +97,8 @@ export type ModeType = typeof Mode.Type;
 export const CellZoomModel = types
   .model("Populations", {
     hoveredOrganelle: types.maybe(Organelle),
-    mode: types.optional(Mode, "normal")
+    mode: types.optional(Mode, "normal"),
+    assayedOrganelle: types.maybe(Organelle)
   })
   .views(self => ({
     get currentData(): ChartDataModelType {
