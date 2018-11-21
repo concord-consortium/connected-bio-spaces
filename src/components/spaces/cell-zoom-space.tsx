@@ -14,21 +14,23 @@ interface IState {}
 export class CellZoomSpaceComponent extends BaseComponent<IProps, IState> {
 
   public render() {
-    const {populations} = this.stores;
+    const {cellZoom} = this.stores;
     const graphTitle = "Graph";
-    // Add a fake chart for now
-    const graphPanel = <Chart title="Chart Test" chartData={populations.currentData} chartType={"line"} />;
+
+    const cellGraphPanel1 = <Chart title="Chart Test" chartData={cellZoom.currentData} chartType={"horizontalBar"} />;
     const cellZoomComponent1 = <TwoUpDisplayComponent
       leftTitle="Investigate: Cell"
       leftPanel={<OrganelleWrapper elementName="organelle-wrapper-1" />}
       rightTitle={graphTitle}
-      rightPanel={graphPanel}
+      rightPanel={cellGraphPanel1}
     />;
+
+    const cellGraphPanel2 = <Chart title="Chart Test" chartData={cellZoom.currentData} chartType={"horizontalBar"} />;
     const cellZoomComponent2 = <TwoUpDisplayComponent
       leftTitle="Investigate: Cell"
       leftPanel={<OrganelleWrapper elementName="organelle-wrapper-2" />}
       rightTitle={graphTitle}
-      rightPanel={graphPanel}
+      rightPanel={cellGraphPanel2}
     />;
     return (
       <FourUpDisplayComponent topRow={cellZoomComponent1} bottomRow={cellZoomComponent2} />

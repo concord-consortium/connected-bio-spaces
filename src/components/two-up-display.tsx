@@ -1,6 +1,7 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { BaseComponent, IBaseProps } from "./base";
+import { ZoomControl } from "./zoom-control";
 
 import "./two-up-display.sass";
 
@@ -36,6 +37,7 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
         <div className="content" data-test="two-up-content">
           {this.props.leftPanel}
         </div>
+        <ZoomControl />
       </div>
     );
   }
