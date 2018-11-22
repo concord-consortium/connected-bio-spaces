@@ -34,24 +34,29 @@ export class LeftNavPanelComponent extends BaseComponent<IProps, IState> {
   }
 
   private renderExploreButtons = () => {
+    const {ui} = this.stores;
     return (
       <div className="button-holder investigate">
+        {ui.showPopulationSpace &&
         <ExploreButtonComponent
           space={"populations"}
           title={"Population"}
-        />
+        /> }
+        {ui.showBreedingSpace &&
         <ExploreButtonComponent
           space={"breeding"}
           title={"Breeding"}
-        />
+        /> }
+        {ui.showOrganismSpace &&
         <ExploreButtonComponent
           space={"organism"}
           title={"Organism"}
-        />
+        /> }
+        {ui.showDNASpace &&
         <ExploreButtonComponent
           space={"dna"}
           title={"Protein/DNA"}
-        />
+        /> }
       </div>
     );
   }

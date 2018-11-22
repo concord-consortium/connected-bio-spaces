@@ -21,6 +21,34 @@ const schema: JSONSchema6 = {
       ]
     },
     topBar: {type: "boolean", title: "Show Top Bar"},
+    spaces: {
+      title: "Investigation Spaces",
+      type: "object",
+      properties: {
+        showPopulationSpace: {type: "boolean", title: "Show Populations Space"},
+        showBreedingSpace: {type: "boolean", title: "Show Breeding Space"},
+        showOrganismSpace: {type: "boolean", title: "Show Organism Space"},
+        showDNASpace: {type: "boolean", title: "Show DNA/Protein Space"},
+        displayedSpace: {
+          title: "Initial displayed space",
+          type: "string",
+          enum: [
+            "none",
+            "populations",
+            "breeding",
+            "organism",
+            "dna"
+          ],
+          enumNames: [
+            "none",
+            "Populations",
+            "Breeding",
+            "Organism",
+            "DNA"
+          ]
+        },
+      }
+    },
     populations: {
       title: "Populations Model",
       type: "object",
@@ -113,6 +141,13 @@ const schema: JSONSchema6 = {
 export const defaultAuthoring = {
   curriculum: "mouse",
   topBar: true,
+  spaces: {
+    showPopulationSpace: true,
+    showBreedingSpace: true,
+    showOrganismSpace: true,
+    showDNASpace: true,
+    displayedSpace: "none"
+  },
   populations: {
     environment: "white",
     showSwitchEnvironmentsButton: true,

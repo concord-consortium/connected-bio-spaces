@@ -1,4 +1,4 @@
-import { UIModel, UIModelType } from "./ui";
+import { UIModel, UIModelType, createUIModel } from "./ui";
 import { PopulationsModelType, createPopulationsModel } from "./spaces/populations/populations";
 import { BackpackModel, BackpackModelType } from "./backpack";
 import { flatten } from "flat";
@@ -26,7 +26,7 @@ export interface ICreateStores {
 
 export function createStores(params: ICreateStores, authoring: any): IStores {
   return {
-    ui: params && params.ui || UIModel.create({investigationPanelSpace: "none"}),
+    ui: params && params.ui || createUIModel(authoring.spaces),
     populations: params && params.populations ||
       createPopulationsModel(authoring.curriculum, flatten(authoring.populations)),
     backpack: params && params.backpack || BackpackModel.create({}),
