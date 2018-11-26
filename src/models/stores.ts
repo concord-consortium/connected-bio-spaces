@@ -2,6 +2,8 @@ import { UIModel, UIModelType } from "./ui";
 import { PopulationsModelType, createPopulationsModel } from "./spaces/populations/populations";
 import { BackpackModel, BackpackModelType } from "./backpack";
 import { flatten } from "flat";
+import { CellZoomModel, CellZoomModelType } from "./spaces/cell-zoom/cell-zoom";
+import { CellMouseModel } from "../components/spaces/cell-zoom/cell-mouse";
 
 export type Curriculum = "mouse";
 
@@ -11,12 +13,14 @@ export interface IStores {
   ui: UIModelType;
   populations: PopulationsModelType;
   backpack: BackpackModelType;
+  cellZoom: CellZoomModelType;
 }
 
 export interface ICreateStores {
   ui?: UIModelType;
   populations?: PopulationsModelType;
   backpack?: BackpackModelType;
+  cellZoom?: CellZoomModelType;
 }
 
 export function createStores(params: ICreateStores, authoring: any): IStores {
@@ -24,6 +28,8 @@ export function createStores(params: ICreateStores, authoring: any): IStores {
     ui: params && params.ui || UIModel.create({investigationPanelSpace: "none"}),
     populations: params && params.populations ||
       createPopulationsModel(authoring.curriculum, flatten(authoring.populations)),
-    backpack: params && params.backpack || BackpackModel.create({})
+    backpack: params && params.backpack || BackpackModel.create({}),
+    cellZoom: params && params.cellZoom
+      || CellZoomModel.create({ organism: CellMouseModel.create({baseColor: "brown"}) })
   };
 }

@@ -62,6 +62,7 @@ export const DataPoint = types
     a1: types.number,
     a2: types.number
   });
+export type DataPointType = typeof DataPoint.Type;
 
 export const ChartDataSetModel = types
   .model("ChartDataSet", {

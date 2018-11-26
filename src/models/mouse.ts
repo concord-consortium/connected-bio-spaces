@@ -1,6 +1,7 @@
 import { types } from "mobx-state-tree";
 
-export type ColorType = "brown" | "tan" | "white";
+export const MouseColor = types.enumeration("type", ["brown", "white", "tan"]);
+export type ColorType = typeof MouseColor.Type;
 
 export const SexTypeEnum = types.enumeration("type", ["male", "female"]);
 export type SexType = typeof SexTypeEnum.Type;

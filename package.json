@@ -117,6 +117,7 @@
     "mobx": "^5.5.0",
     "mobx-react": "^5.2.8",
     "mobx-state-tree": "^3.4.0",
+    "organelle": "0.0.11",
     "populations-react": "0.0.1",
     "populations.js": "^0.1.1",
     "query-string": "^6.1.0",

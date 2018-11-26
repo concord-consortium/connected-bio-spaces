@@ -19,8 +19,16 @@ const defaultOptions: ChartOptions = {
   },
   legend: {
     display: true,
-    position: "bottom"
+    position: "bottom",
+    labels: {
+      filter: (legendItem: any, chartData: any) => {
+        // Hidden labels, like for "extra" bars, are marked with a "#"
+        return legendItem.text.indexOf("#") === -1;
+      },
+      boxWidth: 50
+    }
   },
+  maintainAspectRatio: false,
   scales: {
     xAxes: [{
       ticks: {
@@ -30,6 +38,10 @@ const defaultOptions: ChartOptions = {
       stacked: true
     }],
     yAxes: [{
+      ticks: {
+        min: 0,
+        max: 100
+      },
       stacked: true
     }]
   },
@@ -88,12 +100,18 @@ export class BarChart extends React.Component<IBarProps> {
             max: chartData.minMaxAll.maxA1
           },
           stacked: true
+        }],
+        yAxes: [{
+          ticks: {
+            min: 0,
+            max: chartData.minMaxAll.maxA1
+          },
+          stacked: true
         }]
       }
     });
     const w = width ? width : 400;
     const h = height ? height : 400;
-
     if (barChartType === "bar") {
       return (
         <Bar
@@ -101,6 +119,7 @@ export class BarChart extends React.Component<IBarProps> {
           options={options}
           height={h}
           width={w}
+          redraw={true}
         />
       );
     } else {
@@ -110,6 +129,7 @@ export class BarChart extends React.Component<IBarProps> {
           options={options}
           height={h}
           width={w}
+          redraw={true}
         />
       );
     }
