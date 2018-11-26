@@ -87,7 +87,7 @@ module.exports = (env, argv) => {
         to: 'assets'
       }]),
       new CopyWebpackPlugin([{
-        from: 'src/organelles',
+        from: 'src/components/spaces/cell-zoom/organelles',
         to: 'organelles'
       }])
     ]
