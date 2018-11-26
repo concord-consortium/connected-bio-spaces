@@ -6,18 +6,46 @@ import { FourUpDisplayComponent } from "../four-up-display";
 import { Chart } from "../charts/chart";
 
 import { CellZoomComponent } from "./cell-zoom/cell-zoom";
+import { OrganismView } from "./cell-zoom/organism-view";
 
 interface IProps extends IBaseProps {}
-interface IState {}
+interface IState {
+  topZoom: number;
+  bottomZoom: number;
+}
 
 @inject("stores")
 @observer
 export class CellZoomSpaceComponent extends BaseComponent<IProps, IState> {
+  constructor(props: IProps) {
+    super(props);
+    this.state = { topZoom: 1, bottomZoom: 0 };
 
+  }
   public render() {
-    const cellZoomComponent1 = this.getCellZoomRow(0);
-    const cellZoomComponent2 = this.getCellZoomRow(1);
+    const _cellZoomComponent1 = this.getCellZoomRow(0);
+    const _cellZoomComponent2 = this.getCellZoomRow(1);
 
+    const { cellZoom } = this.stores;
+    const graphTitle = "Graph";
+
+    const cellGraphPanel1 = <Chart title="Chart Test" chartData={cellZoom.rows[0].currentData}
+      chartType={"horizontalBar"} />;
+    const cellZoomComponent1 = <TwoUpDisplayComponent
+      leftTitle="Investigate: Cell"
+      leftPanel={<OrganismView viewNumber={0} />}
+      rightTitle={graphTitle}
+      rightPanel={cellGraphPanel1}
+    />;
+
+    const cellGraphPanel2 = <Chart title="Chart Test" chartData={cellZoom.rows[1].currentData}
+      chartType={"horizontalBar"} />;
+    const cellZoomComponent2 = <TwoUpDisplayComponent
+      leftTitle="Investigate: Cell"
+      leftPanel={<OrganismView viewNumber={1} />}
+      rightTitle={graphTitle}
+      rightPanel={cellGraphPanel2}
+    />;
     return (
       <FourUpDisplayComponent topRow={cellZoomComponent1} bottomRow={cellZoomComponent2} />
     );
