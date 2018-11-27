@@ -106,9 +106,10 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
           sex: selectedMouse.get("sex"),
           genotype: (selectedMouse as any)._genomeButtonsString()
         });
-        backpack.addCollectedMouse(backpackMouse);
-
-        this.props.stores.populations.removeAgent(selectedMouse);
+        const added = backpack.addCollectedMouse(backpackMouse);
+        if (added){
+          this.props.stores.populations.removeAgent(selectedMouse);
+        }
       }
     }
   }

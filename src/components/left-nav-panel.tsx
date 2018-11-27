@@ -65,7 +65,7 @@ export class LeftNavPanelComponent extends BaseComponent<IProps, IState> {
     const {backpack} = this.stores;
     const {ui} = this.stores;
     const collectedSlots = backpack.collectedMice.length;
-    const emptySlots = ui.availableBackpackSlots - collectedSlots;
+    const emptySlots = backpack.maxSlots - collectedSlots;
     const buttons = backpack.collectedMice.map((slot, index) => {
                       return <CollectButtonComponent
                                mouse={slot}
