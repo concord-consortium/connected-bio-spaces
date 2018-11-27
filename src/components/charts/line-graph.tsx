@@ -3,6 +3,7 @@ import { Scatter, ChartData } from "react-chartjs-2";
 import { observer } from "mobx-react";
 import { ChartDataModelType } from "../../models/spaces/charts/chart-data";
 import { ChartOptions } from "chart.js";
+import { ChartColors } from "../../models/spaces/charts/chart-data-set";
 import { hexToRGBValue } from "../../utilities/color-utils";
 
 interface ILineProps {
@@ -55,7 +56,12 @@ const lineDatasetDefaults: ChartData<any> = {
   pointHoverBorderWidth: 2,
   pointRadius: 1,
   pointHitRadius: 10,
-  data: [0]
+  data: [0],
+  backgroundColor: ChartColors.map(c => hexToRGBValue(c.hex, 0.4)),
+  borderColor: ChartColors.map(c => hexToRGBValue(c.hex, 1.0)),
+  pointBorderColor: ChartColors.map(c => hexToRGBValue(c.hex, 1.0)),
+  pointHoverBackgroundColor: ChartColors.map(c => hexToRGBValue(c.hex, 1.0)),
+  pointHoverBorderColor: ChartColors.map(c => hexToRGBValue(c.hex, 1.0))
 };
 
 const lineData = (chartData: ChartDataModelType) => {
@@ -63,13 +69,15 @@ const lineData = (chartData: ChartDataModelType) => {
   for (const d of chartData.dataSets) {
     const dset = Object.assign({}, lineDatasetDefaults, {
       label: d.name,
-      data: d.timeSeriesXY,
-      backgroundColor: hexToRGBValue(d.color, 0.4),
-      borderColor: hexToRGBValue(d.color, 1),
-      pointBorderColor: hexToRGBValue(d.color, 1),
-      pointHoverBackgroundColor: hexToRGBValue(d.color, 1),
-      pointHoverBorderColor: hexToRGBValue(d.color, 1)
+      data: d.timeSeriesXY
     });
+    if (d.color){
+      dset.backgroundColor = hexToRGBValue(d.color, 0.4);
+      dset.borderColor = hexToRGBValue(d.color, 1);
+      dset.pointBorderColor = hexToRGBValue(d.color, 1);
+      dset.pointHoverBackgroundColor = hexToRGBValue(d.color, 1);
+      dset.pointHoverBorderColor = hexToRGBValue(d.color, 1);
+    }
     lineDatasets.push(dset);
   }
 
