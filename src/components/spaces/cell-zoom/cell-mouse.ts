@@ -1,9 +1,12 @@
 import { types, Instance } from "mobx-state-tree";
 import { MouseColor } from "../../../models/mouse";
-import { SubstanceType, OrganelleType, kOrganelleInfo } from "../../../models/spaces/cell-zoom/cell-zoom";
+import { SubstanceType, kOrganelleInfo } from "../../../models/spaces/cell-zoom/cell-zoom";
+import { v4 as uuid } from "uuid";
+import { OrganelleType } from "../../../models/spaces/cell-zoom/cell-zoom-row";
 
 export const CellMouseModel = types
-  .model("Populations", {
+  .model("CellMouse", {
+    id: types.optional(types.identifier, () => uuid()),
     baseColor: MouseColor
   })
   .views(self => ({

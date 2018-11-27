@@ -7,13 +7,15 @@ import { observer, inject } from "mobx-react";
 // import { rootStore, Mode } from "../stores/RootStore";
 import { createModel } from "organelle";
 import * as Cell from "./cell-models/cell.json";
-import { OrganelleType, ModeType, kOrganelleInfo } from "../../../models/spaces/cell-zoom/cell-zoom";
+import { kOrganelleInfo } from "../../../models/spaces/cell-zoom/cell-zoom";
 import { BaseComponent } from "../../base";
 // import { SubstanceType } from "../models/Substance";
 import "./OrganelleWrapper.sass";
+import { OrganelleType, ModeType } from "../../../models/spaces/cell-zoom/cell-zoom-row.js";
 
 interface OrganelleWrapperProps {
   elementName: string;
+  rowIndex: number;
 }
 
 interface OrganelleWrapperState {
@@ -153,7 +155,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
 
   public organelleClick(organelleType: OrganelleType, location: {x: number, y: number}) {
     const { cellZoom } = this.stores;
-    cellZoom.setActiveAssay(organelleType);
+    cellZoom.rows[this.props.rowIndex].setActiveAssay(organelleType);
     // if (rootStore.mode === Mode.Assay) {
     //   const organelleInfo = OrganelleRef.create({
     //     organism,
@@ -227,7 +229,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     const {cellZoom} = this.stores;
     // const hoverLabel = appStore.mysteryLabels ?
     //   mysteryOrganelleNames[this.state.hoveredOrganelle] : this.state.hoveredOrganelle;
-    const {hoveredOrganelle} = cellZoom;
+    const hoveredOrganelle = cellZoom.rows[this.props.rowIndex].hoveredOrganelle;
     const hoverLabel = hoveredOrganelle ? kOrganelleInfo[hoveredOrganelle].displayName : undefined;
     const hoverDiv = hoverLabel
       ? (
@@ -335,7 +337,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
       const {cellZoom} = this.stores;
       const hoveredOrganelle = this.getOrganelleFromMouseEvent(evt);
       if (hoveredOrganelle) {
-        cellZoom.setHoveredOrganelle(hoveredOrganelle);
+        cellZoom.rows[this.props.rowIndex].setHoveredOrganelle(hoveredOrganelle);
       }
     });
 
@@ -367,7 +369,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
       .filter(organelle => {
         const organelleInfo = this.organelleSelectorInfo[organelle];
         const visibleModes = organelleInfo.visibleModes;
-        return !visibleModes || visibleModes.indexOf(cellZoom.mode) > -1;
+        return !visibleModes || visibleModes.indexOf(cellZoom.rows[this.props.rowIndex].mode) > -1;
       });
     return possibleTargets.find((t) => {
       return evt.target._organelle.matches({selector: this.organelleSelectorInfo[t].selector});
