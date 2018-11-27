@@ -3,6 +3,7 @@ import { Scatter, ChartData } from "react-chartjs-2";
 import { observer } from "mobx-react";
 import { ChartDataModelType } from "../../models/spaces/charts/chart-data";
 import { ChartOptions } from "chart.js";
+import { hexToRGBValue } from "../../utilities/color-utils";
 
 interface ILineProps {
   chartData: ChartDataModelType;
@@ -63,11 +64,11 @@ const lineData = (chartData: ChartDataModelType) => {
     const dset = Object.assign({}, lineDatasetDefaults, {
       label: d.name,
       data: d.timeSeriesXY,
-      backgroundColor: `rgba(${d.colorRGB},0.4)`,
-      borderColor: `rgba(${d.colorRGB},1)`,
-      pointBorderColor: `rgba(${d.colorRGB},1)`,
-      pointHoverBackgroundColor: `rgba(${d.colorRGB},1)`,
-      pointHoverBorderColor: `rgba(${d.colorRGB},1)`,
+      backgroundColor: hexToRGBValue(d.color, 0.4),
+      borderColor: hexToRGBValue(d.color, 1),
+      pointBorderColor: hexToRGBValue(d.color, 1),
+      pointHoverBackgroundColor: hexToRGBValue(d.color, 1),
+      pointHoverBorderColor: hexToRGBValue(d.color, 1)
     });
     lineDatasets.push(dset);
   }
