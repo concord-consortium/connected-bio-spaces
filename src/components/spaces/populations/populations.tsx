@@ -17,11 +17,22 @@ interface SizeMeProps {
 }
 
 interface IProps extends IBaseProps {}
-interface IState {}
+interface IState {
+  selectMode: boolean;
+  modelWasPlaying: boolean;
+}
 
 @inject("stores")
 @observer
 export class PopulationsComponent extends BaseComponent<IProps, IState> {
+
+  constructor(props: IProps) {
+    super(props);
+    this.state = {
+      selectMode: false,
+      modelWasPlaying: false
+    };
+  }
 
   public render() {
     const populations = this.props.stores && this.props.stores.populations;
@@ -66,6 +77,15 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
                 <div className="populations-toolbar">
                   <button onClick={this.handleClickRunButton}>{runButtonLabel}</button>
                   <button onClick={this.handleClickResetButton}>Reset</button>
+                  <div className="two-state-button">
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={this.state.selectMode}
+                        onChange={this.handleClickSelect} />
+                      <span>Select</span>
+                    </label>
+                  </div>
                   { buttons }
                 </div>
               </div>
@@ -80,6 +100,10 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
     const populations = this.props.stores && this.props.stores.populations;
     if (populations) {
       populations.togglePlay();
+
+      if (this.state.selectMode && populations.isPlaying) {
+        this.setState({selectMode: false});
+      }
     }
   }
 
@@ -97,8 +121,22 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
     };
   }
 
+  private handleClickSelect = () => {
+    this.setState({
+      selectMode: !this.state.selectMode
+    }, () => {
+      const { populations } = this.props.stores!;
+      if (this.state.selectMode) {
+        this.setState({modelWasPlaying: populations.isPlaying});
+        populations.pause();
+      } else if (!this.state.selectMode && this.state.modelWasPlaying) {
+        populations.play();
+      }
+    });
+  }
+
   private handleAgentClicked = (evt: AgentEnvironmentMouseEvent) => {
-    if (evt.type === "click" && evt.agents.mice) {
+    if (this.state.selectMode && evt.type === "click" && evt.agents.mice) {
       const selectedMouse = evt.agents.mice;
       if (this.props.stores) {
         const backpack = this.props.stores.backpack;

@@ -53,6 +53,12 @@ export const PopulationsModel = types
         togglePlay() {
           self.model.interactive.togglePlay();
         },
+        play() {
+          self.model.interactive.play();
+        },
+        pause() {
+          self.model.interactive.stop();
+        },
         reset() {
           self.model.reset();
         },
