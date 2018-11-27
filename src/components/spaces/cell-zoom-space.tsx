@@ -9,10 +9,7 @@ import { CellZoomComponent } from "./cell-zoom/cell-zoom";
 import { OrganismView } from "./cell-zoom/organism-view";
 
 interface IProps extends IBaseProps {}
-interface IState {
-  topZoom: number;
-  bottomZoom: number;
-}
+interface IState {}
 
 @inject("stores")
 @observer
