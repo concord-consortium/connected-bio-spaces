@@ -1,6 +1,6 @@
 import { types, Instance, detach } from "mobx-state-tree";
 import { MousePopulationsModel, MousePopulationsModelType } from "./mouse-model/mouse-populations-model";
-import { Interactive, Events, Environment } from "populations.js";
+import { Interactive, Events, Environment, Agent } from "populations.js";
 import { ChartDataModelType } from "../charts/chart-data";
 
 const ModelsUnion = types.union(MousePopulationsModel);
@@ -55,6 +55,9 @@ export const PopulationsModel = types
         },
         reset() {
           self.model.reset();
+        },
+        removeAgent(agent: Agent) {
+          self.model.interactive.removeAgent(agent);
         }
       }
     };

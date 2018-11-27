@@ -7,6 +7,7 @@ import { BaseComponent, IBaseProps } from "../../base";
 import "./populations.sass";
 import { ToolbarButton } from "../../../models/spaces/populations/populations";
 import { AgentEnvironmentMouseEvent } from "populations.js";
+import { Mouse } from "../../../models/mouse";
 
 interface SizeMeProps {
   size?: {
@@ -57,7 +58,9 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
                   (size && size.width)
                   ? <PopulationsView
                       interactive={populations.interactive}
-                      width={size.width} />
+                      width={size.width}
+                      agentClickDistance={20}
+                      onAgentMouseEvent={this.handleAgentClicked} />
                   : null
                 }
                 <div className="populations-toolbar">
@@ -92,5 +95,21 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
       const target = event.target;
       button.action((target as any).checked);
     };
+  }
+
+  private handleAgentClicked = (evt: AgentEnvironmentMouseEvent) => {
+    if (evt.type === "click" && evt.agents.mice) {
+      const selectedMouse = evt.agents.mice;
+      if (this.props.stores) {
+        const backpack = this.props.stores.backpack;
+        const backpackMouse = Mouse.create({
+          sex: selectedMouse.get("sex"),
+          genotype: (selectedMouse as any)._genomeButtonsString()
+        });
+        backpack.addCollectedMouse(backpackMouse);
+
+        this.props.stores.populations.removeAgent(selectedMouse);
+      }
+    }
   }
 }
