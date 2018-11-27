@@ -4,7 +4,8 @@ import { MouseType, Mouse } from "./mouse";
 export const BackpackModel = types
   .model("Backpack", {
     collectedMice: types.array(Mouse),
-    maxSlots: 6
+    maxSlots: 6,
+    activeSlot: types.maybe(types.number)
   })
   .actions((self) => {
     return {
@@ -19,6 +20,12 @@ export const BackpackModel = types
         if (index < self.collectedMice.length ) {
           self.collectedMice.splice(index, 1);
         }
+      },
+      selectSlot(index: number) {
+        self.activeSlot = index;
+      },
+      deselectSlot() {
+        self.activeSlot = undefined;
       }
     };
   });

@@ -24,12 +24,13 @@ export class CollectButtonComponent extends BaseComponent<IProps, IState> {
     );
   }
   private renderFull(mouse: MouseType) {
-    const buttonClass = mouse.sex === "male" ? "collect-button male" : "collect-button female";
+    let buttonClass = mouse.sex === "male" ? "collect-button male" : "collect-button female";
+    buttonClass += this.isDeselected() ? " deselected" : "";
     const innerOutlineClass: string = mouse.isHeterozygote ? "inner-outline heterozygote" : "inner-outline";
     return (
       <div>
         <div className="collect-button-outline">
-          <div className={buttonClass}>
+          <div className={buttonClass} onClick={this.handleClickMouse}>
             <div className={innerOutlineClass}>
               <img src={mouse.baseImage} className="icon"/>
               <div className="label">{mouse.label}</div>
@@ -69,5 +70,20 @@ export class CollectButtonComponent extends BaseComponent<IProps, IState> {
   private handleClickRemove = () => {
     const {backpack} = this.stores;
     backpack.removeCollectedMouse(this.props.index);
+  }
+
+  private handleClickMouse = () => {
+    const { backpack } = this.stores;
+    const { index } = this.props;
+    if (backpack.activeSlot === index) {
+      backpack.deselectSlot();
+    } else {
+      backpack.selectSlot(index);
+    }
+  }
+  private isDeselected = () => {
+    const { backpack } = this.stores;
+    const { index } = this.props;
+    return backpack.activeSlot != null && backpack.activeSlot !== index;
   }
 }
