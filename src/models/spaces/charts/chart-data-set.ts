@@ -60,7 +60,7 @@ export const ChartDataSetModel = types
   .model("ChartDataSet", {
     name: types.string,
     dataPoints: types.array(DataPoint),
-    color: types.string,
+    color: types.maybe(types.string),
     // If maxPoints is 0 we will always work with the entire data set
     maxPoints: types.optional(types.number, -1),
     fixedMin: types.maybe(types.number),

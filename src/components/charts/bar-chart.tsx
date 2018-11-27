@@ -63,7 +63,8 @@ const barDatasetDefaults: ChartData<any> = {
   pointHitRadius: 10,
   data: [0],
   backgroundColor: ChartColors.map(c => hexToRGBValue(c.hex, 0.4)),
-  borderColor: ChartColors.map(c => hexToRGBValue(c.hex, 1.0))
+  borderColor: ChartColors.map(c => hexToRGBValue(c.hex, 1.0)),
+  borderWidth: 2
 };
 
 const barData = (chartData: ChartDataModelType) => {
@@ -71,8 +72,12 @@ const barData = (chartData: ChartDataModelType) => {
   for (const d of chartData.dataSets) {
     const dset = Object.assign({}, barDatasetDefaults, {
       label: d.name,
-      data: d.dataA1
+      data: d.dataA1,
     });
+    if (d.color) {
+      dset.backgroundColor = hexToRGBValue(d.color, 0.4);
+      dset.borderColor = hexToRGBValue(d.color, 1.0);
+    }
     barDatasets.push(dset);
   }
 
