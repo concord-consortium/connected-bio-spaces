@@ -6,6 +6,7 @@ import { BaseComponent, IBaseProps } from "../../base";
 
 import "./populations.sass";
 import { ToolbarButton } from "../../../models/spaces/populations/populations";
+import { AgentEnvironmentMouseEvent } from "populations.js";
 
 interface SizeMeProps {
   size?: {
@@ -24,7 +25,7 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
   public render() {
     const populations = this.props.stores && this.props.stores.populations;
 
-    if (populations) {
+    if (populations && populations.interactive) {
 
       const buttons = populations.toolbarButtons.map( button => {
         const type = button.type || "button";
@@ -50,20 +51,13 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
       return (
         <SizeMe monitorHeight={true}>
           {({ size }: SizeMeProps) => {
-            let zoomStyle = {};
-            if (size && size.width) {
-              zoomStyle = {
-                transform: `scale(${size.width / 450})`,
-                transformOrigin: "left top"
-              };
-            }
             return (
               <div>
                 {
                   (size && size.width)
-                  ? (<div style={zoomStyle}>
-                      <PopulationsView interactive={populations.interactive}/>
-                    </div>)
+                  ? <PopulationsView
+                      interactive={populations.interactive}
+                      width={size.width} />
                   : null
                 }
                 <div className="populations-toolbar">
