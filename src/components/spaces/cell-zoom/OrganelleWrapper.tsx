@@ -90,10 +90,9 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
   }
 
   public componentDidMount() {
-    // const box = appStore.boxes.get(this.props.boxId);
-    // const view = box.viewType;
-    // const {organism} = box;
-    // const {modelProperties} = organism;
+    const { cellZoom } = this.stores;
+    const row = cellZoom.rows[this.props.rowIndex];
+    const { modelProperties } = row.organism as any;
     const modelDef: any = Cell;
 
     modelDef.container = {
@@ -102,15 +101,6 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
       height: MODEL_HEIGHT
     };
 
-    const modelProperties: any = {
-      albino: false,
-      working_tyr1: false,
-      working_myosin_5a: true,
-      open_gates: false,
-      eumelanin: 50,
-      hormone_spawn_period: 40,
-      working_receptor: true
-    };
     modelDef.properties = modelProperties;
 
     createModel(modelDef).then((m: any) => {
@@ -296,32 +286,18 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     });
 
     model.on("model.step", () => {
-      // const organism: IOrganism = appStore.getBoxOrganism(this.props.boxId);
-      // let percentLightness = organism.lightness;
-      let percentLightness = .2;
-
-      if (percentLightness <= 0.19) {
-        percentLightness = 0;
-      } else if (percentLightness < 0.39) {
-        percentLightness = 0.2;
-      } else if (percentLightness < 0.59) {
-        percentLightness = 0.4;
-      } else if (percentLightness < 0.79) {
-        percentLightness = 0.6;
-      } else if (percentLightness < 0.99) {
-        percentLightness = 0.8;
-      } else {
-        percentLightness = 1;
-      }
+      const { cellZoom } = this.stores;
+      const { rowIndex } = this.props;
+      const { organism } = cellZoom.rows[rowIndex];
+      const percentDarkness = organism.getPercentDarkness();
 
       // go from lightest to darkest in HSL space, which provides the best gradual transition
 
       // lightest brown: rgb(244, 212, 141) : hsl(41°, 82%, 75%)
       // darkest brown:  rgb(124, 81, 21)   : hsl(35°, 71%, 28%)
-
       const light = [41, 82, 75];
       const dark = [35, 71, 28];
-      const color = dark.map( (c, i) => Math.round(c + (light[i] - c) * percentLightness) );
+      const color = light.map( (c, i) => Math.round(c + (dark[i] - c) * (percentDarkness / 100)) );
       const colorStr = `hsl(${color[0]},${color[1]}%,${color[2]}%)`;
 
       const cellFill = model.view.getModelSvgObjectById("cellshape_0_Layer0_0_FILL");
