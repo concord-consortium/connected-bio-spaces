@@ -6,6 +6,8 @@ import { BaseComponent, IBaseProps } from "../../base";
 
 import "./populations.sass";
 import { ToolbarButton } from "../../../models/spaces/populations/populations";
+import { AgentEnvironmentMouseEvent } from "populations.js";
+import { Mouse } from "../../../models/mouse";
 
 interface SizeMeProps {
   size?: {
@@ -15,16 +17,27 @@ interface SizeMeProps {
 }
 
 interface IProps extends IBaseProps {}
-interface IState {}
+interface IState {
+  selectMode: boolean;
+  modelWasPlaying: boolean;
+}
 
 @inject("stores")
 @observer
 export class PopulationsComponent extends BaseComponent<IProps, IState> {
 
+  constructor(props: IProps) {
+    super(props);
+    this.state = {
+      selectMode: false,
+      modelWasPlaying: false
+    };
+  }
+
   public render() {
     const populations = this.props.stores && this.props.stores.populations;
 
-    if (populations) {
+    if (populations && populations.interactive) {
 
       const buttons = populations.toolbarButtons.map( button => {
         const type = button.type || "button";
@@ -50,25 +63,29 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
       return (
         <SizeMe monitorHeight={true}>
           {({ size }: SizeMeProps) => {
-            let zoomStyle = {};
-            if (size && size.width) {
-              zoomStyle = {
-                transform: `scale(${size.width / 450})`,
-                transformOrigin: "left top"
-              };
-            }
             return (
               <div>
                 {
                   (size && size.width)
-                  ? (<div style={zoomStyle}>
-                      <PopulationsView interactive={populations.interactive}/>
-                    </div>)
+                  ? <PopulationsView
+                      interactive={populations.interactive}
+                      width={size.width}
+                      agentClickDistance={20}
+                      onAgentMouseEvent={this.handleAgentClicked} />
                   : null
                 }
                 <div className="populations-toolbar">
                   <button onClick={this.handleClickRunButton}>{runButtonLabel}</button>
                   <button onClick={this.handleClickResetButton}>Reset</button>
+                  <div className="two-state-button">
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={this.state.selectMode}
+                        onChange={this.handleClickSelect} />
+                      <span>Select</span>
+                    </label>
+                  </div>
                   { buttons }
                 </div>
               </div>
@@ -83,6 +100,10 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
     const populations = this.props.stores && this.props.stores.populations;
     if (populations) {
       populations.togglePlay();
+
+      if (this.state.selectMode && populations.isPlaying) {
+        this.setState({selectMode: false});
+      }
     }
   }
 
@@ -98,5 +119,36 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
       const target = event.target;
       button.action((target as any).checked);
     };
+  }
+
+  private handleClickSelect = () => {
+    this.setState({
+      selectMode: !this.state.selectMode
+    }, () => {
+      const { populations } = this.props.stores!;
+      if (this.state.selectMode) {
+        this.setState({modelWasPlaying: populations.isPlaying});
+        populations.pause();
+      } else if (!this.state.selectMode && this.state.modelWasPlaying) {
+        populations.play();
+      }
+    });
+  }
+
+  private handleAgentClicked = (evt: AgentEnvironmentMouseEvent) => {
+    if (this.state.selectMode && evt.type === "click" && evt.agents.mice) {
+      const selectedMouse = evt.agents.mice;
+      if (this.props.stores) {
+        const backpack = this.props.stores.backpack;
+        const backpackMouse = Mouse.create({
+          sex: selectedMouse.get("sex"),
+          genotype: (selectedMouse as any)._genomeButtonsString()
+        });
+        const added = backpack.addCollectedMouse(backpackMouse);
+        if (added){
+          this.props.stores.populations.removeAgent(selectedMouse);
+        }
+      }
+    }
   }
 }

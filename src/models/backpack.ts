@@ -3,12 +3,17 @@ import { MouseType, Mouse } from "./mouse";
 
 export const BackpackModel = types
   .model("Backpack", {
-    collectedMice: types.array(Mouse)
+    collectedMice: types.array(Mouse),
+    maxSlots: 6
   })
   .actions((self) => {
     return {
       addCollectedMouse(mouse: MouseType) {
-        self.collectedMice.push(mouse);
+        if (self.collectedMice.length < self.maxSlots) {
+          self.collectedMice.push(mouse);
+          return true;
+        }
+        return false;
       },
       removeCollectedMouse(index: number) {
         if (index < self.collectedMice.length ) {

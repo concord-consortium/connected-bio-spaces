@@ -26,6 +26,7 @@ export class HawksMiceInteractive extends Interactive {
   public addInitialHawksPopulation: (num: number) => void;
   public switchEnvironments: (includeNeutralEnvironment: boolean) => void;
   public getData: () => any;
+  public removeAgent: (agent: Agent) => void;
 }
 
 export function createInteractive(model: MousePopulationsModelType) {
@@ -190,6 +191,10 @@ export function createInteractive(model: MousePopulationsModelType) {
       numTan,
       numBrown
     };
+  };
+
+  interactive.removeAgent = (agent: Agent) => {
+    interactive.environment.removeAgent(agent);
   };
 
   function setProperty(agents: Agent[], prop: string, val: any) {

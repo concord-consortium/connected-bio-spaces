@@ -37,9 +37,6 @@ export const UIModel = types
       },
       setInvestigationPanelSpace(space: SpaceType) {
         self.investigationPanelSpace = space;
-      },
-      setAvailableBackpackSlots(val: number) {
-        self.availableBackpackSlots = val;
       }
     };
   });
