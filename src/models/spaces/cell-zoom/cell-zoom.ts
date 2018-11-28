@@ -1,6 +1,6 @@
 import { types, Instance } from "mobx-state-tree";
 import { ColorType } from "../../mouse";
-import { CellMouseModel } from "../../../components/spaces/cell-zoom/cell-mouse";
+import { CellMouseModel } from "./cell-mouse";
 import { CellZoomRowModel, OrganelleType } from "./cell-zoom-row";
 import { BackpackModelType } from "../../backpack";
 

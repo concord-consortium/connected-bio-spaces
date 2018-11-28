@@ -1,8 +1,8 @@
 import { types, Instance } from "mobx-state-tree";
-import { MouseColor } from "../../../models/mouse";
-import { SubstanceType, kOrganelleInfo } from "../../../models/spaces/cell-zoom/cell-zoom";
+import { MouseColor } from "../../mouse";
+import { SubstanceType, kOrganelleInfo } from "./cell-zoom";
 import { v4 as uuid } from "uuid";
-import { OrganelleType } from "../../../models/spaces/cell-zoom/cell-zoom-row";
+import { OrganelleType } from "./cell-zoom-row";
 
 export const CellMouseModel = types
   .model("CellMouse", {

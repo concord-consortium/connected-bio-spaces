@@ -3,7 +3,7 @@ import { PopulationsModelType, createPopulationsModel } from "./spaces/populatio
 import { BackpackModel, BackpackModelType } from "./backpack";
 import { flatten } from "flat";
 import { CellZoomModel, CellZoomModelType } from "./spaces/cell-zoom/cell-zoom";
-import { CellMouseModel } from "../components/spaces/cell-zoom/cell-mouse";
+import { CellMouseModel } from "./spaces/cell-zoom/cell-mouse";
 import { CellZoomRowModel } from "./spaces/cell-zoom/cell-zoom-row";
 import { Mouse } from "./mouse";
 

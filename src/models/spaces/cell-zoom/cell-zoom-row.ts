@@ -1,7 +1,7 @@
 import { types, Instance } from "mobx-state-tree";
 import { ChartDataModelType, ChartDataModel } from "../charts/chart-data";
 import { DataPoint, ChartDataSetModel, ChartColors, DataPointType } from "../charts/chart-data-set";
-import { CellMouseModel } from "../../../components/spaces/cell-zoom/cell-mouse";
+import { CellMouseModel } from "./cell-mouse";
 import { kSubstanceNames } from "./cell-zoom";
 
 export const Organelle = types.enumeration("type", [
