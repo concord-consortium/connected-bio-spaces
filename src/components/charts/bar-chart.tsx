@@ -3,6 +3,8 @@ import { observer } from "mobx-react";
 import { HorizontalBar, Bar, ChartData } from "react-chartjs-2";
 import { ChartDataModelType } from "../../models/spaces/charts/chart-data";
 import { ChartOptions, ChartType } from "chart.js";
+import { ChartColors } from "../../models/spaces/charts/chart-data-set";
+import { hexToRGBValue } from "../../utilities/color-utils";
 
 interface IBarProps {
   chartData: ChartDataModelType;
@@ -53,13 +55,8 @@ const defaultOptions: ChartOptions = {
 const barDatasetDefaults: ChartData<any> = {
   label: "",
   fill: false,
-  pointBackgroundColor: "#fff",
-  pointBorderWidth: 1,
-  pointHoverRadius: 5,
-  pointHoverBorderWidth: 2,
-  pointRadius: 1,
-  pointHitRadius: 10,
-  data: [0]
+  data: [0],
+  borderWidth: 2
 };
 
 const barData = (chartData: ChartDataModelType) => {
@@ -68,10 +65,23 @@ const barData = (chartData: ChartDataModelType) => {
     const dset = Object.assign({}, barDatasetDefaults, {
       label: d.name,
       data: d.dataA1,
-      backgroundColor: `rgba(${d.colorRGB},0.4)`,
-      pointBorderColor: `rgba(${d.colorRGB},1)`,
-      pointHoverBackgroundColor: `rgba(${d.colorRGB},1)`
     });
+    const seriesOpacity = d.backgroundOpacity ? d.backgroundOpacity : 0.4;
+    if (d.color) {
+      // One color for all bars
+      dset.backgroundColor = hexToRGBValue(d.color, seriesOpacity);
+      dset.borderColor = hexToRGBValue(d.color, 1.0);
+    } else if (d.pointColors) {
+      // If we have specified point colors, use those first to color each bar,
+      // then if we run out of defined colors we fall back to the defaults
+      const colors = d.pointColors.concat(ChartColors.map(c => c.hex));
+      dset.backgroundColor = colors.map(c => hexToRGBValue(c, seriesOpacity));
+      dset.borderColor = colors.map(c => hexToRGBValue(c, 1.0));
+    } else {
+      // Default to predefined colors
+      dset.backgroundColor = ChartColors.map(c => hexToRGBValue(c.hex, seriesOpacity));
+      dset.borderColor = ChartColors.map(c => hexToRGBValue(c.hex, 1.0));
+    }
     barDatasets.push(dset);
   }
 

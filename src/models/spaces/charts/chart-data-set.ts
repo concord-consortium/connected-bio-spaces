@@ -1,6 +1,7 @@
 import { types, Instance } from "mobx-state-tree";
 // @ts-ignore
 import * as colors from "../../../components/colors.scss";
+import { hexToRGB } from "../../../utilities/color-utils";
 
 export interface Color {
   name: string;
@@ -17,7 +18,7 @@ export const ChartColors: Color[] = [
   { name: "blue", hex: colors.chartDataColor1},
   { name: "orange", hex: colors.chartDataColor2},
   { name: "purple", hex: colors.chartDataColor3},
-  { name: "green", hex: colors.chartDataColor4 },
+  { name: "green", hex: colors.chartDataColor4},
   { name: "sage", hex: colors.chartDataColor5},
   { name: "rust", hex: colors.chartDataColor6},
   { name: "cloud", hex: colors.chartDataColor7},
@@ -33,15 +34,6 @@ export const ChartColors: Color[] = [
   { name: "terra", hex: colors.chartColor9},
   { name: "sky", hex: colors.chartColor10}
 ];
-
-function hexToRgb(hex: string) {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result ? {
-    r: parseInt(result[1], 16),
-    g: parseInt(result[2], 16),
-    b: parseInt(result[3], 16)
-  } : null;
-}
 
 function timeSeriesSort(a: XYPoint, b: XYPoint) {
   if (a.x < b.x) {
@@ -68,7 +60,13 @@ export const ChartDataSetModel = types
   .model("ChartDataSet", {
     name: types.string,
     dataPoints: types.array(DataPoint),
-    color: types.string,
+    // A single color will apply to a whole dataset (a line on a line graph, or all bars on a bar chart)
+    color: types.maybe(types.string),
+    // An array will vary each point's color
+    // useful for bar charts with different color bars or scatter plots with each point a different color
+    pointColors: types.maybe(types.array(types.string)),
+    // For bars, can vary opacity of the bar by dataset to show a second dataset with less opacity
+    backgroundOpacity: types.maybe(types.number),
     // If maxPoints is 0 we will always work with the entire data set
     maxPoints: types.optional(types.number, -1),
     fixedMin: types.maybe(types.number),
@@ -157,14 +155,6 @@ export const ChartDataSetModel = types
       const xyData = self.visibleDataPoints.map(d => ({ x: d.a1, y: d.a2 }));
       xyData.sort(timeSeriesSort);
       return xyData;
-    },
-    get colorRGB(): string {
-      const colorValues = hexToRgb(self.color);
-      if (colorValues) {
-        return colorValues.r + "," + colorValues.g + "," + colorValues.b;
-      } else {
-        return "170, 170, 170";
-      }
     }
   }))
   .extend(self => {

@@ -120,7 +120,10 @@ export const CellZoomModel = types
       chartDataSets.push(ChartDataSetModel.create({
         name: "Sample Dataset1",
         dataPoints: points,
-        color: ChartColors[0].hex,
+        color: ChartColors[0].hex, // all bars will be this color
+        // alternatively, use a specified array of specific colors for each bar:
+        // pointColors: ["#00ff00", "#ff0000"]
+        // if no color and no pointColors are specified, each bar will take on a color from ChartColors
         maxPoints: 100
       }));
 

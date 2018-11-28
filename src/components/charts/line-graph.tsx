@@ -3,6 +3,8 @@ import { Scatter, ChartData } from "react-chartjs-2";
 import { observer } from "mobx-react";
 import { ChartDataModelType } from "../../models/spaces/charts/chart-data";
 import { ChartOptions } from "chart.js";
+import { ChartColors } from "../../models/spaces/charts/chart-data-set";
+import { hexToRGBValue } from "../../utilities/color-utils";
 
 interface ILineProps {
   chartData: ChartDataModelType;
@@ -48,13 +50,18 @@ const lineDatasetDefaults: ChartData<any> = {
   label: "",
   fill: false,
   lineTension: 0.1,
-  pointBackgroundColor: "#fff",
   pointBorderWidth: 1,
   pointHoverRadius: 5,
   pointHoverBorderWidth: 2,
   pointRadius: 1,
   pointHitRadius: 10,
-  data: [0]
+  data: [0],
+  backgroundColor: ChartColors.map(c => hexToRGBValue(c.hex, 0.4)),
+  pointBackgroundColor: ChartColors.map(c => hexToRGBValue(c.hex, 0.4)),
+  borderColor: ChartColors.map(c => hexToRGBValue(c.hex, 1.0)),
+  pointBorderColor: ChartColors.map(c => hexToRGBValue(c.hex, 1.0)),
+  pointHoverBackgroundColor: ChartColors.map(c => hexToRGBValue(c.hex, 1.0)),
+  pointHoverBorderColor: ChartColors.map(c => hexToRGBValue(c.hex, 1.0))
 };
 
 const lineData = (chartData: ChartDataModelType) => {
@@ -62,13 +69,26 @@ const lineData = (chartData: ChartDataModelType) => {
   for (const d of chartData.dataSets) {
     const dset = Object.assign({}, lineDatasetDefaults, {
       label: d.name,
-      data: d.timeSeriesXY,
-      backgroundColor: `rgba(${d.colorRGB},0.4)`,
-      borderColor: `rgba(${d.colorRGB},1)`,
-      pointBorderColor: `rgba(${d.colorRGB},1)`,
-      pointHoverBackgroundColor: `rgba(${d.colorRGB},1)`,
-      pointHoverBorderColor: `rgba(${d.colorRGB},1)`,
+      data: d.timeSeriesXY
     });
+    if (d.color) {
+      // backgroundColor is the color under the line, if we decide to fill that area
+      dset.backgroundColor = hexToRGBValue(d.color, 0.4);
+      // borderColor is the color of the line
+      dset.borderColor = hexToRGBValue(d.color, 1);
+      dset.pointBorderColor = hexToRGBValue(d.color, 1);
+      dset.pointHoverBackgroundColor = hexToRGBValue(d.color, 1);
+      dset.pointHoverBorderColor = hexToRGBValue(d.color, 1);
+    }
+    if (d.pointColors) {
+      // If we have specified point colors, use those first,
+      // then if we run out of colors we fall back to the defaults
+      const colors = d.pointColors.concat(ChartColors.map(c => c.hex));
+      dset.pointBackgroundColor = colors.map(c => hexToRGBValue(c, 0.4));
+      dset.pointBorderColor = colors.map(c => hexToRGBValue(c, 1.0));
+      dset.pointHoverBackgroundColor = colors.map(c => hexToRGBValue(c, 1.0));
+      dset.pointHoverBorderColor = colors.map(c => hexToRGBValue(c, 1.0));
+    }
     lineDatasets.push(dset);
   }
 
