@@ -4,14 +4,15 @@ export const SpaceTypeEnum = types.enumeration("type", ["populations", "breeding
 export type SpaceType = typeof SpaceTypeEnum.Type;
 
 export function createUIModel(authoring: any): UIModelType {
-  if (!authoring.showPopulationSpace && authoring.displayedSpace === "populations" ||
-      !authoring.showBreedingSpace && authoring.displayedSpace === "breeding" ||
-      !authoring.showOrganismSpace && authoring.displayedSpace === "organism" ||
-      !authoring.showDNASpace && authoring.displayedSpace === "dna") {
-    authoring.displayedSpace = "none";
+  let displayedSpace = authoring.displayedSpace;
+  if (!authoring.showPopulationSpace && displayedSpace === "populations" ||
+      !authoring.showBreedingSpace && displayedSpace === "breeding" ||
+      !authoring.showOrganismSpace && displayedSpace === "organism" ||
+      !authoring.showDNASpace && displayedSpace === "dna") {
+        displayedSpace = "none";
   }
   return UIModel.create({
-    investigationPanelSpace: authoring.displayedSpace,
+    investigationPanelSpace: displayedSpace,
     showPopulationSpace: authoring.showPopulationSpace,
     showBreedingSpace: authoring.showBreedingSpace,
     showOrganismSpace: authoring.showOrganismSpace,
