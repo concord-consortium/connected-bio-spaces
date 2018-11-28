@@ -5,8 +5,12 @@ import { TwoUpDisplayComponent } from "../two-up-display";
 import { FourUpDisplayComponent } from "../four-up-display";
 import { Chart } from "../charts/chart";
 
+<<<<<<< HEAD
 import { CellZoomComponent } from "./cell-zoom/cell-zoom";
 import { OrganismView } from "./cell-zoom/organism-view";
+=======
+import { OrganismContainer } from "./cell-zoom/organism-container";
+>>>>>>> Reorganize components so that the section of the page that shows the organism (at whatever zoom level we are at) is the OrganismContainer, which chooses to show either the OrganismView (whole organism/mouse), Organelle model or (to be implemented later) the protein level of zoom
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -30,7 +34,7 @@ export class CellZoomSpaceComponent extends BaseComponent<IProps, IState> {
       chartType={"horizontalBar"} />;
     const cellZoomComponent1 = <TwoUpDisplayComponent
       leftTitle="Investigate: Cell"
-      leftPanel={<OrganismView viewNumber={0} />}
+      leftPanel={<OrganismContainer viewNumber={0} />}
       rightTitle={graphTitle}
       rightPanel={cellGraphPanel1}
     />;
@@ -39,7 +43,7 @@ export class CellZoomSpaceComponent extends BaseComponent<IProps, IState> {
       chartType={"horizontalBar"} />;
     const cellZoomComponent2 = <TwoUpDisplayComponent
       leftTitle="Investigate: Cell"
-      leftPanel={<OrganismView viewNumber={1} />}
+      leftPanel={<OrganismContainer viewNumber={1} />}
       rightTitle={graphTitle}
       rightPanel={cellGraphPanel2}
     />;
