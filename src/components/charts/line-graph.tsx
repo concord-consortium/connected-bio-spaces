@@ -50,7 +50,6 @@ const lineDatasetDefaults: ChartData<any> = {
   label: "",
   fill: false,
   lineTension: 0.1,
-  pointBackgroundColor: "#fff",
   pointBorderWidth: 1,
   pointHoverRadius: 5,
   pointHoverBorderWidth: 2,
@@ -58,6 +57,7 @@ const lineDatasetDefaults: ChartData<any> = {
   pointHitRadius: 10,
   data: [0],
   backgroundColor: ChartColors.map(c => hexToRGBValue(c.hex, 0.4)),
+  pointBackgroundColor: ChartColors.map(c => hexToRGBValue(c.hex, 0.4)),
   borderColor: ChartColors.map(c => hexToRGBValue(c.hex, 1.0)),
   pointBorderColor: ChartColors.map(c => hexToRGBValue(c.hex, 1.0)),
   pointHoverBackgroundColor: ChartColors.map(c => hexToRGBValue(c.hex, 1.0)),
@@ -71,12 +71,23 @@ const lineData = (chartData: ChartDataModelType) => {
       label: d.name,
       data: d.timeSeriesXY
     });
-    if (d.color){
+    if (d.color) {
+      // backgroundColor is the color under the line, if we decide to fill that area
       dset.backgroundColor = hexToRGBValue(d.color, 0.4);
+      // borderColor is the color of the line
       dset.borderColor = hexToRGBValue(d.color, 1);
       dset.pointBorderColor = hexToRGBValue(d.color, 1);
       dset.pointHoverBackgroundColor = hexToRGBValue(d.color, 1);
       dset.pointHoverBorderColor = hexToRGBValue(d.color, 1);
+    }
+    if (d.pointColors) {
+      // If we have specified point colors, use those first,
+      // then if we run out of colors we fall back to the defaults
+      const colors = d.pointColors.concat(ChartColors.map(c => c.hex));
+      dset.pointBackgroundColor = colors.map(c => hexToRGBValue(c, 0.4));
+      dset.pointBorderColor = colors.map(c => hexToRGBValue(c, 1.0));
+      dset.pointHoverBackgroundColor = colors.map(c => hexToRGBValue(c, 1.0));
+      dset.pointHoverBorderColor = colors.map(c => hexToRGBValue(c, 1.0));
     }
     lineDatasets.push(dset);
   }

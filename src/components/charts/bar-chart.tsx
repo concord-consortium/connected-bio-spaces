@@ -75,8 +75,15 @@ const barData = (chartData: ChartDataModelType) => {
       data: d.dataA1,
     });
     if (d.color) {
+      // One color for all bars
       dset.backgroundColor = hexToRGBValue(d.color, 0.4);
       dset.borderColor = hexToRGBValue(d.color, 1.0);
+    } else if (d.pointColors) {
+      // If we have specified point colors, use those first to color each bar,
+      // then if we run out of defined colors we fall back to the defaults
+      const colors = d.pointColors.concat(ChartColors.map(c => c.hex));
+      dset.backgroundColor = colors.map(c => hexToRGBValue(c, 0.4));
+      dset.borderColor = colors.map(c => hexToRGBValue(c, 1.0));
     }
     barDatasets.push(dset);
   }

@@ -60,7 +60,11 @@ export const ChartDataSetModel = types
   .model("ChartDataSet", {
     name: types.string,
     dataPoints: types.array(DataPoint),
+    // A single color will apply to a whole dataset (a line on a line graph, or all bars on a bar chart)
     color: types.maybe(types.string),
+    // An array will vary each point's color
+    // useful for bar charts with different color bars or scatter plots with each point a different color
+    pointColors: types.maybe(types.array(types.string)),
     // If maxPoints is 0 we will always work with the entire data set
     maxPoints: types.optional(types.number, -1),
     fixedMin: types.maybe(types.number),

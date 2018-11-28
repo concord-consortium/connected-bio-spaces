@@ -20,13 +20,15 @@ export class ChartTest extends BaseComponent<IProps, IState> {
     chartDataSets.push(ChartDataSetModel.create({
       name: "Sample Dataset1",
       dataPoints: this.addTestDataPoints(),
-      color: ChartColors[0].hex,
+      // color: ChartColors[3].hex,
+      // pointColors: ["#00ff00", "#ff0000", "#0000ff"],
       maxPoints: 100
     }));
     chartDataSets.push(ChartDataSetModel.create({
       name: "Sample Dataset2",
       dataPoints: this.addTestDataPoints(),
-      color: ChartColors[1].hex,
+      color: "#00ffcc",
+      pointColors: ["#00ff00", "#ff0000", "#0000ff"],
       maxPoints: 100
     }));
     const chartData: ChartDataModelType = ChartDataModel.create({
