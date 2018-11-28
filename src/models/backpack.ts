@@ -7,6 +7,15 @@ export const BackpackModel = types
     maxSlots: 6,
     activeSlot: types.maybe(types.number)
   })
+  .views((self) => {
+    return {
+      getMouseAtIndex(i?: number) {
+        return i != null && i < self.collectedMice.length
+          ? self.collectedMice[i]
+          : null;
+      }
+    };
+  })
   .actions((self) => {
     return {
       addCollectedMouse(mouse: MouseType) {
@@ -21,7 +30,7 @@ export const BackpackModel = types
           self.collectedMice.splice(index, 1);
         }
       },
-      selectSlot(index: number) {
+      selectSlot(index?: number) {
         self.activeSlot = index;
       },
       deselectSlot() {

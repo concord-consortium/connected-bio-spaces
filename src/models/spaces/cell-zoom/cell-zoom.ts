@@ -2,6 +2,7 @@ import { types, Instance } from "mobx-state-tree";
 import { ColorType } from "../../mouse";
 import { CellMouseModel } from "../../../components/spaces/cell-zoom/cell-mouse";
 import { CellZoomRowModel, OrganelleType } from "./cell-zoom-row";
+import { BackpackModelType } from "../../backpack";
 
 export const kSubstanceNames = [
   "pheomelanin",
@@ -82,8 +83,48 @@ export const kOrganelleInfo: OrganelleInfo = {
 
 export const CellZoomModel = types
   .model("CellZoom", {
-    organisms: types.map(CellMouseModel),
-    rows: types.array(CellZoomRowModel)
+    cellOrganisms: types.optional(types.array(types.maybe(CellMouseModel)),
+      [undefined, undefined, undefined, undefined, undefined, undefined]),
+    rows: types.optional(types.array(CellZoomRowModel),
+      [CellZoomRowModel.create(), CellZoomRowModel.create()])
+  })
+  .actions((self) => {
+    function clearRowBackpackIndex(rowIndex: number) {
+      const oldBackpackIndex = self.rows[rowIndex].backpackIndex;
+      self.rows[rowIndex] = CellZoomRowModel.create({
+        backpackIndex: undefined
+      });
+
+      if (oldBackpackIndex && !self.rows.some(row => row.backpackIndex === oldBackpackIndex)) {
+        self.cellOrganisms[oldBackpackIndex] = undefined;
+      }
+    }
+
+    return {
+      clearRowBackpackIndex,
+      setRowBackpackIndex(rowIndex: number, backpackIndex: number, backpack: BackpackModelType) {
+        clearRowBackpackIndex(rowIndex);
+
+        const backpackMouse = backpack.getMouseAtIndex(backpackIndex);
+        if (!backpackMouse) {
+          return;
+        }
+
+        let existingCellMouse = backpackIndex < self.cellOrganisms.length
+          ? self.cellOrganisms[backpackIndex]
+          : undefined;
+        if (!existingCellMouse) {
+          existingCellMouse = CellMouseModel.create({
+            baseColor: backpackMouse.baseColor
+          });
+          self.cellOrganisms[backpackIndex] = existingCellMouse;
+        }
+        self.rows[rowIndex] = CellZoomRowModel.create({
+          backpackIndex,
+          organism: existingCellMouse
+        });
+      }
+    };
   });
 
 export type CellZoomModelType = Instance<typeof CellZoomModel>;

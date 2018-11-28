@@ -23,6 +23,7 @@
     width: 20px
     height: 20px
     border-radius: $collect-button-radius
+    transition-property: background-color
     transition-duration: $fade-time
 
   .index
@@ -68,9 +69,6 @@
     &.female
       border-color: $color-key-yellow
 
-    &.deselected
-      opacity: .5
-
     .inner-outline
       display: flex
       flex-direction: column
@@ -93,14 +91,26 @@
 .collect-button-holder:hover
   cursor: pointer
 
-.collect-button-holder:hover .collect-button-outline
-  background-color: $color-nav-cerulean-dark1
-
 .collect-button-holder:hover .collect-button-outline.uncollected
   background-color: $color-nav-cinder-light3
 
-.collect-button-holder:hover .x-close
+.x-close:hover
   background-color: $color-nav-cerulean-dark1
 
-.collect-button-holder:hover .x-close.uncollected
-  background-color: transparent
+// styles below only for when we are in the backpack
+.left-nav-panel
+  .collect-button-holder:hover .collect-button-outline
+    background-color: $color-nav-cerulean-dark1
+
+  .collect-button-holder:hover .x-close
+    background-color: $color-nav-cerulean-dark1
+
+  .collect-button-holder
+    .collect-button
+      &:hover
+        border-color: $color-nav-cerulean-dark2
+        cursor: pointer
+
+      &.deselected
+        opacity: 0.5
+

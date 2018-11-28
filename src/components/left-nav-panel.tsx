@@ -68,8 +68,7 @@ export class LeftNavPanelComponent extends BaseComponent<IProps, IState> {
     const emptySlots = backpack.maxSlots - collectedSlots;
     const buttons = backpack.collectedMice.map((slot, index) => {
                       return <CollectButtonComponent
-                               mouse={slot}
-                               index={index}
+                               backpackIndex={index}
                                key={index}
                              />;
                     });
@@ -86,8 +85,7 @@ export class LeftNavPanelComponent extends BaseComponent<IProps, IState> {
   private renderEmptyCollectButton = (index: number) => {
     return (
       <CollectButtonComponent
-        mouse={undefined}
-        index={index}
+        backpackIndex={index}
         key={index}
       />
     );
