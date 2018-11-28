@@ -7,13 +7,15 @@ import { observer, inject } from "mobx-react";
 // import { rootStore, Mode } from "../stores/RootStore";
 import { createModel } from "organelle";
 import * as Cell from "./cell-models/cell.json";
-import { OrganelleType, ModeType, kOrganelleInfo } from "../../../models/spaces/cell-zoom/cell-zoom";
+import { kOrganelleInfo } from "../../../models/spaces/cell-zoom/cell-zoom";
 import { BaseComponent } from "../../base";
 // import { SubstanceType } from "../models/Substance";
 import "./OrganelleWrapper.sass";
+import { OrganelleType, ModeType } from "../../../models/spaces/cell-zoom/cell-zoom-row.js";
 
 interface OrganelleWrapperProps {
   elementName: string;
+  rowIndex: number;
 }
 
 interface OrganelleWrapperState {
@@ -88,10 +90,9 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
   }
 
   public componentDidMount() {
-    // const box = appStore.boxes.get(this.props.boxId);
-    // const view = box.viewType;
-    // const {organism} = box;
-    // const {modelProperties} = organism;
+    const { cellZoom } = this.stores;
+    const row = cellZoom.rows[this.props.rowIndex];
+    const { modelProperties } = row.organism as any;
     const modelDef: any = Cell;
 
     modelDef.container = {
@@ -100,15 +101,6 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
       height: MODEL_HEIGHT
     };
 
-    const modelProperties: any = {
-      albino: false,
-      working_tyr1: false,
-      working_myosin_5a: true,
-      open_gates: false,
-      eumelanin: 50,
-      hormone_spawn_period: 40,
-      working_receptor: true
-    };
     modelDef.properties = modelProperties;
 
     createModel(modelDef).then((m: any) => {
@@ -153,7 +145,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
 
   public organelleClick(organelleType: OrganelleType, location: {x: number, y: number}) {
     const { cellZoom } = this.stores;
-    cellZoom.setActiveAssay(organelleType);
+    cellZoom.rows[this.props.rowIndex].setActiveAssay(organelleType);
     // if (rootStore.mode === Mode.Assay) {
     //   const organelleInfo = OrganelleRef.create({
     //     organism,
@@ -227,7 +219,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     const {cellZoom} = this.stores;
     // const hoverLabel = appStore.mysteryLabels ?
     //   mysteryOrganelleNames[this.state.hoveredOrganelle] : this.state.hoveredOrganelle;
-    const {hoveredOrganelle} = cellZoom;
+    const hoveredOrganelle = cellZoom.rows[this.props.rowIndex].hoveredOrganelle;
     const hoverLabel = hoveredOrganelle ? kOrganelleInfo[hoveredOrganelle].displayName : undefined;
     const hoverDiv = hoverLabel
       ? (
@@ -294,32 +286,18 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     });
 
     model.on("model.step", () => {
-      // const organism: IOrganism = appStore.getBoxOrganism(this.props.boxId);
-      // let percentLightness = organism.lightness;
-      let percentLightness = .2;
-
-      if (percentLightness <= 0.19) {
-        percentLightness = 0;
-      } else if (percentLightness < 0.39) {
-        percentLightness = 0.2;
-      } else if (percentLightness < 0.59) {
-        percentLightness = 0.4;
-      } else if (percentLightness < 0.79) {
-        percentLightness = 0.6;
-      } else if (percentLightness < 0.99) {
-        percentLightness = 0.8;
-      } else {
-        percentLightness = 1;
-      }
+      const { cellZoom } = this.stores;
+      const { rowIndex } = this.props;
+      const { organism } = cellZoom.rows[rowIndex];
+      const percentDarkness = organism.getPercentDarkness();
 
       // go from lightest to darkest in HSL space, which provides the best gradual transition
 
       // lightest brown: rgb(244, 212, 141) : hsl(41°, 82%, 75%)
       // darkest brown:  rgb(124, 81, 21)   : hsl(35°, 71%, 28%)
-
       const light = [41, 82, 75];
       const dark = [35, 71, 28];
-      const color = dark.map( (c, i) => Math.round(c + (light[i] - c) * percentLightness) );
+      const color = light.map( (c, i) => Math.round(c + (dark[i] - c) * (percentDarkness / 100)) );
       const colorStr = `hsl(${color[0]},${color[1]}%,${color[2]}%)`;
 
       const cellFill = model.view.getModelSvgObjectById("cellshape_0_Layer0_0_FILL");
@@ -335,7 +313,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
       const {cellZoom} = this.stores;
       const hoveredOrganelle = this.getOrganelleFromMouseEvent(evt);
       if (hoveredOrganelle) {
-        cellZoom.setHoveredOrganelle(hoveredOrganelle);
+        cellZoom.rows[this.props.rowIndex].setHoveredOrganelle(hoveredOrganelle);
       }
     });
 
@@ -367,7 +345,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
       .filter(organelle => {
         const organelleInfo = this.organelleSelectorInfo[organelle];
         const visibleModes = organelleInfo.visibleModes;
-        return !visibleModes || visibleModes.indexOf(cellZoom.mode) > -1;
+        return !visibleModes || visibleModes.indexOf(cellZoom.rows[this.props.rowIndex].mode) > -1;
       });
     return possibleTargets.find((t) => {
       return evt.target._organelle.matches({selector: this.organelleSelectorInfo[t].selector});
