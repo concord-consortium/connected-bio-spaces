@@ -34,6 +34,13 @@ export const PopulationsModel = types
 
     function updateIsPlaying() {
       self.isPlaying = self.model.interactive.isPlaying;
+      // on pause, remove dataset point limits for chart rendering
+      const d: ChartDataModelType = self.model.chartData;
+      if (!self.isPlaying) {
+        d.allData();
+      } else {
+        d.setDataSetSubset(-1, 100);
+      }
     }
     Events.addEventListener(Environment.EVENTS.START, updateIsPlaying);
     Events.addEventListener(Environment.EVENTS.STOP, updateIsPlaying);
