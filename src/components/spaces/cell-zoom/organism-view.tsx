@@ -6,6 +6,7 @@ import "./organism-view.sass";
 const kDefaultMouseImage = "../../assets/mouse_beach.png";
 
 interface IProps extends IBaseProps {
+  rowIndex: number;
 }
 interface IState {
 }
@@ -15,7 +16,9 @@ interface IState {
 export class OrganismView extends BaseComponent<IProps, IState> {
 
   public render() {
-    const { backpack } = this.stores;
+    const { backpack, cellZoom } = this.stores;
+    const { rowIndex } = this.props;
+
     const mouseStyle = {
       backgroundImage: `url(${kDefaultMouseImage})`,
       backgroundRepeat: "no-repeat",

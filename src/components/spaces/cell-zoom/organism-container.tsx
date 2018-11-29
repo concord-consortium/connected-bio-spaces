@@ -7,8 +7,6 @@ import { ZoomControl } from "../../zoom-control";
 import { OrganelleWrapper } from "./OrganelleWrapper";
 import { OrganismView } from "./organism-view";
 
-const kDefaultMouseImage = "../../assets/mouse_beach.png";
-
 interface IProps extends IBaseProps {
   viewNumber: number;
 }
@@ -48,7 +46,7 @@ export class OrganismContainer extends BaseComponent<IProps, IState> {
 
     switch (zoomLevel) {
       case 0:
-        return <OrganismView />;
+        return <OrganismView rowIndex={viewNumber} />;
       case 1:
         const organelleViewName = `organelle-wrapper${viewNumber}`;
         return <OrganelleWrapper elementName={organelleViewName} rowIndex={viewNumber} />;
