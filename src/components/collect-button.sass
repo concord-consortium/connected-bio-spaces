@@ -12,26 +12,40 @@
 
   .x-close
     position: absolute
-    top: 0px
-    left: 88px
-    padding: 1px
+    display: flex
+    justify-content: center
+    top: 1px
+    left: 80px
+    padding: 2px
     color: $color-white
-    font-family: $title-font-stack
+    font-family: $font-stack
     font-weight: bold
-
-  .x-close:hover
-    color: $color-nav-cerulean-dark2
-    cursor: pointer
+    width: 20px
+    height: 20px
+    border-radius: $collect-button-radius
+    transition-duration: $fade-time
 
   .index
     position: absolute
     top: 0px
     left: 0px
     padding: 1px
-    font-family: $title-font-stack
+    font-family: $font-stack
     font-size: $font-size-header
     font-weight: bold
-    color: $color-nav-cinder-light1
+    color: $color-nav-cerulean-dark2
+
+    &.uncollected
+      color: $color-nav-cinder-light1
+
+  .collect-button-outline
+    display: flex
+    justify-content: center
+    align-items: center
+    width: $collect-button-outline-width
+    height: $collect-button-outline-height
+    border-radius: $collect-button-radius
+    transition-duration: $fade-time
 
   .collect-button
     display: flex
@@ -64,15 +78,26 @@
 
       &.heterozygote
         border-radius: $collect-button-inner-border-radius
-        border: $collect-button-border-width dashed $color-key-blue
+        border: $collect-button-border-width dotted $color-key-blue
 
     .icon
       height: $collect-button-icon-height
 
     .label
-      font-size: $font-size-label1
-      color: $color-nav-cinder-dark2
+      font-size: $font-size-label2
+      color: $color-nav-cerulean-dark2
 
-  .collect-button:hover
-    border-color: $color-nav-cerulean-dark2
-    cursor: pointer
+.collect-button-holder:hover
+  cursor: pointer
+
+.collect-button-holder:hover .collect-button-outline
+  background-color: $color-nav-cerulean-dark1
+
+.collect-button-holder:hover .collect-button-outline.uncollected
+  background-color: $color-nav-cinder-light3
+
+.collect-button-holder:hover .x-close
+  background-color: $color-nav-cerulean-dark1
+
+.collect-button-holder:hover .x-close.uncollected
+  background-color: transparent
