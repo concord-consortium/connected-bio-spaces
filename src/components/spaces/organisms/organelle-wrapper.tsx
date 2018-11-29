@@ -64,7 +64,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
         selector: "#melanosome_2, #melanosome_4"
       },
       receptor: {
-        selector: "#receptor-broken, #receptor-working, #receptor-bound",
+        selector: ".receptor-group",
         visibleModes: ["normal"]
       },
       gate: {
@@ -114,19 +114,33 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
 
   public updateReceptorImage() {
     const model = this.getModel();
-    if (model.world.getProperty("working_receptor")) {
-      model.view.hide("#receptor-broken", true);
-      if (model.world.getProperty("hormone_bound")) {
-        model.view.hide("#receptor-working", true);
-        model.view.show("#receptor-bound", true);
-      } else {
-        model.view.show("#receptor-working", true);
-        model.view.hide("#receptor-bound", true);
-      }
+    const { zoomLevel } = this.props;
+    if (zoomLevel === "cell") {
+      model.view.show(".receptor-mini", true);
+      model.view.hide("#receptor-working-1", true);
+      model.view.hide("#receptor-broken-1", true);
+      model.view.hide("#receptor-bound-1", true);
+      model.view.hide("#receptor-working-2", true);
+      model.view.hide("#receptor-broken-2", true);
+      model.view.hide("#receptor-bound-2", true);
     } else {
-      model.view.hide("#receptor-working", true);
-      model.view.hide("#receptor-bound", true);
-      model.view.show("#receptor-broken", true);
+      model.view.hide(".receptor-mini", true);
+      if (model.world.getProperty("working_receptor")) {
+        model.view.hide("#receptor-broken-2", true);
+        if (model.world.getProperty("hormone_bound")) {
+          model.view.hide("#receptor-working-2", true);
+          model.view.show("#receptor-bound-2", true);
+        } else {
+          model.view.show("#receptor-working-2", true);
+          model.view.hide("#receptor-bound-2", true);
+        }
+
+        model.view.show("#receptor-broken-1", true);
+      } else {
+        model.view.hide("#receptor-working-2", true);
+        model.view.hide("#receptor-bound-2", true);
+        model.view.show("#receptor-broken-2", true);
+      }
     }
   }
 

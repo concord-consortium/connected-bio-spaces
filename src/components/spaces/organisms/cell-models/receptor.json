@@ -1,10 +1,10 @@
 {
   "modelSvg": "assets/cell-zoom/melanocyte.svg",
   "bounds": {
-    "left": 565,
+    "left": 525,
     "top": 180,
-    "width": 200,
-    "height": 125
+    "width": 240,
+    "height": 150
   },
   "species": [
     "organelles/melanosome.yml",
