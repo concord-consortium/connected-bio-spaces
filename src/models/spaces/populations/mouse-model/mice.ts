@@ -178,7 +178,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
         rules: [
           {
             image: {
-              path: "curriculum/mouse/populations/sandrat-light.png",
+              path: "assets/curriculum/mouse/populations/sandrat-light.png",
               scale: 0.3,
               anchor: {
                 x: 0.8,
@@ -190,7 +190,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
             }
           }, {
             image: {
-              path: "curriculum/mouse/populations/sandrat-tan.png",
+              path: "assets/curriculum/mouse/populations/sandrat-tan.png",
               scale: 0.3,
               anchor: {
                 x: 0.8,
@@ -202,7 +202,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
             }
           }, {
             image: {
-              path: "curriculum/mouse/populations/sandrat-dark.png",
+              path: "assets/curriculum/mouse/populations/sandrat-dark.png",
               scale: 0.3,
               anchor: {
                 x: 0.8,
@@ -220,7 +220,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
         rules: [
           {
             image: {
-              path: "curriculum/mouse/populations/male-stack.png",
+              path: "assets/curriculum/mouse/populations/male-stack.png",
               scale: 0.4,
               anchor: {
                 x: 0.75,
@@ -232,7 +232,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
             }
           }, {
             image: {
-              path: "curriculum/mouse/populations/female-stack.png",
+              path: "assets/curriculum/mouse/populations/female-stack.png",
               scale: 0.4,
               anchor: {
                 x: 0.75,
@@ -250,7 +250,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
         rules: [
           {
             image: {
-              path: "curriculum/mouse/populations/sandrat-light.png",
+              path: "assets/curriculum/mouse/populations/sandrat-light.png",
               scale: 0.4,
               anchor: {
                 x: 0.4,
@@ -262,7 +262,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
             }
           }, {
             image: {
-              path: "curriculum/mouse/populations/sandrat-tan.png",
+              path: "assets/curriculum/mouse/populations/sandrat-tan.png",
               scale: 0.4,
               anchor: {
                 x: 0.4,
@@ -274,7 +274,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
             }
           }, {
             image: {
-              path: "curriculum/mouse/populations/sandrat-dark.png",
+              path: "assets/assets/curriculum/mouse/populations/sandrat-dark.png",
               scale: 0.4,
               anchor: {
                 x: 0.4,

@@ -9,7 +9,7 @@ function createEnvironment(color: EnvironmentColorType) {
   return new Environment({
     columns: 45,
     rows: 45,
-    imgPath: `curriculum/mouse/populations/${color}.png`,
+    imgPath: `assets/curriculum/mouse/populations/${color}.png`,
     wrapEastWest: false,
     wrapNorthSouth: false
   });
@@ -181,7 +181,7 @@ export function createInteractive(model: MousePopulationsModelType) {
     } else {
       environmentColor = "white";
     }
-    interactive.environment.setBackground(`curriculum/mouse/populations/${environmentColor}.png`);
+    interactive.environment.setBackground(`assets/curriculum/mouse/populations/${environmentColor}.png`);
 
   };
 
