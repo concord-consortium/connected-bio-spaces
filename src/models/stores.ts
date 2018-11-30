@@ -31,12 +31,7 @@ export function createStores(params: ICreateStores, authoring: any): IStores {
     populations: params && params.populations ||
       createPopulationsModel(authoring.curriculum, flatten(authoring.populations)),
     backpack: params && params.backpack
-      || BackpackModel.create({
-        collectedMice: [
-          BackpackMouse.create({sex: "female", genotype: "BB"}),
-          BackpackMouse.create({sex: "male", genotype: "bb"})
-        ]
-      }),
+      || BackpackModel.create({}),
     cellZoom: params && params.cellZoom || CellZoomModel.create()
   };
 }
