@@ -4,11 +4,12 @@ import { BaseComponent, IBaseProps } from "../../base";
 
 import "./organism-view.sass";
 import { ZoomControl } from "../../zoom-control";
-import { OrganelleWrapper } from "./OrganelleWrapper";
 import { OrganismView } from "./organism-view";
 
+import { CellZoomComponent } from "../cell-zoom/cell-zoom";
+
 interface IProps extends IBaseProps {
-  viewNumber: number;
+  rowIndex: number;
 }
 interface IState {
   zoomLevel: number;
@@ -42,14 +43,14 @@ export class OrganismContainer extends BaseComponent<IProps, IState> {
 
   private organismZoomedView = () => {
     const { zoomLevel } = this.state;
-    const { viewNumber } = this.props;
+    const { rowIndex } = this.props;
 
     switch (zoomLevel) {
       case 0:
-        return <OrganismView rowIndex={viewNumber} />;
+        return <OrganismView rowIndex={rowIndex} />;
       case 1:
-        const organelleViewName = `organelle-wrapper${viewNumber}`;
-        return <OrganelleWrapper elementName={organelleViewName} rowIndex={viewNumber} />;
+        const organelleViewName = `organelle-wrapper${rowIndex}`;
+        return <CellZoomComponent rowIndex={rowIndex} />;
       default:
         break;
     }

@@ -5,12 +5,7 @@ import { TwoUpDisplayComponent } from "../two-up-display";
 import { FourUpDisplayComponent } from "../four-up-display";
 import { Chart } from "../charts/chart";
 
-<<<<<<< HEAD
-import { CellZoomComponent } from "./cell-zoom/cell-zoom";
-import { OrganismView } from "./cell-zoom/organism-view";
-=======
 import { OrganismContainer } from "./cell-zoom/organism-container";
->>>>>>> Reorganize components so that the section of the page that shows the organism (at whatever zoom level we are at) is the OrganismContainer, which chooses to show either the OrganismView (whole organism/mouse), Organelle model or (to be implemented later) the protein level of zoom
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -24,29 +19,9 @@ export class CellZoomSpaceComponent extends BaseComponent<IProps, IState> {
 
   }
   public render() {
-    const _cellZoomComponent1 = this.getCellZoomRow(0);
-    const _cellZoomComponent2 = this.getCellZoomRow(1);
+    const cellZoomComponent1 = this.getCellZoomRow(0);
+    const cellZoomComponent2 = this.getCellZoomRow(1);
 
-    const { cellZoom } = this.stores;
-    const graphTitle = "Graph";
-
-    const cellGraphPanel1 = <Chart title="Chart Test" chartData={cellZoom.rows[0].currentData}
-      chartType={"horizontalBar"} />;
-    const cellZoomComponent1 = <TwoUpDisplayComponent
-      leftTitle="Investigate: Cell"
-      leftPanel={<OrganismContainer viewNumber={0} />}
-      rightTitle={graphTitle}
-      rightPanel={cellGraphPanel1}
-    />;
-
-    const cellGraphPanel2 = <Chart title="Chart Test" chartData={cellZoom.rows[1].currentData}
-      chartType={"horizontalBar"} />;
-    const cellZoomComponent2 = <TwoUpDisplayComponent
-      leftTitle="Investigate: Cell"
-      leftPanel={<OrganismContainer viewNumber={1} />}
-      rightTitle={graphTitle}
-      rightPanel={cellGraphPanel2}
-    />;
     return (
       <FourUpDisplayComponent topRow={cellZoomComponent1} bottomRow={cellZoomComponent2} />
     );
@@ -64,7 +39,7 @@ export class CellZoomSpaceComponent extends BaseComponent<IProps, IState> {
     return (
       <TwoUpDisplayComponent
         leftTitle="Investigate: Cell"
-        leftPanel={<CellZoomComponent rowIndex={rowIndex}/>}
+        leftPanel={<OrganismContainer rowIndex={rowIndex}/>}
         rightTitle={graphTitle}
         rightPanel={graphPanel}
       />
