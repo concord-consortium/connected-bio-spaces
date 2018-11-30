@@ -1,11 +1,11 @@
 import { types } from "mobx-state-tree";
-import { MouseType, Mouse } from "./mouse";
+import { BackpackMouseType, BackpackMouse } from "./backpack-mouse";
 
 export const BackpackModel = types
   .model("Backpack", {
-    collectedMice: types.array(Mouse),
+    collectedMice: types.array(BackpackMouse),
     maxSlots: 6,
-    activeSlot: types.maybe(types.number)
+    activeMouse: types.maybe(types.reference(BackpackMouse))
   })
   .views((self) => {
     return {
@@ -13,12 +13,24 @@ export const BackpackModel = types
         return i != null && i < self.collectedMice.length
           ? self.collectedMice[i]
           : null;
+      },
+
+      getMouseIndex(mouse?: BackpackMouseType) {
+        return self.collectedMice.findIndex(collectedMouse => collectedMouse === mouse);
+      },
+
+      isDeselected(mouse?: BackpackMouseType) {
+        return self.activeMouse && self.activeMouse !== mouse;
       }
     };
   })
   .actions((self) => {
+    function deselectMouse() {
+      self.activeMouse = undefined;
+    }
+
     return {
-      addCollectedMouse(mouse: MouseType) {
+      addCollectedMouse(mouse: BackpackMouseType) {
         if (self.collectedMice.length < self.maxSlots) {
           self.collectedMice.push(mouse);
           return true;
@@ -30,11 +42,13 @@ export const BackpackModel = types
           self.collectedMice.splice(index, 1);
         }
       },
-      selectSlot(index?: number) {
-        self.activeSlot = index;
-      },
-      deselectSlot() {
-        self.activeSlot = undefined;
+      deselectMouse,
+      selectMouse(mouse?: BackpackMouseType) {
+        if (mouse === self.activeMouse) {
+          deselectMouse();
+        } else {
+          self.activeMouse = mouse;
+        }
       }
     };
   });

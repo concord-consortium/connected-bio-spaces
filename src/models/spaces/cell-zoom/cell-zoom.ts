@@ -1,7 +1,7 @@
 import { types, Instance } from "mobx-state-tree";
-import { ColorType } from "../../mouse";
+import { ColorType, BackpackMouseType } from "../../backpack-mouse";
 import { CellMouseModel } from "./cell-mouse";
-import { CellZoomRowModel, OrganelleType } from "./cell-zoom-row";
+import { CellZoomRowModel, OrganelleType, CellZoomRowModelType } from "./cell-zoom-row";
 import { BackpackModelType } from "../../backpack";
 
 export const kSubstanceNames = [
@@ -83,46 +83,33 @@ export const kOrganelleInfo: OrganelleInfo = {
 
 export const CellZoomModel = types
   .model("CellZoom", {
-    cellOrganisms: types.optional(types.array(types.maybe(CellMouseModel)),
-      [undefined, undefined, undefined, undefined, undefined, undefined]),
+    cellOrganisms: types.array(CellMouseModel),
     rows: types.optional(types.array(CellZoomRowModel),
       [CellZoomRowModel.create(), CellZoomRowModel.create()])
   })
   .actions((self) => {
-    function clearRowBackpackIndex(rowIndex: number) {
-      const oldBackpackIndex = self.rows[rowIndex].backpackIndex;
-      self.rows[rowIndex] = CellZoomRowModel.create({
-        backpackIndex: undefined
-      });
+    function clearRowBackpackMouse(rowIndex: number) {
+      const clearedCellMouse = self.rows[rowIndex].cellMouse;
+      self.rows[rowIndex] = CellZoomRowModel.create();
 
-      if (oldBackpackIndex && !self.rows.some(row => row.backpackIndex === oldBackpackIndex)) {
-        self.cellOrganisms[oldBackpackIndex] = undefined;
+      if (clearedCellMouse) {
+        if (!self.rows.some(row => row.cellMouse === clearedCellMouse)) {
+          self.cellOrganisms.remove(clearedCellMouse);
+        }
       }
     }
 
     return {
-      clearRowBackpackIndex,
-      setRowBackpackIndex(rowIndex: number, backpackIndex: number, backpack: BackpackModelType) {
-        clearRowBackpackIndex(rowIndex);
-
-        const backpackMouse = backpack.getMouseAtIndex(backpackIndex);
-        if (!backpackMouse) {
-          return;
-        }
-
-        let existingCellMouse = backpackIndex < self.cellOrganisms.length
-          ? self.cellOrganisms[backpackIndex]
-          : undefined;
-        if (!existingCellMouse) {
-          existingCellMouse = CellMouseModel.create({
-            baseColor: backpackMouse.baseColor
-          });
-          self.cellOrganisms[backpackIndex] = existingCellMouse;
-        }
-        self.rows[rowIndex] = CellZoomRowModel.create({
-          backpackIndex,
-          organism: existingCellMouse
+      clearRowBackpackMouse,
+      setRowBackpackMouse(rowIndex: number, backpackMouse: BackpackMouseType) {
+        let cellMouse = self.cellOrganisms.find((existingCellMouse) => {
+          return existingCellMouse.backpackMouse === backpackMouse;
         });
+        if (!cellMouse) {
+          cellMouse = CellMouseModel.create({ backpackMouse });
+          self.cellOrganisms.push(cellMouse);
+        }
+        self.rows[rowIndex] = CellZoomRowModel.create({ cellMouse });
       }
     };
   });

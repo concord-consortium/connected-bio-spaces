@@ -24,8 +24,7 @@ export type ZoomLevelType = typeof ZoomLevel.Type;
 
 export const CellZoomRowModel = types
   .model("CellZoomRow", {
-    organism: types.maybe(types.reference(CellMouseModel)),
-    backpackIndex: types.maybe(types.number),
+    cellMouse: types.maybe(types.reference(CellMouseModel)),
     hoveredOrganelle: types.maybe(Organelle),
     mode: types.optional(Mode, "normal"),
     assayedOrganelle: types.maybe(Organelle),
@@ -38,10 +37,10 @@ export const CellZoomRowModel = types
       const organelle = self.assayedOrganelle;
       if (organelle) {
         kSubstanceNames.forEach((substance) => {
-          if (!self.organism) {
+          if (!self.cellMouse) {
             return;
           }
-          const substanceValue = self.organism.getSubstanceValue(organelle, substance);
+          const substanceValue = self.cellMouse.getSubstanceValue(organelle, substance);
           if (substanceValue > 0) {
             points.push(DataPoint.create({ a1: substanceValue, a2: 0, label: substance }));
           }

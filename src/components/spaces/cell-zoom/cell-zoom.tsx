@@ -17,18 +17,18 @@ export class CellZoomComponent extends BaseComponent<IProps, IState> {
   public render() {
     const { cellZoom } = this.stores;
     const { rowIndex } = this.props;
-    const { backpackIndex } = cellZoom.rows[rowIndex];
+    const { cellMouse } = cellZoom.rows[rowIndex];
 
     return (
       <div className="cell-zoom-panel">
         <CollectButtonComponent
-          backpackIndex={backpackIndex}
+          backpackMouse={cellMouse && cellMouse.backpackMouse}
           clickMouse={this.clickMouse}
           clickEmpty={this.clickEmpty}
           clickClose={this.clickClose}
         />
         {
-          backpackIndex != null &&
+          cellMouse != null &&
             <OrganelleWrapper elementName={`organelle-wrapper-${rowIndex}`} rowIndex={rowIndex}/>
         }
       </div>
@@ -42,16 +42,16 @@ export class CellZoomComponent extends BaseComponent<IProps, IState> {
   private clickEmpty = () => {
     const { backpack, cellZoom } = this.stores;
     const { rowIndex } = this.props;
-    const { activeSlot } = backpack;
-    if (activeSlot != null) {
-      cellZoom.setRowBackpackIndex(rowIndex, activeSlot, backpack);
-      backpack.deselectSlot();
+    const { activeMouse } = backpack;
+    if (activeMouse != null) {
+      cellZoom.setRowBackpackMouse(rowIndex, activeMouse);
+      backpack.deselectMouse();
     }
   }
 
   private clickClose = () => {
     const { cellZoom } = this.stores;
     const { rowIndex } = this.props;
-    cellZoom.clearRowBackpackIndex(rowIndex);
+    cellZoom.clearRowBackpackMouse(rowIndex);
   }
 }

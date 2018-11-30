@@ -3,10 +3,10 @@ import * as React from "react";
 import { BaseComponent, IBaseProps } from "./base";
 
 import "./collect-button.sass";
-import { Mouse, MouseType, UNCOLLECTED_IMAGE } from "../models/mouse";
+import { BackpackMouse, BackpackMouseType, UNCOLLECTED_IMAGE } from "../models/backpack-mouse";
 
 interface IProps extends IBaseProps {
-  backpackIndex?: number;
+  backpackMouse?: BackpackMouseType;
   clickMouse?: () => void;
   clickEmpty?: () => void;
   clickClose?: () => void;
@@ -19,16 +19,17 @@ export class CollectButtonComponent extends BaseComponent<IProps, IState> {
 
   public render() {
     const { backpack } = this.stores;
-    const { backpackIndex } = this.props;
-    const mouse = backpack.getMouseAtIndex(backpackIndex);
+    const { backpackMouse } = this.props;
     return (
       <div className="collect-button-holder">
-        {mouse ? this.renderFull(mouse) : this.renderEmpty()}
+        {backpackMouse ? this.renderFull(backpackMouse) : this.renderEmpty()}
       </div>
     );
   }
-  private renderFull(mouse: MouseType) {
-    const { backpackIndex, clickMouse, clickClose } = this.props;
+  private renderFull(mouse: BackpackMouseType) {
+    const { backpack } = this.stores;
+    const { backpackMouse, clickMouse, clickClose } = this.props;
+    const backpackMouseIndex = backpack.getMouseIndex(backpackMouse);
     const handleMouse = clickMouse ? clickMouse : this.handleClickMouse;
     const handleClose = clickClose ? clickClose : this.handleClickRemove;
     let buttonClass = mouse.sex === "male" ? "collect-button male" : "collect-button female";
@@ -45,12 +46,14 @@ export class CollectButtonComponent extends BaseComponent<IProps, IState> {
           </div>
         </div>
         <div className="x-close" onClick={handleClose}>x</div>
-        <div className="index">{backpackIndex != null ? backpackIndex + 1 : ""}</div>
+        <div className="index">{backpackMouseIndex > -1 ? backpackMouseIndex + 1 : ""}</div>
       </div>
     );
   }
   private renderEmpty() {
-    const { backpackIndex, clickEmpty } = this.props;
+    const { backpack } = this.stores;
+    const { backpackMouse, clickEmpty } = this.props;
+    const backpackMouseIndex = backpack.getMouseIndex(backpackMouse);
     const handleClick = clickEmpty ? clickEmpty : this.handleClickButton;
     return (
       <div>
@@ -61,7 +64,7 @@ export class CollectButtonComponent extends BaseComponent<IProps, IState> {
             </div>
           </div>
         </div>
-        <div className="index uncollected">{backpackIndex != null ? backpackIndex + 1 : ""}</div>
+        <div className="index uncollected">{backpackMouseIndex > -1 ? backpackMouseIndex + 1 : ""}</div>
       </div>
     );
   }
@@ -70,36 +73,33 @@ export class CollectButtonComponent extends BaseComponent<IProps, IState> {
   }
   private addTestMouseToBackpack = () => {
     const {backpack} = this.stores;
-    const {backpackIndex} = this.props;
-    if (backpack.getMouseAtIndex(backpackIndex)) {
+    const {backpackMouse} = this.props;
+    if (backpackMouse) {
       return;
     }
 
     const randSex = Math.random() > .5 ? "male" : "female";
     const randGenotype = Math.random() > .5 ? (Math.random() > .5 ? "BB" : "Bb") :
                                                   (Math.random() > .5 ? "bB" : "bb");
-    backpack.addCollectedMouse(Mouse.create({sex: randSex, genotype: randGenotype, label: randGenotype}));
+    backpack.addCollectedMouse(BackpackMouse.create({sex: randSex, genotype: randGenotype, label: randGenotype}));
   }
   private handleClickRemove = () => {
     const {backpack} = this.stores;
-    const {backpackIndex} = this.props;
-    if (backpackIndex != null) {
+    const {backpackMouse} = this.props;
+    const backpackIndex = backpack.getMouseIndex(backpackMouse);
+    if (backpackIndex > -1) {
       backpack.removeCollectedMouse(backpackIndex);
     }
   }
 
   private handleClickMouse = () => {
     const { backpack } = this.stores;
-    const { backpackIndex } = this.props;
-    if (backpack.activeSlot === backpackIndex) {
-      backpack.deselectSlot();
-    } else {
-      backpack.selectSlot(backpackIndex);
-    }
+    const { backpackMouse } = this.props;
+    backpack.selectMouse(backpackMouse);
   }
   private isDeselected = () => {
     const { backpack } = this.stores;
-    const { backpackIndex } = this.props;
-    return backpack.activeSlot != null && backpack.activeSlot !== backpackIndex;
+    const { backpackMouse } = this.props;
+    return backpack.isDeselected(backpackMouse);
   }
 }

@@ -1,5 +1,5 @@
 import { types, Instance } from "mobx-state-tree";
-import { MouseColor } from "../../mouse";
+import { MouseColor, BackpackMouse } from "../../backpack-mouse";
 import { SubstanceType, kOrganelleInfo } from "./cell-zoom";
 import { v4 as uuid } from "uuid";
 import { OrganelleType } from "./cell-zoom-row";
@@ -7,12 +7,12 @@ import { OrganelleType } from "./cell-zoom-row";
 export const CellMouseModel = types
   .model("CellMouse", {
     id: types.optional(types.identifier, () => uuid()),
-    baseColor: MouseColor
+    backpackMouse: types.reference(BackpackMouse)
   })
   .views(self => {
     function getSubstanceValue(organelle: OrganelleType, substance: SubstanceType) {
       const substanceValues = kOrganelleInfo[organelle].substances[substance];
-      return substanceValues ? substanceValues[self.baseColor] : 0;
+      return substanceValues ? substanceValues[self.backpackMouse.baseColor] : 0;
     }
 
     function getPercentDarkness() {
@@ -24,7 +24,7 @@ export const CellMouseModel = types
       getSubstanceValue,
       getPercentDarkness,
       get modelProperties() {
-        const workingReceptor = self.baseColor !== "white";
+        const workingReceptor = self.backpackMouse.baseColor !== "white";
         return {
           albino: false,
           working_tyr1: false,

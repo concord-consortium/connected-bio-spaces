@@ -5,7 +5,7 @@ import { flatten } from "flat";
 import { CellZoomModel, CellZoomModelType } from "./spaces/cell-zoom/cell-zoom";
 import { CellMouseModel } from "./spaces/cell-zoom/cell-mouse";
 import { CellZoomRowModel } from "./spaces/cell-zoom/cell-zoom-row";
-import { Mouse } from "./mouse";
+import { BackpackMouse } from "./backpack-mouse";
 
 export type Curriculum = "mouse";
 
@@ -33,8 +33,8 @@ export function createStores(params: ICreateStores, authoring: any): IStores {
     backpack: params && params.backpack
       || BackpackModel.create({
         collectedMice: [
-          Mouse.create({sex: "female", genotype: "BB"}),
-          Mouse.create({sex: "male", genotype: "bb"})
+          BackpackMouse.create({sex: "female", genotype: "BB"}),
+          BackpackMouse.create({sex: "male", genotype: "bb"})
         ]
       }),
     cellZoom: params && params.cellZoom || CellZoomModel.create()

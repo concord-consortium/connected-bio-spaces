@@ -7,7 +7,7 @@ import { BaseComponent, IBaseProps } from "../../base";
 import "./populations.sass";
 import { ToolbarButton } from "../../../models/spaces/populations/populations";
 import { AgentEnvironmentMouseEvent } from "populations.js";
-import { Mouse } from "../../../models/mouse";
+import { BackpackMouse } from "../../../models/backpack-mouse";
 
 interface SizeMeProps {
   size?: {
@@ -140,7 +140,7 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
       const selectedMouse = evt.agents.mice;
       if (this.props.stores) {
         const backpack = this.props.stores.backpack;
-        const backpackMouse = Mouse.create({
+        const backpackMouse = BackpackMouse.create({
           sex: selectedMouse.get("sex"),
           genotype: (selectedMouse as any)._genomeButtonsString()
         });

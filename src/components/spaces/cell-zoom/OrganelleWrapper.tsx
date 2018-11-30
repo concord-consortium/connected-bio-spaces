@@ -92,7 +92,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
   public componentDidMount() {
     const { cellZoom } = this.stores;
     const row = cellZoom.rows[this.props.rowIndex];
-    const { modelProperties } = row.organism as any;
+    const { modelProperties } = row.cellMouse as any;
     const modelDef: any = Cell;
 
     modelDef.container = {
@@ -279,11 +279,11 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     model.on("model.step", () => {
       const { cellZoom } = this.stores;
       const { rowIndex } = this.props;
-      const { organism } = cellZoom.rows[rowIndex];
-      if (!organism) {
+      const { cellMouse } = cellZoom.rows[rowIndex];
+      if (!cellMouse) {
         return;
       }
-      const percentDarkness = organism.getPercentDarkness();
+      const percentDarkness = cellMouse.getPercentDarkness();
 
       // go from lightest to darkest in HSL space, which provides the best gradual transition
 
@@ -299,7 +299,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
         cellFill.setColor(colorStr);
       }
 
-      const modelProperties: any = organism.modelProperties;
+      const modelProperties: any = cellMouse.modelProperties;
       if (model) {
         Object.keys(modelProperties).forEach((key: string) => {
           this.getModel().world.setProperty(key, modelProperties[key]);

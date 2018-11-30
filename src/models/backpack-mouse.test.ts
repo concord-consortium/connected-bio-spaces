@@ -1,10 +1,10 @@
-import { Mouse, MouseType } from "./mouse";
+import { BackpackMouse, BackpackMouseType } from "./backpack-mouse";
 
 describe("mouse model", () => {
-  let mouse: MouseType;
+  let mouse: BackpackMouseType;
 
   beforeEach(() => {
-    mouse = Mouse.create({
+    mouse = BackpackMouse.create({
       sex: "male",
       genotype: "BB",
       label: "lbl"
@@ -18,7 +18,7 @@ describe("mouse model", () => {
   });
 
   it("uses override values", () => {
-    mouse = Mouse.create({
+    mouse = BackpackMouse.create({
       sex: "female",
       genotype: "bb",
       label: "lbl"

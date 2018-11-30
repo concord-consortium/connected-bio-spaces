@@ -9,8 +9,8 @@ describe("stores object", () => {
   beforeEach(() => {
     if (stores) {
       // Clear up state, or tests after the first complain about duplicate objects in MST
-      stores.cellZoom.clearRowBackpackIndex(0);
-      stores.cellZoom.clearRowBackpackIndex(1);
+      stores.cellZoom.clearRowBackpackMouse(0);
+      stores.cellZoom.clearRowBackpackMouse(1);
     }
     stores = createStores({}, defaultAuthoring);
   });
