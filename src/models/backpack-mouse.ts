@@ -1,4 +1,5 @@
 import { types } from "mobx-state-tree";
+import uuid = require("uuid");
 
 export const MouseColor = types.enumeration("type", ["brown", "white", "tan"]);
 export type ColorType = typeof MouseColor.Type;
@@ -11,8 +12,9 @@ export type Genotype = typeof GenotypeEnum.Type;
 
 export const UNCOLLECTED_IMAGE = "assets/mouse_collect.png";
 
-export const Mouse = types
+export const BackpackMouse = types
   .model("Mouse", {
+    id: types.optional(types.identifier, () => uuid()),
     sex: SexTypeEnum,
     genotype: GenotypeEnum,
     label: ""
@@ -46,4 +48,4 @@ export const Mouse = types
     }
   }));
 
-export type MouseType = typeof Mouse.Type;
+export type BackpackMouseType = typeof BackpackMouse.Type;

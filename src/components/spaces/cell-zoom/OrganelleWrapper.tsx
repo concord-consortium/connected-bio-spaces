@@ -1,5 +1,5 @@
 import * as React from "react";
-import { autorun, IReactionDisposer, observable } from "mobx";
+import { IReactionDisposer, observable } from "mobx";
 import { observer, inject } from "mobx-react";
 // import { IOrganism, OrganelleRef } from "../models/Organism";
 // import { OrganelleType, mysteryOrganelleNames } from "../models/Organelle";
@@ -92,7 +92,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
   public componentDidMount() {
     const { cellZoom } = this.stores;
     const row = cellZoom.rows[this.props.rowIndex];
-    const { modelProperties } = row.organism as any;
+    const { modelProperties } = row.cellMouse as any;
     const modelDef: any = Cell;
 
     modelDef.container = {
@@ -108,15 +108,6 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
       this.model = m;
       this.completeLoad();
     });
-
-    // Update model properties as they change
-    this.disposers.push(autorun(() => {
-      if (this.getModel()) {
-        Object.keys(modelProperties).forEach((key: string) => {
-          this.getModel().world.setProperty(key, modelProperties[key]);
-        });
-      }
-    }));
   }
 
   public componentWillUnmount() {
@@ -288,8 +279,11 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     model.on("model.step", () => {
       const { cellZoom } = this.stores;
       const { rowIndex } = this.props;
-      const { organism } = cellZoom.rows[rowIndex];
-      const percentDarkness = organism.getPercentDarkness();
+      const { cellMouse } = cellZoom.rows[rowIndex];
+      if (!cellMouse) {
+        return;
+      }
+      const percentDarkness = cellMouse.getPercentDarkness();
 
       // go from lightest to darkest in HSL space, which provides the best gradual transition
 
@@ -303,6 +297,13 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
       const cellFill = model.view.getModelSvgObjectById("cellshape_0_Layer0_0_FILL");
       if (cellFill) {
         cellFill.setColor(colorStr);
+      }
+
+      const modelProperties: any = cellMouse.modelProperties;
+      if (model) {
+        Object.keys(modelProperties).forEach((key: string) => {
+          this.getModel().world.setProperty(key, modelProperties[key]);
+        });
       }
 
       // set lightness on model object so it can change organism image

@@ -3,11 +3,13 @@ import * as React from "react";
 import { BaseComponent, IBaseProps } from "./base";
 
 import "./collect-button.sass";
-import { Mouse, MouseType, UNCOLLECTED_IMAGE } from "../models/mouse";
+import { BackpackMouse, BackpackMouseType, UNCOLLECTED_IMAGE } from "../models/backpack-mouse";
 
 interface IProps extends IBaseProps {
-  mouse?: MouseType;
-  index: number;
+  backpackMouse?: BackpackMouseType;
+  clickMouse?: () => void;
+  clickEmpty?: () => void;
+  clickClose?: () => void;
 }
 interface IState {}
 
@@ -16,58 +18,90 @@ interface IState {}
 export class CollectButtonComponent extends BaseComponent<IProps, IState> {
 
   public render() {
-    const { mouse } = this.props;
+    const { backpack } = this.stores;
+    const { backpackMouse } = this.props;
+    let className = "collect-button-holder";
+    if (!backpackMouse) className += " uncollected";
     return (
-      <div className="collect-button-holder">
-        {mouse ? this.renderFull(mouse) : this.renderEmpty()}
+      <div className={className}>
+        {backpackMouse ? this.renderFull(backpackMouse) : this.renderEmpty()}
       </div>
     );
   }
-  private renderFull(mouse: MouseType) {
-    const buttonClass = mouse.sex === "male" ? "collect-button male" : "collect-button female";
+  private renderFull(mouse: BackpackMouseType) {
+    const { backpack } = this.stores;
+    const { backpackMouse, clickMouse, clickClose } = this.props;
+    const backpackMouseIndex = backpack.getMouseIndex(backpackMouse);
+    const handleMouse = clickMouse ? clickMouse : this.handleClickMouse;
+    const handleClose = clickClose ? clickClose : this.handleClickRemove;
+    let buttonClass = mouse.sex === "male" ? "collect-button male" : "collect-button female";
+    buttonClass += this.isDeselected() ? " deselected" : "";
     const innerOutlineClass: string = mouse.isHeterozygote ? "inner-outline heterozygote" : "inner-outline";
     return (
       <div>
         <div className="collect-button-outline">
-          <div className={buttonClass}>
+          <div className={buttonClass} onClick={handleMouse}>
             <div className={innerOutlineClass}>
               <img src={mouse.baseImage} className="icon"/>
               <div className="label">{mouse.label}</div>
             </div>
           </div>
         </div>
-        <div className="x-close" onClick={this.handleClickRemove}>x</div>
-        <div className="index">{this.props.index + 1}</div>
+        <div className="x-close" onClick={handleClose}>x</div>
+        <div className="index">{backpackMouseIndex > -1 ? backpackMouseIndex + 1 : ""}</div>
       </div>
     );
   }
   private renderEmpty() {
+    const { backpack } = this.stores;
+    const { backpackMouse, clickEmpty } = this.props;
+    const backpackMouseIndex = backpack.getMouseIndex(backpackMouse);
+    const handleClick = clickEmpty ? clickEmpty : this.handleClickButton;
     return (
       <div>
         <div className="collect-button-outline uncollected">
-          <div className={"collect-button uncollected"} onClick={this.handleClickButton}>
+          <div className={"collect-button uncollected"} onClick={handleClick}>
             <div className={"inner-outline"}>
               <img src={UNCOLLECTED_IMAGE} className="icon"/>
             </div>
           </div>
         </div>
-        <div className="x-close uncollected"/>
-        <div className="index uncollected">{this.props.index + 1}</div>
+        <div className="index uncollected">{backpackMouseIndex > -1 ? backpackMouseIndex + 1 : ""}</div>
       </div>
     );
   }
   private handleClickButton = () => {
-   this.addTestMouseToBackpack();
+    // do nothing by default
   }
   private addTestMouseToBackpack = () => {
     const {backpack} = this.stores;
+    const {backpackMouse} = this.props;
+    if (backpackMouse) {
+      return;
+    }
+
     const randSex = Math.random() > .5 ? "male" : "female";
     const randGenotype = Math.random() > .5 ? (Math.random() > .5 ? "BB" : "Bb") :
                                                   (Math.random() > .5 ? "bB" : "bb");
-    backpack.addCollectedMouse(Mouse.create({sex: randSex, genotype: randGenotype, label: randGenotype}));
+    backpack.addCollectedMouse(BackpackMouse.create({sex: randSex, genotype: randGenotype, label: randGenotype}));
   }
   private handleClickRemove = () => {
     const {backpack} = this.stores;
-    backpack.removeCollectedMouse(this.props.index);
+    const {backpackMouse} = this.props;
+    const backpackIndex = backpack.getMouseIndex(backpackMouse);
+    if (backpackIndex > -1) {
+      backpack.removeCollectedMouse(backpackIndex);
+    }
+  }
+
+  private handleClickMouse = () => {
+    const { backpack } = this.stores;
+    const { backpackMouse } = this.props;
+    backpack.selectMouse(backpackMouse);
+  }
+  private isDeselected = () => {
+    const { backpack } = this.stores;
+    const { backpackMouse } = this.props;
+    return backpack.isDeselected(backpackMouse);
   }
 }

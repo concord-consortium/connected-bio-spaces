@@ -3,8 +3,9 @@ import * as React from "react";
 import { BaseComponent, IBaseProps } from "../base";
 import { TwoUpDisplayComponent } from "../two-up-display";
 import { FourUpDisplayComponent } from "../four-up-display";
-import OrganelleWrapper from "./cell-zoom/OrganelleWrapper";
 import { Chart } from "../charts/chart";
+
+import { CellZoomComponent } from "./cell-zoom/cell-zoom";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -14,28 +15,30 @@ interface IState {}
 export class CellZoomSpaceComponent extends BaseComponent<IProps, IState> {
 
   public render() {
-    const {cellZoom} = this.stores;
-    const graphTitle = "Graph";
+    const cellZoomComponent1 = this.getCellZoomRow(0);
+    const cellZoomComponent2 = this.getCellZoomRow(1);
 
-    const cellGraphPanel1 = <Chart title="Chart Test" chartData={cellZoom.rows[0].currentData}
-      chartType={"horizontalBar"} />;
-    const cellZoomComponent1 = <TwoUpDisplayComponent
-      leftTitle="Investigate: Cell"
-      leftPanel={<OrganelleWrapper elementName="organelle-wrapper-1" rowIndex={0}/>}
-      rightTitle={graphTitle}
-      rightPanel={cellGraphPanel1}
-    />;
-
-    const cellGraphPanel2 = <Chart title="Chart Test" chartData={cellZoom.rows[1].currentData}
-      chartType={"horizontalBar"} />;
-    const cellZoomComponent2 = <TwoUpDisplayComponent
-      leftTitle="Investigate: Cell"
-      leftPanel={<OrganelleWrapper elementName="organelle-wrapper-2" rowIndex={1}/>}
-      rightTitle={graphTitle}
-      rightPanel={cellGraphPanel2}
-    />;
     return (
       <FourUpDisplayComponent topRow={cellZoomComponent1} bottomRow={cellZoomComponent2} />
+    );
+  }
+
+  private getCellZoomRow(rowIndex: number) {
+    const { cellZoom } = this.stores;
+    const row = cellZoom.rows[rowIndex];
+    const { currentData } = row;
+
+    const graphTitle = "Graph";
+    const graphPanel = <Chart title="Chart Test" chartData={currentData}
+      chartType={"horizontalBar"} />;
+
+    return (
+      <TwoUpDisplayComponent
+        leftTitle="Investigate: Cell"
+        leftPanel={<CellZoomComponent rowIndex={rowIndex}/>}
+        rightTitle={graphTitle}
+        rightPanel={graphPanel}
+      />
     );
   }
 

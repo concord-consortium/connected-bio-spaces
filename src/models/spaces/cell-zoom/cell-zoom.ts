@@ -1,7 +1,8 @@
 import { types, Instance } from "mobx-state-tree";
-import { ColorType } from "../../mouse";
-import { CellMouseModel } from "../../../components/spaces/cell-zoom/cell-mouse";
-import { CellZoomRowModel, OrganelleType } from "./cell-zoom-row";
+import { ColorType, BackpackMouseType } from "../../backpack-mouse";
+import { CellMouseModel } from "./cell-mouse";
+import { CellZoomRowModel, OrganelleType, CellZoomRowModelType } from "./cell-zoom-row";
+import { BackpackModelType } from "../../backpack";
 
 export const kSubstanceNames = [
   "pheomelanin",
@@ -82,8 +83,35 @@ export const kOrganelleInfo: OrganelleInfo = {
 
 export const CellZoomModel = types
   .model("CellZoom", {
-    organisms: types.map(CellMouseModel),
-    rows: types.array(CellZoomRowModel)
+    cellOrganisms: types.array(CellMouseModel),
+    rows: types.optional(types.array(CellZoomRowModel),
+      [CellZoomRowModel.create(), CellZoomRowModel.create()])
+  })
+  .actions((self) => {
+    function clearRowBackpackMouse(rowIndex: number) {
+      const clearedCellMouse = self.rows[rowIndex].cellMouse;
+      self.rows[rowIndex] = CellZoomRowModel.create();
+
+      if (clearedCellMouse) {
+        if (!self.rows.some(row => row.cellMouse === clearedCellMouse)) {
+          self.cellOrganisms.remove(clearedCellMouse);
+        }
+      }
+    }
+
+    return {
+      clearRowBackpackMouse,
+      setRowBackpackMouse(rowIndex: number, backpackMouse: BackpackMouseType) {
+        let cellMouse = self.cellOrganisms.find((existingCellMouse) => {
+          return existingCellMouse.backpackMouse === backpackMouse;
+        });
+        if (!cellMouse) {
+          cellMouse = CellMouseModel.create({ backpackMouse });
+          self.cellOrganisms.push(cellMouse);
+        }
+        self.rows[rowIndex] = CellZoomRowModel.create({ cellMouse });
+      }
+    };
   });
 
 export type CellZoomModelType = Instance<typeof CellZoomModel>;

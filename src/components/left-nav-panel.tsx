@@ -6,7 +6,6 @@ import "./left-nav-panel.sass";
 import { ExploreButtonComponent } from "./explore-button";
 import { CollectButtonComponent } from "./collect-button";
 import { LegendComponent } from "./legend";
-import { Mouse } from "../models/mouse";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -63,13 +62,11 @@ export class LeftNavPanelComponent extends BaseComponent<IProps, IState> {
 
   private renderCollectButtons = () => {
     const {backpack} = this.stores;
-    const {ui} = this.stores;
     const collectedSlots = backpack.collectedMice.length;
     const emptySlots = backpack.maxSlots - collectedSlots;
-    const buttons = backpack.collectedMice.map((slot, index) => {
+    const buttons = backpack.collectedMice.map((collectedMouse, index) => {
                       return <CollectButtonComponent
-                               mouse={slot}
-                               index={index}
+                               backpackMouse={collectedMouse}
                                key={index}
                              />;
                     });
@@ -86,8 +83,7 @@ export class LeftNavPanelComponent extends BaseComponent<IProps, IState> {
   private renderEmptyCollectButton = (index: number) => {
     return (
       <CollectButtonComponent
-        mouse={undefined}
-        index={index}
+        backpackMouse={undefined}
         key={index}
       />
     );
