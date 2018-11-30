@@ -20,7 +20,6 @@ export class CollectButtonComponent extends BaseComponent<IProps, IState> {
     return (
       <div className="collect-button-holder">
         {mouse ? this.renderFull(mouse) : this.renderEmpty()}
-        <div className="index">{this.props.index + 1}</div>
       </div>
     );
   }
@@ -29,24 +28,31 @@ export class CollectButtonComponent extends BaseComponent<IProps, IState> {
     const innerOutlineClass: string = mouse.isHeterozygote ? "inner-outline heterozygote" : "inner-outline";
     return (
       <div>
-        <div className={buttonClass}>
-          <div className={innerOutlineClass}>
-            <img src={mouse.baseImage} className="icon"/>
-            <div className="label">{mouse.label}</div>
+        <div className="collect-button-outline">
+          <div className={buttonClass}>
+            <div className={innerOutlineClass}>
+              <img src={mouse.baseImage} className="icon"/>
+              <div className="label">{mouse.label}</div>
+            </div>
           </div>
         </div>
         <div className="x-close" onClick={this.handleClickRemove}>x</div>
+        <div className="index">{this.props.index + 1}</div>
       </div>
     );
   }
   private renderEmpty() {
     return (
       <div>
-        <div className={"collect-button uncollected"} onClick={this.handleClickButton}>
-          <div className={"inner-outline"}>
-            <img src={UNCOLLECTED_IMAGE} className="icon"/>
+        <div className="collect-button-outline uncollected">
+          <div className={"collect-button uncollected"} onClick={this.handleClickButton}>
+            <div className={"inner-outline"}>
+              <img src={UNCOLLECTED_IMAGE} className="icon"/>
+            </div>
           </div>
         </div>
+        <div className="x-close uncollected"/>
+        <div className="index uncollected">{this.props.index + 1}</div>
       </div>
     );
   }
@@ -58,7 +64,7 @@ export class CollectButtonComponent extends BaseComponent<IProps, IState> {
     const randSex = Math.random() > .5 ? "male" : "female";
     const randGenotype = Math.random() > .5 ? (Math.random() > .5 ? "BB" : "Bb") :
                                                   (Math.random() > .5 ? "bB" : "bb");
-    backpack.addCollectedMouse(Mouse.create({sex: randSex, genotype: randGenotype, label: "lbl"}));
+    backpack.addCollectedMouse(Mouse.create({sex: randSex, genotype: randGenotype, label: randGenotype}));
   }
   private handleClickRemove = () => {
     const {backpack} = this.stores;

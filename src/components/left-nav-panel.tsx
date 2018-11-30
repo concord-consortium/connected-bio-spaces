@@ -55,7 +55,7 @@ export class LeftNavPanelComponent extends BaseComponent<IProps, IState> {
         {ui.showDNASpace &&
         <ExploreButtonComponent
           space={"dna"}
-          title={"Protein/DNA"}
+          title={"DNA"}
         /> }
       </div>
     );

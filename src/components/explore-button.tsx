@@ -22,9 +22,14 @@ export class ExploreButtonComponent extends BaseComponent<IProps, IState> {
     const buttonClass = "explore-button " + classSuffix;
     const iconClass = "icon " + classSuffix;
     const titleClass = "title " + classSuffix;
+    const iconName = "#icon-explore-" + this.props.space;
     return (
       <div className={buttonClass} onClick={this.handleClickButton}>
-        <div className={iconClass} />
+        <div className={iconClass}>
+          <svg className="image">
+            <use xlinkHref={iconName} />
+          </svg>
+        </div>
         <div className={titleClass}>{this.props.title}</div>
       </div>
     );
