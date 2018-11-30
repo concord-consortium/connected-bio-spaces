@@ -20,8 +20,10 @@ export class CollectButtonComponent extends BaseComponent<IProps, IState> {
   public render() {
     const { backpack } = this.stores;
     const { backpackMouse } = this.props;
+    let className = "collect-button-holder";
+    if (!backpackMouse) className += " uncollected";
     return (
-      <div className="collect-button-holder">
+      <div className={className}>
         {backpackMouse ? this.renderFull(backpackMouse) : this.renderEmpty()}
       </div>
     );
@@ -69,7 +71,7 @@ export class CollectButtonComponent extends BaseComponent<IProps, IState> {
     );
   }
   private handleClickButton = () => {
-   this.addTestMouseToBackpack();
+    // do nothing by default
   }
   private addTestMouseToBackpack = () => {
     const {backpack} = this.stores;

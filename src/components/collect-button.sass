@@ -88,24 +88,21 @@
       font-size: $font-size-label2
       color: $color-nav-cerulean-dark2
 
-.collect-button-holder:hover
+.collect-button-holder:hover:not(.uncollected)
   cursor: pointer
-
-.collect-button-holder:hover .collect-button-outline.uncollected
-  background-color: $color-nav-cinder-light3
 
 .x-close:hover
   background-color: $color-nav-cerulean-dark1
 
 // styles below only for when we are in the backpack
 .left-nav-panel
-  .collect-button-holder:hover .collect-button-outline
+  .collect-button-holder:hover:not(.uncollected) .collect-button-outline
     background-color: $color-nav-cerulean-dark1
 
   .collect-button-holder:hover .x-close
     background-color: $color-nav-cerulean-dark1
 
-  .collect-button-holder
+  .collect-button-holder:not(.uncollected)
     .collect-button
       &:hover
         border-color: $color-nav-cerulean-dark2
