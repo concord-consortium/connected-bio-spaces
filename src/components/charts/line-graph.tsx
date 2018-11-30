@@ -18,14 +18,14 @@ const defaultOptions: ChartOptions = {
   },
   title: {
     display: true,
-    text: "",
+    text: "Data",
     fontSize: 22
   },
   legend: {
     display: true,
     position: "bottom",
   },
-  maintainAspectRatio: false,
+  maintainAspectRatio: true,
   scales: {
     display: false,
     yAxes: [{

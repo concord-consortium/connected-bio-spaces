@@ -78,7 +78,14 @@ export class ChartTest extends BaseComponent<IProps, IState> {
     points.push (DataPoint.create({ a1: this.rand(), a2: this.rand(), label: "delta" }));
     points.push (DataPoint.create({ a1: this.rand(), a2: this.rand(), label: "echo" }));
     points.push (DataPoint.create({ a1: this.rand(), a2: this.rand(), label: "foxtrot" }));
-    points.push (DataPoint.create({ a1: this.rand(), a2: this.rand(), label: "golf" }));
+    points.push(DataPoint.create({ a1: this.rand(), a2: this.rand(), label: "golf" }));
+    points.push (DataPoint.create({ a1: this.rand(), a2: this.rand(), label: "hotel" }));
+    points.push (DataPoint.create({ a1: this.rand(), a2: this.rand(), label: "india" }));
+    points.push (DataPoint.create({ a1: this.rand(), a2: this.rand(), label: "juliette" }));
+    points.push (DataPoint.create({ a1: this.rand(), a2: this.rand(), label: "kilo" }));
+    points.push (DataPoint.create({ a1: this.rand(), a2: this.rand(), label: "lima" }));
+    points.push (DataPoint.create({ a1: this.rand(), a2: this.rand(), label: "mike" }));
+    points.push (DataPoint.create({ a1: this.rand(), a2: this.rand(), label: "november" }));
     return points;
   }
 
