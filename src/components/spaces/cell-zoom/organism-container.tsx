@@ -52,10 +52,12 @@ export class OrganismContainer extends BaseComponent<IProps, IState> {
   private organismZoomedView = () => {
     const { zoomLevel } = this.state;
     const { rowIndex } = this.props;
+    const { cellZoom } = this.stores;
+    const { cellMouse } = cellZoom.rows[rowIndex];
 
     switch (zoomLevel) {
       case 0:
-        return <OrganismView rowIndex={rowIndex} />;
+        return <OrganismView backpackMouse={cellMouse && cellMouse.backpackMouse} />;
       case 1:
         return <CellZoomComponent rowIndex={rowIndex} />;
       default:

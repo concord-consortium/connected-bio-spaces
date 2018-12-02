@@ -2,11 +2,12 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { BaseComponent, IBaseProps } from "../../base";
 import "./organism-view.sass";
+import { BackpackMouseType } from "../../../models/backpack-mouse";
 
 const kDefaultMouseImage = "../../assets/mouse_beach.png";
 
 interface IProps extends IBaseProps {
-  rowIndex: number;
+  backpackMouse?: BackpackMouseType;
 }
 interface IState {
 }
@@ -16,23 +17,22 @@ interface IState {
 export class OrganismView extends BaseComponent<IProps, IState> {
 
   public render() {
-    const { backpack, cellZoom } = this.stores;
-    const { rowIndex } = this.props;
+    const { backpackMouse } = this.props;
+    const mouseImage = backpackMouse ? backpackMouse.baseImage : kDefaultMouseImage;
 
     const mouseStyle = {
-      backgroundImage: `url(${kDefaultMouseImage})`,
+      backgroundImage: `url(${mouseImage})`,
       backgroundRepeat: "no-repeat",
-      backgroundSize: "contain",
-      width: "256px",
-      height: "256px"
+      backgroundSize: "contain"
     };
-    if (backpack.collectedMice && backpack.collectedMice.length > 0) {
-      const mouse = backpack.collectedMice[0];
-      mouseStyle.backgroundImage = `url(${mouse.baseImage})`;
-    }
+
+    const mouseDescription = backpackMouse ? `Mouse: ${backpackMouse.baseColor}` : "";
 
     return (
-        <div className="organism-view" style={mouseStyle}>Mouse</div>
+      <div className="organism-view-container">
+        <div className="organism-description">{mouseDescription}</div>
+        <div className="organism-view" style={mouseStyle} />
+      </div>
     );
   }
 }
