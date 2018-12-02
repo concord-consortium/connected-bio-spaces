@@ -4,7 +4,7 @@ import { BaseComponent, IBaseProps } from "../../base";
 import "./organism-view.sass";
 import { BackpackMouseType } from "../../../models/backpack-mouse";
 
-const kDefaultMouseImage = "../../assets/mouse_beach.png";
+const kDefaultMouseImage = "../../assets/mouse_collect.png";
 
 interface IProps extends IBaseProps {
   backpackMouse?: BackpackMouseType;
@@ -31,7 +31,9 @@ export class OrganismView extends BaseComponent<IProps, IState> {
     return (
       <div className="organism-view-container">
         <div className="organism-description">{mouseDescription}</div>
-        <div className="organism-view" style={mouseStyle} />
+        {backpackMouse &&
+          <div className="organism-view" style={mouseStyle} />
+        }
       </div>
     );
   }

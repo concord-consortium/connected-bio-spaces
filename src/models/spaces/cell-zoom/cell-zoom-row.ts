@@ -71,6 +71,9 @@ export const CellZoomRowModel = types
       },
       setActiveAssay(organelle: OrganelleType) {
         self.assayedOrganelle = organelle;
+      },
+      setZoomLevel(zoomLevel: ZoomLevelType) {
+        self.zoomLevel = zoomLevel;
       }
     };
   });

@@ -7,12 +7,11 @@ import { CollectButtonComponent } from "../../collect-button";
 import { CellZoomComponent } from "../cell-zoom/cell-zoom";
 
 import "./organism-container.sass";
+import { ZoomLevel, ZoomLevelType } from "../../../models/spaces/cell-zoom/cell-zoom-row";
 interface IProps extends IBaseProps {
   rowIndex: number;
 }
-interface IState {
-  zoomLevel: number;
-}
+interface IState { }
 
 @inject("stores")
 @observer
@@ -43,22 +42,31 @@ export class OrganismContainer extends BaseComponent<IProps, IState> {
   }
 
   private zoomChange = (zoomChange: number) => {
-    const { zoomLevel } = this.state;
-    const newZoom = zoomLevel + zoomChange;
-    const nextZoom = newZoom > 1 ? 1 : newZoom < 0 ? 0 : newZoom;
-    this.setState({ zoomLevel: nextZoom });
+    const { cellZoom } = this.stores;
+    const { rowIndex } = this.props;
+    const cellZoomRow = cellZoom.rows[rowIndex];
+
+    // Add protein level to this list when ready
+    const availableZoomLevels: ZoomLevelType[] = ["organism", "cell"];
+    const maxZoom = availableZoomLevels.length - 1;
+
+    const current = availableZoomLevels.indexOf(cellZoomRow.zoomLevel);
+    const newZoom = current + zoomChange;
+    const nextIdx = newZoom > maxZoom ? maxZoom : newZoom < 0 ? 0 : newZoom;
+
+    cellZoomRow.setZoomLevel(availableZoomLevels[nextIdx]);
   }
 
   private organismZoomedView = () => {
-    const { zoomLevel } = this.state;
     const { rowIndex } = this.props;
     const { cellZoom } = this.stores;
+    const cellZoomRow = cellZoom.rows[rowIndex];
     const { cellMouse } = cellZoom.rows[rowIndex];
 
-    switch (zoomLevel) {
-      case 0:
+    switch (cellZoomRow.zoomLevel) {
+      case "organism":
         return <OrganismView backpackMouse={cellMouse && cellMouse.backpackMouse} />;
-      case 1:
+      case "cell":
         return <CellZoomComponent rowIndex={rowIndex} />;
       default:
         break;
