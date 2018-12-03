@@ -14,7 +14,8 @@ const chartData = {
       maxPoints: 100,
       fixedMin: 0,
       fixedMax: 100,
-      expandOnly: true
+      expandOnly: true,
+      fixedLabelRotation: 0
     },
     {
       name: "Tan mice",
@@ -23,7 +24,8 @@ const chartData = {
       maxPoints: 100,
       fixedMin: 0,
       fixedMax: 100,
-      expandOnly: true
+      expandOnly: true,
+      fixedLabelRotation: 0
     },
     {
       name: "Brown mice",
@@ -32,7 +34,8 @@ const chartData = {
       maxPoints: 100,
       fixedMin: 0,
       fixedMax: 100,
-      expandOnly: true
+      expandOnly: true,
+      fixedLabelRotation: 0
     }
   ]
  };

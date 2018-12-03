@@ -74,7 +74,7 @@ export const ChartDataSetModel = types
     // expandOnly is used for y-axis scaling. When requesting min/max point values,
     // if this is set the a2 / y axis max returns the max of the full data set, not just the visiblePoints
     expandOnly: false,
-
+    fixedLabelRotation: types.maybe(types.number),
     dataStartIdx: types.maybe(types.number)
   })
   .views(self => ({

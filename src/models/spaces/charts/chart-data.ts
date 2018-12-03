@@ -13,6 +13,11 @@ export const ChartDataModel = types
         return self.dataSets[0].dataLabels;
       } else return [];
     },
+    get dataLabelRotation() {
+      if (self.dataSets && self.dataSets.length > 0) {
+        return self.dataSets[0].fixedLabelRotation;
+      } else return;
+    },
     get minMaxAll() {
       const maxA1Values: number[] = [];
       const maxA2Values: number[] = [];

@@ -89,6 +89,10 @@ const lineData = (chartData: ChartDataModelType) => {
       dset.pointHoverBackgroundColor = colors.map(c => hexToRGBValue(c, 1.0));
       dset.pointHoverBorderColor = colors.map(c => hexToRGBValue(c, 1.0));
     }
+    if (d.fixedLabelRotation) {
+      dset.minRotation = d.fixedLabelRotation;
+      dset.maxRotation = d.fixedLabelRotation;
+    }
     lineDatasets.push(dset);
   }
 
@@ -131,7 +135,9 @@ export class LineGraph extends React.Component<ILineProps> {
           display: true,
           ticks: {
             min: minMaxValues.minA1,
-            max: minMaxValues.maxA1
+            max: minMaxValues.maxA1,
+            minRotation: chartData.dataLabelRotation,
+            maxRotation: chartData.dataLabelRotation
           }
         }]
       }
