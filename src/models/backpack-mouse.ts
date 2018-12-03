@@ -37,7 +37,7 @@ export const BackpackMouse = types
         case "bb":
           return "assets/mouse_beach.png";
         default:
-          return "assets/sandrat-tan.png";
+          return "assets/mouse_tan.png";
       }
     },
     get isHeterozygote(): boolean {
