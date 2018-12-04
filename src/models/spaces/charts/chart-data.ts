@@ -40,6 +40,14 @@ export const ChartDataModel = types
     },
     get nextDataSeriesColor() {
       return ChartColors[self.dataSets.length];
+    },
+
+    get maxPoints() {
+      return self.dataSets[0].maxPoints;
+    },
+
+    get pointCount() {
+      return self.dataSets[0].dataPoints.length;
     }
   }))
   .extend(self => {
@@ -53,7 +61,9 @@ export const ChartDataModel = types
     function setDataSetSubset(idx: number, maxPoints: number) {
       self.dataSets.forEach(d => {
         d.subsetPoints(idx);
-        d.setMaxDataPoints(maxPoints);
+        if (self.maxPoints !== maxPoints) {
+          d.setMaxDataPoints(maxPoints);
+        }
       });
     }
     // To fetch all data from all datasets, remove any subset index points and set the max number of points to -1

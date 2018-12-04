@@ -69,8 +69,10 @@ export const ChartDataSetModel = types
     backgroundOpacity: types.maybe(types.number),
     // If maxPoints is 0 we will always work with the entire data set
     maxPoints: types.optional(types.number, -1),
-    fixedMin: types.maybe(types.number),
-    fixedMax: types.maybe(types.number),
+    fixedMinA1: types.maybe(types.number),
+    fixedMaxA1: types.maybe(types.number),
+    fixedMinA2: types.maybe(types.number),
+    fixedMaxA2: types.maybe(types.number),
     // expandOnly is used for y-axis scaling. When requesting min/max point values,
     // if this is set the a2 / y axis max returns the max of the full data set, not just the visiblePoints
     expandOnly: false,
@@ -111,17 +113,21 @@ export const ChartDataSetModel = types
     },
     // Determine minimum and maximum values on each axis
     get maxA1(): number | undefined {
-      if (self.fixedMax !== undefined && self.dataPoints.length <= self.fixedMax) {
-        return self.fixedMax;
+      if (self.fixedMaxA1 !== undefined && self.dataPoints.length <= self.fixedMaxA1) {
+        return self.fixedMaxA1;
       } else if (!self.visibleDataPoints || self.visibleDataPoints.length === 0) {
-        return defaultMax;
+        if (self.maxPoints) {
+          return self.maxPoints;
+        } else {
+          return defaultMax;
+        }
       } else {
         return Math.max(...self.visibleDataPoints.map(p => p.a1));
       }
     },
     get maxA2(): number | undefined {
-      if (self.fixedMax !== undefined) {
-        return self.fixedMax;
+      if (self.fixedMaxA2 !== undefined) {
+        return self.fixedMaxA2;
       } else if (!self.visibleDataPoints || self.visibleDataPoints.length === 0) {
         return defaultMax;
       }
@@ -134,15 +140,17 @@ export const ChartDataSetModel = types
       }
     },
     get minA1(): number | undefined {
-      if (!self.visibleDataPoints || self.visibleDataPoints.length === 0) {
+      if (self.fixedMinA1 !== undefined) {
+        return self.fixedMinA1;
+      } else if (!self.visibleDataPoints || self.visibleDataPoints.length === 0) {
         return defaultMin;
       } else {
         return Math.min(...self.visibleDataPoints.map(p => p.a1));
       }
     },
     get minA2(): number | undefined {
-      if (self.fixedMin !== undefined) {
-        return self.fixedMin;
+      if (self.fixedMinA2 !== undefined) {
+        return self.fixedMinA2;
       } else if (!self.visibleDataPoints || self.visibleDataPoints.length === 0) {
         return defaultMin;
       } else {

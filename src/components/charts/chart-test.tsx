@@ -55,7 +55,7 @@ export class ChartTest extends BaseComponent<IProps, IState> {
             <option value={"bar"} data-test="bar-option">Bar</option>
           </select>
           <div>
-            <Chart title="Chart Test" chartData={chartData} chartType={chartType} />
+            <Chart title="Chart Test" chartData={chartData} chartType={chartType} isPlaying={false} />
           </div>
         </div>
         <div className="footer"/>

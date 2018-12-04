@@ -11,9 +11,9 @@ const chartData = {
       name: "White mice",
       dataPoints: [],
       color: "#f4ce83",
-      maxPoints: 100,
-      fixedMin: 0,
-      fixedMax: 100,
+      maxPoints: 20,
+      fixedMinA2: 0,
+      fixedMaxA2: 50,
       expandOnly: true,
       fixedLabelRotation: 0
     },
@@ -21,9 +21,9 @@ const chartData = {
       name: "Tan mice",
       dataPoints: [],
       color: "#db9e26",
-      maxPoints: 100,
-      fixedMin: 0,
-      fixedMax: 100,
+      maxPoints: 20,
+      fixedMinA2: 0,
+      fixedMaxA2: 50,
       expandOnly: true,
       fixedLabelRotation: 0
     },
@@ -31,9 +31,9 @@ const chartData = {
       name: "Brown mice",
       dataPoints: [],
       color: "#795423",
-      maxPoints: 100,
-      fixedMin: 0,
-      fixedMax: 100,
+      maxPoints: 20,
+      fixedMinA2: 0,
+      fixedMaxA2: 50,
       expandOnly: true,
       fixedLabelRotation: 0
     }

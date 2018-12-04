@@ -33,13 +33,14 @@ export const PopulationsModel = types
   .extend(self => {
 
     function updateIsPlaying() {
-      self.isPlaying = self.model.interactive.isPlaying;
-      // on pause, remove dataset point limits for chart rendering
-      const d: ChartDataModelType = self.model.chartData;
-      if (!self.isPlaying) {
-        d.allData();
-      } else {
-        d.setDataSetSubset(-1, 100);
+      if (self.isPlaying !== self.model.interactive.isPlaying) {
+        self.isPlaying = self.model.interactive.isPlaying;
+
+        if (self.isPlaying) {
+          // clear any subset information and return to viewing the live tail
+          const d: ChartDataModelType = self.model.chartData;
+          d.setDataSetSubset(-1, d.maxPoints);
+        }
       }
     }
     Events.addEventListener(Environment.EVENTS.START, updateIsPlaying);

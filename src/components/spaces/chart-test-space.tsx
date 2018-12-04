@@ -3,7 +3,7 @@ import * as React from "react";
 import { BaseComponent, IBaseProps } from "../base";
 import { TwoUpDisplayComponent } from "../two-up-display";
 
-import { PopulationsComponent } from "./populations/populations";
+import { PopulationsComponent } from "./populations/populations-container";
 import { ChartTest } from "../charts/chart-test";
 
 interface IProps extends IBaseProps {}

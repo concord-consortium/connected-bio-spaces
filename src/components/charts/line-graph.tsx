@@ -5,12 +5,17 @@ import { ChartDataModelType } from "../../models/spaces/charts/chart-data";
 import { ChartOptions } from "chart.js";
 import { ChartColors } from "../../models/spaces/charts/chart-data-set";
 import { hexToRGBValue } from "../../utilities/color-utils";
+import { LineChartControls } from "./line-chart-controls";
+import { BaseComponent } from "../base";
 
 interface ILineProps {
   chartData: ChartDataModelType;
   width?: number;
   height?: number;
+  isPlaying: boolean;
 }
+
+interface ILineState { }
 
 const defaultOptions: ChartOptions = {
   animation: {
@@ -38,7 +43,7 @@ const defaultOptions: ChartOptions = {
       display: false,
       ticks: {
         min: 0,
-        max: 100
+        max: 20
       }
     }]
   },
@@ -105,13 +110,14 @@ const lineData = (chartData: ChartDataModelType) => {
 };
 
 @observer
-export class LineGraph extends React.Component<ILineProps> {
+export class LineGraph extends BaseComponent<ILineProps, ILineState> {
   constructor(props: ILineProps) {
     super(props);
   }
 
   public render() {
-    const { chartData, width, height } = this.props;
+    const { chartData, width, height, isPlaying } = this.props;
+
     const chartDisplay = lineData(chartData);
     const graphs: JSX.Element[] = [];
     const minMaxValues = chartData.minMaxAll;
@@ -158,6 +164,7 @@ export class LineGraph extends React.Component<ILineProps> {
     return (
       <div className="line-chart-container" data-test="line-graph">
         {graphs}
+        <LineChartControls chartData={chartData} isPlaying={isPlaying} />
       </div>
     );
   }
