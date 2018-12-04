@@ -1,13 +1,22 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
+import { SizeMe } from "react-sizeme";
 import { BaseComponent, IBaseProps } from "../../base";
 import { ZoomControl } from "../../zoom-control";
 import { OrganismView } from "./organism-view";
 import { CollectButtonComponent } from "../../collect-button";
 
 import "./organisms-container.sass";
-import { ZoomLevel, ZoomLevelType } from "../../../models/spaces/organisms/organisms-row";
+import { ZoomLevelType, OrganismsRowModelType } from "../../../models/spaces/organisms/organisms-row";
 import { OrganelleWrapper } from "./organelle-wrapper";
+
+interface SizeMeProps {
+  size?: {
+    width: number | null;
+    height: number | null;
+  };
+}
+
 interface IProps extends IBaseProps {
   rowIndex: number;
 }
@@ -24,8 +33,8 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
   public render() {
     const { rowIndex } = this.props;
     const { organisms } = this.stores;
-    const { organismsMouse } = organisms.rows[rowIndex];
-    const organismView = this.organismZoomedView();
+    const organismsRow = organisms.rows[rowIndex];
+    const { organismsMouse, zoomLevel } = organismsRow;
 
     return (
       <div className="organism-view-container" data-test="organism-view-container">
@@ -35,7 +44,11 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
           clickEmpty={this.clickEmpty}
           clickClose={this.clickClose}
         />
-        {organismView}
+        <SizeMe monitorHeight={true}>
+          {(sizeProps: SizeMeProps) => {
+            return  this.organismZoomedView(organismsRow, zoomLevel, rowIndex, sizeProps);
+          }}
+        </SizeMe>
         <ZoomControl handleZoom={this.zoomChange} />
       </div>
     );
@@ -57,21 +70,22 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
     organismsRow.setZoomLevel(availableZoomLevels[nextIdx]);
   }
 
-  private organismZoomedView = () => {
-    const { rowIndex } = this.props;
-    const { organisms } = this.stores;
-    const organismsRow = organisms.rows[rowIndex];
-    const { organismsMouse } = organisms.rows[rowIndex];
+  // We explicitly pass down organismsRow and zoomLevel separately, or MST won't correctly attach the observers
+  // due to this function being nested inside the SizeMe component.
+  private organismZoomedView = (organismsRow: OrganismsRowModelType, zoomLevel: ZoomLevelType, rowIndex: number,
+                                { size }: SizeMeProps) => {
+    const { organismsMouse } = organismsRow;
+    const width = size && size.width ? size.width : 0;
 
-    switch (organismsRow.zoomLevel) {
+    switch (zoomLevel) {
       case "organism":
-        return <OrganismView backpackMouse={organismsMouse && organismsMouse.backpackMouse} />;
+        return <OrganismView backpackMouse={organismsMouse && organismsMouse.backpackMouse} width={width}/>;
       case "cell":
         return (
           <div className="cell-zoom-panel" data-test="cell-zoon-panel">
             {
               organismsMouse != null &&
-                <OrganelleWrapper elementName={`organelle-wrapper-${rowIndex}`} rowIndex={rowIndex}/>
+                <OrganelleWrapper elementName={`organelle-wrapper-${rowIndex}`} rowIndex={rowIndex} width={width}/>
             }
           </div>
         );

@@ -16,6 +16,7 @@ import { OrganelleType, ModeType } from "../../../models/spaces/organisms/organi
 interface OrganelleWrapperProps {
   elementName: string;
   rowIndex: number;
+  width: number;
 }
 
 interface OrganelleWrapperState {
@@ -97,7 +98,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
 
     modelDef.container = {
       elId: this.props.elementName,
-      width: MODEL_WIDTH,
+      width: this.props.width ? Math.min(this.props.width, MODEL_WIDTH) : MODEL_WIDTH,
       height: MODEL_HEIGHT
     };
 
@@ -226,7 +227,8 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     ));
     // const dropperCursor = this.state.hoveredOrganelle && this.isModeDropper(rootStore.mode);
     const dropperCursor = false;
-    const style = {height: MODEL_HEIGHT, width: MODEL_WIDTH};
+    const width = this.props.width ? Math.min(this.props.width, MODEL_WIDTH) : MODEL_WIDTH;
+    const style = {height: MODEL_HEIGHT, width};
     return (
       <div className={"model-wrapper" + (dropperCursor ? " dropper" : "")} style={style}>
         <div id={this.props.elementName} className="model" onMouseLeave={this.resetHoveredOrganelle}/>
