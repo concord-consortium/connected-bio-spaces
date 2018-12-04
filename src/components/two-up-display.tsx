@@ -29,11 +29,11 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
 
   private renderLeftPanel() {
     return (
-      <div className="two-up-panel left-abutment" data-test="two-up-left-panel">
-        <div className="header" data-test="two-up-header">
-          <div className="title" data-test="two-up-title">{this.props.leftTitle}</div>
+      <div className="two-up-panel left-abutment" data-test="left-panel">
+        <div className="header" data-test="left-header">
+          <div className="title" data-test="left-title">{this.props.leftTitle}</div>
         </div>
-        <div className="content" data-test="two-up-content">
+        <div className="content" data-test="left-content">
           {this.props.leftPanel}
         </div>
       </div>
@@ -43,19 +43,19 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
   private renderRightPanel() {
     return (
       <div className="two-up-panel right-abutment">
-        <div className="header">
+        <div className="header" data-test="right-header">
           {
             this.props.rightIcon ?
               <div className="button-holder" onClick={this.handleClickRightIcon}>
-                <svg className="button">
+                <svg className="button" data-test="right-button">
                   <use xlinkHref={this.props.rightIcon} />
                 </svg>
               </div>
               : null
             }
-          <div className="title">{this.props.rightTitle}</div>
+          <div className="title" data-test="right-title">{this.props.rightTitle}</div>
         </div>
-        <div className="content">
+        <div className="content" data-test="right-content">
           {this.props.rightPanel}
         </div>
       </div>

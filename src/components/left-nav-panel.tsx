@@ -40,21 +40,25 @@ export class LeftNavPanelComponent extends BaseComponent<IProps, IState> {
         <ExploreButtonComponent
           space={"populations"}
           title={"Population"}
+          data-test="population-button"
         /> }
         {ui.showBreedingSpace &&
         <ExploreButtonComponent
           space={"breeding"}
           title={"Breeding"}
+          data-test="breeding-button"
         /> }
         {ui.showOrganismSpace &&
         <ExploreButtonComponent
           space={"organism"}
           title={"Organism"}
+          data-test="organism-button"
         /> }
         {ui.showDNASpace &&
         <ExploreButtonComponent
           space={"dna"}
           title={"DNA"}
+          data-test="dna-button"
         /> }
       </div>
     );

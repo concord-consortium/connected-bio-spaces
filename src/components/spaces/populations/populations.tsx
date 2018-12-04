@@ -39,7 +39,7 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
 
     if (populations && populations.interactive) {
 
-      const buttons = populations.toolbarButtons.map( button => {
+      const buttons = populations.toolbarButtons.map( (button, i) => {
         const type = button.type || "button";
         switch (type) {
           case "checkbox":
@@ -55,7 +55,11 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
             );
           case "button":
           default:
-            return (<button key={button.title} onClick={button.action}>{button.title}</button>);
+            return (
+              <button key={button.title} onClick={button.action} data-test={button.title.replace(/ /g, "-")}>
+                {button.title}
+              </button>
+            );
         }
       });
 
@@ -74,15 +78,16 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
                       onAgentMouseEvent={this.handleAgentClicked} />
                   : null
                 }
-                <div className="populations-toolbar">
-                  <button onClick={this.handleClickRunButton}>{runButtonLabel}</button>
-                  <button onClick={this.handleClickResetButton}>Reset</button>
+                <div className="populations-toolbar" data-test="pop-toolbar">
+                  <button onClick={this.handleClickRunButton} data-test="run-button">{runButtonLabel}</button>
+                  <button onClick={this.handleClickResetButton} data-test="reset-button">Reset</button>
                   <div className="two-state-button">
                     <label>
                       <input
                         type="checkbox"
                         checked={this.state.selectMode}
-                        onChange={this.handleClickSelect} />
+                        onChange={this.handleClickSelect}
+                        data-test="select-button"/>
                       <span>Select</span>
                     </label>
                   </div>
