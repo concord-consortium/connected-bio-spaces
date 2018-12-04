@@ -2,7 +2,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { BaseComponent, IBaseProps } from "../base";
 import { TwoUpDisplayComponent } from "../two-up-display";
-import { PopulationsComponent } from "./populations/populations";
+import { PopulationsComponent } from "./populations/populations-container";
 import { Chart } from "../charts/chart";
 
 interface IProps extends IBaseProps {}

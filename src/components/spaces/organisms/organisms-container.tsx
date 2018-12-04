@@ -4,10 +4,10 @@ import { BaseComponent, IBaseProps } from "../../base";
 import { ZoomControl } from "../../zoom-control";
 import { OrganismView } from "./organism-view";
 import { CollectButtonComponent } from "../../collect-button";
-import { CellZoomComponent } from "../cell-zoom/cell-zoom";
 
-import "./organism-container.sass";
-import { ZoomLevel, ZoomLevelType } from "../../../models/spaces/cell-zoom/cell-zoom-row";
+import "./organisms-container.sass";
+import { ZoomLevel, ZoomLevelType } from "../../../models/spaces/organisms/organisms-row";
+import { OrganelleWrapper } from "./organelle-wrapper";
 interface IProps extends IBaseProps {
   rowIndex: number;
 }
@@ -15,7 +15,7 @@ interface IState { }
 
 @inject("stores")
 @observer
-export class OrganismContainer extends BaseComponent<IProps, IState> {
+export class OrganismsContainer extends BaseComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = { zoomLevel: 1 };
@@ -23,14 +23,14 @@ export class OrganismContainer extends BaseComponent<IProps, IState> {
 
   public render() {
     const { rowIndex } = this.props;
-    const { cellZoom } = this.stores;
-    const { cellMouse } = cellZoom.rows[rowIndex];
+    const { organisms } = this.stores;
+    const { organismsMouse } = organisms.rows[rowIndex];
     const organismView = this.organismZoomedView();
 
     return (
       <div className="organism-view-container" data-test="organism-view-container">
         <CollectButtonComponent
-          backpackMouse={cellMouse && cellMouse.backpackMouse}
+          backpackMouse={organismsMouse && organismsMouse.backpackMouse}
           clickMouse={this.clickMouse}
           clickEmpty={this.clickEmpty}
           clickClose={this.clickClose}
@@ -42,32 +42,39 @@ export class OrganismContainer extends BaseComponent<IProps, IState> {
   }
 
   private zoomChange = (zoomChange: number) => {
-    const { cellZoom } = this.stores;
+    const { organisms } = this.stores;
     const { rowIndex } = this.props;
-    const cellZoomRow = cellZoom.rows[rowIndex];
+    const organismsRow = organisms.rows[rowIndex];
 
     // Add protein level to this list when ready
     const availableZoomLevels: ZoomLevelType[] = ["organism", "cell"];
     const maxZoom = availableZoomLevels.length - 1;
 
-    const current = availableZoomLevels.indexOf(cellZoomRow.zoomLevel);
+    const current = availableZoomLevels.indexOf(organismsRow.zoomLevel);
     const newZoom = current + zoomChange;
     const nextIdx = newZoom > maxZoom ? maxZoom : newZoom < 0 ? 0 : newZoom;
 
-    cellZoomRow.setZoomLevel(availableZoomLevels[nextIdx]);
+    organismsRow.setZoomLevel(availableZoomLevels[nextIdx]);
   }
 
   private organismZoomedView = () => {
     const { rowIndex } = this.props;
-    const { cellZoom } = this.stores;
-    const cellZoomRow = cellZoom.rows[rowIndex];
-    const { cellMouse } = cellZoom.rows[rowIndex];
+    const { organisms } = this.stores;
+    const organismsRow = organisms.rows[rowIndex];
+    const { organismsMouse } = organisms.rows[rowIndex];
 
-    switch (cellZoomRow.zoomLevel) {
+    switch (organismsRow.zoomLevel) {
       case "organism":
-        return <OrganismView backpackMouse={cellMouse && cellMouse.backpackMouse} />;
+        return <OrganismView backpackMouse={organismsMouse && organismsMouse.backpackMouse} />;
       case "cell":
-        return <CellZoomComponent rowIndex={rowIndex} />;
+        return (
+          <div className="cell-zoom-panel">
+            {
+              organismsMouse != null &&
+                <OrganelleWrapper elementName={`organelle-wrapper-${rowIndex}`} rowIndex={rowIndex}/>
+            }
+          </div>
+        );
       default:
         break;
     }
@@ -78,18 +85,18 @@ export class OrganismContainer extends BaseComponent<IProps, IState> {
   }
 
   private clickEmpty = () => {
-    const { backpack, cellZoom } = this.stores;
+    const { backpack, organisms } = this.stores;
     const { rowIndex } = this.props;
     const { activeMouse } = backpack;
     if (activeMouse != null) {
-      cellZoom.setRowBackpackMouse(rowIndex, activeMouse);
+      organisms.setRowBackpackMouse(rowIndex, activeMouse);
       backpack.deselectMouse();
     }
   }
 
   private clickClose = () => {
-    const { cellZoom } = this.stores;
+    const { organisms } = this.stores;
     const { rowIndex } = this.props;
-    cellZoom.clearRowBackpackMouse(rowIndex);
+    organisms.clearRowBackpackMouse(rowIndex);
   }
 }

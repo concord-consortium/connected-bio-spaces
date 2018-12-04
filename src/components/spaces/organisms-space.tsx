@@ -5,31 +5,31 @@ import { TwoUpDisplayComponent } from "../two-up-display";
 import { FourUpDisplayComponent } from "../four-up-display";
 import { Chart } from "../charts/chart";
 
-import { OrganismContainer } from "./cell-zoom/organism-container";
+import { OrganismsContainer } from "./organisms/organisms-container";
 
 interface IProps extends IBaseProps {}
 interface IState {}
 
 @inject("stores")
 @observer
-export class CellZoomSpaceComponent extends BaseComponent<IProps, IState> {
+export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = { topZoom: 1, bottomZoom: 0 };
 
   }
   public render() {
-    const cellZoomComponent1 = this.getCellZoomRow(0);
-    const cellZoomComponent2 = this.getCellZoomRow(1);
+    const organismsComponent1 = this.getOrganismsRow(0);
+    const organismsComponent2 = this.getOrganismsRow(1);
 
     return (
-      <FourUpDisplayComponent topRow={cellZoomComponent1} bottomRow={cellZoomComponent2} />
+      <FourUpDisplayComponent topRow={organismsComponent1} bottomRow={organismsComponent2} />
     );
   }
 
-  private getCellZoomRow(rowIndex: number) {
-    const { cellZoom } = this.stores;
-    const row = cellZoom.rows[rowIndex];
+  private getOrganismsRow(rowIndex: number) {
+    const { organisms } = this.stores;
+    const row = organisms.rows[rowIndex];
     const { currentData } = row;
 
     const graphTitle = "Graph";
@@ -39,7 +39,7 @@ export class CellZoomSpaceComponent extends BaseComponent<IProps, IState> {
     return (
       <TwoUpDisplayComponent
         leftTitle="Investigate: Cell"
-        leftPanel={<OrganismContainer rowIndex={rowIndex}/>}
+        leftPanel={<OrganismsContainer rowIndex={rowIndex}/>}
         rightTitle={graphTitle}
         rightPanel={graphPanel}
       />

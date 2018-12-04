@@ -4,7 +4,7 @@ import { PopulationsView } from "populations-react";
 import { SizeMe } from "react-sizeme";
 import { BaseComponent, IBaseProps } from "../../base";
 
-import "./populations.sass";
+import "./populations-container.sass";
 import { ToolbarButton } from "../../../models/spaces/populations/populations";
 import { AgentEnvironmentMouseEvent } from "populations.js";
 import { BackpackMouse } from "../../../models/backpack-mouse";
