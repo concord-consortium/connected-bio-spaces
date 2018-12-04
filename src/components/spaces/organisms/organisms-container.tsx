@@ -4,10 +4,10 @@ import { BaseComponent, IBaseProps } from "../../base";
 import { ZoomControl } from "../../zoom-control";
 import { OrganismView } from "./organism-view";
 import { CollectButtonComponent } from "../../collect-button";
-import { CellZoomComponent } from "./cell-view";
 
 import "./organisms-container.sass";
 import { ZoomLevel, ZoomLevelType } from "../../../models/spaces/organisms/organisms-row";
+import { OrganelleWrapper } from "./organelle-wrapper";
 interface IProps extends IBaseProps {
   rowIndex: number;
 }
@@ -67,7 +67,14 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
       case "organism":
         return <OrganismView backpackMouse={organismsMouse && organismsMouse.backpackMouse} />;
       case "cell":
-        return <CellZoomComponent rowIndex={rowIndex} />;
+        return (
+          <div className="cell-zoom-panel">
+            {
+              organismsMouse != null &&
+                <OrganelleWrapper elementName={`organelle-wrapper-${rowIndex}`} rowIndex={rowIndex}/>
+            }
+          </div>
+        );
       default:
         break;
     }
