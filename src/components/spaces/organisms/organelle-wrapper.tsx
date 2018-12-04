@@ -7,13 +7,15 @@ import { observer, inject } from "mobx-react";
 // import { rootStore, Mode } from "../stores/RootStore";
 import { createModel } from "organelle";
 import * as Cell from "./cell-models/cell.json";
+import * as Receptor from "./cell-models/receptor.json";
 import { kOrganelleInfo } from "../../../models/spaces/organisms/organisms-space";
 import { BaseComponent } from "../../base";
 // import { SubstanceType } from "../models/Substance";
 import "./organelle-wrapper.sass";
-import { OrganelleType, ModeType } from "../../../models/spaces/organisms/organisms-row.js";
+import { OrganelleType, ModeType, ZoomLevelType } from "../../../models/spaces/organisms/organisms-row.js";
 
 interface OrganelleWrapperProps {
+  zoomLevel: ZoomLevelType;
   elementName: string;
   rowIndex: number;
   width: number;
@@ -75,10 +77,8 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
         visibleModes: ["normal"]
       }
     };
-    // private modelDefs: any = {
-    //   Cell: CellModels.cell,
-    //   Protein: CellModels.receptor
-    // };
+  private modelDomRef: React.RefObject<{}>|null;
+  private setModelDomRef: (element: any) => void;
 
   constructor(props: OrganelleWrapperProps) {
     super(props);
@@ -88,27 +88,22 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     };
     this.completeLoad = this.completeLoad.bind(this);
     this.resetHoveredOrganelle = this.resetHoveredOrganelle.bind(this);
+
+    this.modelDomRef = null;
+    this.setModelDomRef = (element) => {
+      this.modelDomRef = element;
+    };
   }
 
   public componentDidMount() {
-    const { organisms } = this.stores;
-    const row = organisms.rows[this.props.rowIndex];
-    const { modelProperties } = row.organismsMouse as any;
-    const modelDef: any = Cell;
+    this.createNewModel();
+  }
 
-    modelDef.container = {
-      elId: this.props.elementName,
-      width: this.props.width ? Math.min(this.props.width, MODEL_WIDTH) : MODEL_WIDTH,
-      height: MODEL_HEIGHT
-    };
-
-    modelDef.properties = modelProperties;
-
-    createModel(modelDef).then((m: any) => {
-      // appStore.boxes.get(this.props.boxId).setModel(m);
-      this.model = m;
-      this.completeLoad();
-    });
+  public componentWillReact() {
+    const zoomLevel = this.props.zoomLevel;
+    if (this.model && zoomLevel !== this.model.zoomLevel) {
+      this.createNewModel();
+    }
   }
 
   public componentWillUnmount() {
@@ -231,11 +226,42 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     const style = {height: MODEL_HEIGHT, width};
     return (
       <div className={"model-wrapper" + (dropperCursor ? " dropper" : "")} style={style}>
-        <div id={this.props.elementName} className="model" onMouseLeave={this.resetHoveredOrganelle}/>
+        <div id={this.props.elementName} className="model" onMouseLeave={this.resetHoveredOrganelle}
+          ref={this.setModelDomRef} />
         {hoverDiv}
         {droppers}
       </div>
     );
+  }
+
+  private createNewModel() {
+    if (this.model) {
+      this.model.destroy();
+      if (this.modelDomRef) {
+        ((this.modelDomRef as unknown) as Element).innerHTML = "";
+      }
+    }
+    const {zoomLevel } = this.props;
+    const { organisms } = this.stores;
+    const row = organisms.rows[this.props.rowIndex];
+    const { organismsMouse } = row;
+    const { modelProperties } = organismsMouse!;
+    const modelDef: any = zoomLevel === "cell" ? Cell : Receptor;
+
+    modelDef.container = {
+      elId: this.props.elementName,
+      width: this.props.width ? Math.min(this.props.width, MODEL_WIDTH) : MODEL_WIDTH,
+      height: MODEL_HEIGHT
+    };
+
+    modelDef.properties = modelProperties;
+
+    createModel(modelDef).then((m: any) => {
+      // appStore.boxes.get(this.props.boxId).setModel(m);
+      this.model = m;
+      this.model.zoomLevel = zoomLevel;
+      this.completeLoad();
+    });
   }
 
   private getModel() {
