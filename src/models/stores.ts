@@ -2,9 +2,9 @@ import { UIModel, UIModelType, createUIModel } from "./ui";
 import { PopulationsModelType, createPopulationsModel } from "./spaces/populations/populations";
 import { BackpackModel, BackpackModelType } from "./backpack";
 import { flatten } from "flat";
-import { CellZoomModel, CellZoomModelType } from "./spaces/cell-zoom/cell-zoom";
-import { CellMouseModel } from "./spaces/cell-zoom/cell-mouse";
-import { CellZoomRowModel } from "./spaces/cell-zoom/cell-zoom-row";
+import { OrganismsSpaceModel, OrganismsSpaceModelType } from "./spaces/organisms/organisms-space";
+import { OrganismsMouseModel } from "./spaces/organisms/organisms-mouse";
+import { OrganismsRowModel } from "./spaces/organisms/organisms-row";
 import { BackpackMouse } from "./backpack-mouse";
 
 export type Curriculum = "mouse";
@@ -15,14 +15,14 @@ export interface IStores {
   ui: UIModelType;
   populations: PopulationsModelType;
   backpack: BackpackModelType;
-  cellZoom: CellZoomModelType;
+  organisms: OrganismsSpaceModelType;
 }
 
 export interface ICreateStores {
   ui?: UIModelType;
   populations?: PopulationsModelType;
   backpack?: BackpackModelType;
-  cellZoom?: CellZoomModelType;
+  organisms?: OrganismsSpaceModelType;
 }
 
 export function createStores(params: ICreateStores, authoring: any): IStores {
@@ -32,6 +32,6 @@ export function createStores(params: ICreateStores, authoring: any): IStores {
       createPopulationsModel(authoring.curriculum, flatten(authoring.populations)),
     backpack: params && params.backpack
       || BackpackModel.create({}),
-    cellZoom: params && params.cellZoom || CellZoomModel.create()
+    organisms: params && params.organisms || OrganismsSpaceModel.create()
   };
 }

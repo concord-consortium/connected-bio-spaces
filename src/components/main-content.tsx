@@ -5,12 +5,12 @@ import { BaseComponent, IBaseProps } from "./base";
 import "./main-content.sass";
 import { PopulationsSpaceComponent } from "./spaces/populations-space";
 import { SpaceType } from "../models/ui";
-import { CellZoomSpaceComponent } from "./spaces/cell-zoom-space";
+import { OrganismsSpaceComponent } from "./spaces/organisms-space";
 
 interface IProps extends IBaseProps {}
 interface IState {}
 
-type SpaceComponent = typeof PopulationsSpaceComponent | typeof CellZoomSpaceComponent;
+type SpaceComponent = typeof PopulationsSpaceComponent | typeof OrganismsSpaceComponent;
 
 type SpaceTypeToComponent = {
   [key in SpaceType]: SpaceComponent | undefined
@@ -19,7 +19,7 @@ type SpaceTypeToComponent = {
 const kSpaceComponents: SpaceTypeToComponent = {
   populations: PopulationsSpaceComponent,
   breeding: undefined,
-  organism: CellZoomSpaceComponent,
+  organism: OrganismsSpaceComponent,
   dna: undefined,
   none: undefined
 };

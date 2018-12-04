@@ -1,11 +1,11 @@
 import { types, Instance } from "mobx-state-tree";
 import { MouseColor, BackpackMouse } from "../../backpack-mouse";
-import { SubstanceType, kOrganelleInfo } from "./cell-zoom";
+import { SubstanceType, kOrganelleInfo } from "./organisms-space";
 import { v4 as uuid } from "uuid";
-import { OrganelleType } from "./cell-zoom-row";
+import { OrganelleType } from "./organisms-row";
 
-export const CellMouseModel = types
-  .model("CellMouse", {
+export const OrganismsMouseModel = types
+  .model("OrganismsMouse", {
     id: types.optional(types.identifier, () => uuid()),
     backpackMouse: types.reference(BackpackMouse)
   })
@@ -38,4 +38,4 @@ export const CellMouseModel = types
     };
   });
 
-export type CellMouseModelType = Instance<typeof CellMouseModel>;
+export type OrganismsMouseModelType = Instance<typeof OrganismsMouseModel>;

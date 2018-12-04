@@ -1,8 +1,8 @@
 import { types, Instance } from "mobx-state-tree";
 import { ChartDataModelType, ChartDataModel } from "../charts/chart-data";
 import { DataPoint, ChartDataSetModel, ChartColors, DataPointType } from "../charts/chart-data-set";
-import { CellMouseModel } from "./cell-mouse";
-import { kSubstanceNames } from "./cell-zoom";
+import { OrganismsMouseModel } from "./organisms-mouse";
+import { kSubstanceNames } from "./organisms-space";
 
 export const Organelle = types.enumeration("type", [
   "nucleus",
@@ -22,9 +22,9 @@ export type ModeType = typeof Mode.Type;
 export const ZoomLevel = types.enumeration("type", ["organism", "cell", "protein"]);
 export type ZoomLevelType = typeof ZoomLevel.Type;
 
-export const CellZoomRowModel = types
-  .model("CellZoomRow", {
-    cellMouse: types.maybe(types.reference(CellMouseModel)),
+export const OrganismsRowModel = types
+  .model("OrganismsRow", {
+    organismsMouse: types.maybe(types.reference(OrganismsMouseModel)),
     hoveredOrganelle: types.maybe(Organelle),
     mode: types.optional(Mode, "normal"),
     assayedOrganelle: types.maybe(Organelle),
@@ -37,10 +37,10 @@ export const CellZoomRowModel = types
       const organelle = self.assayedOrganelle;
       if (organelle) {
         kSubstanceNames.forEach((substance) => {
-          if (!self.cellMouse) {
+          if (!self.organismsMouse) {
             return;
           }
-          const substanceValue = self.cellMouse.getSubstanceValue(organelle, substance);
+          const substanceValue = self.organismsMouse.getSubstanceValue(organelle, substance);
           if (substanceValue > 0) {
             points.push(DataPoint.create({ a1: substanceValue, a2: 0, label: substance }));
           }
@@ -78,4 +78,4 @@ export const CellZoomRowModel = types
     };
   });
 
-export type CellZoomRowModelType = Instance<typeof CellZoomRowModel>;
+export type OrganismsRowModelType = Instance<typeof OrganismsRowModel>;

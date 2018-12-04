@@ -7,11 +7,11 @@ import { observer, inject } from "mobx-react";
 // import { rootStore, Mode } from "../stores/RootStore";
 import { createModel } from "organelle";
 import * as Cell from "./cell-models/cell.json";
-import { kOrganelleInfo } from "../../../models/spaces/cell-zoom/cell-zoom";
+import { kOrganelleInfo } from "../../../models/spaces/organisms/organisms-space";
 import { BaseComponent } from "../../base";
 // import { SubstanceType } from "../models/Substance";
-import "./OrganelleWrapper.sass";
-import { OrganelleType, ModeType } from "../../../models/spaces/cell-zoom/cell-zoom-row.js";
+import "./organelle-wrapper.sass";
+import { OrganelleType, ModeType } from "../../../models/spaces/organisms/organisms-row.js";
 
 interface OrganelleWrapperProps {
   elementName: string;
@@ -90,9 +90,9 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
   }
 
   public componentDidMount() {
-    const { cellZoom } = this.stores;
-    const row = cellZoom.rows[this.props.rowIndex];
-    const { modelProperties } = row.cellMouse as any;
+    const { organisms } = this.stores;
+    const row = organisms.rows[this.props.rowIndex];
+    const { modelProperties } = row.organismsMouse as any;
     const modelDef: any = Cell;
 
     modelDef.container = {
@@ -135,8 +135,8 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
   }
 
   public organelleClick(organelleType: OrganelleType, location: {x: number, y: number}) {
-    const { cellZoom } = this.stores;
-    cellZoom.rows[this.props.rowIndex].setActiveAssay(organelleType);
+    const { organisms } = this.stores;
+    organisms.rows[this.props.rowIndex].setActiveAssay(organelleType);
     // if (rootStore.mode === Mode.Assay) {
     //   const organelleInfo = OrganelleRef.create({
     //     organism,
@@ -207,10 +207,10 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
   }
 
   public render() {
-    const {cellZoom} = this.stores;
+    const {organisms} = this.stores;
     // const hoverLabel = appStore.mysteryLabels ?
     //   mysteryOrganelleNames[this.state.hoveredOrganelle] : this.state.hoveredOrganelle;
-    const hoveredOrganelle = cellZoom.rows[this.props.rowIndex].hoveredOrganelle;
+    const hoveredOrganelle = organisms.rows[this.props.rowIndex].hoveredOrganelle;
     const hoverLabel = hoveredOrganelle ? kOrganelleInfo[hoveredOrganelle].displayName : undefined;
     const hoverDiv = hoverLabel
       ? (
@@ -277,13 +277,13 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     });
 
     model.on("model.step", () => {
-      const { cellZoom } = this.stores;
+      const { organisms } = this.stores;
       const { rowIndex } = this.props;
-      const { cellMouse } = cellZoom.rows[rowIndex];
-      if (!cellMouse) {
+      const { organismsMouse } = organisms.rows[rowIndex];
+      if (!organismsMouse) {
         return;
       }
-      const percentDarkness = cellMouse.getPercentDarkness();
+      const percentDarkness = organismsMouse.getPercentDarkness();
 
       // go from lightest to darkest in HSL space, which provides the best gradual transition
 
@@ -299,7 +299,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
         cellFill.setColor(colorStr);
       }
 
-      const modelProperties: any = cellMouse.modelProperties;
+      const modelProperties: any = organismsMouse.modelProperties;
       if (model) {
         Object.keys(modelProperties).forEach((key: string) => {
           this.getModel().world.setProperty(key, modelProperties[key]);
@@ -311,10 +311,10 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     });
 
     model.on("view.hover.enter", (evt: any) => {
-      const {cellZoom} = this.stores;
+      const {organisms} = this.stores;
       const hoveredOrganelle = this.getOrganelleFromMouseEvent(evt);
       if (hoveredOrganelle) {
-        cellZoom.rows[this.props.rowIndex].setHoveredOrganelle(hoveredOrganelle);
+        organisms.rows[this.props.rowIndex].setHoveredOrganelle(hoveredOrganelle);
       }
     });
 
@@ -341,12 +341,12 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
   }
 
   private getOrganelleFromMouseEvent(evt: any): OrganelleType | undefined {
-    const {cellZoom} = this.stores;
+    const {organisms} = this.stores;
     const possibleTargets: OrganelleType[] = (Object.keys(this.organelleSelectorInfo) as OrganelleType[])
       .filter(organelle => {
         const organelleInfo = this.organelleSelectorInfo[organelle];
         const visibleModes = organelleInfo.visibleModes;
-        return !visibleModes || visibleModes.indexOf(cellZoom.rows[this.props.rowIndex].mode) > -1;
+        return !visibleModes || visibleModes.indexOf(organisms.rows[this.props.rowIndex].mode) > -1;
       });
     return possibleTargets.find((t) => {
       return evt.target._organelle.matches({selector: this.organelleSelectorInfo[t].selector});

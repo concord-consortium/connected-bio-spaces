@@ -1,7 +1,7 @@
 import { types, Instance } from "mobx-state-tree";
 import { ColorType, BackpackMouseType } from "../../backpack-mouse";
-import { CellMouseModel } from "./cell-mouse";
-import { CellZoomRowModel, OrganelleType, CellZoomRowModelType } from "./cell-zoom-row";
+import { OrganismsMouseModel } from "./organisms-mouse";
+import { OrganismsRowModel, OrganelleType, OrganismsRowModelType } from "./organisms-row";
 import { BackpackModelType } from "../../backpack";
 
 export const kSubstanceNames = [
@@ -81,20 +81,20 @@ export const kOrganelleInfo: OrganelleInfo = {
   },
 };
 
-export const CellZoomModel = types
-  .model("CellZoom", {
-    cellOrganisms: types.array(CellMouseModel),
-    rows: types.optional(types.array(CellZoomRowModel),
-      [CellZoomRowModel.create(), CellZoomRowModel.create()])
+export const OrganismsSpaceModel = types
+  .model("OrganismsSpace", {
+    organismsMice: types.array(OrganismsMouseModel),
+    rows: types.optional(types.array(OrganismsRowModel),
+      [OrganismsRowModel.create(), OrganismsRowModel.create()])
   })
   .actions((self) => {
     function clearRowBackpackMouse(rowIndex: number) {
-      const clearedCellMouse = self.rows[rowIndex].cellMouse;
-      self.rows[rowIndex] = CellZoomRowModel.create();
+      const clearedOrganismsMouse = self.rows[rowIndex].organismsMouse;
+      self.rows[rowIndex] = OrganismsRowModel.create();
 
-      if (clearedCellMouse) {
-        if (!self.rows.some(row => row.cellMouse === clearedCellMouse)) {
-          self.cellOrganisms.remove(clearedCellMouse);
+      if (clearedOrganismsMouse) {
+        if (!self.rows.some(row => row.organismsMouse === clearedOrganismsMouse)) {
+          self.organismsMice.remove(clearedOrganismsMouse);
         }
       }
     }
@@ -102,16 +102,16 @@ export const CellZoomModel = types
     return {
       clearRowBackpackMouse,
       setRowBackpackMouse(rowIndex: number, backpackMouse: BackpackMouseType) {
-        let cellMouse = self.cellOrganisms.find((existingCellMouse) => {
-          return existingCellMouse.backpackMouse === backpackMouse;
+        let organismsMouse = self.organismsMice.find((existingOrganismsMouse) => {
+          return existingOrganismsMouse.backpackMouse === backpackMouse;
         });
-        if (!cellMouse) {
-          cellMouse = CellMouseModel.create({ backpackMouse });
-          self.cellOrganisms.push(cellMouse);
+        if (!organismsMouse) {
+          organismsMouse = OrganismsMouseModel.create({ backpackMouse });
+          self.organismsMice.push(organismsMouse);
         }
-        self.rows[rowIndex] = CellZoomRowModel.create({ cellMouse });
+        self.rows[rowIndex] = OrganismsRowModel.create({ organismsMouse });
       }
     };
   });
 
-export type CellZoomModelType = Instance<typeof CellZoomModel>;
+export type OrganismsSpaceModelType = Instance<typeof OrganismsSpaceModel>;
