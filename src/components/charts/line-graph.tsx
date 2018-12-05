@@ -150,7 +150,7 @@ export class LineGraph extends React.Component<ILineProps> {
     );
 
     return (
-      <div className="line-chart-container">
+      <div className="line-chart-container" data-test="line-graph">
         {graphs}
       </div>
     );

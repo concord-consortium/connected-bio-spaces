@@ -214,14 +214,14 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     const hoverLabel = hoveredOrganelle ? kOrganelleInfo[hoveredOrganelle].displayName : undefined;
     const hoverDiv = hoverLabel
       ? (
-        <div className="hover-location">
+        <div className="hover-location" data-test="hover-label">
           {hoverLabel}
         </div>)
       : null;
 
     const droppers: any = this.state.dropperCoords.map((dropperCoord: any, i: number) => (
       <div className="temp-dropper" key={i} style={{left: dropperCoord.x - 6, top: dropperCoord.y - 28}}>
-        <img src="assets/cell-zoom/dropper.png" width="32px"/>
+        <img src="assets/cell-zoom/dropper.png" width="32px" data-test="dropper"/>
       </div>
     ));
     // const dropperCursor = this.state.hoveredOrganelle && this.isModeDropper(rootStore.mode);

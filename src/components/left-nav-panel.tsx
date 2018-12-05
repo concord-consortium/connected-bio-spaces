@@ -21,7 +21,7 @@ export class LeftNavPanelComponent extends BaseComponent<IProps, IState> {
         Explore
         </div>
         {this.renderExploreButtons()}
-        <div className="header collect" data-test="backpack">
+        <div className="header collect">
         Collect
         </div>
         {this.renderCollectButtons()}
@@ -35,30 +35,26 @@ export class LeftNavPanelComponent extends BaseComponent<IProps, IState> {
   private renderExploreButtons = () => {
     const {ui} = this.stores;
     return (
-      <div className="button-holder investigate">
+      <div className="button-holder investigate" data-test="explore-options">
         {ui.showPopulationSpace &&
         <ExploreButtonComponent
           space={"populations"}
           title={"Population"}
-          data-test="population-button"
         /> }
         {ui.showBreedingSpace &&
         <ExploreButtonComponent
           space={"breeding"}
           title={"Breeding"}
-          data-test="breeding-button"
         /> }
         {ui.showOrganismSpace &&
         <ExploreButtonComponent
           space={"organism"}
           title={"Organism"}
-          data-test="organism-button"
         /> }
         {ui.showDNASpace &&
         <ExploreButtonComponent
           space={"dna"}
           title={"DNA"}
-          data-test="dna-button"
         /> }
       </div>
     );

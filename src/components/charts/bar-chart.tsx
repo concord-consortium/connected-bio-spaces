@@ -130,6 +130,7 @@ export class BarChart extends React.Component<IBarProps> {
           height={h}
           width={w}
           redraw={true}
+          data-test="bar"
         />
       );
     } else {
@@ -140,6 +141,7 @@ export class BarChart extends React.Component<IBarProps> {
           height={h}
           width={w}
           redraw={true}
+          data-test="horizontal-bar"
         />
       );
     }

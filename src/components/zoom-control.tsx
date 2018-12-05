@@ -16,8 +16,8 @@ export class ZoomControl extends BaseComponent<IProps, IState> {
   public render() {
     return (
       <div className="zoom-control-container" data-test="zoom-control-container">
-        <div className="zoom-control zoom-out" onClick={this.handleZoomOutButton}>-</div>
-        <div className="zoom-control zoom-in" onClick={this.handleZoomInButton}>+</div>
+        <div className="zoom-control zoom-out" onClick={this.handleZoomOutButton} data-test="zoom-out">-</div>
+        <div className="zoom-control zoom-in" onClick={this.handleZoomInButton} data-test="zoom-in">+</div>
       </div>
     );
   }
