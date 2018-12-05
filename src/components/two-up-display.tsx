@@ -55,7 +55,7 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
             }
           <div className="title" data-test="right-title">{this.props.rightTitle}</div>
         </div>
-        <div className="content" data-test="right-content">
+        <div className="content scrollable" data-test="right-content">
           {this.props.rightPanel}
         </div>
       </div>

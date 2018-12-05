@@ -18,7 +18,7 @@
   overflow: hidden
 
   .header
-    height: $two-up-header-height
+    flex: 0 0 $two-up-header-height
     display: flex
     align-items: center
     font-family: $font-stack
@@ -47,6 +47,9 @@
     flex-grow: 1
     overflow: hidden
     position: relative
+
+  .scrollable
+    overflow: auto
 
 .left-abutment
   margin-right: $component-margin

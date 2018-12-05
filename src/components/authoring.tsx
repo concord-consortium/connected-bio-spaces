@@ -53,6 +53,10 @@ const schema: JSONSchema6 = {
       title: "Populations Model",
       type: "object",
       properties: {
+        instructions: {
+          title: "Instructions (as markdown)",
+          type: "string"
+        },
         environment: {
           title: "Initial environment",
           type: "string",
@@ -149,6 +153,7 @@ export const defaultAuthoring = {
     displayedSpace: "none"
   },
   populations: {
+    instructions: "",
     environment: "white",
     showSwitchEnvironmentsButton: true,
     includeNeutralEnvironment: true,
@@ -176,6 +181,9 @@ const uiSchema = {
     "ui:readonly": true
   },
   populations: {
+    instructions: {
+      "ui:widget": "textarea"
+    },
     initialPopulation: {
       classNames: "minor-group",
       tan: {
