@@ -65,7 +65,7 @@ export const OrganismsRowModel = types
   }))
   .actions((self) => {
     return {
-      setHoveredOrganelle(organelle: OrganelleType) {
+      setHoveredOrganelle(organelle?: OrganelleType) {
         self.hoveredOrganelle = organelle;
       },
       setActiveAssay(organelle: OrganelleType) {

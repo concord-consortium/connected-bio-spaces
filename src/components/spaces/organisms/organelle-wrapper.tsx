@@ -362,9 +362,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     model.on("view.hover.enter", (evt: any) => {
       const {organisms} = this.stores;
       const hoveredOrganelle = this.getOrganelleFromMouseEvent(evt);
-      if (hoveredOrganelle) {
-        organisms.rows[this.props.rowIndex].setHoveredOrganelle(hoveredOrganelle);
-      }
+      organisms.rows[this.props.rowIndex].setHoveredOrganelle(hoveredOrganelle);
     });
 
     model.on("view.click", (evt: any) => {
@@ -452,7 +450,9 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
   }
 
   private resetHoveredOrganelle() {
-    this.setState({hoveredOrganelle: null});
+    const {organisms} = this.stores;
+    const {rowIndex} = this.props;
+    organisms.rows[rowIndex].setHoveredOrganelle(undefined);
   }
 
   private getOpaqueSelector(organelleType: OrganelleType) {
