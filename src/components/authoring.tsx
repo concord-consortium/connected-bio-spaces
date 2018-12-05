@@ -53,6 +53,10 @@ const schema: JSONSchema6 = {
       title: "Populations Model",
       type: "object",
       properties: {
+        instructions: {
+          title: "Instructions (as markdown)",
+          type: "string"
+        },
         environment: {
           title: "Initial environment",
           type: "string",
@@ -134,6 +138,16 @@ const schema: JSONSchema6 = {
           }
         }
       }
+    },
+    organism: {
+      title: "Organism Model",
+      type: "object",
+      properties: {
+        instructions: {
+          title: "Instructions (as markdown)",
+          type: "string"
+        }
+      }
     }
   }
 };
@@ -149,6 +163,7 @@ export const defaultAuthoring = {
     displayedSpace: "none"
   },
   populations: {
+    instructions: "",
     environment: "white",
     showSwitchEnvironmentsButton: true,
     includeNeutralEnvironment: true,
@@ -168,7 +183,11 @@ export const defaultAuthoring = {
         tan: 33.33
       }
     }
+  },
+  organism: {
+    instructions: ""
   }
+
 };
 
 const uiSchema = {
@@ -176,6 +195,9 @@ const uiSchema = {
     "ui:readonly": true
   },
   populations: {
+    instructions: {
+      "ui:widget": "textarea"
+    },
     initialPopulation: {
       classNames: "minor-group",
       tan: {
@@ -198,6 +220,11 @@ const uiSchema = {
           "ui:help": "Brown will be the remainder"
         }
       }
+    }
+  },
+  organism: {
+    instructions: {
+      "ui:widget": "textarea"
     }
   }
 };

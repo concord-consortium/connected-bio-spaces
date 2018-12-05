@@ -3,6 +3,7 @@ import * as React from "react";
 import { BaseComponent, IBaseProps } from "../base";
 import { TwoUpDisplayComponent } from "../two-up-display";
 import { PopulationsComponent } from "./populations/populations-container";
+import { InstructionsComponent } from "../instructions";
 import { Chart } from "../charts/chart";
 
 interface IProps extends IBaseProps {}
@@ -20,14 +21,16 @@ export class PopulationsSpaceComponent extends BaseComponent<IProps, IState> {
     const contentText = showPopulationGraph ? "Graph goes here" :
                                                      "Data goes here";
     const graphPanel = <Chart title="Chart Test" chartData={populations.currentData} chartType={"line"} />;
+    const instructionsPanel = <InstructionsComponent content={populations.instructions}/>;
+    const rightPanelContent = ui.showPopulationGraph ? graphPanel : instructionsPanel;
 
     return (
       <TwoUpDisplayComponent
-        leftTitle="Investigate: Population"
+        leftTitle="Explore: Population"
         leftPanel={<PopulationsComponent />}
         rightTitle={graphTitle}
         rightIcon={iconId}
-        rightPanel={graphPanel}
+        rightPanel={rightPanelContent}
         onClickRightIcon={this.togglePopulationsGraph}
       />
     );
