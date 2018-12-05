@@ -49,10 +49,10 @@ export class ChartTest extends BaseComponent<IProps, IState> {
     return (
       <div className="chart-test-panel">
         <div className="content">
-          <select value={chartType} onChange={this.handleChangeSelection}>
-            <option value={"line"}>Line</option>
-            <option value={"horizontalBar"}>Horizontal Bar</option>
-            <option value={"bar"}>Bar</option>
+          <select value={chartType} onChange={this.handleChangeSelection} data-test="chart-type">
+            <option value={"line"} data-test="line-option">Line</option>
+            <option value={"horizontalBar"} data-test="horizontalBar-option">Horizontal Bar</option>
+            <option value={"bar"} data-test="bar-option">Bar</option>
           </select>
           <div>
             <Chart title="Chart Test" chartData={chartData} chartType={chartType} />

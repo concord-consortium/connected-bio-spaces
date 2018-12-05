@@ -27,17 +27,19 @@ export class Chart extends React.Component<ChartProps, ChartState> {
       <LineGraph
         chartData={chartData}
         width={this.props.width}
-        height={this.props.height} />
+        height={this.props.height}
+        data-test="line-graph" />
       :
       <BarChart
               chartData={chartData}
               width={this.props.width}
               height={this.props.height}
-              barChartType={chartType} />;
+              barChartType={chartType}
+              data-test="bar-chart" />;
 
     return (
       <div className="chart-container">
-        <div className="chart-display">
+        <div className="chart-display" data-test="chart-display">
           {chart}
         </div>
       </div>

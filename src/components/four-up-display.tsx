@@ -17,8 +17,8 @@ export class FourUpDisplayComponent extends BaseComponent<IProps, IState> {
   public render() {
     return (
       <div className="four-up-display" data-test="four-up-display">
-        <div className="four-up-row top-row">{this.props.topRow}</div>
-        <div className="four-up-row bottom-row">{this.props.bottomRow}</div>
+        <div className="four-up-row top-row" data-test="four-up-top">{this.props.topRow}</div>
+        <div className="four-up-row bottom-row" data-test="four-up-bottom">{this.props.bottomRow}</div>
       </div>
     );
   }

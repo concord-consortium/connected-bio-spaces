@@ -40,15 +40,17 @@ export class CollectButtonComponent extends BaseComponent<IProps, IState> {
     return (
       <div>
         <div className="collect-button-outline">
-          <div className={buttonClass} onClick={handleMouse}>
-            <div className={innerOutlineClass}>
-              <img src={mouse.baseImage} className="icon"/>
-              <div className="label">{mouse.label}</div>
+          <div className={buttonClass} onClick={handleMouse} data-test="stored-mouse-class">
+            <div className={innerOutlineClass} data-test="inner-outline">
+              <img src={mouse.baseImage} className="icon" data-test="stored-mouse-image"/>
+              <div className="label" data-test="stored-mouse-label">{mouse.label}</div>
             </div>
           </div>
         </div>
-        <div className="x-close" onClick={handleClose}>x</div>
-        <div className="index">{backpackMouseIndex > -1 ? backpackMouseIndex + 1 : ""}</div>
+        <div className="x-close" onClick={handleClose} data-test="x-close-backpack">x</div>
+        <div className="index" data-test="stored-mouse-index">
+          {backpackMouseIndex > -1 ? backpackMouseIndex + 1 : ""}
+        </div>
       </div>
     );
   }
@@ -60,7 +62,7 @@ export class CollectButtonComponent extends BaseComponent<IProps, IState> {
     return (
       <div>
         <div className="collect-button-outline uncollected">
-          <div className={"collect-button uncollected"} onClick={handleClick}>
+          <div className={"collect-button uncollected"} onClick={handleClick} data-test="empty-button">
             <div className={"inner-outline"}>
               <img src={UNCOLLECTED_IMAGE} className="icon"/>
             </div>

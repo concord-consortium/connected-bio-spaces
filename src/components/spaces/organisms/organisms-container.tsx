@@ -68,7 +68,7 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
         return <OrganismView backpackMouse={organismsMouse && organismsMouse.backpackMouse} />;
       case "cell":
         return (
-          <div className="cell-zoom-panel">
+          <div className="cell-zoom-panel" data-test="cell-zoon-panel">
             {
               organismsMouse != null &&
                 <OrganelleWrapper elementName={`organelle-wrapper-${rowIndex}`} rowIndex={rowIndex}/>
