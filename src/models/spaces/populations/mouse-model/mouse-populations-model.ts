@@ -51,8 +51,7 @@ export const MousePopulationsModel = types
     "inheritance.randomOffspring.white": types.number,
     "inheritance.randomOffspring.tan": types.number,
     "showSexStack": false,
-    "chartData": types.optional(ChartDataModel, chartData),
-    "instructions": types.string
+    "chartData": types.optional(ChartDataModel, chartData)
   })
   .extend(self => {
     let interactive: HawksMiceInteractive;

@@ -11,7 +11,8 @@ export function createPopulationsModel(curriculumName: string, authoring: any): 
     case "mouse":
     default:
       return PopulationsModel.create({
-        model: MousePopulationsModel.create(authoring)
+        model: MousePopulationsModel.create(authoring),
+        instructions: authoring.instructions
       });
   }
 }
@@ -26,7 +27,8 @@ export interface ToolbarButton {
 export const PopulationsModel = types
   .model("Populations", {
     model: ModelsUnion,
-    isPlaying: false
+    isPlaying: false,
+    instructions: ""
   })
   .extend(self => {
 

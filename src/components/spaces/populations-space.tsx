@@ -21,12 +21,12 @@ export class PopulationsSpaceComponent extends BaseComponent<IProps, IState> {
     const contentText = showPopulationGraph ? "Graph goes here" :
                                                      "Data goes here";
     const graphPanel = <Chart title="Chart Test" chartData={populations.currentData} chartType={"line"} />;
-    const instructionsPanel = <InstructionsComponent content={populations.model.instructions}/>;
+    const instructionsPanel = <InstructionsComponent content={populations.instructions}/>;
     const rightPanelContent = ui.showPopulationGraph ? graphPanel : instructionsPanel;
 
     return (
       <TwoUpDisplayComponent
-        leftTitle="Investigate: Population"
+        leftTitle="Explore: Population"
         leftPanel={<PopulationsComponent />}
         rightTitle={graphTitle}
         rightIcon={iconId}
