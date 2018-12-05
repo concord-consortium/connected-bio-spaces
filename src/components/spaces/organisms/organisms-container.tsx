@@ -9,6 +9,7 @@ import { CollectButtonComponent } from "../../collect-button";
 import "./organisms-container.sass";
 import { ZoomLevelType, OrganismsRowModelType } from "../../../models/spaces/organisms/organisms-row";
 import { OrganelleWrapper } from "./organelle-wrapper";
+import { ManipulationControls } from "./manipulation-controls";
 
 interface SizeMeProps {
   size?: {
@@ -37,7 +38,7 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
     const { organismsMouse, zoomLevel } = organismsRow;
 
     return (
-      <div className="organism-view-container" data-test="organism-view-container">
+      <div className="organisms-container" data-test="organism-view-container">
         <CollectButtonComponent
           backpackMouse={organismsMouse && organismsMouse.backpackMouse}
           clickMouse={this.clickMouse}
@@ -49,7 +50,10 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
             return  this.organismZoomedView(organismsRow, zoomLevel, rowIndex, sizeProps);
           }}
         </SizeMe>
-        <ZoomControl handleZoom={this.zoomChange} />
+        <div className="organism-controls">
+          <ZoomControl handleZoom={this.zoomChange} />
+          <ManipulationControls />
+        </div>
       </div>
     );
   }
