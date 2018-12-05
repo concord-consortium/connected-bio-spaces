@@ -197,13 +197,13 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
   //   this.addAgentsOverTime(species, state, location, 1, 9);
   // }
 
-  public isModeDropper(mode: string) {
-    // return mode === Mode.Assay || mode === Mode.Add || mode === Mode.Subtract;
-    return false;
+  public isModeDropper(mode: ModeType) {
+    return mode === "assay" || mode === "add" || mode === "subtract";
   }
 
   public render() {
     const {organisms} = this.stores;
+    const {mode} = this.props;
     // const hoverLabel = appStore.mysteryLabels ?
     //   mysteryOrganelleNames[this.state.hoveredOrganelle] : this.state.hoveredOrganelle;
     const hoveredOrganelle = organisms.rows[this.props.rowIndex].hoveredOrganelle;
@@ -220,12 +220,18 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
         <img src="assets/cell-zoom/dropper.png" width="32px" data-test="dropper"/>
       </div>
     ));
-    // const dropperCursor = this.state.hoveredOrganelle && this.isModeDropper(rootStore.mode);
-    const dropperCursor = false;
+    const dropperCursor = hoveredOrganelle && this.isModeDropper(mode);
     const width = this.props.width ? Math.min(this.props.width, MODEL_WIDTH) : MODEL_WIDTH;
     const style = {height: MODEL_HEIGHT, width};
     return (
-      <div className={"model-wrapper" + (dropperCursor ? " dropper" : "")} style={style}>
+      <div
+        className={"model-wrapper" + (dropperCursor ? " dropper" : "")}
+        style={style}
+        onClick={this.forceDropper}
+        onMouseUp={this.forceDropper}
+        onMouseDown={this.forceDropper}
+        onMouseMove={this.forceDropper}
+      >
         <div id={this.props.elementName} className="model" onMouseLeave={this.resetHoveredOrganelle}
           ref={this.setModelDomRef} />
         {hoverDiv}
@@ -263,6 +269,13 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
       this.model.mode = row.mode;
       this.completeLoad();
     });
+  }
+
+  private forceDropper(e: any) {
+    // Hack to force Fabric canvases to inherit cursor styles, should configure in Organelle instead
+    if (typeof e.target.className === "string" && e.target.className.indexOf("upper-canvas") > -1) {
+      e.target.style.cursor = "inherit";
+    }
   }
 
   private getModel() {
