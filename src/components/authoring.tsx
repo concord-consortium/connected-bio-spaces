@@ -138,6 +138,16 @@ const schema: JSONSchema6 = {
           }
         }
       }
+    },
+    organism: {
+      title: "Organism Model",
+      type: "object",
+      properties: {
+        instructions: {
+          title: "Instructions (as markdown)",
+          type: "string"
+        }
+      }
     }
   }
 };
@@ -173,7 +183,11 @@ export const defaultAuthoring = {
         tan: 33.33
       }
     }
+  },
+  organism: {
+    instructions: ""
   }
+
 };
 
 const uiSchema = {
@@ -206,6 +220,11 @@ const uiSchema = {
           "ui:help": "Brown will be the remainder"
         }
       }
+    }
+  },
+  organism: {
+    instructions: {
+      "ui:widget": "textarea"
     }
   }
 };
