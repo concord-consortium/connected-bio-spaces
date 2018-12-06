@@ -20,8 +20,6 @@ interface SizeMeProps {
 
 interface IProps extends IBaseProps {}
 interface IState {
-  selectMode: boolean;
-  modelWasPlaying: boolean;
 }
 
 @inject("stores")
@@ -30,10 +28,6 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
 
   constructor(props: IProps) {
     super(props);
-    this.state = {
-      selectMode: false,
-      modelWasPlaying: false
-    };
   }
 
   public render() {
@@ -134,8 +128,8 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
       const runButtonLabel = populations.isPlaying ? "Pause" : "Run";
       const runButtonIcon = populations.isPlaying ? "#icon-pause" : "#icon-run";
       const runButtonClass = populations.isPlaying ? "pause" : "run";
-      const inspectButtonClass = populations.isInspectMode ? "button-active" : "button-inactive";
-      const collectButtonClass = this.state.selectMode ? "button-active" : "button-inactive";
+      const inspectButtonClass = populations.mouseMode === "inspect" ? "button-active" : "button-inactive";
+      const collectButtonClass = populations.mouseMode === "select" ? "button-active" : "button-inactive";
       return (
         <div>
           <SizeMe monitorHeight={true}>
@@ -218,10 +212,6 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
     const populations = this.props.stores && this.props.stores.populations;
     if (populations) {
       populations.togglePlay();
-
-      if (this.state.selectMode && populations.isPlaying) {
-        this.setState({selectMode: false});
-      }
     }
   }
 
@@ -247,21 +237,15 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
   }
 
   private handleClickSelect = () => {
-    this.setState({
-      selectMode: !this.state.selectMode
-    }, () => {
-      const { populations } = this.props.stores!;
-      if (this.state.selectMode) {
-        this.setState({modelWasPlaying: populations.isPlaying});
-        populations.pause();
-      } else if (!this.state.selectMode && this.state.modelWasPlaying) {
-        populations.play();
-      }
-    });
+    const populations = this.props.stores && this.props.stores.populations;
+    if (populations) {
+      populations.toggleSelectionMode();
+    }
   }
 
   private handleAgentClicked = (evt: AgentEnvironmentMouseEvent) => {
-    if (this.state.selectMode && evt.type === "click" && evt.agents.mice) {
+    const populations = this.props.stores && this.props.stores.populations;
+    if (populations && populations.mouseMode === "select" && evt.type === "click" && evt.agents.mice) {
       const selectedMouse = evt.agents.mice;
       if (this.props.stores) {
         const backpack = this.props.stores.backpack;
