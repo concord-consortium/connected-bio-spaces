@@ -215,9 +215,6 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
   private handleClickRunButton = () => {
     const populations = this.props.stores && this.props.stores.populations;
     if (populations) {
-      // TODO: this feels crude
-      const {"initialPopulation.white": white, "initialPopulation.tan": tan} = populations.model;
-      populations.model.interactive.addInitialMicePopulation(30, {white, tan});
       populations.togglePlay();
 
       if (this.state.selectMode && populations.isPlaying) {
