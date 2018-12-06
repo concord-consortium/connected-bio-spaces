@@ -1,7 +1,7 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 import { BarChart } from "./bar-chart";
-import { LineGraph } from "./line-graph";
+import { LineChart } from "./line-chart";
 import { ChartDataModelType } from "../../models/spaces/charts/chart-data";
 
 import "./chart.sass";
@@ -25,12 +25,12 @@ export class Chart extends React.Component<IChartProps, IChartState> {
   public render() {
     const { chartType, chartData, width, height, isPlaying } = this.props;
     const chart = chartType === "line" ?
-      <LineGraph
+      <LineChart
         chartData={chartData}
         width={this.props.width}
         height={this.props.height}
         isPlaying={isPlaying}
-        data-test="line-graph" />
+        data-test="line-chart" />
       :
       <BarChart
         chartData={chartData}

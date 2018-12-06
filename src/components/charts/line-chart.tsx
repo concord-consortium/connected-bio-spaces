@@ -110,14 +110,13 @@ const lineData = (chartData: ChartDataModelType) => {
 };
 
 @observer
-export class LineGraph extends BaseComponent<ILineProps, ILineState> {
+export class LineChart extends BaseComponent<ILineProps, ILineState> {
   constructor(props: ILineProps) {
     super(props);
   }
 
   public render() {
     const { chartData, width, height, isPlaying } = this.props;
-
     const chartDisplay = lineData(chartData);
     const graphs: JSX.Element[] = [];
     const minMaxValues = chartData.minMaxAll;
@@ -162,7 +161,7 @@ export class LineGraph extends BaseComponent<ILineProps, ILineState> {
     );
 
     return (
-      <div className="line-chart-container" data-test="line-graph">
+      <div className="line-chart-container" data-test="line-chart">
         {graphs}
         <LineChartControls chartData={chartData} isPlaying={isPlaying} />
       </div>
@@ -170,4 +169,4 @@ export class LineGraph extends BaseComponent<ILineProps, ILineState> {
   }
 }
 
-export default LineGraph;
+export default LineChart;

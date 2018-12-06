@@ -121,19 +121,27 @@ export const ChartDataSetModel = types
         } else {
           return defaultMax;
         }
+      } else if (self.visibleDataPoints && self.visibleDataPoints.length > 0 &&
+        self.maxPoints && self.visibleDataPoints.length < self.maxPoints) {
+        return self.maxPoints;
       } else {
         return Math.max(...self.visibleDataPoints.map(p => p.a1));
       }
     },
     get maxA2(): number | undefined {
-      if (self.fixedMaxA2 !== undefined) {
+      if (self.fixedMaxA2 !== undefined && !self.expandOnly) {
         return self.fixedMaxA2;
       } else if (!self.visibleDataPoints || self.visibleDataPoints.length === 0) {
         return defaultMax;
-      }
-      else if (self.expandOnly) {
+      } else if (self.expandOnly) {
         // always return max from all points so y axis only scales up, never down
-        return Math.max(...self.dataPoints.map(p => p.a2));
+        if (self.fixedMaxA2) {
+          // use fixedMax as a minimum value for max
+          const dataMax = Math.max(...self.dataPoints.map(p => p.a2));
+          return self.fixedMaxA2 > dataMax ? self.fixedMaxA2 : dataMax;
+        } else {
+          return Math.max(...self.dataPoints.map(p => p.a2));
+        }
       } else {
         // only return max of visible subset of data
         return Math.max(...self.visibleDataPoints.map(p => p.a2));
