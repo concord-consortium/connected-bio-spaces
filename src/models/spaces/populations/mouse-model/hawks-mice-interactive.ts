@@ -1,4 +1,4 @@
-import { Interactive, Environment, Rule, Agent, Events, Species, Rect, Trait } from "populations.js";
+import { Interactive, Environment, Rule, Agent, Events, Species, Rect, Trait, ToolButton } from "populations.js";
 import { MousePopulationsModelType, EnvironmentColorType } from "./mouse-populations-model";
 import { getMouseSpecies, MouseColors } from "./mice";
 import { hawkSpecies } from "./hawks";
@@ -26,6 +26,8 @@ export class HawksMiceInteractive extends Interactive {
   public switchEnvironments: (includeNeutralEnvironment: boolean) => void;
   public getData: () => any;
   public removeAgent: (agent: Agent) => void;
+  public enterInspectMode: () => void;
+  public exitInspectMode: () => void;
 }
 
 export function createInteractive(model: MousePopulationsModelType) {
@@ -57,7 +59,12 @@ export function createInteractive(model: MousePopulationsModelType) {
   const interactive = new HawksMiceInteractive({
     environment: env,
     speedSlider: false,
-    showToolbar: false
+    showToolbar: false,
+    toolButtons: [
+      {
+        type: ToolButton.INFO_TOOL
+      }
+    ]
   });
 
   let addedHawks: boolean;
@@ -191,6 +198,14 @@ export function createInteractive(model: MousePopulationsModelType) {
 
   interactive.removeAgent = (agent: Agent) => {
     interactive.environment.removeAgent(agent);
+  };
+
+  interactive.enterInspectMode = () => {
+    (interactive.environment as any).setState("info-tool");
+  };
+  interactive.exitInspectMode = () => {
+    (interactive.environment as any).setState("None");
+    (interactive.environment as any).infoPopup.hide();
   };
 
   function setProperty(agents: Agent[], prop: string, val: any) {

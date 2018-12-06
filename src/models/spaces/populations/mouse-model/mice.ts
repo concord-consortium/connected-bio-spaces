@@ -148,10 +148,9 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
       MAX_HEALTH: 1,
       MATURITY_AGE: 9,
       CHANCE_OF_MUTATION: 0,
-      INFO_VIEW_SCALE: 2.5,
+      INFO_VIEW_SCALE: 2,
       INFO_VIEW_PROPERTIES: {
         "Fur color: ": "color",
-        "Genotype: ": "genome",
         "Sex: ": "sex"
       }
     },
@@ -274,7 +273,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
             }
           }, {
             image: {
-              path: "assets/assets/curriculum/mouse/populations/sandrat-dark.png",
+              path: "assets/curriculum/mouse/populations/sandrat-dark.png",
               scale: 0.4,
               anchor: {
                 x: 0.4,

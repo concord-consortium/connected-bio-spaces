@@ -134,7 +134,8 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
       const runButtonLabel = populations.isPlaying ? "Pause" : "Run";
       const runButtonIcon = populations.isPlaying ? "#icon-pause" : "#icon-run";
       const runButtonClass = populations.isPlaying ? "pause" : "run";
-      const collectButtonClass = this.state.selectMode ? "collect-on" : "collect-off";
+      const inspectButtonClass = populations.isInspectMode ? "button-active" : "button-inactive";
+      const collectButtonClass = this.state.selectMode ? "button-active" : "button-inactive";
       return (
         <div>
           <SizeMe monitorHeight={true}>
@@ -164,7 +165,8 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
                 <div className="label">{runButtonLabel}</div>
               </button>
               { buttons }
-              <button className="population-button" onClick={this.handleClickInspectButton} data-test="inspect-button">
+              <button className={"population-button " + inspectButtonClass}
+                      onClick={this.handleClickInspectButton} data-test="inspect-button">
                 <svg className="icon">
                   <use xlinkHref="#icon-inspect" />
                 </svg>
@@ -224,7 +226,10 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
   }
 
   private handleClickInspectButton = () => {
-    // TODO: add inspect functionality
+    const populations = this.props.stores && this.props.stores.populations;
+    if (populations) {
+      populations.toggleInspectMode();
+    }
   }
 
   private handleClickResetButton = () => {

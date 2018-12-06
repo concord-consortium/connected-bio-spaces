@@ -28,7 +28,8 @@ export const PopulationsModel = types
   .model("Populations", {
     model: ModelsUnion,
     isPlaying: false,
-    instructions: ""
+    instructions: "",
+    isInspectMode: false
   })
   .extend(self => {
 
@@ -68,6 +69,14 @@ export const PopulationsModel = types
         },
         removeAgent(agent: Agent) {
           self.model.interactive.removeAgent(agent);
+        },
+        toggleInspectMode() {
+          if (!self.isInspectMode) {
+            self.model.interactive.enterInspectMode();
+          } else {
+            self.model.interactive.exitInspectMode();
+          }
+          self.isInspectMode = !self.isInspectMode;
         }
       }
     };
