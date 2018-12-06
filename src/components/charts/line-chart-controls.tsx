@@ -1,9 +1,14 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 import { ChartDataModelType } from "../../models/spaces/charts/chart-data";
+import Slider from "rc-slider";
+import { BaseComponent } from "../base";
+
+// @ts-ignore
+import * as colors from "../colors.scss";
 
 import "./line-chart-controls.sass";
-import { BaseComponent } from "../base";
+import "rc-slider/assets/index.css";
 
 interface IChartControlProps {
   chartData: ChartDataModelType;
@@ -44,36 +49,45 @@ export class LineChartControls extends BaseComponent<IChartControlProps, IChartC
     const pos = scrubberPosition ? scrubberPosition : 0;
     const timelineVisible = chartData.pointCount > chartData.maxPoints;
 
+    const trackStyle = { backgroundColor: colors.chartColor5, height: 10 };
+    const handleStyle = {
+      borderColor: colors.chartColor6,
+      height: 20,
+      width: 20
+    };
+    const railStyle = { backgroundColor: colors.chartColor7, height: 10 };
+
     return (
       <div className="line-chart-controls" id="line-chart-controls">
         {timelineVisible &&
-          <input type="range" className="scrubber"
-            onChange={this.handleDragChange}
-            min={scrubberMin}
-            max={scrubberMax}
-            value={pos}
-            disabled={isPlaying}
+          <Slider className="scrubber"
+          trackStyle={trackStyle}
+          handleStyle={handleStyle}
+          railStyle={railStyle}
+          onChange={this.handleDragChange}
+          min={scrubberMin}
+          max={scrubberMax}
+          value={pos}
+          disabled={isPlaying}
           />
         }
       </div>
     );
   }
 
-  private handleDragChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  private handleDragChange = (value: number) => {
     const { chartData } = this.props;
-    const scrubber = e.currentTarget;
 
     // slider covers whole dataset
     // retrieve maxPoints for subset based on percentage along of the slider
-
-    const sliderPercentage = scrubber.valueAsNumber / chartData.pointCount;
+    const sliderPercentage = value / chartData.pointCount;
     const dataRangeMax = chartData.pointCount - chartData.maxPoints;
 
     if (dataRangeMax > 0) {
       const startIdx = Math.round(sliderPercentage * dataRangeMax);
       chartData.setDataSetSubset(startIdx, chartData.maxPoints);
       this.setState({
-        scrubberPosition: scrubber.valueAsNumber,
+        scrubberPosition: value,
         scrubberMax: chartData.pointCount
       });
     }
