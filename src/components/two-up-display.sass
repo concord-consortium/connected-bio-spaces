@@ -22,7 +22,6 @@
     display: flex
     align-items: center
     font-family: $font-stack
-    font-weight: bold
     color: $two-up-header-color
     text-align: center
     background-color: $two-up-header-bgcolor
@@ -50,6 +49,12 @@
 
   .scrollable
     overflow: auto
+
+  .footer
+    flex: 0 0 $two-up-header-height
+    background-color: $two-up-header-bgcolor
+    border-bottom-left-radius: $component-border-radius
+    border-bottom-right-radius: $component-border-radius     
 
 .left-abutment
   margin-right: $component-margin

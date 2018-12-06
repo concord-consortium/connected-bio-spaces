@@ -120,15 +120,7 @@ export const MousePopulationsModel = types
           const buttons = [];
 
           buttons.push({
-            title: "Add Mice",
-            action: (e: any) => {
-              const {"initialPopulation.white": white, "initialPopulation.tan": tan} = self;
-              self.interactive.addInitialMicePopulation(30, {white, tan});
-            }
-          });
-
-          buttons.push({
-            title: "Add Hawks",
+            title: "Add",
             action: (e: any) => {
               self.interactive.addInitialHawksPopulation(self.numHawks);
             }
@@ -136,7 +128,7 @@ export const MousePopulationsModel = types
 
           if (self.showSwitchEnvironmentsButton) {
             buttons.push({
-              title: "Switch environments",
+              title: "Change",
               action: (e: any) => {
                 self.interactive.switchEnvironments(self.includeNeutralEnvironment);
               }
@@ -145,7 +137,7 @@ export const MousePopulationsModel = types
 
           if (self["inheritance.showStudentControlOfMutations"]) {
             buttons.push({
-              title: "Breed with muations",
+              title: "Mutations",
               type: "checkbox",
               value: self["inheritance.breedWithMutations"],
               action: (val: boolean) => {
@@ -156,7 +148,7 @@ export const MousePopulationsModel = types
 
           if (self["inheritance.showStudentControlOfInheritance"]) {
             buttons.push({
-              title: "Breed without inheritance",
+              title: "Inheritance",
               type: "checkbox",
               value: self["inheritance.breedWithoutInheritance"],
               action: (val: boolean) => {
