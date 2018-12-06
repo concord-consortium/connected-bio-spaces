@@ -30,29 +30,26 @@ context("Test the population level", () => {
     });
 
     it('resets model then runs with mice and hawks', () => {
-      cy.get('[data-test=pop-toolbar]').find('button').eq(1).click({force:true}); //reset
-      cy.get('[data-test=pop-toolbar]').find('button').eq(2).click({force:true}); //add mice
-      cy.get('[data-test=pop-toolbar]').find('button').eq(3).click({force:true}); //add hawks
+      cy.get('[data-test=pop-toolbar]').find('button').eq(5).click({force:true}); //reset
+      cy.get('[data-test=pop-toolbar]').find('button').eq(1).click({force:true}); //add hawks
       cy.wait(2000)
-      cy.get('[data-test=pop-toolbar]').find('button').eq(0).click({force:true}); //run
+      cy.get('[data-test=pop-toolbar]').find('button').eq(0).click({force:true}); //add mice and run
     });
 
     it('runs model after pausing and changing environment', () => {
       cy.get('[data-test=pop-toolbar]').find('button').eq(0).click({force:true}); //run
-      cy.get('[data-test=pop-toolbar]').find('button').eq(4).click({force:true}); //change env
+      cy.get('[data-test=pop-toolbar]').find('button').eq(2).click({force:true}); //change env
       cy.wait(2000)
-      cy.get('[data-test=pop-toolbar]').find('button').eq(4).click({force:true}); //change env
-      cy.get('[data-test=pop-toolbar]').find('button').eq(2).click({force:true}); //add mice
-      cy.get('[data-test=pop-toolbar]').find('button').eq(1).click({force:true}); //reset
-      cy.get('[data-test=pop-toolbar]').find('button').eq(2).click({force:true}); //add mice
+      cy.get('[data-test=pop-toolbar]').find('button').eq(2).click({force:true}); //change env
+      cy.get('[data-test=pop-toolbar]').find('button').eq(5).click({force:true}); //reset
       cy.get('[data-test=pop-toolbar]').find('button').eq(3).click({force:true}); //add hawk
-      cy.get('[data-test=pop-toolbar]').find('button').eq(0).click({force:true}); //run
+      cy.get('[data-test=pop-toolbar]').find('button').eq(0).click({force:true}); //add mice and run
     });
 
-    it("verifies select button functionality", () => {
+    it("verifies collect button functionality", () => {
       cy.get('[data-test=pop-toolbar]').find('button').eq(0).click({force:true});
       cy.get('[data-test=pop-toolbar]').contains('Run');
-      cy.get('[data-test=select-button]').click({force:true});
+      cy.get('[data-test=collect-button]').click({force:true});
       //Need to be able to read iframe data in order to locate mouse coordinates
     });
 
