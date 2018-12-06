@@ -32,7 +32,8 @@ export const OrganismsMouseModel = types
           open_gates: false,
           eumelanin: getPercentDarkness(),
           hormone_spawn_period: 40,
-          working_receptor: workingReceptor
+          working_receptor: workingReceptor,
+          tan: self.backpackMouse.baseColor === "tan"
         };
       }
     };

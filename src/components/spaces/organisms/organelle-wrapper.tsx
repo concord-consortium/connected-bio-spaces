@@ -112,38 +112,6 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     // appStore.boxes.get(this.props.boxId).setModel(null);
   }
 
-  public updateReceptorImage() {
-    const model = this.getModel();
-    const { zoomLevel } = this.props;
-    if (zoomLevel === "cell") {
-      model.view.show(".receptor-mini", true);
-      model.view.hide("#receptor-working-1", true);
-      model.view.hide("#receptor-broken-1", true);
-      model.view.hide("#receptor-bound-1", true);
-      model.view.hide("#receptor-working-2", true);
-      model.view.hide("#receptor-broken-2", true);
-      model.view.hide("#receptor-bound-2", true);
-    } else {
-      model.view.hide(".receptor-mini", true);
-      if (model.world.getProperty("working_receptor")) {
-        model.view.hide("#receptor-broken-2", true);
-        if (model.world.getProperty("hormone_bound")) {
-          model.view.hide("#receptor-working-2", true);
-          model.view.show("#receptor-bound-2", true);
-        } else {
-          model.view.show("#receptor-working-2", true);
-          model.view.hide("#receptor-bound-2", true);
-        }
-
-        model.view.show("#receptor-broken-1", true);
-      } else {
-        model.view.hide("#receptor-working-2", true);
-        model.view.hide("#receptor-bound-2", true);
-        model.view.show("#receptor-broken-2", true);
-      }
-    }
-  }
-
   public organelleClick(organelleType: OrganelleType, location: {x: number, y: number}) {
     const { organisms } = this.stores;
     organisms.rows[this.props.rowIndex].setActiveAssay(organelleType);
@@ -304,7 +272,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
 
     model.on("hexagon.notify", () => this.updateReceptorImage());
 
-    model.on("gProtein.notify.break_time", (evt: any) => {
+    model.on("gProtein.notify", (evt: any) => {
       const proteinToBreak = evt.agent;
       const location = {x: proteinToBreak.getProperty("x"), y: proteinToBreak.getProperty("y")};
       const body = model.world.createAgent(model.world.species.gProteinBody);
@@ -315,7 +283,11 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
 
       proteinToBreak.die();
 
-      model.world.setProperty("g_protein_bound", false);
+      if (evt.message === "break_time_1") {
+        model.world.setProperty("g_protein_1_bound", false);
+      } else {
+        model.world.setProperty("g_protein_2_bound", false);
+      }
 
       model.world.createAgent(model.world.species.gProtein);
     });
@@ -382,6 +354,55 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
         this.organelleClick(clickTarget, location);
       }
     });
+  }
+
+  private updateReceptorImage() {
+    const model = this.getModel();
+    const { zoomLevel } = this.props;
+    if (zoomLevel === "cell") {
+      model.view.show(".receptor-mini", true);
+      this.hideAllReceptors();
+    } else {
+      model.view.hide(".receptor-mini", true);
+      if (model.world.getProperty("working_receptor")) {
+        if (model.world.getProperty("hormone_1_bound")) {
+          this.showReceptor(1, "bound");
+        } else {
+          this.showReceptor(1, "working");
+        }
+
+        if (model.world.getProperty("tan")) {
+          this.showReceptor(2, "broken");
+        } else {
+          if (model.world.getProperty("hormone_2_bound")) {
+            this.showReceptor(2, "bound");
+          } else {
+            this.showReceptor(2, "working");
+          }
+        }
+      } else {
+        this.showReceptor(1, "broken");
+        this.showReceptor(2, "broken");
+      }
+    }
+  }
+
+  private hideAllReceptors() {
+    const model = this.getModel();
+    model.view.hide("#receptor-working-1", true);
+    model.view.hide("#receptor-broken-1", true);
+    model.view.hide("#receptor-bound-1", true);
+    model.view.hide("#receptor-working-2", true);
+    model.view.hide("#receptor-broken-2", true);
+    model.view.hide("#receptor-bound-2", true);
+  }
+
+  private showReceptor(receptor: number, state: "working" | "bound" | "broken") {
+    const model = this.getModel();
+    model.view.hide(`#receptor-working-${receptor}`, true);
+    model.view.hide(`#receptor-bound-${receptor}`, true);
+    model.view.hide(`#receptor-broken-${receptor}`, true);
+    model.view.show(`#receptor-${state}-${receptor}`, true);
   }
 
   private getOrganelleFromMouseEvent(evt: any): OrganelleType | undefined {
