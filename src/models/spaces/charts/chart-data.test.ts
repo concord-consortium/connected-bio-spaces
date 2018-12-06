@@ -28,7 +28,7 @@ describe("chart data model", () => {
     expect(chart.minMaxAll.minA1).toBe(0);
     expect(chart.minMaxAll.minA2).toBe(10);
 
-    expect(chart.minMaxAll.maxA1).toBe(50);
+    expect(chart.minMaxAll.maxA1).toBe(100);
     expect(chart.minMaxAll.maxA2).toBe(70);
   });
 
