@@ -41,19 +41,14 @@ export const OrganismsRowModel = types
             return;
           }
           const substanceValue = self.organismsMouse.getSubstanceValue(organelle, substance);
-          if (substanceValue > 0) {
-            points.push(DataPoint.create({ a1: substanceValue, a2: 0, label: substance }));
-          }
+          points.push(DataPoint.create({ a1: substanceValue, a2: 0, label: `${organelle} ${substance}` }));
         });
       }
 
       chartDataSets.push(ChartDataSetModel.create({
-        name: "Sample Dataset1",
+        name: self.assayedOrganelle || "",
         dataPoints: points,
-        color: ChartColors[0].hex // all bars will be this color
-        // alternatively, use a specified array of specific colors for each bar:
-        // pointColors: ["#00ff00", "#ff0000"]
-        // if no color and no pointColors are specified, each bar will take on a color from ChartColors
+        pointColors: ["#f4ce83", "#d88bff", "#795423", "#0adbd7"]
       }));
 
       const chart = ChartDataModel.create({
