@@ -6,14 +6,12 @@ import "./main-content.sass";
 import { PopulationsSpaceComponent } from "./spaces/populations-space";
 import { SpaceType } from "../models/ui";
 import { OrganismsSpaceComponent } from "./spaces/organisms-space";
-import { ChartTestSpaceComponent } from "./spaces/chart-test-space";
 
 interface IProps extends IBaseProps {}
 interface IState {}
 
 type SpaceComponent = typeof PopulationsSpaceComponent |
-  typeof OrganismsSpaceComponent |
-  typeof ChartTestSpaceComponent;
+  typeof OrganismsSpaceComponent;
 
 type SpaceTypeToComponent = {
   [key in SpaceType]: SpaceComponent | undefined
@@ -22,7 +20,7 @@ type SpaceTypeToComponent = {
 const kSpaceComponents: SpaceTypeToComponent = {
   populations: PopulationsSpaceComponent,
   organism: OrganismsSpaceComponent,
-  breeding: ChartTestSpaceComponent,
+  breeding: undefined,
   dna: undefined,
   none: undefined
 };
