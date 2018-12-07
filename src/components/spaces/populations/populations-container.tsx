@@ -34,40 +34,10 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
     const populations = this.props.stores && this.props.stores.populations;
 
     if (populations && populations.interactive) {
-
-      const buttonsOLD = populations.toolbarButtons.map( (button, i) => {
-        const type = button.type || "button";
-        switch (type) {
-          case "checkbox":
-            return (
-              <label key={button.title}>
-                { button.title }
-                <input
-                  key={button.title}
-                  type="checkbox"
-                  checked={button.value}
-                  onChange={this.handleClickToolbarCheckbox(button)} />
-              </label>
-            );
-          case "button":
-          default:
-            return (
-              <button key={button.title} className="population-button"
-                      onClick={button.action} data-test={button.title.replace(/ /g, "-")}>
-                <svg className="icon">
-                  <use xlinkHref={"#icon-inspect"} />
-                </svg>
-                <div className="label">{button.title}</div>
-              </button>
-            );
-        }
-      });
-
       const buttons = populations.toolbarButtons.map( (button, i) => {
         const type = button.type || "button";
         if (type === "button") {
           if (button.title === "Change") {
-            // TODO: state not updating?
             const environmentColor: EnvironmentColorType = populations.model.environment;
             let colorReadable = "neutral";
             switch (environmentColor) {
