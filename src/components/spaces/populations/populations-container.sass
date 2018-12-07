@@ -20,7 +20,6 @@
     height: 20px
     width: 20px
     background: $color-khaki-yellow-light2
-    color: red
 
   .population-button
     display: flex
@@ -32,7 +31,7 @@
     margin: 6px
     border: none
     outline: none
-    border-radius: 5px
+    border-radius: $component-border-radius
     font-size: $font-size-label1
     font-family: $font-stack
     color: $color-khaki-yellow-dark5
@@ -88,31 +87,6 @@
     color: $color-white
     background-color: $color-nav-cerulean-dark1
 
-  button
-    height: 20px
-
-  .two-state-button
-    background-color: #FFF
-    border-radius: 4px
-    border: 1px solid #D0D0D0
-    height: 17px
-    font-size: 0.8em
-    line-height: 0.8em
-
-    label
-      float: left
-      width: 4.0em
-      span
-        text-align: center
-        padding: 3px 0px
-        display: block
-      input
-        display: none;
-      input:checked + span
-        background-color: #911
-        color: #fff
-
-/* The container */
 .check-container
   display: block
   position: relative
@@ -124,8 +98,8 @@
   user-select: none
   margin-left: 5px
   margin-right: 5px
-  margin-top: 2px
-  margin-bottom: 2px
+  margin-top: $internal-component-margin
+  margin-bottom: $internal-component-margin
 
 /* Hide the browser's default checkbox */
 .check-container input
@@ -142,10 +116,10 @@
   left: 0
   height: 20px
   width: 20px
-  border-radius: 5px
+  border-radius: $component-border-radius
   background-color: $color-khaki-yellow-light2
 
-/* On mouse-over, add a grey background color */
+/* On mouse-over, add a background color */
 .check-container:hover input ~ .checkmark
   background-color: $color-khaki-yellow
 
