@@ -16,9 +16,11 @@ export class InstructionsComponent extends BaseComponent<IProps, IState> {
 
   public render() {
     return (
-      <Markdown className="authored-markdown">
-        {this.props.content}
-      </Markdown>
+      <div className="authored-markdown">
+        <Markdown>
+          {this.props.content}
+        </Markdown>
+      </div>
     );
   }
 }

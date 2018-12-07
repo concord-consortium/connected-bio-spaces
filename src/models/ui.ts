@@ -12,6 +12,7 @@ export function createUIModel(authoring: any): UIModelType {
         displayedSpace = "none";
   }
   return UIModel.create({
+    showOrganismGraph: [false, true],
     investigationPanelSpace: displayedSpace,
     showPopulationSpace: authoring.showPopulationSpace,
     showBreedingSpace: authoring.showBreedingSpace,
@@ -23,6 +24,7 @@ export function createUIModel(authoring: any): UIModelType {
 export const UIModel = types
   .model("UI", {
     showPopulationGraph: false,
+    showOrganismGraph: types.array(types.boolean),
     investigationPanelSpace: SpaceTypeEnum,
     availableBackpackSlots: 6,
     showPopulationSpace: true,
@@ -32,6 +34,9 @@ export const UIModel = types
   })
   .actions((self) => {
     return {
+      setShowOrganismGraph(rowIndex: number, val: boolean) {
+        self.showOrganismGraph[rowIndex] = val;
+      },
       setShowPopulationGraph(val: boolean) {
         self.showPopulationGraph = val;
       },

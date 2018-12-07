@@ -4,6 +4,7 @@ import { BaseComponent, IBaseProps } from "../base";
 import { TwoUpDisplayComponent } from "../two-up-display";
 import { FourUpDisplayComponent } from "../four-up-display";
 import { Chart } from "../charts/chart";
+import { InstructionsComponent } from "../instructions";
 
 import { OrganismsContainer } from "./organisms/organisms-container";
 
@@ -28,22 +29,32 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
   }
 
   private getOrganismsRow(rowIndex: number) {
-    const { organisms } = this.stores;
+    const { ui, organisms } = this.stores;
     const row = organisms.rows[rowIndex];
     const { currentData } = row;
-
-    const graphTitle = "Graph";
+    const showOrganismGraph = ui.showOrganismGraph[rowIndex];
+    const iconId = showOrganismGraph ? "#icon-show-data" : "#icon-show-graph";
+    const graphTitle = showOrganismGraph ? "Graph" : "Instructions";
     const graphPanel = <Chart title="Chart Test" chartData={currentData}
       chartType={"horizontalBar"} />;
+    const instructionsPanel = <InstructionsComponent content={organisms.instructions}/>;
+    const rightPanelContent = showOrganismGraph ? graphPanel : instructionsPanel;
 
     return (
       <TwoUpDisplayComponent
         leftTitle="Investigate: Cell"
         leftPanel={<OrganismsContainer rowIndex={rowIndex}/>}
         rightTitle={graphTitle}
-        rightPanel={graphPanel}
+        rightIcon={iconId}
+        rightPanel={rightPanelContent}
+        onClickRightIcon={this.toggleOrganismsGraph(rowIndex)}
       />
     );
+  }
+
+  private toggleOrganismsGraph = (rowIndex: number) => (e: any) => {
+    const {ui} = this.stores;
+    ui.setShowOrganismGraph(rowIndex, !ui.showOrganismGraph[rowIndex]);
   }
 
 }

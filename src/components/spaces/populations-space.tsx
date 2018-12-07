@@ -17,9 +17,7 @@ export class PopulationsSpaceComponent extends BaseComponent<IProps, IState> {
     const {ui, populations} = this.stores;
     const showPopulationGraph = ui.showPopulationGraph;
     const iconId = showPopulationGraph ? "#icon-show-data" : "#icon-show-graph";
-    const graphTitle = showPopulationGraph ? "Graph" : "Data";
-    const contentText = showPopulationGraph ? "Graph goes here" :
-                                                     "Data goes here";
+    const graphTitle = showPopulationGraph ? "Graph" : "Instructions";
     const graphPanel = <Chart title="Chart Test" chartData={populations.currentData} chartType={"line"} />;
     const instructionsPanel = <InstructionsComponent content={populations.instructions}/>;
     const rightPanelContent = ui.showPopulationGraph ? graphPanel : instructionsPanel;

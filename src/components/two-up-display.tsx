@@ -9,7 +9,7 @@ interface IProps extends IBaseProps {
   leftPanel: React.ReactNode;
   rightTitle: string;
   rightIcon?: string;
-  onClickRightIcon?: () => void;
+  onClickRightIcon?: (row?: number) => void;
   rightPanel: React.ReactNode;
 }
 interface IState {}

@@ -85,7 +85,8 @@ export const OrganismsSpaceModel = types
   .model("OrganismsSpace", {
     organismsMice: types.array(OrganismsMouseModel),
     rows: types.optional(types.array(OrganismsRowModel),
-      [OrganismsRowModel.create(), OrganismsRowModel.create()])
+      [OrganismsRowModel.create(), OrganismsRowModel.create()]),
+    instructions: ""
   })
   .actions((self) => {
     function clearRowBackpackMouse(rowIndex: number) {
