@@ -14,7 +14,7 @@ export function createPopulationsModel(curriculumName: string, authoring: any): 
       return PopulationsModel.create({
         model: MousePopulationsModel.create(authoring),
         instructions: authoring.instructions,
-        mouseMode: "none"
+        interactionMode: "none"
       });
   }
 }
@@ -34,7 +34,7 @@ export const PopulationsModel = types
     model: ModelsUnion,
     isPlaying: false,
     instructions: "",
-    mouseMode: InteractionModeEnum
+    interactionMode: InteractionModeEnum
   })
   .extend(self => {
 
@@ -61,14 +61,18 @@ export const PopulationsModel = types
       },
       actions: {
         togglePlay() {
-          self.model.interactive.togglePlay();
-          if (self.mouseMode === "select" && self.isPlaying) {
-            self.mouseMode = "none";
+          if (!self.isPlaying) {
+            self.model.interactive.play();
+            self.interactionMode = "none";
+            // temporary
+            self.model.interactive.exitInspectMode();
+          } else {
+            self.model.interactive.stop();
           }
         },
         play() {
           self.model.interactive.play();
-          if (self.mouseMode === "select") self.mouseMode = "none";
+          self.interactionMode = "none";
         },
         pause() {
           self.model.interactive.stop();
@@ -88,26 +92,28 @@ export const PopulationsModel = types
 
     return {
       actions: {
-        toggleSelectionMode() {
-          if (self.mouseMode !== "select") {
-            if (self.mouseMode === "inspect") self.model.interactive.exitInspectMode();
-            self.mouseMode = "select";
-            modelWasPlaying = self.isPlaying;
-            self.pause();
-          } else {
-            self.mouseMode = "none";
+        toggleInteractionMode(mode: "select" | "inspect") {
+          if (self.interactionMode === mode) {
+            // unset mode, and return to playing if model was playing previously
+            self.interactionMode = "none";
             if (modelWasPlaying) {
               self.play();
             }
+          } else {
+            // if we're switching from "none", save current play state. Then switch state
+            if (self.interactionMode === "none") {
+              modelWasPlaying = self.isPlaying;
+              self.pause();
+            }
+            self.interactionMode = mode;
           }
-        },
-        toggleInspectMode() {
-          if (self.mouseMode !== "inspect") {
+
+          // set "info" mode on interactive. This is temporary, eventually we will show info in right
+          // panel using the same mouse handler as the select view.
+          if (self.interactionMode === "inspect") {
             self.model.interactive.enterInspectMode();
-            self.mouseMode = "inspect";
           } else {
             self.model.interactive.exitInspectMode();
-            self.mouseMode = "none";
           }
         }
       }

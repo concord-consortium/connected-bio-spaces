@@ -98,8 +98,8 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
       const runButtonLabel = populations.isPlaying ? "Pause" : "Run";
       const runButtonIcon = populations.isPlaying ? "#icon-pause" : "#icon-run";
       const runButtonClass = populations.isPlaying ? "pause" : "run";
-      const inspectButtonClass = populations.mouseMode === "inspect" ? "button-active" : "button-inactive";
-      const collectButtonClass = populations.mouseMode === "select" ? "button-active" : "button-inactive";
+      const inspectButtonClass = populations.interactionMode === "inspect" ? "button-active" : "button-inactive";
+      const collectButtonClass = populations.interactionMode === "select" ? "button-active" : "button-inactive";
       return (
         <div>
           <SizeMe monitorHeight={true}>
@@ -188,7 +188,7 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
   private handleClickInspectButton = () => {
     const populations = this.props.stores && this.props.stores.populations;
     if (populations) {
-      populations.toggleInspectMode();
+      populations.toggleInteractionMode("inspect");
     }
   }
 
@@ -209,13 +209,13 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
   private handleClickSelect = () => {
     const populations = this.props.stores && this.props.stores.populations;
     if (populations) {
-      populations.toggleSelectionMode();
+      populations.toggleInteractionMode("select");
     }
   }
 
   private handleAgentClicked = (evt: AgentEnvironmentMouseEvent) => {
     const populations = this.props.stores && this.props.stores.populations;
-    if (populations && populations.mouseMode === "select" && evt.type === "click" && evt.agents.mice) {
+    if (populations && populations.interactionMode === "select" && evt.type === "click" && evt.agents.mice) {
       const selectedMouse = evt.agents.mice;
       if (this.props.stores) {
         const backpack = this.props.stores.backpack;

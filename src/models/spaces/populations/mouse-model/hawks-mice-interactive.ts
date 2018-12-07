@@ -205,7 +205,7 @@ export function createInteractive(model: MousePopulationsModelType) {
   };
   interactive.exitInspectMode = () => {
     (interactive.environment as any).setState("None");
-    (interactive.environment as any).infoPopup.hide();
+    if ((interactive.environment as any).infoPopup) (interactive.environment as any).infoPopup.hide();
   };
 
   function setProperty(agents: Agent[], prop: string, val: any) {
