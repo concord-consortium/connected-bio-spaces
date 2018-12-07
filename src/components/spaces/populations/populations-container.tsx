@@ -88,7 +88,14 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
                 onChange={this.handleClickToolbarCheckbox(button)} />
               <span className="checkmark"/>
               <div className="label-holder">
-                <div className="label">{ button.title }</div>
+                <div className="label">
+                  <div>{ button.title }</div>
+                  {
+                    button.imageClass
+                      ?  <div className={button.imageClass} />
+                      :  null
+                  }
+                </div>
               </div>
             </label>
           );
@@ -159,15 +166,6 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
                 <div className="label-holder">
                   <div className="label"><div>Females</div><div className="circle female"/></div>
                   <div className="label"><div>Males</div><div className="circle male"/></div>
-                </div>
-              </label>
-              <label className="check-container">
-                <input
-                  className="population-checkbox"
-                  type="checkbox" />
-                <span className="checkmark"/>
-                <div className="label-holder">
-                  <div className="label"><div>Heterozygotes</div><div className="circle heterozygote"/></div>
                 </div>
               </label>
               { checkboxes }

@@ -142,6 +142,16 @@ export const MousePopulationsModel = types
             });
           }
 
+          buttons.push({
+            title: "Heterozygotes",
+            imageClass: "circle heterozygote",
+            type: "checkbox",
+            value: self.showHeteroStack,
+            action: (val: boolean) => {
+              self.setShowHeteroStack(val);
+            }
+          });
+
           if (self["inheritance.showStudentControlOfMutations"]) {
             buttons.push({
               title: "Mutations",

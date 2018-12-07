@@ -21,6 +21,7 @@ export function createPopulationsModel(curriculumName: string, authoring: any): 
 
 export interface ToolbarButton {
   title: string;
+  imageClass?: string;
   type?: string;
   value?: boolean;
   action: (e: (React.MouseEvent<HTMLButtonElement> | boolean)) => void;
