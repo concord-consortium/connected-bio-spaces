@@ -59,6 +59,7 @@ export const MousePopulationsModel = types
     "inheritance.randomOffspring.white": types.number,
     "inheritance.randomOffspring.tan": types.number,
     "showSexStack": false,
+    "showHeteroStack": false,
     "chartData": types.optional(ChartDataModel, chartData)
   })
   .extend(self => {
@@ -109,6 +110,12 @@ export const MousePopulationsModel = types
           self.chartData.dataSets[0].clearDataPoints();
           self.chartData.dataSets[1].clearDataPoints();
           self.chartData.dataSets[2].clearDataPoints();
+        },
+        setShowSexStack(show: boolean) {
+          self.showSexStack = show;
+        },
+        setShowHeteroStack(show: boolean) {
+          self.showHeteroStack = show;
         }
       }
     };

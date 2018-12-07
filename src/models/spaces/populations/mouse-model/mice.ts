@@ -244,6 +244,24 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
           }
         ]
       }, {
+        name: "heterozygous",
+        contexts: ["environment"],
+        rules: [
+          {
+            image: {
+              path: "assets/curriculum/mouse/populations/heterozygous-stack.png",
+              scale: 0.4,
+              anchor: {
+                x: 0.75,
+                y: 0.5
+              }
+            },
+            useIf(agent: Agent) {
+              return model.showHeteroStack && agent.get("color") === "tan";
+            }
+          }
+        ]
+      }, {
         name: "mouse info tool",
         contexts: ["info-tool"],
         rules: [
