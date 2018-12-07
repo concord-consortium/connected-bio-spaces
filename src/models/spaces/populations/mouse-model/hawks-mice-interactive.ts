@@ -184,8 +184,8 @@ export function createInteractive(model: MousePopulationsModelType) {
     } else {
       environmentColor = "white";
     }
+    model.setEnvironmentColor(environmentColor);
     interactive.environment.setBackground(`assets/curriculum/mouse/populations/${environmentColor}.png`);
-
   };
 
   interactive.getData = () => {
