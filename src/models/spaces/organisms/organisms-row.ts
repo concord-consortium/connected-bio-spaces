@@ -73,6 +73,9 @@ export const OrganismsRowModel = types
       },
       setZoomLevel(zoomLevel: ZoomLevelType) {
         self.zoomLevel = zoomLevel;
+      },
+      setMode(mode: ModeType) {
+        self.mode = mode;
       }
     };
   });

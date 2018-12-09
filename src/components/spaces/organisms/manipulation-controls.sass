@@ -9,5 +9,10 @@
     display: inline-block
     cursor: pointer
 
+    &.disabled
+      pointer-events: none
+      color: lightgray
+
+    &.active,
     &:active
       background-color: gray
