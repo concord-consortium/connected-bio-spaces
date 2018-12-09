@@ -1,13 +1,15 @@
 .manipulation-controls
   flex-grow: 1
   justify-content: center
+  font-size: 17px
 
-  .assay
+  .button
     border: 1px solid black
     background-color: white
     padding: 3px
     display: inline-block
     cursor: pointer
+    margin: 0 3px
 
     &.disabled
       pointer-events: none
@@ -16,3 +18,7 @@
     &.active,
     &:active
       background-color: gray
+
+  select
+    font-size: inherit
+    font-family: inherit

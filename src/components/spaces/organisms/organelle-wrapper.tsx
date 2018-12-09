@@ -462,7 +462,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     });
   }
 
-  private resetHoveredOrganelle() {
+  private resetHoveredOrganelle = () => {
     const {organisms} = this.stores;
     const {rowIndex} = this.props;
     organisms.rows[rowIndex].setHoveredOrganelle(undefined);

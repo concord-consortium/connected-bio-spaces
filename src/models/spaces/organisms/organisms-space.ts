@@ -1,20 +1,10 @@
 import { types, Instance } from "mobx-state-tree";
 import { ColorType, BackpackMouseType } from "../../backpack-mouse";
 import { OrganismsMouseModel } from "./organisms-mouse";
-import { OrganismsRowModel, OrganelleType, OrganismsRowModelType } from "./organisms-row";
-import { BackpackModelType } from "../../backpack";
 import { ProteinSpec } from "../../../components/spaces/proteins/protein-viewer";
 import MouseProteins from "../../../components/spaces/proteins/protein-specs/mouse-proteins";
+import { OrganismsRowModel, OrganelleType, SubstanceType } from "./organisms-row";
 import { RightPanelType } from "../../ui";
-
-export const kSubstanceNames = [
-  "pheomelanin",
-  "signalProtein",
-  "eumelanin",
-  "hormone"
-];
-export const Substance = types.enumeration("Substance", kSubstanceNames);
-export type SubstanceType = typeof Substance.Type;
 
 type SubstanceInfo = {
   [substance in SubstanceType]: {

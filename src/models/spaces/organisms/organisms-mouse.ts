@@ -1,8 +1,8 @@
 import { types, Instance } from "mobx-state-tree";
 import { MouseColor, BackpackMouse } from "../../backpack-mouse";
-import { SubstanceType, kOrganelleInfo } from "./organisms-space";
+import { kOrganelleInfo } from "./organisms-space";
 import { v4 as uuid } from "uuid";
-import { OrganelleType } from "./organisms-row";
+import { OrganelleType, SubstanceType } from "./organisms-row";
 
 export const OrganismsMouseModel = types
   .model("OrganismsMouse", {

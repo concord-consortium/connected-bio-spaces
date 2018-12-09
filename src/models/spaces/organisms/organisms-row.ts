@@ -2,8 +2,8 @@ import { types, Instance } from "mobx-state-tree";
 import { ChartDataModelType, ChartDataModel } from "../charts/chart-data";
 import { DataPoint, ChartDataSetModel, ChartDataSetModelType, DataPointType } from "../charts/chart-data-set";
 import { OrganismsMouseModel } from "./organisms-mouse";
-import { kSubstanceInfo, kSubstanceNames } from "./organisms-space";
 import { RightPanelTypeEnum, RightPanelType } from "../../ui";
+import { kSubstanceInfo } from "./organisms-space";
 
 export const Organelle = types.enumeration("type", [
   "nucleus",
@@ -18,6 +18,15 @@ export const Organelle = types.enumeration("type", [
   "nearbyCell"
 ]);
 export type OrganelleType = typeof Organelle.Type;
+
+export const kSubstanceNames = [
+  "pheomelanin",
+  "signalProtein",
+  "eumelanin",
+  "hormone"
+];
+export const Substance = types.enumeration("Substance", kSubstanceNames);
+export type SubstanceType = typeof Substance.Type;
 
 export const Mode = types.enumeration("type", ["add", "subtract", "assay", "inspect", "normal"]);
 export type ModeType = typeof Mode.Type;
@@ -36,7 +45,8 @@ export const OrganismsRowModel = types
     showProteinDNA: false,
     showProteinAminoAcidsOnProtein: false,
     proteinSliderStartPercent: 0,
-    rightPanel: types.optional(RightPanelTypeEnum, "instructions")
+    rightPanel: types.optional(RightPanelTypeEnum, "instructions"),
+    selectedSubstance: types.optional(Substance, "hormone")
   })
   .views(self => ({
     get currentData(): ChartDataModelType {
@@ -109,6 +119,9 @@ export const OrganismsRowModel = types
       },
       setRightPanel(val: RightPanelType) {
         self.rightPanel = val;
+      },
+      setSelectedSubstance(substance: SubstanceType) {
+        self.selectedSubstance = substance;
       }
     };
   });
