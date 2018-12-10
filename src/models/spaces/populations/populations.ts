@@ -35,12 +35,6 @@ export const PopulationsModel = types
     function updateIsPlaying() {
       if (self.isPlaying !== self.model.interactive.isPlaying) {
         self.isPlaying = self.model.interactive.isPlaying;
-
-        if (self.isPlaying) {
-          // clear any subset information and return to viewing the live tail
-          const d: ChartDataModelType = self.model.chartData;
-          d.setDataSetSubset(-1, d.maxPoints);
-        }
       }
     }
     Events.addEventListener(Environment.EVENTS.START, updateIsPlaying);

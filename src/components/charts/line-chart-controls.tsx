@@ -29,7 +29,9 @@ export class LineChartControls extends BaseComponent<IChartControlProps, IChartC
 
     if (isPlaying) {
       nextState.scrubberPosition = chartData.pointCount;
-
+      if (chartData.subsetIdx !== -1) {
+        chartData.setDataSetSubset(-1, chartData.maxPoints);
+      }
       if (prevState.scrubberMax !== chartData.pointCount) {
         nextState.scrubberMax = chartData.pointCount;
       }

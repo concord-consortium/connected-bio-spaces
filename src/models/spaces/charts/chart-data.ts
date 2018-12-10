@@ -48,6 +48,10 @@ export const ChartDataModel = types
 
     get pointCount() {
       return self.dataSets[0].dataPoints.length;
+    },
+
+    get subsetIdx() {
+      return self.dataSets[0].dataStartIdx;
     }
   }))
   .extend(self => {
