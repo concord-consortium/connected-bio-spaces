@@ -223,7 +223,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
         ((this.modelDomRef as unknown) as Element).innerHTML = "";
       }
     }
-    const {zoomLevel } = this.props;
+    const { zoomLevel } = this.props;
     const { organisms } = this.stores;
     const row = organisms.rows[this.props.rowIndex];
     const { organismsMouse } = row;
@@ -364,14 +364,14 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
       this.hideAllReceptors();
     } else {
       model.view.hide(".receptor-mini", true);
-      if (model.world.getProperty("working_receptor")) {
+      if (model.world.getProperty("base_darkness") > 0) {
         if (model.world.getProperty("hormone_1_bound")) {
           this.showReceptor(1, "bound");
         } else {
           this.showReceptor(1, "working");
         }
 
-        if (model.world.getProperty("tan")) {
+        if (model.world.getProperty("base_darkness") === 1) {
           this.showReceptor(2, "broken");
         } else {
           if (model.world.getProperty("hormone_2_bound")) {

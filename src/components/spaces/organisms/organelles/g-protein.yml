@@ -17,8 +17,8 @@ rules:
   initialization:
   - if:
       all:
-      - fact:
-          not: world.tan
+      - fact: world.base_darkness
+        equals: 2
       - fact: rand
         greaterThan: 0.5
     then:
@@ -44,7 +44,7 @@ rules:
   check_if_bound_to_first:
   - if:
       all:
-      - fact: world.working_receptor
+      - fact: world.base_darkness
       - fact:
           not: world.g_protein_1_bound
     then:
@@ -54,7 +54,7 @@ rules:
   check_if_bound_to_second:
   - if:
       all:
-      - fact: world.working_receptor
+      - fact: world.base_darkness
       - fact:
           not: world.g_protein_2_bound
     then:
@@ -64,14 +64,14 @@ rules:
 
   head_away_1:
     if:
-      fact: world.working_receptor
+      fact: world.base_darkness
     then:
       switch_state: move_away_on_current_path_1
     else:
       switch_state: pick_path_away_1
   head_away_2:
     if:
-      fact: world.working_receptor
+      fact: world.base_darkness
     then:
       switch_state: move_away_on_current_path_2
     else:
