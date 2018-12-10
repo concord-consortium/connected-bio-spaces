@@ -287,6 +287,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
         model.world.setProperty("g_protein_1_bound", false);
       } else {
         model.world.setProperty("g_protein_2_bound", false);
+        body.setProperties({second_receptor: true});
       }
 
       model.world.createAgent(model.world.species.gProtein);
