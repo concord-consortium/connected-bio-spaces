@@ -24,7 +24,11 @@ export const OrganismsMouseModel = types
       getSubstanceValue,
       getPercentDarkness,
       get modelProperties() {
-        const workingReceptor = self.backpackMouse.baseColor !== "white";
+        const darkness = self.backpackMouse.baseColor === "white"
+          ? 0
+          : self.backpackMouse.baseColor === "tan"
+            ? 1
+            : 2;
         return {
           albino: false,
           working_tyr1: false,
@@ -32,7 +36,7 @@ export const OrganismsMouseModel = types
           open_gates: false,
           eumelanin: getPercentDarkness(),
           hormone_spawn_period: 40,
-          working_receptor: workingReceptor
+          base_darkness: darkness
         };
       }
     };

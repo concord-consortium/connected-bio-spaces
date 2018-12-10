@@ -16,11 +16,17 @@ rules:
   initialization:
   - if:
       fact: rand
-      greaterThan: 85
+      greaterThan: 90
     then:
-      switch_state: heading_to_receptor
+      switch_state: heading_to_receptor_1
     else:
-      switch_state: flowing
+      if:
+        fact: rand
+        greaterThan: 80
+      then:
+        switch_state: heading_to_receptor_2
+      else:
+        switch_state: flowing
   flowing:
   - follow:
       selector: "#intercellular-paths path"
@@ -30,36 +36,70 @@ rules:
       direction: forward
       finally:
         die: true
-  heading_to_receptor:
+  heading_to_receptor_1:
   - follow:
       selector: "#intercellular-path-to-receptor path"
       which: 0
       direction: forward
       finally:
-        switch_state: check_if_bound
-  check_if_bound:
+        switch_state: check_if_bound_1
+  heading_to_receptor_2:
+  - follow:
+      selector: "#intercellular-path-to-second-receptor path"
+      which: 0
+      direction: forward
+      finally:
+        switch_state: check_if_bound_2
+  check_if_bound_1:
   - if:
-      fact: world.hormone_bound
+      fact: world.hormone_1_bound
     then:
-      switch_state: heading_away_from_receptor
+      switch_state: heading_away_from_receptor_1
     else:
-      switch_state: waiting_on_receptor
-  waiting_on_receptor:
+      switch_state: waiting_on_receptor_1
+  check_if_bound_2:
+  - if:
+      fact: world.hormone_2_bound
+    then:
+      switch_state: heading_away_from_receptor_2
+    else:
+      switch_state: waiting_on_receptor_2
+  waiting_on_receptor_1:
   - set:
-      world.hormone_bound: true
+      world.hormone_1_bound: true
   - notify: "bound"
   - wait:
       for: 300
       finally:
-        switch_state: unbind
-  unbind:
+        switch_state: unbind_1
+  waiting_on_receptor_2:
   - set:
-      world.hormone_bound: false
+      world.hormone_2_bound: true
+  - notify: "bound"
+  - wait:
+      for: 300
+      finally:
+        switch_state: unbind_2
+  unbind_1:
+  - set:
+      world.hormone_1_bound: false
   - notify: "unbound"
-  - switch_state: heading_away_from_receptor
-  heading_away_from_receptor:
+  - switch_state: heading_away_from_receptor_1
+  unbind_2:
+  - set:
+      world.hormone_2_bound: false
+  - notify: "unbound"
+  - switch_state: heading_away_from_receptor_2
+  heading_away_from_receptor_1:
   - follow:
       selector: "#intercellular-path-away-from-receptor path"
+      which: nearest
+      direction: forward
+      finally:
+        die: true
+  heading_away_from_receptor_2:
+  - follow:
+      selector: "#intercellular-path-away-from-second-receptor path"
       which: nearest
       direction: forward
       finally:

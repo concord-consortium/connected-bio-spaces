@@ -2,11 +2,7 @@
   "modelSvg": "assets/cell-zoom/melanocyte.svg",
   "species": [
     "organelles/melanosome.yml",
-    "organelles/dots.yml",
-    "organelles/hexagon.yml",
-    "organelles/g-protein.yml",
-    "organelles/g-protein-body.yml",
-    "organelles/g-protein-part.yml"
+    "organelles/hormone-dot.yml"
   ],
   "calculatedProperties": {
     "lightness": {

@@ -8,6 +8,7 @@ const kDefaultMouseImage = "../../assets/mouse_collect.png";
 
 interface IProps extends IBaseProps {
   backpackMouse?: BackpackMouseType;
+  width: number;
 }
 interface IState {
 }
@@ -17,14 +18,18 @@ interface IState {
 export class OrganismView extends BaseComponent<IProps, IState> {
 
   public render() {
-    const { backpackMouse } = this.props;
+    const { backpackMouse, width } = this.props;
     const mouseImage = backpackMouse ? backpackMouse.baseImage : kDefaultMouseImage;
 
-    const mouseStyle = {
+    const mouseStyle: React.CSSProperties = {
       backgroundImage: `url(${mouseImage})`,
       backgroundRepeat: "no-repeat",
-      backgroundSize: "contain"
+      backgroundSize: "contain",
+      backgroundPositionX: "center"
     };
+    if (width) {
+      mouseStyle.width = `${width}px`;
+    }
 
     const mouseDescription = backpackMouse ? `Mouse: ${backpackMouse.baseColor}` : "";
 

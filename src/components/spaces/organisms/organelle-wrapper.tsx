@@ -7,15 +7,18 @@ import { observer, inject } from "mobx-react";
 // import { rootStore, Mode } from "../stores/RootStore";
 import { createModel } from "organelle";
 import * as Cell from "./cell-models/cell.json";
+import * as Receptor from "./cell-models/receptor.json";
 import { kOrganelleInfo } from "../../../models/spaces/organisms/organisms-space";
 import { BaseComponent } from "../../base";
 // import { SubstanceType } from "../models/Substance";
 import "./organelle-wrapper.sass";
-import { OrganelleType, ModeType } from "../../../models/spaces/organisms/organisms-row.js";
+import { OrganelleType, ModeType, ZoomLevelType } from "../../../models/spaces/organisms/organisms-row.js";
 
 interface OrganelleWrapperProps {
+  zoomLevel: ZoomLevelType;
   elementName: string;
   rowIndex: number;
+  width: number;
 }
 
 interface OrganelleWrapperState {
@@ -61,7 +64,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
         selector: "#melanosome_2, #melanosome_4"
       },
       receptor: {
-        selector: "#receptor-broken, #receptor-working, #receptor-bound",
+        selector: ".receptor-group",
         visibleModes: ["normal"]
       },
       gate: {
@@ -74,10 +77,8 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
         visibleModes: ["normal"]
       }
     };
-    // private modelDefs: any = {
-    //   Cell: CellModels.cell,
-    //   Protein: CellModels.receptor
-    // };
+  private modelDomRef: React.RefObject<{}>|null;
+  private setModelDomRef: (element: any) => void;
 
   constructor(props: OrganelleWrapperProps) {
     super(props);
@@ -87,51 +88,28 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     };
     this.completeLoad = this.completeLoad.bind(this);
     this.resetHoveredOrganelle = this.resetHoveredOrganelle.bind(this);
+
+    this.modelDomRef = null;
+    this.setModelDomRef = (element) => {
+      this.modelDomRef = element;
+    };
   }
 
   public componentDidMount() {
-    const { organisms } = this.stores;
-    const row = organisms.rows[this.props.rowIndex];
-    const { modelProperties } = row.organismsMouse as any;
-    const modelDef: any = Cell;
+    this.createNewModel();
+  }
 
-    modelDef.container = {
-      elId: this.props.elementName,
-      width: MODEL_WIDTH,
-      height: MODEL_HEIGHT
-    };
-
-    modelDef.properties = modelProperties;
-
-    createModel(modelDef).then((m: any) => {
-      // appStore.boxes.get(this.props.boxId).setModel(m);
-      this.model = m;
-      this.completeLoad();
-    });
+  public componentWillReact() {
+    const zoomLevel = this.props.zoomLevel;
+    if (this.model && zoomLevel !== this.model.zoomLevel) {
+      this.createNewModel();
+    }
   }
 
   public componentWillUnmount() {
     this.disposers.forEach(disposer => disposer());
     this.getModel().destroy();
     // appStore.boxes.get(this.props.boxId).setModel(null);
-  }
-
-  public updateReceptorImage() {
-    const model = this.getModel();
-    if (model.world.getProperty("working_receptor")) {
-      model.view.hide("#receptor-broken", true);
-      if (model.world.getProperty("hormone_bound")) {
-        model.view.hide("#receptor-working", true);
-        model.view.show("#receptor-bound", true);
-      } else {
-        model.view.show("#receptor-working", true);
-        model.view.hide("#receptor-bound", true);
-      }
-    } else {
-      model.view.hide("#receptor-working", true);
-      model.view.hide("#receptor-bound", true);
-      model.view.show("#receptor-broken", true);
-    }
   }
 
   public organelleClick(organelleType: OrganelleType, location: {x: number, y: number}) {
@@ -226,14 +204,46 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     ));
     // const dropperCursor = this.state.hoveredOrganelle && this.isModeDropper(rootStore.mode);
     const dropperCursor = false;
-    const style = {height: MODEL_HEIGHT, width: MODEL_WIDTH};
+    const width = this.props.width ? Math.min(this.props.width, MODEL_WIDTH) : MODEL_WIDTH;
+    const style = {height: MODEL_HEIGHT, width};
     return (
       <div className={"model-wrapper" + (dropperCursor ? " dropper" : "")} style={style}>
-        <div id={this.props.elementName} className="model" onMouseLeave={this.resetHoveredOrganelle}/>
+        <div id={this.props.elementName} className="model" onMouseLeave={this.resetHoveredOrganelle}
+          ref={this.setModelDomRef} />
         {hoverDiv}
         {droppers}
       </div>
     );
+  }
+
+  private createNewModel() {
+    if (this.model) {
+      this.model.destroy();
+      if (this.modelDomRef) {
+        ((this.modelDomRef as unknown) as Element).innerHTML = "";
+      }
+    }
+    const { zoomLevel } = this.props;
+    const { organisms } = this.stores;
+    const row = organisms.rows[this.props.rowIndex];
+    const { organismsMouse } = row;
+    const { modelProperties } = organismsMouse!;
+    const modelDef: any = zoomLevel === "cell" ? Cell : Receptor;
+
+    modelDef.container = {
+      elId: this.props.elementName,
+      width: this.props.width ? Math.min(this.props.width, MODEL_WIDTH) : MODEL_WIDTH,
+      height: MODEL_HEIGHT
+    };
+
+    modelDef.properties = modelProperties;
+
+    createModel(modelDef).then((m: any) => {
+      // appStore.boxes.get(this.props.boxId).setModel(m);
+      this.model = m;
+      this.model.zoomLevel = zoomLevel;
+      this.completeLoad();
+    });
   }
 
   private getModel() {
@@ -247,20 +257,22 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
       this.updateReceptorImage();
     });
 
-    model.setTimeout(
-      () => {
-        for (let i = 0; i < 3; i++) {
-          // The world could have been unmounted since the timeout was set
-          if (model && model.world) {
-            model.world.createAgent(model.world.species.gProtein);
+    if (this.props.zoomLevel === "protein") {
+      model.setTimeout(
+        () => {
+          for (let i = 0; i < 3; i++) {
+            // The world could have been unmounted since the timeout was set
+            if (model && model.world) {
+              model.world.createAgent(model.world.species.gProtein);
+            }
           }
-        }
-      },
-      1300);
+        },
+        1300);
+    }
 
     model.on("hexagon.notify", () => this.updateReceptorImage());
 
-    model.on("gProtein.notify.break_time", (evt: any) => {
+    model.on("gProtein.notify", (evt: any) => {
       const proteinToBreak = evt.agent;
       const location = {x: proteinToBreak.getProperty("x"), y: proteinToBreak.getProperty("y")};
       const body = model.world.createAgent(model.world.species.gProteinBody);
@@ -271,7 +283,12 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
 
       proteinToBreak.die();
 
-      model.world.setProperty("g_protein_bound", false);
+      if (evt.message === "break_time_1") {
+        model.world.setProperty("g_protein_1_bound", false);
+      } else {
+        model.world.setProperty("g_protein_2_bound", false);
+        body.setProperties({second_receptor: true});
+      }
 
       model.world.createAgent(model.world.species.gProtein);
     });
@@ -338,6 +355,55 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
         this.organelleClick(clickTarget, location);
       }
     });
+  }
+
+  private updateReceptorImage() {
+    const model = this.getModel();
+    const { zoomLevel } = this.props;
+    if (zoomLevel === "cell") {
+      model.view.show(".receptor-mini", true);
+      this.hideAllReceptors();
+    } else {
+      model.view.hide(".receptor-mini", true);
+      if (model.world.getProperty("base_darkness") > 0) {
+        if (model.world.getProperty("hormone_1_bound")) {
+          this.showReceptor(1, "bound");
+        } else {
+          this.showReceptor(1, "working");
+        }
+
+        if (model.world.getProperty("base_darkness") === 1) {
+          this.showReceptor(2, "broken");
+        } else {
+          if (model.world.getProperty("hormone_2_bound")) {
+            this.showReceptor(2, "bound");
+          } else {
+            this.showReceptor(2, "working");
+          }
+        }
+      } else {
+        this.showReceptor(1, "broken");
+        this.showReceptor(2, "broken");
+      }
+    }
+  }
+
+  private hideAllReceptors() {
+    const model = this.getModel();
+    model.view.hide("#receptor-working-1", true);
+    model.view.hide("#receptor-broken-1", true);
+    model.view.hide("#receptor-bound-1", true);
+    model.view.hide("#receptor-working-2", true);
+    model.view.hide("#receptor-broken-2", true);
+    model.view.hide("#receptor-bound-2", true);
+  }
+
+  private showReceptor(receptor: number, state: "working" | "bound" | "broken") {
+    const model = this.getModel();
+    model.view.hide(`#receptor-working-${receptor}`, true);
+    model.view.hide(`#receptor-bound-${receptor}`, true);
+    model.view.hide(`#receptor-broken-${receptor}`, true);
+    model.view.show(`#receptor-${state}-${receptor}`, true);
   }
 
   private getOrganelleFromMouseEvent(evt: any): OrganelleType | undefined {

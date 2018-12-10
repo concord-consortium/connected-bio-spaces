@@ -12,48 +12,102 @@ dieWhenExitingWorld: false
 properties:
   size: 1.1
   speed: [0.5, 0.8]
-initialState: towards
+  rand: [0, 1]
 rules:
-  towards:
+  initialization:
+  - if:
+      all:
+      - fact: world.base_darkness
+        equals: 2
+      - fact: rand
+        greaterThan: 0.5
+    then:
+      switch_state: toward_second_receptor
+    else:
+      switch_state: toward_first_receptor
+
+  toward_first_receptor:
   - follow:
       selector: "#gprotein-paths-to-receptor path"
       which: random
       direction: backward
       finally:
-        switch_state: check_if_bound
-  check_if_bound:
+        switch_state: check_if_bound_to_first
+  toward_second_receptor:
+  - follow:
+      selector: "#gprotein-paths-to-second-receptor path"
+      which: random
+      direction: backward
+      finally:
+        switch_state: check_if_bound_to_second
+
+  check_if_bound_to_first:
   - if:
       all:
-      - fact: world.working_receptor
+      - fact: world.base_darkness
       - fact:
-          not: world.g_protein_bound
+          not: world.g_protein_1_bound
     then:
-      switch_state: bind_to_receptor
+      switch_state: bind_to_first_receptor
     else:
-      switch_state: head_away
-  head_away:
+      switch_state: head_away_1
+  check_if_bound_to_second:
+  - if:
+      all:
+      - fact: world.base_darkness
+      - fact:
+          not: world.g_protein_2_bound
+    then:
+      switch_state: bind_to_second_receptor
+    else:
+      switch_state: head_away_2
+
+  head_away_1:
     if:
-      fact: world.working_receptor
+      fact: world.base_darkness
     then:
-      switch_state: away
+      switch_state: move_away_on_current_path_1
     else:
-      switch_state: pick_path_away
-  pick_path_away:
+      switch_state: pick_path_away_1
+  head_away_2:
+    if:
+      fact: world.base_darkness
+    then:
+      switch_state: move_away_on_current_path_2
+    else:
+      switch_state: pick_path_away_2
+
+  pick_path_away_1:
   - move_to:
       selector: "#gprotein-paths-to-receptor path"
       which: random
       finally:
-        switch_state: away
-  away:
+        switch_state: move_away_on_current_path_1
+  pick_path_away_2:
+  - move_to:
+      selector: "#gprotein-paths-to-second-receptor path"
+      which: random
+      finally:
+        switch_state: move_away_on_current_path_2
+
+  move_away_on_current_path_1:
   - follow:
       selector: "#gprotein-paths-to-receptor path"
       which: nearest
       direction: forward
       finally:
-        switch_state: towards
-  bind_to_receptor:
+        switch_state: initialization
+  move_away_on_current_path_2:
+  - follow:
+      selector: "#gprotein-paths-to-second-receptor path"
+      which: nearest
+      direction: forward
+      finally:
+        switch_state: initialization
+
+  bind_to_first_receptor:
   - set:
-      world.g_protein_bound: true
+      world.g_protein_1_bound: true
   - move_to:
       selector: "#path-away-from-receptor-part"
   - change:
@@ -61,15 +115,36 @@ rules:
       by: 5
       until: 172
       finally:
-        switch_state: bound
-  bound:
+        switch_state: bound_1
+  bind_to_second_receptor:
+  - set:
+      world.g_protein_2_bound: true
+  - move_to:
+      selector: "#path-away-from-second-receptor-part"
+  - change:
+      prop: direction
+      by: 5
+      until: 176
+      finally:
+        switch_state: bound_2
+  bound_1:
   - if:
-      fact: world.hormone_bound
+      fact: world.hormone_1_bound
     then:
-        switch_state: waiting_to_break
+        switch_state: waiting_to_break_1
+  bound_2:
+  - if:
+      fact: world.hormone_2_bound
+    then:
+        switch_state: waiting_to_break_2
   - wait: forever
-  waiting_to_break:
+  waiting_to_break_1:
   - wait:
       for: 30
       finally:
-        notify: "break_time"
+        notify: "break_time_1"
+  waiting_to_break_2:
+  - wait:
+      for: 30
+      finally:
+        notify: "break_time_2"

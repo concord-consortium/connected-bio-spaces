@@ -9,11 +9,39 @@ properties:
   speed: 0.7
   drection: 172
   image_selector: gbodypart2
-initialState: away
+  second_receptor: false
 rules:
-  away:
-  - follow:
+  initialization:
+      switch_state: wait_one_step
+  wait_one_step:
+    if:
+      fact: second_receptor
+    then:
+      switch_state: move_to_2
+    else:
+      switch_state: move_to_1
+  move_to_1:
+    move_to:
       selector: "#gprotein-paths-to-receptor path"
+      which: 0
+      finally:
+        switch_state: away_1
+  away_1:
+    follow:
+      selector: "#gprotein-paths-to-receptor path"
+      which: 0
+      direction: forward
+      finally:
+        die: true
+  move_to_2:
+    move_to:
+      selector: "#gprotein-paths-to-second-receptor path"
+      which: 0
+      finally:
+        switch_state: away_2
+  away_2:
+    follow:
+      selector: "#gprotein-paths-to-second-receptor path"
       which: 0
       direction: forward
       finally:
