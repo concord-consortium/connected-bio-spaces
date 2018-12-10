@@ -32,6 +32,7 @@ export function createStores(params: ICreateStores, authoring: any): IStores {
       createPopulationsModel(authoring.curriculum, flatten(authoring.populations)),
     backpack: params && params.backpack
       || BackpackModel.create({}),
-    organisms: params && params.organisms || OrganismsSpaceModel.create()
+    organisms: params && params.organisms ||
+      OrganismsSpaceModel.create({instructions: authoring.organism.instructions})
   };
 }
