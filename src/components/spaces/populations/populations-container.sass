@@ -46,6 +46,10 @@
       color: $color-white
       background-color: $color-nav-cerulean-dark1
 
+    &.disabled
+      opacity: .5
+      pointer-events: none
+
     .icon
       width: 44px
       height: 28px
@@ -57,9 +61,13 @@
       &.button-active
         fill: $color-white
 
+      &.disabled
+        opacity: .5
+
     .label
       margin: $internal-component-margin
 
+  /* hover and mousedown states */
   .population-button:hover
     background-color: $color-khaki-yellow
 
@@ -70,9 +78,7 @@
   .population-button:active .icon
     fill: $color-white
 
-  .population-button:active .icon.pause
-    fill: $color-khaki-yellow-dark2
-
+  /* hover and mousedown states of pause button */
   .population-button.pause:hover
     background-color: $color-khaki-yellow
 
@@ -80,12 +86,27 @@
     color: $color-khaki-yellow-dark5
     background-color: $color-khaki-yellow-light2
 
-  .population-button:active .icon.button-inactive
-    fill: $color-white
+  .population-button:active .icon.pause
+    fill: $color-khaki-yellow-dark2
+
+
+  /* hover and mousedown states of sticky button */
+  .population-button.button-active:hover
+    background-color: $color-nav-cerulean-light1
+
+  .population-button.button-active:active
+    color: $color-nav-cerulean-dark2
+    background-color: $color-nav-cerulean-light2
+
+  .population-button:active .icon.button-active
+    fill: $color-nav-cerulean
 
   .population-button.button-inactive:active
     color: $color-white
     background-color: $color-nav-cerulean-dark1
+
+  .population-button:active .icon.button-inactive
+    fill: $color-white
 
 .check-container
   display: block
@@ -100,6 +121,10 @@
   margin-right: 5px
   margin-top: $internal-component-margin
   margin-bottom: $internal-component-margin
+
+  &.disabled
+    opacity: .5
+    pointer-events: none
 
 /* Hide the browser's default checkbox */
 .check-container input
@@ -123,9 +148,19 @@
 .check-container:hover input ~ .checkmark
   background-color: $color-khaki-yellow
 
+/* On mouse-down, add a background color */
+.check-container:active input ~ .checkmark
+  background-color: $color-khaki-yellow-dark4
+
 /* checkbox is checked */
 .check-container input:checked ~ .checkmark
   background-color: $color-khaki-yellow-dark4
+
+.check-container:hover input:checked ~ .checkmark
+  background-color: $color-khaki-yellow
+
+.check-container:active input:checked ~ .checkmark
+  background-color: $color-khaki-yellow-light2
 
 /* Create the checkmark/indicator (hidden when not checked) */
 .checkmark:after
@@ -153,8 +188,7 @@
   display: flex
   flex-direction: column
   justify-content: center
-  align-items: left
-  height: 20px
+  height: 22px
 
   .label
     display: flex
@@ -163,10 +197,10 @@
     color: $color-khaki-yellow-dark5
 
 .circle
-  height: 8px
-  width: 8px
-  border-radius: 4px
-  margin-left: 4px
+  height: 6px
+  width: 6px
+  border-radius: 3px
+  margin-left: 3px
   margin-top: 3px
 
   &.male
@@ -180,13 +214,15 @@
 
 .environment-box
   height: 22px
-  width: 36px
-  border: 1px solid $color-khaki-yellow-dark2
+  width: 38px
+  border: 2px solid $color-khaki-yellow-dark2
+  border-radius: 3px
   color: $color-black
   background-color: $color-white
   display: flex
   justify-content: center
   align-items: center
+  font-size: $font-size-label2
 
   &.dark
     color: $color-nav-cinder-light2
