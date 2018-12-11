@@ -9,6 +9,8 @@ import { ToolbarButton } from "../../../models/spaces/populations/populations";
 import { AgentEnvironmentMouseEvent } from "populations.js";
 import { BackpackMouse } from "../../../models/backpack-mouse";
 
+import { EnvironmentColorType } from "../../../models/spaces/populations/mouse-model/mouse-populations-model";
+
 interface SizeMeProps {
   size?: {
     width: number | null;
@@ -18,8 +20,6 @@ interface SizeMeProps {
 
 interface IProps extends IBaseProps {}
 interface IState {
-  selectMode: boolean;
-  modelWasPlaying: boolean;
 }
 
 @inject("stores")
@@ -28,87 +28,165 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
 
   constructor(props: IProps) {
     super(props);
-    this.state = {
-      selectMode: false,
-      modelWasPlaying: false
-    };
   }
 
   public render() {
     const populations = this.props.stores && this.props.stores.populations;
 
     if (populations && populations.interactive) {
-
       const buttons = populations.toolbarButtons.map( (button, i) => {
         const type = button.type || "button";
-        switch (type) {
-          case "checkbox":
-            return (
-              <label>
-                { button.title }
-                <input
-                  key={button.title}
-                  type="checkbox"
-                  checked={button.value}
-                  onChange={this.handleClickToolbarCheckbox(button)} />
-              </label>
-            );
-          case "button":
-          default:
-            return (
-              <button key={button.title} onClick={button.action} data-test={button.title.replace(/ /g, "-")}>
-                {button.title}
-              </button>
-            );
+        if (type === "button") {
+          const buttonClass = button.enabled === false ? "population-button disabled" : "population-button";
+          return (
+            <button key={button.title} className={buttonClass}
+                    onClick={button.action} data-test={button.title.replace(/ /g, "-")}>
+              { button.title === "Change"
+                  ? this.renderChangeButtonText(populations.model.environment)
+                  : <svg className="icon">
+                      <use xlinkHref={"#icon-inspect"} />
+                    </svg>
+              }
+              <div className="label">{button.title}</div>
+            </button>
+          );
+        }
+      });
+
+      const checkboxes = populations.toolbarButtons.map( (button, i) => {
+        const type = button.type || "button";
+        if (type === "checkbox") {
+          const checkClass = button.enabled === false ? "check-container disabled" : "check-container";
+          return (
+            <label key={button.title} className={checkClass}>
+              <input
+                key={button.title}
+                className="population-checkbox"
+                type="checkbox"
+                checked={button.value}
+                onChange={this.handleClickToolbarCheckbox(button)} />
+              <span className="checkmark"/>
+              <div className="label-holder">
+                { this.renderCheckBoxLabel(button.title, button.imageClass) }
+                { button.secondaryTitle && button.secondaryTitleImageClass
+                    ? this.renderCheckBoxLabel(button.secondaryTitle, button.secondaryTitleImageClass)
+                    : null
+                }
+              </div>
+            </label>
+          );
         }
       });
 
       const runButtonLabel = populations.isPlaying ? "Pause" : "Run";
+      const runButtonIcon = populations.isPlaying ? "#icon-pause" : "#icon-run";
+      const runButtonClass = populations.isPlaying ? "sticky" : "sticky-inactive";
+      const inspectButtonClass = populations.interactionMode === "inspect" ? "sticky" : "sticky-off";
+      const collectButtonClass = populations.interactionMode === "select" ? "sticky-alt" : "sticky-alt-off";
       return (
-        <SizeMe monitorHeight={true}>
-          {({ size }: SizeMeProps) => {
-            return (
-              <div>
-                {
-                  (size && size.width)
-                  ? <PopulationsView
-                      interactive={populations.interactive}
-                      width={size.width}
-                      agentClickDistance={20}
-                      onAgentMouseEvent={this.handleAgentClicked} />
-                  : null
-                }
-                <div className="populations-toolbar" data-test="pop-toolbar">
-                  <button onClick={this.handleClickRunButton} data-test="run-button">{runButtonLabel}</button>
-                  <button onClick={this.handleClickResetButton} data-test="reset-button">Reset</button>
-                  <div className="two-state-button">
-                    <label>
-                      <input
-                        type="checkbox"
-                        checked={this.state.selectMode}
-                        onChange={this.handleClickSelect}
-                        data-test="select-button"/>
-                      <span>Select</span>
-                    </label>
-                  </div>
-                  { buttons }
+        <div>
+          <SizeMe monitorHeight={true}>
+            {({ size }: SizeMeProps) => {
+              return (
+                <div>
+                  {
+                    (size && size.width)
+                    ? <PopulationsView
+                        interactive={populations.interactive}
+                        width={size.width}
+                        agentClickDistance={20}
+                        onAgentMouseEvent={this.handleAgentClicked} />
+                    : null
+                  }
                 </div>
-              </div>
-            );
-          }}
-        </SizeMe>
+              );
+            }}
+          </SizeMe>
+          <div className="populations-toolbar" data-test="pop-toolbar">
+            <div className="toolbar-row">
+              <button className={"population-button " + runButtonClass}
+                      onClick={this.handleClickRunButton} data-test="run-button">
+                <svg className={"icon " + runButtonClass}>
+                  <use xlinkHref={runButtonIcon} />
+                </svg>
+                <div className="label">{runButtonLabel}</div>
+              </button>
+              { buttons }
+              <button className={"population-button " + inspectButtonClass}
+                      onClick={this.handleClickInspectButton} data-test="inspect-button">
+                <svg className={"icon " + inspectButtonClass}>
+                  <use xlinkHref="#icon-inspect" />
+                </svg>
+                <div className="label">Inspect</div>
+              </button>
+              <button className={"population-button " + collectButtonClass}
+                      onClick={this.handleClickSelect} data-test="collect-button">
+                <svg className={"icon " + collectButtonClass}>
+                  <use xlinkHref="#icon-collect" />
+                </svg>
+                <div className="label">Collect</div>
+              </button>
+              <button className="population-button" onClick={this.handleClickResetButton} data-test="reset-button">
+                <svg className="icon">
+                  <use xlinkHref="#icon-reset" />
+                </svg>
+                <div className="label">Reset</div>
+              </button>
+            </div>
+            <div className="toolbar-row">
+              { checkboxes }
+            </div>
+          </div>
+        </div>
       );
     }
+  }
+
+  private renderChangeButtonText = (environmentColor?: EnvironmentColorType) => {
+    let colorReadable = "neutral";
+    switch (environmentColor) {
+      case "white":
+        colorReadable = "light";
+        break;
+      case "brown":
+        colorReadable = "dark";
+        break;
+      case "neutral":
+        colorReadable = "neutral";
+        break;
+      default:
+        colorReadable = "neutral";
+    }
+    const colorClass = "environment-box " + colorReadable;
+    return (
+      <div className={colorClass}>{colorReadable}</div>
+    );
+  }
+
+  private renderCheckBoxLabel = (title?: string, imageClass?: string) => {
+    return (
+      <div className="label">
+        <div>{ title }</div>
+        {
+          imageClass
+            ?  <div className={imageClass} />
+            :  null
+        }
+      </div>
+    );
   }
 
   private handleClickRunButton = () => {
     const populations = this.props.stores && this.props.stores.populations;
     if (populations) {
       populations.togglePlay();
+    }
+  }
 
-      if (this.state.selectMode && populations.isPlaying) {
-        this.setState({selectMode: false});
-      }
+  private handleClickInspectButton = () => {
+    const populations = this.props.stores && this.props.stores.populations;
+    if (populations) {
+      populations.toggleInteractionMode("inspect");
     }
   }
 
@@ -127,21 +205,15 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
   }
 
   private handleClickSelect = () => {
-    this.setState({
-      selectMode: !this.state.selectMode
-    }, () => {
-      const { populations } = this.props.stores!;
-      if (this.state.selectMode) {
-        this.setState({modelWasPlaying: populations.isPlaying});
-        populations.pause();
-      } else if (!this.state.selectMode && this.state.modelWasPlaying) {
-        populations.play();
-      }
-    });
+    const populations = this.props.stores && this.props.stores.populations;
+    if (populations) {
+      populations.toggleInteractionMode("select");
+    }
   }
 
   private handleAgentClicked = (evt: AgentEnvironmentMouseEvent) => {
-    if (this.state.selectMode && evt.type === "click" && evt.agents.mice) {
+    const populations = this.props.stores && this.props.stores.populations;
+    if (populations && populations.interactionMode === "select" && evt.type === "click" && evt.agents.mice) {
       const selectedMouse = evt.agents.mice;
       if (this.props.stores) {
         const backpack = this.props.stores.backpack;

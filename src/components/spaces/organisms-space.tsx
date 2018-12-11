@@ -42,7 +42,7 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
 
     return (
       <TwoUpDisplayComponent
-        leftTitle="Investigate: Cell"
+        leftTitle="Explore: Cell"
         leftPanel={<OrganismsContainer rowIndex={rowIndex}/>}
         rightTitle={graphTitle}
         rightIcon={iconId}

@@ -55,10 +55,11 @@ export const MousePopulationsModel = types
     "inheritance.breedWithMutations": types.boolean,
     "inheritance.chanceOfMutations": types.number,
     "inheritance.showStudentControlOfInheritance": types.boolean,
-    "inheritance.breedWithoutInheritance": types.boolean,
+    "inheritance.breedWithInheritance": types.boolean,
     "inheritance.randomOffspring.white": types.number,
     "inheritance.randomOffspring.tan": types.number,
     "showSexStack": false,
+    "showHeteroStack": false,
     "chartData": types.optional(ChartDataModel, chartData)
   })
   .extend(self => {
@@ -101,14 +102,20 @@ export const MousePopulationsModel = types
         setBreedWithMutations(value: boolean) {
           self["inheritance.breedWithMutations"] = value;
         },
-        setBreedWithoutInheritance(value: boolean) {
-          self["inheritance.breedWithoutInheritance"] = value;
+        setBreedWithInheritance(value: boolean) {
+          self["inheritance.breedWithInheritance"] = value;
         },
         reset() {
           interactive.reset();
           self.chartData.dataSets[0].clearDataPoints();
           self.chartData.dataSets[1].clearDataPoints();
           self.chartData.dataSets[2].clearDataPoints();
+        },
+        setShowSexStack(show: boolean) {
+          self.showSexStack = show;
+        },
+        setShowHeteroStack(show: boolean) {
+          self.showHeteroStack = show;
         }
       }
     };
@@ -120,50 +127,61 @@ export const MousePopulationsModel = types
           const buttons = [];
 
           buttons.push({
-            title: "Add Mice",
-            action: (e: any) => {
-              const {"initialPopulation.white": white, "initialPopulation.tan": tan} = self;
-              self.interactive.addInitialMicePopulation(30, {white, tan});
-            }
-          });
-
-          buttons.push({
-            title: "Add Hawks",
+            title: "Add",
             action: (e: any) => {
               self.interactive.addInitialHawksPopulation(self.numHawks);
             }
           });
 
-          if (self.showSwitchEnvironmentsButton) {
-            buttons.push({
-              title: "Switch environments",
-              action: (e: any) => {
-                self.interactive.switchEnvironments(self.includeNeutralEnvironment);
-              }
-            });
-          }
+          buttons.push({
+            title: "Change",
+            action: (e: any) => {
+              self.interactive.switchEnvironments(self.includeNeutralEnvironment);
+            },
+            enabled: self.showSwitchEnvironmentsButton
+          });
 
-          if (self["inheritance.showStudentControlOfMutations"]) {
-            buttons.push({
-              title: "Breed with muations",
-              type: "checkbox",
-              value: self["inheritance.breedWithMutations"],
-              action: (val: boolean) => {
-                self.setBreedWithMutations(val);
-              }
-            });
-          }
+          buttons.push({
+            title: "Females",
+            imageClass: "circle female",
+            secondaryTitle: "Males",
+            secondaryTitleImageClass: "circle male",
+            type: "checkbox",
+            value: self.showSexStack,
+            action: (val: boolean) => {
+              self.setShowSexStack(val);
+            }
+          });
 
-          if (self["inheritance.showStudentControlOfInheritance"]) {
-            buttons.push({
-              title: "Breed without inheritance",
-              type: "checkbox",
-              value: self["inheritance.breedWithoutInheritance"],
-              action: (val: boolean) => {
-                self.setBreedWithoutInheritance(val);
-              }
-            });
-          }
+          buttons.push({
+            title: "Heterozygotes",
+            imageClass: "circle heterozygote",
+            type: "checkbox",
+            value: self.showHeteroStack,
+            action: (val: boolean) => {
+              self.setShowHeteroStack(val);
+            }
+          });
+
+          buttons.push({
+            title: "Mutations",
+            type: "checkbox",
+            value: self["inheritance.breedWithMutations"],
+            action: (val: boolean) => {
+              self.setBreedWithMutations(val);
+            },
+            enabled: self["inheritance.showStudentControlOfMutations"]
+          });
+
+          buttons.push({
+            title: "Inheritance",
+            type: "checkbox",
+            value: self["inheritance.breedWithInheritance"],
+            action: (val: boolean) => {
+              self.setBreedWithInheritance(val);
+            },
+            enabled: self["inheritance.showStudentControlOfInheritance"]
+          });
 
           return buttons;
         }

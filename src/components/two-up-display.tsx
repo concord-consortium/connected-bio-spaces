@@ -58,6 +58,7 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
         <div className="content scrollable" data-test="right-content">
           {this.props.rightPanel}
         </div>
+        <div className="footer" data-test="right-footer"/>
       </div>
     );
   }
