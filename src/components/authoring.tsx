@@ -72,7 +72,7 @@ const schema: JSONSchema6 = {
           ]
         },
         showSwitchEnvironmentsButton: {
-          title: "Show switch environments button",
+          title: "Enable change environments button",
           type: "boolean"
         },
         includeNeutralEnvironment: {
@@ -102,7 +102,7 @@ const schema: JSONSchema6 = {
           type: "object",
           properties: {
             showStudentControlOfMutations: {
-              title: "Show student mutation control",
+              title: "Enable student mutation control",
               type: "boolean"
             },
             breedWithMutations: {
@@ -114,11 +114,11 @@ const schema: JSONSchema6 = {
               type: "number"
             },
             showStudentControlOfInheritance: {
-              title: "Show student inheritance control",
+              title: "Enable student inheritance control",
               type: "boolean"
             },
-            breedWithoutInheritance: {
-              title: "Breed without inheritance",
+            breedWithInheritance: {
+              title: "Breed with inheritance",
               type: "boolean"
             },
             randomOffspring: {
@@ -177,7 +177,7 @@ export const defaultAuthoring = {
       breedWithMutations: false,
       chanceOfMutations: 2,
       showStudentControlOfInheritance: false,
-      breedWithoutInheritance: false,
+      breedWithInheritance: true,
       randomOffspring: {
         white: 33.33,
         tan: 33.33
@@ -211,8 +211,8 @@ const uiSchema = {
       chanceOfMutations: {
         "ui:help": "When either 'Breed with mutations' or 'Student control' is true"
       },
-      breedWithoutInheritance: {
-        "ui:help": "Whether the model starts without inheritance"
+      breedWithInheritance: {
+        "ui:help": "Whether the model starts with inheritance"
       },
       randomOffspring: {
         classNames: "minor-group",

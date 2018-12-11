@@ -55,7 +55,7 @@ export const MousePopulationsModel = types
     "inheritance.breedWithMutations": types.boolean,
     "inheritance.chanceOfMutations": types.number,
     "inheritance.showStudentControlOfInheritance": types.boolean,
-    "inheritance.breedWithoutInheritance": types.boolean,
+    "inheritance.breedWithInheritance": types.boolean,
     "inheritance.randomOffspring.white": types.number,
     "inheritance.randomOffspring.tan": types.number,
     "showSexStack": false,
@@ -102,8 +102,8 @@ export const MousePopulationsModel = types
         setBreedWithMutations(value: boolean) {
           self["inheritance.breedWithMutations"] = value;
         },
-        setBreedWithoutInheritance(value: boolean) {
-          self["inheritance.breedWithoutInheritance"] = value;
+        setBreedWithInheritance(value: boolean) {
+          self["inheritance.breedWithInheritance"] = value;
         },
         reset() {
           interactive.reset();
@@ -133,14 +133,13 @@ export const MousePopulationsModel = types
             }
           });
 
-          if (self.showSwitchEnvironmentsButton) {
-            buttons.push({
-              title: "Change",
-              action: (e: any) => {
-                self.interactive.switchEnvironments(self.includeNeutralEnvironment);
-              }
-            });
-          }
+          buttons.push({
+            title: "Change",
+            action: (e: any) => {
+              self.interactive.switchEnvironments(self.includeNeutralEnvironment);
+            },
+            enabled: self.showSwitchEnvironmentsButton
+          });
 
           buttons.push({
             title: "Females",
@@ -177,11 +176,11 @@ export const MousePopulationsModel = types
           buttons.push({
             title: "Inheritance",
             type: "checkbox",
-            value: self["inheritance.breedWithoutInheritance"],
+            value: self["inheritance.breedWithInheritance"],
             action: (val: boolean) => {
-              self.setBreedWithoutInheritance(val);
+              self.setBreedWithInheritance(val);
             },
-            enabled: self["inheritance.showStudentControlOfMutations"]
+            enabled: self["inheritance.showStudentControlOfInheritance"]
           });
 
           return buttons;

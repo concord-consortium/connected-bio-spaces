@@ -37,8 +37,9 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
       const buttons = populations.toolbarButtons.map( (button, i) => {
         const type = button.type || "button";
         if (type === "button") {
+          const buttonClass = button.enabled === false ? "population-button disabled" : "population-button";
           return (
-            <button key={button.title} className="population-button"
+            <button key={button.title} className={buttonClass}
                     onClick={button.action} data-test={button.title.replace(/ /g, "-")}>
               { button.title === "Change"
                   ? this.renderChangeButtonText(populations.model.environment)
