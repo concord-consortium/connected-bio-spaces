@@ -1,12 +1,8 @@
 @import vars
 
 .zoom-control-container
-  position: absolute
-  width: 100px
-  bottom: 0px
-  text-align: center
-  font-size: 1.2em
-
+  display: flex
+  flex-direction: row
 
   .zoom-control
     width: $explore-button-height
@@ -15,7 +11,6 @@
     margin: $quarter-margin $half-margin
     border-radius: $explore-button-right-radius
     color: $color3-1
-    float: left
     font-weight: bold
     &:hover
       background-color: $color3-7

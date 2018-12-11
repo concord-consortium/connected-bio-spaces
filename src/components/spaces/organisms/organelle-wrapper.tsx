@@ -13,12 +13,14 @@ import { BaseComponent } from "../../base";
 // import { SubstanceType } from "../models/Substance";
 import "./organelle-wrapper.sass";
 import { OrganelleType, ModeType, ZoomLevelType } from "../../../models/spaces/organisms/organisms-row.js";
+import { IProps, IState } from "populations-react/build/lib/components/PopulationsView";
 
 interface OrganelleWrapperProps {
   zoomLevel: ZoomLevelType;
   elementName: string;
   rowIndex: number;
   width: number;
+  mode: ModeType;
 }
 
 interface OrganelleWrapperState {
@@ -100,10 +102,22 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
   }
 
   public componentWillReact() {
-    const zoomLevel = this.props.zoomLevel;
-    if (this.model && zoomLevel !== this.model.zoomLevel) {
-      this.createNewModel();
+    const { zoomLevel, mode } = this.props;
+    if (this.model) {
+      if (zoomLevel !== this.model.zoomLevel) {
+        this.createNewModel();
+      }
+
+      if (mode !== this.model.mode) {
+        this.model.mode = mode;
+        if (mode === "normal") {
+          this.model.run();
+        } else {
+          this.model.stop();
+        }
+      }
     }
+
   }
 
   public componentWillUnmount() {
@@ -114,7 +128,11 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
 
   public organelleClick(organelleType: OrganelleType, location: {x: number, y: number}) {
     const { organisms } = this.stores;
-    organisms.rows[this.props.rowIndex].setActiveAssay(organelleType);
+    const row = organisms.rows[this.props.rowIndex];
+    if (row.mode === "assay") {
+      row.setActiveAssay(organelleType);
+      row.setMode("normal");
+    }
     // if (rootStore.mode === Mode.Assay) {
     //   const organelleInfo = OrganelleRef.create({
     //     organism,
@@ -179,13 +197,13 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
   //   this.addAgentsOverTime(species, state, location, 1, 9);
   // }
 
-  public isModeDropper(mode: string) {
-    // return mode === Mode.Assay || mode === Mode.Add || mode === Mode.Subtract;
-    return false;
+  public isModeDropper(mode: ModeType) {
+    return mode === "assay" || mode === "add" || mode === "subtract";
   }
 
   public render() {
     const {organisms} = this.stores;
+    const {mode} = this.props;
     // const hoverLabel = appStore.mysteryLabels ?
     //   mysteryOrganelleNames[this.state.hoveredOrganelle] : this.state.hoveredOrganelle;
     const hoveredOrganelle = organisms.rows[this.props.rowIndex].hoveredOrganelle;
@@ -202,12 +220,18 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
         <img src="assets/cell-zoom/dropper.png" width="32px" data-test="dropper"/>
       </div>
     ));
-    // const dropperCursor = this.state.hoveredOrganelle && this.isModeDropper(rootStore.mode);
-    const dropperCursor = false;
+    const dropperCursor = hoveredOrganelle && this.isModeDropper(mode);
     const width = this.props.width ? Math.min(this.props.width, MODEL_WIDTH) : MODEL_WIDTH;
     const style = {height: MODEL_HEIGHT, width};
     return (
-      <div className={"model-wrapper" + (dropperCursor ? " dropper" : "")} style={style}>
+      <div
+        className={"model-wrapper" + (dropperCursor ? " dropper" : "")}
+        style={style}
+        onClick={this.forceDropper}
+        onMouseUp={this.forceDropper}
+        onMouseDown={this.forceDropper}
+        onMouseMove={this.forceDropper}
+      >
         <div id={this.props.elementName} className="model" onMouseLeave={this.resetHoveredOrganelle}
           ref={this.setModelDomRef} />
         {hoverDiv}
@@ -242,8 +266,16 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
       // appStore.boxes.get(this.props.boxId).setModel(m);
       this.model = m;
       this.model.zoomLevel = zoomLevel;
+      this.model.mode = row.mode;
       this.completeLoad();
     });
+  }
+
+  private forceDropper(e: any) {
+    // Hack to force Fabric canvases to inherit cursor styles, should configure in Organelle instead
+    if (typeof e.target.className === "string" && e.target.className.indexOf("upper-canvas") > -1) {
+      e.target.style.cursor = "inherit";
+    }
   }
 
   private getModel() {
@@ -330,9 +362,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     model.on("view.hover.enter", (evt: any) => {
       const {organisms} = this.stores;
       const hoveredOrganelle = this.getOrganelleFromMouseEvent(evt);
-      if (hoveredOrganelle) {
-        organisms.rows[this.props.rowIndex].setHoveredOrganelle(hoveredOrganelle);
-      }
+      organisms.rows[this.props.rowIndex].setHoveredOrganelle(hoveredOrganelle);
     });
 
     model.on("view.click", (evt: any) => {
@@ -420,7 +450,9 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
   }
 
   private resetHoveredOrganelle() {
-    this.setState({hoveredOrganelle: null});
+    const {organisms} = this.stores;
+    const {rowIndex} = this.props;
+    organisms.rows[rowIndex].setHoveredOrganelle(undefined);
   }
 
   private getOpaqueSelector(organelleType: OrganelleType) {

@@ -7,8 +7,9 @@ import { OrganismView } from "./organism-view";
 import { CollectButtonComponent } from "../../collect-button";
 
 import "./organisms-container.sass";
-import { ZoomLevelType, OrganismsRowModelType } from "../../../models/spaces/organisms/organisms-row";
+import { ZoomLevelType, OrganismsRowModelType, ModeType } from "../../../models/spaces/organisms/organisms-row";
 import { OrganelleWrapper } from "./organelle-wrapper";
+import { ManipulationControls } from "./manipulation-controls";
 
 interface SizeMeProps {
   size?: {
@@ -34,10 +35,10 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
     const { rowIndex } = this.props;
     const { organisms } = this.stores;
     const organismsRow = organisms.rows[rowIndex];
-    const { organismsMouse, zoomLevel } = organismsRow;
+    const { organismsMouse, zoomLevel, mode } = organismsRow;
 
     return (
-      <div className="organism-view-container" data-test="organism-view-container">
+      <div className="organisms-container" data-test="organism-view-container">
         <CollectButtonComponent
           backpackMouse={organismsMouse && organismsMouse.backpackMouse}
           clickMouse={this.clickMouse}
@@ -46,10 +47,13 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
         />
         <SizeMe monitorHeight={true}>
           {(sizeProps: SizeMeProps) => {
-            return  this.organismZoomedView(organismsRow, zoomLevel, rowIndex, sizeProps);
+            return  this.organismZoomedView(organismsRow, zoomLevel, rowIndex, mode, sizeProps);
           }}
         </SizeMe>
-        <ZoomControl handleZoom={this.zoomChange} />
+        <div className="organism-controls">
+          <ZoomControl handleZoom={this.zoomChange} />
+          <ManipulationControls rowIndex={rowIndex} />
+        </div>
       </div>
     );
   }
@@ -72,7 +76,7 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
   // We explicitly pass down organismsRow and zoomLevel separately, or MST won't correctly attach the observers
   // due to this function being nested inside the SizeMe component.
   private organismZoomedView = (organismsRow: OrganismsRowModelType, zoomLevel: ZoomLevelType, rowIndex: number,
-                                { size }: SizeMeProps) => {
+                                mode: ModeType, { size }: SizeMeProps) => {
     const { organismsMouse } = organismsRow;
     const width = size && size.width ? size.width : 0;
 
@@ -86,7 +90,7 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
             {
               organismsMouse != null &&
                 <OrganelleWrapper zoomLevel={zoomLevel} elementName={`organelle-wrapper-${rowIndex}`}
-                  rowIndex={rowIndex} width={width}/>
+                  rowIndex={rowIndex} width={width} mode={mode}/>
             }
           </div>
         );
