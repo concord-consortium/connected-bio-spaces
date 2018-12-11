@@ -68,7 +68,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
       this.set("age", Math.round(Math.random() * 10));
 
       if (this.organism) {
-        if (!model["inheritance.breedWithInheritance"]) {
+        if (model["inheritance.breedWithInheritance"]) {
           this.mutateGenetics();
         } else {
           this.setRandomColorGenetics();
