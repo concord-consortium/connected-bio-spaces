@@ -79,9 +79,9 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
 
       const runButtonLabel = populations.isPlaying ? "Pause" : "Run";
       const runButtonIcon = populations.isPlaying ? "#icon-pause" : "#icon-run";
-      const runButtonClass = populations.isPlaying ? "pause" : "run";
-      const inspectButtonClass = populations.interactionMode === "inspect" ? "button-active" : "button-inactive";
-      const collectButtonClass = populations.interactionMode === "select" ? "button-active" : "button-inactive";
+      const runButtonClass = populations.isPlaying ? "sticky" : "sticky-inactive";
+      const inspectButtonClass = populations.interactionMode === "inspect" ? "sticky" : "sticky-off";
+      const collectButtonClass = populations.interactionMode === "select" ? "sticky-alt" : "sticky-alt-off";
       return (
         <div>
           <SizeMe monitorHeight={true}>
@@ -132,7 +132,6 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
                 <div className="label">Reset</div>
               </button>
             </div>
-
             <div className="toolbar-row">
               { checkboxes }
             </div>

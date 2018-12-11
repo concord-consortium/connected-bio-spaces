@@ -38,11 +38,11 @@
     background-color: $color-khaki-yellow-light2
     cursor: pointer
 
-    &.pause
+    &.sticky
       color: $color-white
       background-color: $color-khaki-yellow-dark4
 
-    &.button-active
+    &.sticky-alt
       color: $color-white
       background-color: $color-nav-cerulean-dark1
 
@@ -55,10 +55,10 @@
       height: 28px
       fill: $color-khaki-yellow-dark2
 
-      &.pause
+      &.sticky
         fill: $color-white
 
-      &.button-active
+      &.sticky-alt
         fill: $color-white
 
       &.disabled
@@ -78,34 +78,34 @@
   .population-button:active .icon
     fill: $color-white
 
-  /* hover and mousedown states of pause button */
-  .population-button.pause:hover
+  /* hover and mousedown states of brown sticky button */
+  .population-button.sticky:hover
     background-color: $color-khaki-yellow
 
-  .population-button.pause:active
+  .population-button.sticky:active
     color: $color-khaki-yellow-dark5
     background-color: $color-khaki-yellow-light2
 
-  .population-button:active .icon.pause
+  .population-button:active .icon.sticky
     fill: $color-khaki-yellow-dark2
 
 
-  /* hover and mousedown states of sticky button */
-  .population-button.button-active:hover
+  /* hover and mousedown states of blue sticky button */
+  .population-button.sticky-alt:hover
     background-color: $color-nav-cerulean-light1
 
-  .population-button.button-active:active
+  .population-button.sticky-alt:active
     color: $color-nav-cerulean-dark2
     background-color: $color-nav-cerulean-light2
 
-  .population-button:active .icon.button-active
+  .population-button:active .icon.sticky-alt
     fill: $color-nav-cerulean
 
-  .population-button.button-inactive:active
+  .population-button.sticky-alt-off:active
     color: $color-white
     background-color: $color-nav-cerulean-dark1
 
-  .population-button:active .icon.button-inactive
+  .population-button:active .icon.sticky-alt-off
     fill: $color-white
 
 .check-container
