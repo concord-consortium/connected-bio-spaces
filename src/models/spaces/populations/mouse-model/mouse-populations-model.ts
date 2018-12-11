@@ -143,6 +143,18 @@ export const MousePopulationsModel = types
           }
 
           buttons.push({
+            title: "Females",
+            imageClass: "circle female",
+            secondaryTitle: "Males",
+            secondaryTitleImageClass: "circle male",
+            type: "checkbox",
+            value: self.showSexStack,
+            action: (val: boolean) => {
+              self.setShowSexStack(val);
+            }
+          });
+
+          buttons.push({
             title: "Heterozygotes",
             imageClass: "circle heterozygote",
             type: "checkbox",
@@ -152,27 +164,25 @@ export const MousePopulationsModel = types
             }
           });
 
-          if (self["inheritance.showStudentControlOfMutations"]) {
-            buttons.push({
-              title: "Mutations",
-              type: "checkbox",
-              value: self["inheritance.breedWithMutations"],
-              action: (val: boolean) => {
-                self.setBreedWithMutations(val);
-              }
-            });
-          }
+          buttons.push({
+            title: "Mutations",
+            type: "checkbox",
+            value: self["inheritance.breedWithMutations"],
+            action: (val: boolean) => {
+              self.setBreedWithMutations(val);
+            },
+            enabled: self["inheritance.showStudentControlOfMutations"]
+          });
 
-          if (self["inheritance.showStudentControlOfInheritance"]) {
-            buttons.push({
-              title: "Inheritance",
-              type: "checkbox",
-              value: self["inheritance.breedWithoutInheritance"],
-              action: (val: boolean) => {
-                self.setBreedWithoutInheritance(val);
-              }
-            });
-          }
+          buttons.push({
+            title: "Inheritance",
+            type: "checkbox",
+            value: self["inheritance.breedWithoutInheritance"],
+            action: (val: boolean) => {
+              self.setBreedWithoutInheritance(val);
+            },
+            enabled: self["inheritance.showStudentControlOfMutations"]
+          });
 
           return buttons;
         }

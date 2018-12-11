@@ -37,49 +37,27 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
       const buttons = populations.toolbarButtons.map( (button, i) => {
         const type = button.type || "button";
         if (type === "button") {
-          if (button.title === "Change") {
-            const environmentColor: EnvironmentColorType = populations.model.environment;
-            let colorReadable = "neutral";
-            switch (environmentColor) {
-              case "white":
-                colorReadable = "light";
-                break;
-              case "brown":
-                colorReadable = "dark";
-                break;
-              case "neutral":
-                colorReadable = "neutral";
-                break;
-              default:
-                colorReadable = "neutral";
-            }
-            const colorClass = "environment-box " + colorReadable;
-            return (
-              <button key={button.title} className="population-button"
-                      onClick={button.action} data-test={button.title.replace(/ /g, "-")}>
-                <div className={colorClass}>{colorReadable}</div>
-                <div className="label">{button.title}</div>
-              </button>
-            );
-          } else {
-            return (
-              <button key={button.title} className="population-button"
-                      onClick={button.action} data-test={button.title.replace(/ /g, "-")}>
-                <svg className="icon">
-                  <use xlinkHref={"#icon-inspect"} />
-                </svg>
-                <div className="label">{button.title}</div>
-              </button>
-            );
-          }
+          return (
+            <button key={button.title} className="population-button"
+                    onClick={button.action} data-test={button.title.replace(/ /g, "-")}>
+              { button.title === "Change"
+                  ? this.renderChangeButtonText(populations.model.environment)
+                  : <svg className="icon">
+                      <use xlinkHref={"#icon-inspect"} />
+                    </svg>
+              }
+              <div className="label">{button.title}</div>
+            </button>
+          );
         }
       });
 
       const checkboxes = populations.toolbarButtons.map( (button, i) => {
         const type = button.type || "button";
         if (type === "checkbox") {
+          const checkClass = button.enabled === false ? "check-container disabled" : "check-container";
           return (
-            <label key={button.title} className="check-container">
+            <label key={button.title} className={checkClass}>
               <input
                 key={button.title}
                 className="population-checkbox"
@@ -88,14 +66,11 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
                 onChange={this.handleClickToolbarCheckbox(button)} />
               <span className="checkmark"/>
               <div className="label-holder">
-                <div className="label">
-                  <div>{ button.title }</div>
-                  {
-                    button.imageClass
-                      ?  <div className={button.imageClass} />
-                      :  null
-                  }
-                </div>
+                { this.renderCheckBoxLabel(button.title, button.imageClass) }
+                { button.secondaryTitle && button.secondaryTitleImageClass
+                    ? this.renderCheckBoxLabel(button.secondaryTitle, button.secondaryTitleImageClass)
+                    : null
+                }
               </div>
             </label>
           );
@@ -138,7 +113,7 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
               { buttons }
               <button className={"population-button " + inspectButtonClass}
                       onClick={this.handleClickInspectButton} data-test="inspect-button">
-                <svg className="icon">
+                <svg className={"icon " + inspectButtonClass}>
                   <use xlinkHref="#icon-inspect" />
                 </svg>
                 <div className="label">Inspect</div>
@@ -157,23 +132,48 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
                 <div className="label">Reset</div>
               </button>
             </div>
+
             <div className="toolbar-row">
-              <label className="check-container">
-                <input
-                  className="population-checkbox"
-                  type="checkbox" />
-                <span className="checkmark"/>
-                <div className="label-holder">
-                  <div className="label"><div>Females</div><div className="circle female"/></div>
-                  <div className="label"><div>Males</div><div className="circle male"/></div>
-                </div>
-              </label>
               { checkboxes }
             </div>
           </div>
         </div>
       );
     }
+  }
+
+  private renderChangeButtonText = (environmentColor?: EnvironmentColorType) => {
+    let colorReadable = "neutral";
+    switch (environmentColor) {
+      case "white":
+        colorReadable = "light";
+        break;
+      case "brown":
+        colorReadable = "dark";
+        break;
+      case "neutral":
+        colorReadable = "neutral";
+        break;
+      default:
+        colorReadable = "neutral";
+    }
+    const colorClass = "environment-box " + colorReadable;
+    return (
+      <div className={colorClass}>{colorReadable}</div>
+    );
+  }
+
+  private renderCheckBoxLabel = (title?: string, imageClass?: string) => {
+    return (
+      <div className="label">
+        <div>{ title }</div>
+        {
+          imageClass
+            ?  <div className={imageClass} />
+            :  null
+        }
+      </div>
+    );
   }
 
   private handleClickRunButton = () => {

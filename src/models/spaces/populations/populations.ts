@@ -22,9 +22,12 @@ export function createPopulationsModel(curriculumName: string, authoring: any): 
 export interface ToolbarButton {
   title: string;
   imageClass?: string;
+  secondaryTitle?: string;
+  secondaryTitleImageClass?: string;
   type?: string;
   value?: boolean;
   action: (e: (React.MouseEvent<HTMLButtonElement> | boolean)) => void;
+  enabled?: boolean;
 }
 
 const InteractionModeEnum = types.enumeration("interaction", ["none", "select", "inspect"]);
