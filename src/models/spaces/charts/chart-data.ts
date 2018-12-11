@@ -13,6 +13,11 @@ export const ChartDataModel = types
         return self.dataSets[0].dataLabels;
       } else return [];
     },
+    get dataLabelRotation() {
+      if (self.dataSets && self.dataSets.length > 0) {
+        return self.dataSets[0].fixedLabelRotation;
+      } else return;
+    },
     get minMaxAll() {
       const maxA1Values: number[] = [];
       const maxA2Values: number[] = [];
@@ -35,6 +40,18 @@ export const ChartDataModel = types
     },
     get nextDataSeriesColor() {
       return ChartColors[self.dataSets.length];
+    },
+
+    get maxPoints() {
+      return self.dataSets[0].maxPoints;
+    },
+
+    get pointCount() {
+      return self.dataSets[0].dataPoints.length;
+    },
+
+    get subsetIdx() {
+      return self.dataSets[0].dataStartIdx;
     }
   }))
   .extend(self => {
@@ -48,7 +65,9 @@ export const ChartDataModel = types
     function setDataSetSubset(idx: number, maxPoints: number) {
       self.dataSets.forEach(d => {
         d.subsetPoints(idx);
-        d.setMaxDataPoints(maxPoints);
+        if (self.maxPoints !== maxPoints) {
+          d.setMaxDataPoints(maxPoints);
+        }
       });
     }
     // To fetch all data from all datasets, remove any subset index points and set the max number of points to -1

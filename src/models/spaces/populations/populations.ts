@@ -33,7 +33,9 @@ export const PopulationsModel = types
   .extend(self => {
 
     function updateIsPlaying() {
-      self.isPlaying = self.model.interactive.isPlaying;
+      if (self.isPlaying !== self.model.interactive.isPlaying) {
+        self.isPlaying = self.model.interactive.isPlaying;
+      }
     }
     Events.addEventListener(Environment.EVENTS.START, updateIsPlaying);
     Events.addEventListener(Environment.EVENTS.STOP, updateIsPlaying);

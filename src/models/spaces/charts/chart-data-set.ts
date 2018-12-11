@@ -69,11 +69,14 @@ export const ChartDataSetModel = types
     backgroundOpacity: types.maybe(types.number),
     // If maxPoints is 0 we will always work with the entire data set
     maxPoints: types.optional(types.number, -1),
-    fixedMin: types.maybe(types.number),
-    fixedMax: types.maybe(types.number),
+    fixedMinA1: types.maybe(types.number),
+    fixedMaxA1: types.maybe(types.number),
+    fixedMinA2: types.maybe(types.number),
+    fixedMaxA2: types.maybe(types.number),
     // expandOnly is used for y-axis scaling. When requesting min/max point values,
     // if this is set the a2 / y axis max returns the max of the full data set, not just the visiblePoints
     expandOnly: false,
+    fixedLabelRotation: types.maybe(types.number),
     dataStartIdx: types.maybe(types.number)
   })
   .views(self => ({
@@ -110,36 +113,52 @@ export const ChartDataSetModel = types
     },
     // Determine minimum and maximum values on each axis
     get maxA1(): number | undefined {
-      if (!self.visibleDataPoints || self.visibleDataPoints.length === 0) {
-        return defaultMax;
+      if (self.fixedMaxA1 !== undefined && self.dataPoints.length <= self.fixedMaxA1) {
+        return self.fixedMaxA1;
+      } else if (!self.visibleDataPoints || self.visibleDataPoints.length === 0) {
+        if (self.maxPoints) {
+          return self.maxPoints;
+        } else {
+          return defaultMax;
+        }
+      } else if (self.visibleDataPoints && self.visibleDataPoints.length > 0 &&
+        self.maxPoints && self.visibleDataPoints.length < self.maxPoints) {
+        return self.maxPoints;
       } else {
         return Math.max(...self.visibleDataPoints.map(p => p.a1));
       }
     },
     get maxA2(): number | undefined {
-      if (self.fixedMax !== undefined) {
-        return self.fixedMax;
+      if (self.fixedMaxA2 !== undefined && !self.expandOnly) {
+        return self.fixedMaxA2;
       } else if (!self.visibleDataPoints || self.visibleDataPoints.length === 0) {
         return defaultMax;
-      }
-      else if (self.expandOnly) {
+      } else if (self.expandOnly) {
         // always return max from all points so y axis only scales up, never down
-        return Math.max(...self.dataPoints.map(p => p.a2));
+        if (self.fixedMaxA2) {
+          // use fixedMax as a minimum value for max
+          const dataMax = Math.max(...self.dataPoints.map(p => p.a2));
+          return self.fixedMaxA2 > dataMax ? self.fixedMaxA2 : dataMax;
+        } else {
+          return Math.max(...self.dataPoints.map(p => p.a2));
+        }
       } else {
         // only return max of visible subset of data
         return Math.max(...self.visibleDataPoints.map(p => p.a2));
       }
     },
     get minA1(): number | undefined {
-      if (!self.visibleDataPoints || self.visibleDataPoints.length === 0) {
+      if (self.fixedMinA1 !== undefined) {
+        return self.fixedMinA1;
+      } else if (!self.visibleDataPoints || self.visibleDataPoints.length === 0) {
         return defaultMin;
       } else {
         return Math.min(...self.visibleDataPoints.map(p => p.a1));
       }
     },
     get minA2(): number | undefined {
-      if (self.fixedMin !== undefined) {
-        return self.fixedMin;
+      if (self.fixedMinA2 !== undefined) {
+        return self.fixedMinA2;
       } else if (!self.visibleDataPoints || self.visibleDataPoints.length === 0) {
         return defaultMin;
       } else {

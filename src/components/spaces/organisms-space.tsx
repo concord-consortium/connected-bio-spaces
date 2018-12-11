@@ -36,7 +36,7 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
     const iconId = showOrganismGraph ? "#icon-show-data" : "#icon-show-graph";
     const graphTitle = showOrganismGraph ? "Graph" : "Instructions";
     const graphPanel = <Chart title="Chart Test" chartData={currentData}
-      chartType={"horizontalBar"} />;
+      chartType={"horizontalBar"} isPlaying={false} />;
     const instructionsPanel = <InstructionsComponent content={organisms.instructions}/>;
     const rightPanelContent = showOrganismGraph ? graphPanel : instructionsPanel;
 
