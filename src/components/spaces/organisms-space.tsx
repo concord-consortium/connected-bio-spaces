@@ -78,7 +78,9 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
               toggleShowingAminoAcidsOnProtein={this.toggleShowingAminoAcidsOnViewer}
             />;
           } else {
-            return null;
+            return (<div>
+              Find and inspect a protein to view it here.
+            </div>);
           }
       }
     })();
