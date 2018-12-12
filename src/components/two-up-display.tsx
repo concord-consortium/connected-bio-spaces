@@ -11,6 +11,7 @@ interface IProps extends IBaseProps {
   rightIcon?: string;
   onClickRightIcon?: (row?: number) => void;
   rightPanel: React.ReactNode;
+  spaceClass: string;
 }
 interface IState {}
 
@@ -30,7 +31,7 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
   private renderLeftPanel() {
     return (
       <div className="two-up-panel left-abutment" data-test="left-panel">
-        <div className="header" data-test="left-header">
+        <div className={"header " + this.props.spaceClass} data-test="left-header">
           <div className="title" data-test="left-title">{this.props.leftTitle}</div>
         </div>
         <div className="content" data-test="left-content">
@@ -43,7 +44,7 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
   private renderRightPanel() {
     return (
       <div className="two-up-panel right-abutment">
-        <div className="header" data-test="right-header">
+        <div className={"header " + this.props.spaceClass} data-test="right-header">
           {
             this.props.rightIcon ?
               <div className="button-holder" onClick={this.handleClickRightIcon}>
@@ -58,7 +59,7 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
         <div className="content scrollable" data-test="right-content">
           {this.props.rightPanel}
         </div>
-        <div className="footer" data-test="right-footer"/>
+        <div className={"footer " + this.props.spaceClass} data-test="right-footer"/>
       </div>
     );
   }

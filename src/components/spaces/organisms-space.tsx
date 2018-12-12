@@ -34,7 +34,7 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
     const { currentData } = row;
     const showOrganismGraph = ui.showOrganismGraph[rowIndex];
     const iconId = showOrganismGraph ? "#icon-show-data" : "#icon-show-graph";
-    const graphTitle = showOrganismGraph ? "Graph" : "Instructions";
+    const graphTitle = showOrganismGraph ? "Data" : "Instructions";
     const graphPanel = <Chart title="Chart Test" chartData={currentData}
       chartType={"horizontalBar"} isPlaying={false} />;
     const instructionsPanel = <InstructionsComponent content={organisms.instructions}/>;
@@ -42,12 +42,13 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
 
     return (
       <TwoUpDisplayComponent
-        leftTitle="Explore: Cell"
+        leftTitle="Explore: Organism"
         leftPanel={<OrganismsContainer rowIndex={rowIndex}/>}
         rightTitle={graphTitle}
         rightIcon={iconId}
         rightPanel={rightPanelContent}
         onClickRightIcon={this.toggleOrganismsGraph(rowIndex)}
+        spaceClass="organism"
       />
     );
   }
