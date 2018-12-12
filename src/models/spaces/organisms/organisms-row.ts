@@ -31,7 +31,9 @@ export const OrganismsRowModel = types
     selectedOrganelle: types.maybe(Organelle),
     mode: types.optional(Mode, "normal"),
     assayedOrganelle: types.maybe(Organelle),
-    zoomLevel: types.optional(ZoomLevel, "organism")
+    zoomLevel: types.optional(ZoomLevel, "organism"),
+    showProteinDNA: false,
+    showProteinAminoAcidsOnProtein: false
   })
   .views(self => ({
     get currentData(): ChartDataModelType {
@@ -80,6 +82,12 @@ export const OrganismsRowModel = types
       },
       setMode(mode: ModeType) {
         self.mode = mode;
+      },
+      setShowProteinDNA(val: boolean) {
+        self.showProteinDNA = val;
+      },
+      setShowProteinAminoAcidsOnProtein(val: boolean) {
+        self.showProteinAminoAcidsOnProtein = val;
       }
     };
   });

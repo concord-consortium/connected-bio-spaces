@@ -13,20 +13,13 @@ import { RightPanelType } from "../../models/ui";
 import { kOrganelleInfo } from "../../models/spaces/organisms/organisms-space";
 
 interface IProps extends IBaseProps {}
-interface IState {
-  showAminoAcidsOnViewer: boolean;
-  showDNA: boolean;
-}
+interface IState {}
 
 @inject("stores")
 @observer
 export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
-    this.state = {
-      showAminoAcidsOnViewer: false,
-      showDNA: false
-    };
   }
 
   public render() {
@@ -38,22 +31,24 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
     );
   }
 
-  private toggleShowingAminoAcidsOnViewer = () => {
-    this.setState({
-      showAminoAcidsOnViewer: !this.state.showAminoAcidsOnViewer
-    });
+  private toggleShowingAminoAcidsOnViewer = (rowIndex: number) => {
+    const { organisms } = this.stores;
+    const row = organisms.rows[rowIndex];
+    return () =>
+      row.setShowProteinAminoAcidsOnProtein(!row.showProteinAminoAcidsOnProtein);
   }
 
-  private toggleShowDNA = () => {
-    this.setState({
-      showDNA: !this.state.showDNA
-    });
+  private toggleShowDNA = (rowIndex: number) => {
+    const { organisms } = this.stores;
+    const row = organisms.rows[rowIndex];
+    return () =>
+      row.setShowProteinDNA(!row.showProteinDNA);
   }
 
   private getOrganismsRow(rowIndex: number) {
     const { ui, organisms } = this.stores;
     const row = organisms.rows[rowIndex];
-    const { currentData, selectedOrganelle } = row;
+    const { currentData, selectedOrganelle, showProteinAminoAcidsOnProtein, showProteinDNA } = row;
     const rightPanelType = ui.organismRightPanel[rowIndex];
 
     const rightPanelContent = (() => {
@@ -71,16 +66,17 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
           if (selectedOrganelle && kOrganelleInfo[selectedOrganelle].protein) {
             return <ProteinViewer
               protein={kOrganelleInfo[selectedOrganelle].protein}
-              showAminoAcidsOnProtein={this.state.showAminoAcidsOnViewer}
-              showDNA={this.state.showDNA}
+              showAminoAcidsOnProtein={showProteinAminoAcidsOnProtein}
+              showDNA={showProteinDNA}
               dnaSwitchable={true}
-              toggleShowDNA={this.toggleShowDNA}
-              toggleShowingAminoAcidsOnProtein={this.toggleShowingAminoAcidsOnViewer}
+              toggleShowDNA={this.toggleShowDNA(rowIndex)}
+              toggleShowingAminoAcidsOnProtein={this.toggleShowingAminoAcidsOnViewer(rowIndex)}
             />;
           } else {
-            return (<div>
-              Find and inspect a protein to view it here.
-            </div>);
+            return (
+              <div>
+                Find and inspect a protein to view it here.
+              </div>);
           }
       }
     })();
