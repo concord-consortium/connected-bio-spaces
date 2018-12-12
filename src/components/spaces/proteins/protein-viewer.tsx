@@ -10,7 +10,7 @@ import { getAminoAcidsFromCodons } from "./util/amino-acid-utils";
 import "./protein-viewer.sass";
 import { PANEL_ASPECT_RATIO } from "../../four-up-display";
 
-interface ProteinSpec {
+export interface ProteinSpec {
   dna: string;
   svgImage: string;
 }

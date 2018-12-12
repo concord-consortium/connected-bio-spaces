@@ -10,6 +10,7 @@ import { OrganismsContainer } from "./organisms/organisms-container";
 import ProteinViewer from "./proteins/protein-viewer";
 import MouseProteins from "./proteins/protein-specs/mouse-proteins";
 import { RightPanelType } from "../../models/ui";
+import { kOrganelleInfo } from "../../models/spaces/organisms/organisms-space";
 
 interface IProps extends IBaseProps {}
 interface IState {
@@ -27,6 +28,7 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
       showDNA: false
     };
   }
+
   public render() {
     const organismsComponent1 = this.getOrganismsRow(0);
     const organismsComponent2 = this.getOrganismsRow(1);
@@ -51,7 +53,7 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
   private getOrganismsRow(rowIndex: number) {
     const { ui, organisms } = this.stores;
     const row = organisms.rows[rowIndex];
-    const { currentData } = row;
+    const { currentData, selectedOrganelle } = row;
     const rightPanelType = ui.organismRightPanel[rowIndex];
 
     const rightPanelContent = (() => {
@@ -66,14 +68,18 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
             isPlaying={false} />;
         case "information":
         default:
-          return <ProteinViewer
-            protein={MouseProteins.receptor.broken}
-            showAminoAcidsOnProtein={this.state.showAminoAcidsOnViewer}
-            showDNA={this.state.showDNA}
-            dnaSwitchable={true}
-            toggleShowDNA={this.toggleShowDNA}
-            toggleShowingAminoAcidsOnProtein={this.toggleShowingAminoAcidsOnViewer}
-          />;
+          if (selectedOrganelle && kOrganelleInfo[selectedOrganelle].protein) {
+            return <ProteinViewer
+              protein={kOrganelleInfo[selectedOrganelle].protein}
+              showAminoAcidsOnProtein={this.state.showAminoAcidsOnViewer}
+              showDNA={this.state.showDNA}
+              dnaSwitchable={true}
+              toggleShowDNA={this.toggleShowDNA}
+              toggleShowingAminoAcidsOnProtein={this.toggleShowingAminoAcidsOnViewer}
+            />;
+          } else {
+            return null;
+          }
       }
     })();
 
