@@ -45,10 +45,18 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
       row.setShowProteinDNA(!row.showProteinDNA);
   }
 
+  private handleSetSelectStartPercent = (percent: number) => {
+    const { organisms } = this.stores;
+    // set on both simultaneously
+    organisms.rows[0].setProteinSliderStartPercent(percent);
+    organisms.rows[1].setProteinSliderStartPercent(percent);
+  }
+
   private getOrganismsRow(rowIndex: number) {
     const { ui, organisms } = this.stores;
     const row = organisms.rows[rowIndex];
-    const { currentData, selectedOrganelle, showProteinAminoAcidsOnProtein, showProteinDNA } = row;
+    const { currentData, selectedOrganelle,
+      showProteinAminoAcidsOnProtein, showProteinDNA, proteinSliderStartPercent } = row;
     const rightPanelType = ui.organismRightPanel[rowIndex];
 
     const rightPanelContent = (() => {
@@ -66,11 +74,13 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
           if (selectedOrganelle && kOrganelleInfo[selectedOrganelle].protein) {
             return <ProteinViewer
               protein={kOrganelleInfo[selectedOrganelle].protein}
+              selectionStartPercent={proteinSliderStartPercent}
               showAminoAcidsOnProtein={showProteinAminoAcidsOnProtein}
               showDNA={showProteinDNA}
               dnaSwitchable={true}
               toggleShowDNA={this.toggleShowDNA(rowIndex)}
               toggleShowingAminoAcidsOnProtein={this.toggleShowingAminoAcidsOnViewer(rowIndex)}
+              setSelectStartPercent={this.handleSetSelectStartPercent}
             />;
           } else {
             return (

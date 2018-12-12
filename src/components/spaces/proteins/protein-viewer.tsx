@@ -18,6 +18,7 @@ export interface ProteinSpec {
 interface IProps extends IBaseProps {
   protein: ProteinSpec;
   secondProtein?: ProteinSpec;
+  selectionStartPercent?: number;
   aminoAcidWidth?: number;            // Width of one amino acid in the slider elements, in pixels
   codonWidth?: number;                // Width of one codon in the slider elements, in pixels
   showDNA?: boolean;
@@ -25,10 +26,12 @@ interface IProps extends IBaseProps {
   dnaSwitchable?: boolean;
   toggleShowDNA: () => void;
   toggleShowingAminoAcidsOnProtein: () => void;
+  setSelectStartPercent: (percent: number) => void;
   size: {width: number};              // From SizeMe
 }
 
 interface DefaultProps {
+  selectionStartPercent: number;
   aminoAcidWidth: number;
   codonWidth: number;
   showDNA: boolean;
@@ -40,7 +43,6 @@ type PropsWithDefaults = IProps & DefaultProps;
 
 interface IState {
   animating: boolean;
-  selectionStartPercent: number;
   selectionStartPercentTarget: number;
   selectedAminoAcidIndex: number;
   selectedAminoAcidXLocation: number;
@@ -53,6 +55,7 @@ interface IState {
 export class ProteinViewer extends BaseComponent<IProps, IState> {
 
   public static defaultProps: DefaultProps = {
+    selectionStartPercent: 0,
     aminoAcidWidth: 14,
     codonWidth: 29,
     showDNA: false,
@@ -65,7 +68,6 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
 
     this.state = {
       animating: false,
-      selectionStartPercent: 0,
       selectionStartPercentTarget: 0,
       selectedAminoAcidIndex: 0,
       selectedAminoAcidXLocation: 0,
@@ -77,7 +79,8 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
   public render() {
     const {
       protein, aminoAcidWidth,
-      secondProtein, showDNA, showAminoAcidsOnProtein, dnaSwitchable
+      secondProtein, showDNA, showAminoAcidsOnProtein, dnaSwitchable,
+      selectionStartPercent
     } = this.props as PropsWithDefaults;
 
     const { width } = this.props.size;
@@ -107,7 +110,7 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
             <Protein
               width={halfWidth}
               height={height - SLIDER_HEIGHT}
-              selectionStartPercent={this.state.selectionStartPercent}
+              selectionStartPercent={selectionStartPercent}
               updateSelectionStart={this.handleAnimateToSelectionStart}
               selectionPercent={protein1SelectionPercent}
               viewBox="0 0 222 206"
@@ -120,7 +123,7 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
                 ? <Protein
                     width={width / 2}
                     height={height - SLIDER_HEIGHT}
-                    selectionStartPercent={this.state.selectionStartPercent}
+                    selectionStartPercent={selectionStartPercent}
                     updateSelectionStart={this.handleAnimateToSelectionStart}
                     selectionPercent={protein2SelectionPercent}
                     viewBox="0 0 222 206"
@@ -140,7 +143,7 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
               width={halfWidth}
               aminoAcidWidth={aminoAcidWidth}
               selectionWidth={selectionWidth}
-              selectionStartPercent={this.state.selectionStartPercent}
+              selectionStartPercent={selectionStartPercent}
               updateSelectionStart={this.handleUpdateSelectionStart}
               selectedAminoAcidIndex={this.state.selectedAminoAcidIndex}
               updateSelectedAminoAcidIndex={this.handleUpdateSelectedAminoAcidIndex}
@@ -157,7 +160,7 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
                 width={halfWidth}
                 aminoAcidWidth={aminoAcidWidth}
                 selectionWidth={selectionWidth}
-                selectionStartPercent={this.state.selectionStartPercent}
+                selectionStartPercent={selectionStartPercent}
                 updateSelectionStart={this.handleUpdateSelectionStart}
                 selectedAminoAcidIndex={this.state.selectedAminoAcidIndex}
                 updateSelectedAminoAcidIndex={this.handleUpdateSelectedAminoAcidIndex}
@@ -210,9 +213,9 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
 
   private handleUpdateSelectionStart = (selectionStartPercent: number) => {
     this.setState({
-      animating: false,
-      selectionStartPercent
+      animating: false
     });
+    this.props.setSelectStartPercent(selectionStartPercent);
   }
 
   private handleAnimateToSelectionStart = (selectionStartPercentTarget: number) => {
@@ -223,7 +226,8 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
   }
 
   private animate = () => {
-    const {selectionStartPercent, selectionStartPercentTarget, animating} = this.state;
+    const { selectionStartPercent } = this.props as PropsWithDefaults;
+    const { selectionStartPercentTarget, animating } = this.state;
     if (!animating) return;
     let speed;
     if (selectionStartPercent > selectionStartPercentTarget) {
@@ -231,7 +235,7 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
     } else {
       speed = Math.min(0.02, selectionStartPercentTarget - selectionStartPercent);
     }
-    this.setState({selectionStartPercent: selectionStartPercent + speed});
+    this.props.setSelectStartPercent(selectionStartPercent + speed);
     if (selectionStartPercentTarget - selectionStartPercent !== 0) {
       window.requestAnimationFrame(this.animate);
     }

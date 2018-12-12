@@ -33,7 +33,8 @@ export const OrganismsRowModel = types
     assayedOrganelle: types.maybe(Organelle),
     zoomLevel: types.optional(ZoomLevel, "organism"),
     showProteinDNA: false,
-    showProteinAminoAcidsOnProtein: false
+    showProteinAminoAcidsOnProtein: false,
+    proteinSliderStartPercent: 0
   })
   .views(self => ({
     get currentData(): ChartDataModelType {
@@ -88,6 +89,9 @@ export const OrganismsRowModel = types
       },
       setShowProteinAminoAcidsOnProtein(val: boolean) {
         self.showProteinAminoAcidsOnProtein = val;
+      },
+      setProteinSliderStartPercent(val: number) {
+        self.proteinSliderStartPercent = val;
       }
     };
   });
