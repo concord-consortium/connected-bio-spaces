@@ -15,7 +15,7 @@ interface IBarProps {
 
 const defaultOptions: ChartOptions = {
   title: {
-    display: true,
+    display: false,
     text: "",
     fontSize: 22
   },
@@ -82,11 +82,12 @@ const barData = (chartData: ChartDataModelType) => {
       dset.backgroundColor = ChartColors.map(c => hexToRGBValue(c.hex, seriesOpacity));
       dset.borderColor = ChartColors.map(c => hexToRGBValue(c.hex, 1.0));
     }
+    dset.stack = d.stack;
     barDatasets.push(dset);
   }
 
   const barChartData = {
-    labels: chartData.dataLabels,
+    labels: chartData.chartLabels,
     datasets: barDatasets
   };
 
