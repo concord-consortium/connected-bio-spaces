@@ -39,13 +39,37 @@
     .button-holder
       flex-grow: 0
       flex-shrink: 0
-      display: flex;
-      margin: $double-component-margin
+      display: flex
+      align-items: center
+      justify-content: center
+      width: 30px
+      height: 30px
 
-    .button
-      height: $two-up-graph-button-icon-height
-      width: $two-up-graph-button-icon-width
-      fill: $two-up-graph-button-icon-color
+      &:hover:not(.disabled)
+        background-color: $two-up-button-background
+        cursor: pointer
+
+      .button
+        height: $two-up-button-icon-height
+        width: $two-up-button-icon-width
+        fill: $color-khaki-yellow
+
+    &.organism
+      .button-holder
+        &:hover:not(.disabled)
+          background-color: $color-salmon-orange-dark4
+        .button
+          fill: $color-salmon-orange-dark1
+        &.active
+          .button
+            fill: $two-up-button-icon-color-active
+
+      &.disabled
+        .button
+          opacity: 0.25
+      &.active
+        .button
+          fill: $two-up-button-icon-color-active
 
   .content
     flex-grow: 1

@@ -3,13 +3,22 @@ import * as React from "react";
 import { BaseComponent, IBaseProps } from "./base";
 
 import "./two-up-display.sass";
+import { RightPanelType } from "../models/ui";
+
+const titles: {[key in RightPanelType]: string} = {
+  instructions: "Instructions",
+  data: "Data",
+  information: "Information"
+};
 
 interface IProps extends IBaseProps {
   leftTitle: string;
   leftPanel: React.ReactNode;
-  rightTitle: string;
-  rightIcon?: string;
-  onClickRightIcon?: (row?: number) => void;
+  instructionsIconEnabled?: boolean;
+  dataIconEnabled?: boolean;
+  informationIconEnabled?: boolean;
+  selectedRightPanel: RightPanelType;
+  onClickRightIcon?: (icon: RightPanelType) => void;
   rightPanel: React.ReactNode;
   spaceClass: string;
 }
@@ -41,22 +50,33 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
     );
   }
 
+  private renderIcon(panelType: RightPanelType, selectedPanel: RightPanelType, enabled?: boolean) {
+    const active = panelType === selectedPanel;
+    const className = "button-holder" +
+      (enabled ? "" : " disabled") +
+      (active ? " active" : "");
+    return (
+      <div className={className} onClick={this.handleClickRightIcon(panelType, enabled)}>
+        <svg className="button" data-test="right-button">
+          <use xlinkHref={`#icon-show-${panelType}`} />
+        </svg>
+      </div>
+    );
+  }
+
   private renderRightPanel() {
+    const { selectedRightPanel, instructionsIconEnabled, dataIconEnabled, informationIconEnabled } = this.props;
+    const title = titles[selectedRightPanel];
+    const contentClass = "content" + (selectedRightPanel === "instructions" ? " scrollable" : "");
     return (
       <div className="two-up-panel right-abutment">
         <div className={"header " + this.props.spaceClass} data-test="right-header">
-          {
-            this.props.rightIcon ?
-              <div className="button-holder" onClick={this.handleClickRightIcon}>
-                <svg className="button" data-test="right-button">
-                  <use xlinkHref={this.props.rightIcon} />
-                </svg>
-              </div>
-              : null
-            }
-          <div className="title" data-test="right-title">{this.props.rightTitle}</div>
+          { this.renderIcon("instructions", selectedRightPanel, instructionsIconEnabled) }
+          { this.renderIcon("data", selectedRightPanel, dataIconEnabled) }
+          { this.renderIcon("information", selectedRightPanel, informationIconEnabled) }
+          <div className="title" data-test="right-title">{title}</div>
         </div>
-        <div className="content scrollable" data-test="right-content">
+        <div className={contentClass} data-test="right-content">
           {this.props.rightPanel}
         </div>
         <div className={"footer " + this.props.spaceClass} data-test="right-footer"/>
@@ -64,7 +84,10 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
     );
   }
 
-  private handleClickRightIcon = () => {
-    if (this.props.onClickRightIcon) this.props.onClickRightIcon();
+  private handleClickRightIcon = (icon: RightPanelType, enabled?: boolean) => {
+    const { onClickRightIcon } = this.props;
+    if (enabled && onClickRightIcon) {
+      return () => onClickRightIcon(icon);
+    }
   }
 }

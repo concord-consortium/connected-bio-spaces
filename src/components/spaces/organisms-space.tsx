@@ -7,17 +7,25 @@ import { Chart } from "../charts/chart";
 import { InstructionsComponent } from "../instructions";
 
 import { OrganismsContainer } from "./organisms/organisms-container";
+import ProteinViewer from "./proteins/protein-viewer";
+import MouseProteins from "./proteins/protein-specs/mouse-proteins";
+import { RightPanelType } from "../../models/ui";
 
 interface IProps extends IBaseProps {}
-interface IState {}
+interface IState {
+  showAminoAcidsOnViewer: boolean;
+  showDNA: boolean;
+}
 
 @inject("stores")
 @observer
 export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
-    this.state = { topZoom: 1, bottomZoom: 0 };
-
+    this.state = {
+      showAminoAcidsOnViewer: false,
+      showDNA: false
+    };
   }
   public render() {
     const organismsComponent1 = this.getOrganismsRow(0);
@@ -28,34 +36,65 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
     );
   }
 
+  private toggleShowingAminoAcidsOnViewer = () => {
+    this.setState({
+      showAminoAcidsOnViewer: !this.state.showAminoAcidsOnViewer
+    });
+  }
+
+  private toggleShowDNA = () => {
+    this.setState({
+      showDNA: !this.state.showDNA
+    });
+  }
+
   private getOrganismsRow(rowIndex: number) {
     const { ui, organisms } = this.stores;
     const row = organisms.rows[rowIndex];
     const { currentData } = row;
-    const showOrganismGraph = ui.showOrganismGraph[rowIndex];
-    const iconId = showOrganismGraph ? "#icon-show-data" : "#icon-show-graph";
-    const graphTitle = showOrganismGraph ? "Data" : "Instructions";
-    const graphPanel = <Chart title="Chart Test" chartData={currentData}
-      chartType={"horizontalBar"} isPlaying={false} />;
-    const instructionsPanel = <InstructionsComponent content={organisms.instructions}/>;
-    const rightPanelContent = showOrganismGraph ? graphPanel : instructionsPanel;
+    const rightPanelType = ui.organismRightPanel[rowIndex];
+
+    const rightPanelContent = (() => {
+      switch (rightPanelType) {
+        case "instructions":
+          return <InstructionsComponent content={organisms.instructions}/>;
+        case "data":
+          return <Chart
+            title="Chart Test"
+            chartData={currentData}
+            chartType={"horizontalBar"}
+            isPlaying={false} />;
+        case "information":
+        default:
+          return <ProteinViewer
+            protein={MouseProteins.receptor.broken}
+            showAminoAcidsOnProtein={this.state.showAminoAcidsOnViewer}
+            showDNA={this.state.showDNA}
+            dnaSwitchable={true}
+            toggleShowDNA={this.toggleShowDNA}
+            toggleShowingAminoAcidsOnProtein={this.toggleShowingAminoAcidsOnViewer}
+          />;
+      }
+    })();
 
     return (
       <TwoUpDisplayComponent
         leftTitle="Explore: Organism"
         leftPanel={<OrganismsContainer rowIndex={rowIndex}/>}
-        rightTitle={graphTitle}
-        rightIcon={iconId}
         rightPanel={rightPanelContent}
+        instructionsIconEnabled={true}
+        dataIconEnabled={true}
+        informationIconEnabled={true}
+        selectedRightPanel={rightPanelType}
         onClickRightIcon={this.toggleOrganismsGraph(rowIndex)}
         spaceClass="organism"
       />
     );
   }
 
-  private toggleOrganismsGraph = (rowIndex: number) => (e: any) => {
+  private toggleOrganismsGraph = (rowIndex: number) => (panelType: RightPanelType) => {
     const {ui} = this.stores;
-    ui.setShowOrganismGraph(rowIndex, !ui.showOrganismGraph[rowIndex]);
+    ui.setOrganismRightPanel(rowIndex, panelType);
   }
 
 }

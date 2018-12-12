@@ -5,27 +5,30 @@ describe("ui model", () => {
 
   beforeEach(() => {
     ui = UIModel.create({
-      investigationPanelSpace: "none"
+      investigationPanelSpace: "none",
+      populationsRightPanel: "instructions",
+      organismRightPanel: ["instructions", "data"]
     });
   });
 
   it("has default values", () => {
-    expect(ui.showPopulationGraph).toBe(false);
     expect(ui.investigationPanelSpace).toBe("none");
+    expect(ui.populationsRightPanel).toBe("instructions");
+    expect(ui.availableBackpackSlots).toBe(6);
   });
 
   it("uses override values", () => {
     ui = UIModel.create({
-      showPopulationGraph: true,
+      populationsRightPanel: "data",
       investigationPanelSpace: "populations"
     });
-    expect(ui.showPopulationGraph).toBe(true);
+    expect(ui.populationsRightPanel).toBe("data");
     expect(ui.investigationPanelSpace).toBe("populations");
   });
 
   it("sets new values", () => {
-    ui.setShowPopulationGraph(true);
-    expect(ui.showPopulationGraph).toBe(true);
+    ui.setPopulationRightPanel("information");
+    expect(ui.populationsRightPanel).toBe("information");
   });
 
 });
