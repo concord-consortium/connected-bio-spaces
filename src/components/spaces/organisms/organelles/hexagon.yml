@@ -137,7 +137,7 @@ rules:
       at: nearest
       direction: forward
       finally:
-        switch_state: check_if_bound
+        switch_state: check_if_bound_1
   diffuse:
   - diffuse:
       for: 300

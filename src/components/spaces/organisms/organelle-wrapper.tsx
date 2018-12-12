@@ -150,6 +150,12 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
       const substance = row.selectedSubstance;
       row.organismsMouse.addSubstance(organelleType, substance, 100);
       row.setMode("normal");
+
+      if (substance === "hormone") {
+        this.addHormone(organelleType, location);
+      } else if (substance === "signalProtein") {
+        this.addSignalProtein(organelleType, location);
+      }
     }
     // if (rootStore.mode === Mode.Assay) {
     //   const organelleInfo = OrganelleRef.create({
@@ -162,11 +168,6 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     //   rootStore.changeSubstanceLevel(OrganelleRef.create({ organism, organelleType }));
     //   // show animation in model
     //   const substanceType = rootStore.activeSubstance;
-    //   if (substanceType === SubstanceType.Hormone) {
-    //     this.addHormone(organelleType, location);
-    //   } else if (substanceType === SubstanceType.SignalProtein) {
-    //     this.addSignalProtein(organelleType, location);
-    //   }
     // }
   }
 
@@ -174,7 +175,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     const period = SUBSTANCE_ADDITION_MS / times;
     const addAgents = (model: any) => {
       for (let i = 0; i < countAtOnce; i++) {
-        const a = model.world.createAgent(this.getModel().world.species[species]);
+        const a = model.world.createAgent(model.world.species[species]);
         a.state = state;
         a.setProperties(props);
       }
@@ -186,6 +187,8 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
         model.setTimeout(addAgentsAgent.bind(this, model, added + 1), period);
       }
     };
+
+    addAgentsAgent(this.model, 0);
 
     // const matchingBoxes = Object.keys(appStore.boxes.toJS())
     //   .map((key) => appStore.boxes.get(key))
@@ -199,21 +202,24 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     // matchingBoxes.forEach((box) => addAgentsAgent(box.model, 0));
   }
 
-  // public addHormone(organelleType: OrganelleType, location: {x: number, y: number}) {
-  //   const inIntercell = organelleType === OrganelleType.Extracellular;
-  //   const species = "hexagon";
-  //   const state = inIntercell ? "find_path_from_anywhere" : "diffuse";
-  //   const props = inIntercell ? location : {speed: 0.4, x: location.x, y: location.y};
-  //   const count = inIntercell ? 3 : 2;
-  //   this.addAgentsOverTime(species, state, props, count, 9);
-  // }
+  public addHormone(organelleType: OrganelleType, location: {x: number, y: number}) {
+    const { rowIndex } = this.props;
+    const { organisms } = this.stores;
+    const zoom = organisms.rows[rowIndex].zoomLevel;
+    const species = zoom === "cell" ? "hormoneDot" : "hexagon";
+    const inIntercell = organelleType === "extracellular";
+    const state = inIntercell ? "find_path_from_anywhere" : "diffuse";
+    const props = inIntercell ? location : {speed: 0.4, x: location.x, y: location.y};
+    const count = inIntercell ? 3 : 2;
+    this.addAgentsOverTime(species, state, props, count, 9);
+  }
 
-  // public addSignalProtein(organelleType: OrganelleType, location: {x: number, y: number}) {
-  //   const inIntercell = organelleType === OrganelleType.Extracellular;
-  //   const species = "gProteinPart";
-  //   const state = inIntercell ? "find_flowing_path" : "in_cell_from_click";
-  //   this.addAgentsOverTime(species, state, location, 1, 9);
-  // }
+  public addSignalProtein(organelleType: OrganelleType, location: {x: number, y: number}) {
+    const inIntercell = organelleType === "extracellular";
+    const species = "gProteinPart";
+    const state = inIntercell ? "find_flowing_path" : "in_cell_from_click";
+    this.addAgentsOverTime(species, state, location, 1, 9);
+  }
 
   public isModeDropper(mode: ModeType) {
     return mode === "assay" || mode === "add" || mode === "subtract";
@@ -387,16 +393,17 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
       const clickTarget = this.getOrganelleFromMouseEvent(evt);
       if (clickTarget) {
         // Keep the dropper displayed for substance additions
-        // if (rootStore.mode === Mode.Add || rootStore.mode === Mode.Subtract) {
-        //   const newCoords = this.state.dropperCoords.slice(0);
-        //   newCoords.push({x: evt.e.layerX, y: evt.e.layerY});
-        //   this.setState({dropperCoords: newCoords});
-        //   rootStore.startTimer(() => {
-        //     const splicedCoords = this.state.dropperCoords.slice(0);
-        //     splicedCoords.splice(0, 1);
-        //     this.setState({dropperCoords: splicedCoords});
-        //   },                   SUBSTANCE_ADDITION_MS);
-        // }
+        const { mode } = this.props;
+        if (mode === "add") {
+          const newCoords = this.state.dropperCoords.slice(0);
+          newCoords.push({x: evt.e.layerX, y: evt.e.layerY});
+          this.setState({dropperCoords: newCoords});
+          model.setTimeout(() => {
+            const splicedCoords = this.state.dropperCoords.slice(0);
+            splicedCoords.splice(0, 1);
+            this.setState({dropperCoords: splicedCoords});
+          }, SUBSTANCE_ADDITION_MS);
+        }
 
         // Handle the click in the Organelle model
         const location = model.view.transformToWorldCoordinates({x: evt.e.offsetX, y: evt.e.offsetY});
