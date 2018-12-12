@@ -4,6 +4,8 @@ import { BaseComponent, IBaseProps } from "./base";
 
 import "./four-up-display.sass";
 
+export const PANEL_ASPECT_RATIO = 1.68;
+
 interface IProps extends IBaseProps {
   topRow: JSX.Element;
   bottomRow: JSX.Element;

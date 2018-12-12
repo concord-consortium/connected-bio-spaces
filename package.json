@@ -127,6 +127,7 @@
     "react-dom": "^16.5.0",
     "react-jsonschema-form": "^1.0.5",
     "react-sizeme": "^2.5.2",
+    "svg-path-properties": "^0.4.7",
     "uuid": "^3.3.2",
     "wait-on": "^3.0.1"
   }
