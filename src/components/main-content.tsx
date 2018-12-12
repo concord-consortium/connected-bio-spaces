@@ -30,20 +30,14 @@ const kSpaceComponents: SpaceTypeToComponent = {
 export class MainContentComponent extends BaseComponent<IProps, IState> {
 
   public render() {
+    const {investigationPanelSpace} = this.stores.ui;
+    const mainClass = "main-content " + investigationPanelSpace;
+
+    const ActiveSpaceComponent = kSpaceComponents[investigationPanelSpace];
     return (
-      <div className="main-content" data-test="main-content">
-        {this.renderMainContent()}
+      <div className={mainClass} data-test="main-content">
+        {ActiveSpaceComponent ? <ActiveSpaceComponent/> : null}
       </div>
     );
-  }
-
-  private renderMainContent() {
-    const {investigationPanelSpace} = this.stores.ui;
-
-    // stawman code
-    const ActiveSpaceComponent = kSpaceComponents[investigationPanelSpace];
-    if (ActiveSpaceComponent) {
-      return <ActiveSpaceComponent/>;
-    }
   }
 }

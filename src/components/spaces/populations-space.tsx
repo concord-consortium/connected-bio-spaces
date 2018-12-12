@@ -17,7 +17,7 @@ export class PopulationsSpaceComponent extends BaseComponent<IProps, IState> {
     const {ui, populations} = this.stores;
     const showPopulationGraph = ui.showPopulationGraph;
     const iconId = showPopulationGraph ? "#icon-show-data" : "#icon-show-graph";
-    const graphTitle = showPopulationGraph ? "Graph" : "Instructions";
+    const graphTitle = showPopulationGraph ? "Data" : "Instructions";
     const graphPanel = <Chart title="Population"
                           chartData={populations.currentData}
                           chartType={"line"}
@@ -33,6 +33,7 @@ export class PopulationsSpaceComponent extends BaseComponent<IProps, IState> {
         rightIcon={iconId}
         rightPanel={rightPanelContent}
         onClickRightIcon={this.togglePopulationsGraph}
+        spaceClass="populations"
       />
     );
   }

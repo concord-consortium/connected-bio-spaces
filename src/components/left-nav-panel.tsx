@@ -22,7 +22,7 @@ export class LeftNavPanelComponent extends BaseComponent<IProps, IState> {
         </div>
         {this.renderExploreButtons()}
         <div className="header collect">
-        Collect
+        Sample
         </div>
         {this.renderCollectButtons()}
         <div className="footer">
