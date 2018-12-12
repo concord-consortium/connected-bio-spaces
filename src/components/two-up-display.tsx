@@ -79,7 +79,7 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
         <div className={contentClass} data-test="right-content">
           {this.props.rightPanel}
         </div>
-        <div className={"footer " + this.props.spaceClass} data-test="right-footer"/>
+        {/* <div className={"footer " + this.props.spaceClass} data-test="right-footer"/> // removed for time being*/}
       </div>
     );
   }
