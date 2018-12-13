@@ -69,6 +69,14 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
         selector: ".receptor-group",
         visibleModes: ["normal"]
       },
+      receptorWorking: {
+        selector: ".receptor-working",
+        visibleModes: ["inspect"]
+      },
+      receptorBroken: {
+        selector: ".receptor-broken",
+        visibleModes: ["inspect"]
+      },
       gate: {
         selector: ".gate-a, .gate-b, .gate-c, .gate-d",
         visibleModes: ["normal"]
@@ -127,10 +135,15 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
   }
 
   public organelleClick(organelleType: OrganelleType, location: {x: number, y: number}) {
-    const { organisms } = this.stores;
+    const { organisms, ui } = this.stores;
     const row = organisms.rows[this.props.rowIndex];
     if (row.mode === "assay") {
       row.setActiveAssay(organelleType);
+      row.setMode("normal");
+    } else if (row.mode === "inspect" &&
+        (organelleType === "receptorWorking" || organelleType === "receptorBroken")) {
+      row.setSelectedOrganelle(organelleType);
+      ui.setOrganismRightPanel(this.props.rowIndex, "information"); // auto-switch to info
       row.setMode("normal");
     }
     // if (rootStore.mode === Mode.Assay) {

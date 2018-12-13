@@ -7,6 +7,10 @@ import { Chart } from "../charts/chart";
 import { InstructionsComponent } from "../instructions";
 
 import { OrganismsContainer } from "./organisms/organisms-container";
+import ProteinViewer from "./proteins/protein-viewer";
+import MouseProteins from "./proteins/protein-specs/mouse-proteins";
+import { RightPanelType } from "../../models/ui";
+import { kOrganelleInfo } from "../../models/spaces/organisms/organisms-space";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -16,9 +20,8 @@ interface IState {}
 export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
-    this.state = { topZoom: 1, bottomZoom: 0 };
-
   }
+
   public render() {
     const organismsComponent1 = this.getOrganismsRow(0);
     const organismsComponent2 = this.getOrganismsRow(1);
@@ -28,34 +31,84 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
     );
   }
 
+  private toggleShowingAminoAcidsOnViewer = (rowIndex: number) => {
+    const { organisms } = this.stores;
+    const row = organisms.rows[rowIndex];
+    return () =>
+      row.setShowProteinAminoAcidsOnProtein(!row.showProteinAminoAcidsOnProtein);
+  }
+
+  private toggleShowDNA = (rowIndex: number) => {
+    const { organisms } = this.stores;
+    const row = organisms.rows[rowIndex];
+    return () =>
+      row.setShowProteinDNA(!row.showProteinDNA);
+  }
+
+  private handleSetSelectStartPercent = (percent: number) => {
+    const { organisms } = this.stores;
+    // set on both simultaneously
+    organisms.rows[0].setProteinSliderStartPercent(percent);
+    organisms.rows[1].setProteinSliderStartPercent(percent);
+  }
+
   private getOrganismsRow(rowIndex: number) {
     const { ui, organisms } = this.stores;
     const row = organisms.rows[rowIndex];
-    const { currentData } = row;
-    const showOrganismGraph = ui.showOrganismGraph[rowIndex];
-    const iconId = showOrganismGraph ? "#icon-show-data" : "#icon-show-graph";
-    const graphTitle = showOrganismGraph ? "Data" : "Instructions";
-    const graphPanel = <Chart title="Chart Test" chartData={currentData}
-      chartType={"horizontalBar"} isPlaying={false} />;
-    const instructionsPanel = <InstructionsComponent content={organisms.instructions}/>;
-    const rightPanelContent = showOrganismGraph ? graphPanel : instructionsPanel;
+    const { currentData, selectedOrganelle,
+      showProteinAminoAcidsOnProtein, showProteinDNA, proteinSliderStartPercent } = row;
+    const rightPanelType = ui.organismRightPanel[rowIndex];
+
+    const rightPanelContent = (() => {
+      switch (rightPanelType) {
+        case "instructions":
+          return <InstructionsComponent content={organisms.instructions}/>;
+        case "data":
+          return <Chart
+            title="Chart Test"
+            chartData={currentData}
+            chartType={"horizontalBar"}
+            isPlaying={false} />;
+        case "information":
+        default:
+          if (selectedOrganelle && kOrganelleInfo[selectedOrganelle].protein) {
+            return <ProteinViewer
+              protein={kOrganelleInfo[selectedOrganelle].protein}
+              selectionStartPercent={proteinSliderStartPercent}
+              showAminoAcidsOnProtein={showProteinAminoAcidsOnProtein}
+              showDNA={showProteinDNA}
+              dnaSwitchable={true}
+              toggleShowDNA={this.toggleShowDNA(rowIndex)}
+              toggleShowingAminoAcidsOnProtein={this.toggleShowingAminoAcidsOnViewer(rowIndex)}
+              setSelectStartPercent={this.handleSetSelectStartPercent}
+            />;
+          } else {
+            return (
+              <div>
+                Find and inspect a protein to view it here.
+              </div>);
+          }
+      }
+    })();
 
     return (
       <TwoUpDisplayComponent
         leftTitle="Explore: Organism"
         leftPanel={<OrganismsContainer rowIndex={rowIndex}/>}
-        rightTitle={graphTitle}
-        rightIcon={iconId}
         rightPanel={rightPanelContent}
+        instructionsIconEnabled={true}
+        dataIconEnabled={true}
+        informationIconEnabled={true}
+        selectedRightPanel={rightPanelType}
         onClickRightIcon={this.toggleOrganismsGraph(rowIndex)}
         spaceClass="organism"
       />
     );
   }
 
-  private toggleOrganismsGraph = (rowIndex: number) => (e: any) => {
+  private toggleOrganismsGraph = (rowIndex: number) => (panelType: RightPanelType) => {
     const {ui} = this.stores;
-    ui.setShowOrganismGraph(rowIndex, !ui.showOrganismGraph[rowIndex]);
+    ui.setOrganismRightPanel(rowIndex, panelType);
   }
 
 }

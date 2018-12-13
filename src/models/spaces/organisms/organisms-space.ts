@@ -3,6 +3,8 @@ import { ColorType, BackpackMouseType } from "../../backpack-mouse";
 import { OrganismsMouseModel } from "./organisms-mouse";
 import { OrganismsRowModel, OrganelleType, OrganismsRowModelType } from "./organisms-row";
 import { BackpackModelType } from "../../backpack";
+import { ProteinSpec } from "../../../components/spaces/proteins/protein-viewer";
+import MouseProteins from "../../../components/spaces/proteins/protein-specs/mouse-proteins";
 
 export const kSubstanceNames = [
   "pheomelanin",
@@ -21,6 +23,7 @@ type OrganelleInfo = {
         [color in ColorType]: number;
       };
     };
+    protein?: ProteinSpec;
   };
 };
 export const kOrganelleInfo: OrganelleInfo = {
@@ -70,6 +73,16 @@ export const kOrganelleInfo: OrganelleInfo = {
   receptor: {
     displayName: "Receptor",
     substances: {}
+  },
+  receptorWorking: {
+    displayName: "Receptor",
+    substances: {},
+    protein: MouseProteins.receptor.working
+  },
+  receptorBroken: {
+    displayName: "Receptor",
+    substances: {},
+    protein: MouseProteins.receptor.broken
   },
   gate: {
     displayName: "Gate",

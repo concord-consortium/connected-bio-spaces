@@ -5,6 +5,7 @@ import { TwoUpDisplayComponent } from "../two-up-display";
 import { PopulationsComponent } from "./populations/populations-container";
 import { InstructionsComponent } from "../instructions";
 import { Chart } from "../charts/chart";
+import { RightPanelType } from "../../models/ui";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -15,32 +16,32 @@ export class PopulationsSpaceComponent extends BaseComponent<IProps, IState> {
 
   public render() {
     const {ui, populations} = this.stores;
-    const showPopulationGraph = ui.showPopulationGraph;
-    const iconId = showPopulationGraph ? "#icon-show-data" : "#icon-show-graph";
-    const graphTitle = showPopulationGraph ? "Data" : "Instructions";
+    const rightPanelType = ui.populationsRightPanel;
     const graphPanel = <Chart title="Population"
                           chartData={populations.currentData}
                           chartType={"line"}
                           isPlaying={populations.isPlaying} />;
     const instructionsPanel = <InstructionsComponent content={populations.instructions}/>;
-    const rightPanelContent = ui.showPopulationGraph ? graphPanel : instructionsPanel;
+    const rightPanelContent = rightPanelType === "data" ? graphPanel : instructionsPanel;
 
     return (
       <TwoUpDisplayComponent
         leftTitle="Explore: Population"
         leftPanel={<PopulationsComponent />}
-        rightTitle={graphTitle}
-        rightIcon={iconId}
         rightPanel={rightPanelContent}
+        instructionsIconEnabled={true}
+        dataIconEnabled={true}
+        informationIconEnabled={false}
+        selectedRightPanel={rightPanelType}
         onClickRightIcon={this.togglePopulationsGraph}
         spaceClass="populations"
       />
     );
   }
 
-  private togglePopulationsGraph = () => {
+  private togglePopulationsGraph = (panelType: RightPanelType) => {
     const {ui} = this.stores;
-    ui.setShowPopulationGraph(!ui.showPopulationGraph);
+    ui.setPopulationRightPanel(panelType);
   }
 
 }

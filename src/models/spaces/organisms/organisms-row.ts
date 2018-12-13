@@ -11,12 +11,14 @@ export const Organelle = types.enumeration("type", [
   "extracellular",
   "melanosome",
   "receptor",
+  "receptorWorking",
+  "receptorBroken",
   "gate",
   "nearbyCell"
 ]);
 export type OrganelleType = typeof Organelle.Type;
 
-export const Mode = types.enumeration("type", ["add", "subtract", "assay", "normal"]);
+export const Mode = types.enumeration("type", ["add", "subtract", "assay", "inspect", "normal"]);
 export type ModeType = typeof Mode.Type;
 
 export const ZoomLevel = types.enumeration("type", ["organism", "cell", "protein"]);
@@ -26,9 +28,13 @@ export const OrganismsRowModel = types
   .model("OrganismsRow", {
     organismsMouse: types.maybe(types.reference(OrganismsMouseModel)),
     hoveredOrganelle: types.maybe(Organelle),
+    selectedOrganelle: types.maybe(Organelle),
     mode: types.optional(Mode, "normal"),
     assayedOrganelle: types.maybe(Organelle),
-    zoomLevel: types.optional(ZoomLevel, "organism")
+    zoomLevel: types.optional(ZoomLevel, "organism"),
+    showProteinDNA: false,
+    showProteinAminoAcidsOnProtein: false,
+    proteinSliderStartPercent: 0
   })
   .views(self => ({
     get currentData(): ChartDataModelType {
@@ -66,11 +72,26 @@ export const OrganismsRowModel = types
       setActiveAssay(organelle: OrganelleType) {
         self.assayedOrganelle = organelle;
       },
+      setSelectedOrganelle(organelle: OrganelleType) {
+        self.selectedOrganelle = organelle;
+      },
       setZoomLevel(zoomLevel: ZoomLevelType) {
         self.zoomLevel = zoomLevel;
+        if (zoomLevel !== "protein") {
+          self.selectedOrganelle = undefined;
+        }
       },
       setMode(mode: ModeType) {
         self.mode = mode;
+      },
+      setShowProteinDNA(val: boolean) {
+        self.showProteinDNA = val;
+      },
+      setShowProteinAminoAcidsOnProtein(val: boolean) {
+        self.showProteinAminoAcidsOnProtein = val;
+      },
+      setProteinSliderStartPercent(val: number) {
+        self.proteinSliderStartPercent = val;
       }
     };
   });

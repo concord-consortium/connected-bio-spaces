@@ -3,6 +3,9 @@ import { types } from "mobx-state-tree";
 export const SpaceTypeEnum = types.enumeration("type", ["populations", "breeding", "organism", "dna", "none"]);
 export type SpaceType = typeof SpaceTypeEnum.Type;
 
+export const RightPanelTypeEnum = types.enumeration("type", ["instructions", "data", "information"]);
+export type RightPanelType = typeof RightPanelTypeEnum.Type;
+
 export function createUIModel(authoring: any): UIModelType {
   let displayedSpace = authoring.displayedSpace;
   if (!authoring.showPopulationSpace && displayedSpace === "populations" ||
@@ -12,7 +15,8 @@ export function createUIModel(authoring: any): UIModelType {
         displayedSpace = "none";
   }
   return UIModel.create({
-    showOrganismGraph: [false, true],
+    populationsRightPanel: "instructions",
+    organismRightPanel: ["instructions", "data"],
     investigationPanelSpace: displayedSpace,
     showPopulationSpace: authoring.showPopulationSpace,
     showBreedingSpace: authoring.showBreedingSpace,
@@ -23,8 +27,8 @@ export function createUIModel(authoring: any): UIModelType {
 
 export const UIModel = types
   .model("UI", {
-    showPopulationGraph: false,
-    showOrganismGraph: types.array(types.boolean),
+    populationsRightPanel: RightPanelTypeEnum,
+    organismRightPanel: types.array(RightPanelTypeEnum),
     investigationPanelSpace: SpaceTypeEnum,
     availableBackpackSlots: 6,
     showPopulationSpace: true,
@@ -34,11 +38,11 @@ export const UIModel = types
   })
   .actions((self) => {
     return {
-      setShowOrganismGraph(rowIndex: number, val: boolean) {
-        self.showOrganismGraph[rowIndex] = val;
+      setOrganismRightPanel(rowIndex: number, val: RightPanelType) {
+        self.organismRightPanel[rowIndex] = val;
       },
-      setShowPopulationGraph(val: boolean) {
-        self.showPopulationGraph = val;
+      setPopulationRightPanel(val: RightPanelType) {
+        self.populationsRightPanel = val;
       },
       setInvestigationPanelSpace(space: SpaceType) {
         self.investigationPanelSpace = space;
