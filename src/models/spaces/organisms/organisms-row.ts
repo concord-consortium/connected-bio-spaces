@@ -1,8 +1,8 @@
 import { types, Instance } from "mobx-state-tree";
 import { ChartDataModelType, ChartDataModel } from "../charts/chart-data";
-import { DataPoint, ChartDataSetModel, ChartColors, DataPointType } from "../charts/chart-data-set";
+import { DataPoint, ChartDataSetModel, ChartDataSetModelType, DataPointType } from "../charts/chart-data-set";
 import { OrganismsMouseModel } from "./organisms-mouse";
-import { kSubstanceNames } from "./organisms-space";
+import { kSubstanceInfo, kSubstanceNames } from "./organisms-space";
 
 export const Organelle = types.enumeration("type", [
   "nucleus",
@@ -38,20 +38,15 @@ export const OrganismsRowModel = types
   })
   .views(self => ({
     get currentData(): ChartDataModelType {
-      const chartDataSets: any[] = [];
+      const chartDataSets: ChartDataSetModelType[] = [];
       const organelleLabels: string[] = [];
 
       self.assayedOrganelles.forEach((organelle) => {
         organelleLabels.push(organelle);
       });
-      const colorMaps: any = { pheomelanin: "#f4ce83",
-                               signalProtein: "#d88bff",
-                               eumelanin: "#795423",
-                               hormone: "#0adbd7" };
-      let stackIterator = 0;
-      kSubstanceNames.forEach((substance) => {
-        const substanceName = substance === "signalProtein" ? "signal protein" : substance;
-        const substanceColor: string = colorMaps[substance];
+      kSubstanceNames.forEach((substance, index) => {
+        const substanceName: string = kSubstanceInfo[substance].displayName;
+        const substanceColor: string =  kSubstanceInfo[substance].color;
         const points: DataPointType[] = [];
         self.assayedOrganelles.forEach((organelle) => {
           if (!self.organismsMouse) {
@@ -60,7 +55,7 @@ export const OrganismsRowModel = types
           const substanceValue = self.organismsMouse.getSubstanceValue(organelle, substance);
           points.push(DataPoint.create({ a1: substanceValue, a2: 0, label: `${organelle} ${substanceName}` }));
         });
-        const stackNum = "Stack " + stackIterator;
+        const stackNum = "Stack " + index;
         chartDataSets.push(ChartDataSetModel.create({
           name: substanceName,
           dataPoints: points,
@@ -69,7 +64,6 @@ export const OrganismsRowModel = types
           fixedMaxA1: 800,
           stack: stackNum
         }));
-        stackIterator++;
       });
 
       const chart = ChartDataModel.create({
