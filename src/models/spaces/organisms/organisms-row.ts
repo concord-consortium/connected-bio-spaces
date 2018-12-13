@@ -1,32 +1,10 @@
 import { types, Instance } from "mobx-state-tree";
 import { ChartDataModelType, ChartDataModel } from "../charts/chart-data";
-import { DataPoint, ChartDataSetModel, ChartDataSetModelType, DataPointType } from "../charts/chart-data-set";
-import { OrganismsMouseModel } from "./organisms-mouse";
 import { RightPanelTypeEnum, RightPanelType } from "../../ui";
+import { DataPoint, ChartDataSetModel, DataPointType, ChartDataSetModelType } from "../charts/chart-data-set";
+import { OrganismsMouseModel, Organelle, Substance, kSubstanceNames,
+  OrganelleType, SubstanceType } from "./organisms-mouse";
 import { kSubstanceInfo } from "./organisms-space";
-
-export const Organelle = types.enumeration("type", [
-  "nucleus",
-  "cytoplasm",
-  "golgi",
-  "extracellular",
-  "melanosome",
-  "receptor",
-  "receptorWorking",
-  "receptorBroken",
-  "gate",
-  "nearbyCell"
-]);
-export type OrganelleType = typeof Organelle.Type;
-
-export const kSubstanceNames = [
-  "pheomelanin",
-  "signalProtein",
-  "eumelanin",
-  "hormone"
-];
-export const Substance = types.enumeration("Substance", kSubstanceNames);
-export type SubstanceType = typeof Substance.Type;
 
 export const Mode = types.enumeration("type", ["add", "subtract", "assay", "inspect", "normal"]);
 export type ModeType = typeof Mode.Type;
@@ -107,6 +85,13 @@ export const OrganismsRowModel = types
       },
       setMode(mode: ModeType) {
         self.mode = mode;
+        if (self.organismsMouse) {
+          if (mode === "normal") {
+            self.organismsMouse.setPaused(false);
+          } else {
+            self.organismsMouse.setPaused(true);
+          }
+        }
       },
       setShowProteinDNA(val: boolean) {
         self.showProteinDNA = val;

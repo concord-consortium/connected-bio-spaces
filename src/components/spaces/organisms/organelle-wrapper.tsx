@@ -12,7 +12,8 @@ import { kOrganelleInfo } from "../../../models/spaces/organisms/organisms-space
 import { BaseComponent } from "../../base";
 // import { SubstanceType } from "../models/Substance";
 import "./organelle-wrapper.sass";
-import { OrganelleType, ModeType, ZoomLevelType } from "../../../models/spaces/organisms/organisms-row.js";
+import { ModeType, ZoomLevelType } from "../../../models/spaces/organisms/organisms-row.js";
+import { OrganelleType } from "../../../models/spaces/organisms/organisms-mouse.js";
 
 interface OrganelleWrapperProps {
   zoomLevel: ZoomLevelType;
@@ -144,6 +145,10 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
         (organelleType === "receptorWorking" || organelleType === "receptorBroken")) {
       row.setSelectedOrganelle(organelleType);
       row.setRightPanel("information"); // auto-switch to info
+      row.setMode("normal");
+    } else if (row.mode === "add" && row.organismsMouse) {
+      const substance = row.selectedSubstance;
+      row.organismsMouse.addSubstance(organelleType, substance, 100);
       row.setMode("normal");
     }
     // if (rootStore.mode === Mode.Assay) {
