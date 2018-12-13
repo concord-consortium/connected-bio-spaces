@@ -35,7 +35,6 @@ export class OrganismView extends BaseComponent<IProps, IState> {
 
     return (
       <div className="organism-view-container">
-        <div className="organism-description" data-test="organism-description">{mouseDescription}</div>
         {backpackMouse &&
           <div className="organism-view" style={mouseStyle} data-test="organism-view" />
         }
