@@ -43,7 +43,7 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
         <div className={"header " + this.props.spaceClass} data-test="left-header">
           <div className="title" data-test="left-title">{this.props.leftTitle}</div>
         </div>
-        <div className="content" data-test="left-content">
+        <div className={"content " + this.props.spaceClass} data-test="left-content">
           {this.props.leftPanel}
         </div>
       </div>
@@ -67,7 +67,9 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
   private renderRightPanel() {
     const { selectedRightPanel, instructionsIconEnabled, dataIconEnabled, informationIconEnabled } = this.props;
     const title = titles[selectedRightPanel];
-    const contentClass = "content" + (selectedRightPanel === "instructions" ? " scrollable" : "");
+    const contentClass = "content " + (selectedRightPanel === "instructions" ? " scrollable " : "")
+                                    + (selectedRightPanel === "data" ? "resizetofit " : "")
+                                    + this.props.spaceClass;
     return (
       <div className="two-up-panel right-abutment">
         <div className={"header " + this.props.spaceClass} data-test="right-header">

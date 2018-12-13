@@ -30,7 +30,7 @@ const defaultOptions: ChartOptions = {
     display: true,
     position: "bottom",
   },
-  maintainAspectRatio: true,
+  maintainAspectRatio: false,
   scales: {
     display: false,
     yAxes: [{
@@ -161,8 +161,10 @@ export class LineChart extends BaseComponent<ILineProps, ILineState> {
     );
 
     return (
-      <div className="line-chart-container" data-test="line-chart">
-        {graphs}
+      <div className="line-chart-container">
+        <div className="line-chart-container" data-test="line-chart">
+          {graphs}
+        </div>
         <LineChartControls chartData={chartData} isPlaying={isPlaying} />
       </div>
     );

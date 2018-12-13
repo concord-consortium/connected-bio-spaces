@@ -1,14 +1,12 @@
 @import ../vars
 
 .chart-container
-  max-height: 360px
+  width: 100%
   background-color: white
-  margin: $component-margin
+  display: flex
 
-  .chart-display
-    max-height: 360px
-
-    .line-chart-container
-      position: relative
-      height: 100%
-      width: 100%
+  .line-chart-container
+    display: flex
+    flex-direction: column
+    height: 100%
+    width: 100%
