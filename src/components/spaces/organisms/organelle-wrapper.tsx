@@ -138,6 +138,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     const row = organisms.rows[this.props.rowIndex];
     if (row.mode === "assay") {
       row.setActiveAssay(organelleType);
+      row.setRightPanel("data");        // auto-switch to data
       row.setMode("normal");
     } else if (row.mode === "inspect" &&
         (organelleType === "receptorWorking" || organelleType === "receptorBroken")) {
