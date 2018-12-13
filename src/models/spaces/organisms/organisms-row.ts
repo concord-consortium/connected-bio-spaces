@@ -3,6 +3,7 @@ import { ChartDataModelType, ChartDataModel } from "../charts/chart-data";
 import { DataPoint, ChartDataSetModel, ChartDataSetModelType, DataPointType } from "../charts/chart-data-set";
 import { OrganismsMouseModel } from "./organisms-mouse";
 import { kSubstanceInfo, kSubstanceNames } from "./organisms-space";
+import { RightPanelTypeEnum, RightPanelType } from "../../ui";
 
 export const Organelle = types.enumeration("type", [
   "nucleus",
@@ -34,7 +35,8 @@ export const OrganismsRowModel = types
     zoomLevel: types.optional(ZoomLevel, "organism"),
     showProteinDNA: false,
     showProteinAminoAcidsOnProtein: false,
-    proteinSliderStartPercent: 0
+    proteinSliderStartPercent: 0,
+    rightPanel: types.optional(RightPanelTypeEnum, "instructions")
   })
   .views(self => ({
     get currentData(): ChartDataModelType {
@@ -104,6 +106,9 @@ export const OrganismsRowModel = types
       },
       setProteinSliderStartPercent(val: number) {
         self.proteinSliderStartPercent = val;
+      },
+      setRightPanel(val: RightPanelType) {
+        self.rightPanel = val;
       }
     };
   });

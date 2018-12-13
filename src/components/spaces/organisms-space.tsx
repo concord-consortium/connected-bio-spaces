@@ -8,7 +8,6 @@ import { InstructionsComponent } from "../instructions";
 
 import { OrganismsContainer } from "./organisms/organisms-container";
 import ProteinViewer from "./proteins/protein-viewer";
-import MouseProteins from "./proteins/protein-specs/mouse-proteins";
 import { RightPanelType } from "../../models/ui";
 import { kOrganelleInfo } from "../../models/spaces/organisms/organisms-space";
 
@@ -53,14 +52,14 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
   }
 
   private getOrganismsRow(rowIndex: number) {
-    const { ui, organisms } = this.stores;
+    const { organisms } = this.stores;
     const row = organisms.rows[rowIndex];
     const { currentData, selectedOrganelle,
-      showProteinAminoAcidsOnProtein, showProteinDNA, proteinSliderStartPercent } = row;
-    const rightPanelType = ui.organismRightPanel[rowIndex];
+      showProteinAminoAcidsOnProtein, showProteinDNA, proteinSliderStartPercent,
+      rightPanel } = row;
 
     const rightPanelContent = (() => {
-      switch (rightPanelType) {
+      switch (rightPanel) {
         case "instructions":
           return <InstructionsComponent content={organisms.instructions}/>;
         case "data":
@@ -99,17 +98,17 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
         instructionsIconEnabled={true}
         dataIconEnabled={true}
         informationIconEnabled={true}
-        selectedRightPanel={rightPanelType}
-        onClickRightIcon={this.toggleOrganismsGraph(rowIndex)}
+        selectedRightPanel={rightPanel}
+        onClickRightIcon={this.setRightPanel(rowIndex)}
         spaceClass="organism"
         rowNumber={rowIndex}
       />
     );
   }
 
-  private toggleOrganismsGraph = (rowIndex: number) => (panelType: RightPanelType) => {
-    const {ui} = this.stores;
-    ui.setOrganismRightPanel(rowIndex, panelType);
+  private setRightPanel = (rowIndex: number) => (panelType: RightPanelType) => {
+    const { organisms } = this.stores;
+    organisms.rows[rowIndex].setRightPanel(panelType);
   }
 
 }

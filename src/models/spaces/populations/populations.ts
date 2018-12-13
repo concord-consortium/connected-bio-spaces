@@ -3,6 +3,7 @@ import { MousePopulationsModel, MousePopulationsModelType } from "./mouse-model/
 import { Interactive, Events, Environment, Agent } from "populations.js";
 import { ChartDataModelType } from "../charts/chart-data";
 import { type } from "os";
+import { RightPanelTypeEnum, RightPanelType } from "../../ui";
 
 const ModelsUnion = types.union(MousePopulationsModel);
 type ModelsUnionType = MousePopulationsModelType;
@@ -13,8 +14,7 @@ export function createPopulationsModel(curriculumName: string, authoring: any): 
     default:
       return PopulationsModel.create({
         model: MousePopulationsModel.create(authoring),
-        instructions: authoring.instructions,
-        interactionMode: "none"
+        instructions: authoring.instructions
       });
   }
 }
@@ -38,7 +38,8 @@ export const PopulationsModel = types
     model: ModelsUnion,
     isPlaying: false,
     instructions: "",
-    interactionMode: InteractionModeEnum
+    interactionMode: types.optional(InteractionModeEnum, "none"),
+    rightPanel: types.optional(RightPanelTypeEnum, "instructions")
   })
   .extend(self => {
 
@@ -86,6 +87,9 @@ export const PopulationsModel = types
         },
         removeAgent(agent: Agent) {
           self.model.interactive.removeAgent(agent);
+        },
+        setRightPanel(val: RightPanelType) {
+          self.rightPanel = val;
         }
       }
     };

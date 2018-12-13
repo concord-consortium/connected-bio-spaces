@@ -13,7 +13,6 @@ import { BaseComponent } from "../../base";
 // import { SubstanceType } from "../models/Substance";
 import "./organelle-wrapper.sass";
 import { OrganelleType, ModeType, ZoomLevelType } from "../../../models/spaces/organisms/organisms-row.js";
-import { IProps, IState } from "populations-react/build/lib/components/PopulationsView";
 
 interface OrganelleWrapperProps {
   zoomLevel: ZoomLevelType;
@@ -135,7 +134,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
   }
 
   public organelleClick(organelleType: OrganelleType, location: {x: number, y: number}) {
-    const { organisms, ui } = this.stores;
+    const { organisms } = this.stores;
     const row = organisms.rows[this.props.rowIndex];
     if (row.mode === "assay") {
       row.setActiveAssay(organelleType);
@@ -143,7 +142,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     } else if (row.mode === "inspect" &&
         (organelleType === "receptorWorking" || organelleType === "receptorBroken")) {
       row.setSelectedOrganelle(organelleType);
-      ui.setOrganismRightPanel(this.props.rowIndex, "information"); // auto-switch to info
+      row.setRightPanel("information"); // auto-switch to info
       row.setMode("normal");
     }
     // if (rootStore.mode === Mode.Assay) {
