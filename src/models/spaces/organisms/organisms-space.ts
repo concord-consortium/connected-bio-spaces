@@ -148,7 +148,15 @@ export const OrganismsSpaceModel = types
           organismsMouse = OrganismsMouseModel.create({ backpackMouse });
           self.organismsMice.push(organismsMouse);
         }
-        self.rows[rowIndex] = OrganismsRowModel.create({ organismsMouse });
+
+        // sync initial slider position
+        let proteinSliderStartPercent = 0;
+        const otherRow = -(rowIndex - 1);
+        if (self.rows[otherRow] && self.rows[otherRow].proteinSliderStartPercent) {
+          proteinSliderStartPercent = self.rows[otherRow].proteinSliderStartPercent;
+        }
+
+        self.rows[rowIndex] = OrganismsRowModel.create({ organismsMouse, proteinSliderStartPercent });
       }
     };
   });
