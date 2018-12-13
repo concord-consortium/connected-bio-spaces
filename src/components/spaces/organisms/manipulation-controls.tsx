@@ -26,7 +26,7 @@ export class ManipulationControls extends BaseComponent<IProps, IState> {
     const inspectClass = "assay" + inspectDisabledClass + inspectActiveClass;
     return (
       <div className="manipulation-controls" data-test="manipulations-panel">
-        <div className={assayClass} onClick={this.handleAssayClick}>Assay</div>
+        <div className={assayClass} onClick={this.handleAssayClick}>Measure</div>
         <div className={inspectClass} onClick={this.handleInspectClick}>Inspect</div>
       </div>
     );
