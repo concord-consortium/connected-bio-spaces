@@ -102,6 +102,7 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
         selectedRightPanel={rightPanelType}
         onClickRightIcon={this.toggleOrganismsGraph(rowIndex)}
         spaceClass="organism"
+        rowNumber={rowIndex}
       />
     );
   }
