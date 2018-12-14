@@ -43,6 +43,8 @@ export class ManipulationControls extends BaseComponent<IProps, IState> {
 
     if (row.mode === "normal") {
       row.setMode("assay");
+      const { ui } = this.stores;
+      ui.setOrganismRightPanel(this.props.rowIndex, "data"); // auto-switch to graph
     } else {
       row.setMode("normal");
     }
