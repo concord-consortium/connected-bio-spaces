@@ -21,6 +21,10 @@ export const BackpackModel = types
 
       isDeselected(mouse?: BackpackMouseType) {
         return self.activeMouse && self.activeMouse !== mouse;
+      },
+
+      isSelected(mouse?: BackpackMouseType) {
+        return self.activeMouse && self.activeMouse === mouse;
       }
     };
   })

@@ -36,9 +36,15 @@ export class CollectButtonComponent extends BaseComponent<IProps, IState> {
     const handleClose = clickClose ? clickClose : this.handleClickRemove;
     let buttonClass = mouse.sex === "male" ? "collect-button male" : "collect-button female";
     buttonClass += this.isDeselected() ? " deselected" : "";
+    buttonClass += this.isSelected() ? " selected" : "";
     const innerOutlineClass: string = mouse.isHeterozygote ? "inner-outline heterozygote" : "inner-outline";
     return (
       <div>
+        <div className="x-close" onClick={handleClose} data-test="x-close-backpack">
+          <svg className="icon">
+            <use xlinkHref="#icon-close" />
+          </svg>
+        </div>
         <div className="collect-button-outline">
           <div className={buttonClass} onClick={handleMouse} data-test="stored-mouse-class">
             <div className={innerOutlineClass} data-test="inner-outline">
@@ -47,7 +53,6 @@ export class CollectButtonComponent extends BaseComponent<IProps, IState> {
             </div>
           </div>
         </div>
-        <div className="x-close" onClick={handleClose} data-test="x-close-backpack">x</div>
         <div className="index" data-test="stored-mouse-index">
           {backpackMouseIndex > -1 ? backpackMouseIndex + 1 : ""}
         </div>
@@ -105,5 +110,10 @@ export class CollectButtonComponent extends BaseComponent<IProps, IState> {
     const { backpack } = this.stores;
     const { backpackMouse } = this.props;
     return backpack.isDeselected(backpackMouse);
+  }
+  private isSelected = () => {
+    const { backpack } = this.stores;
+    const { backpackMouse } = this.props;
+    return backpack.isSelected(backpackMouse);
   }
 }

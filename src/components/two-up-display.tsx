@@ -21,6 +21,7 @@ interface IProps extends IBaseProps {
   onClickRightIcon?: (icon: RightPanelType) => void;
   rightPanel: React.ReactNode;
   spaceClass: string;
+  rowNumber: number | undefined;
 }
 interface IState {}
 
@@ -38,8 +39,12 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
   }
 
   private renderLeftPanel() {
+    let abutmentClass: string = " right-abutment";
+    if (this.props.rowNumber !== undefined) {
+      abutmentClass += this.props.rowNumber === 0 ? " bottom-abutment" : " top-abutment";
+    }
     return (
-      <div className="two-up-panel left-abutment" data-test="left-panel">
+      <div className={"two-up-panel" + abutmentClass} data-test="left-panel">
         <div className={"header " + this.props.spaceClass} data-test="left-header">
           <div className="title" data-test="left-title">{this.props.leftTitle}</div>
         </div>
@@ -67,11 +72,15 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
   private renderRightPanel() {
     const { selectedRightPanel, instructionsIconEnabled, dataIconEnabled, informationIconEnabled } = this.props;
     const title = titles[selectedRightPanel];
+    let abutmentClass: string = " left-abutment";
+    if (this.props.rowNumber !== undefined) {
+      abutmentClass += this.props.rowNumber === 0 ? " bottom-abutment " : " top-abutment";
+    }
     const contentClass = "content " + (selectedRightPanel === "instructions" ? " scrollable " : "")
                                     + (selectedRightPanel === "data" ? "resizetofit " : "")
                                     + this.props.spaceClass;
     return (
-      <div className="two-up-panel right-abutment">
+      <div className={"two-up-panel" + abutmentClass}>
         <div className={"header " + this.props.spaceClass} data-test="right-header">
           { this.renderIcon("instructions", selectedRightPanel, instructionsIconEnabled) }
           { this.renderIcon("data", selectedRightPanel, dataIconEnabled) }
