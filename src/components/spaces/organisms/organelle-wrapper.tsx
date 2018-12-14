@@ -287,10 +287,10 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     modelDef.properties = modelProperties;
 
     createModel(modelDef).then((m: any) => {
-      // appStore.boxes.get(this.props.boxId).setModel(m);
       this.model = m;
       this.model.zoomLevel = zoomLevel;
       this.model.mode = row.mode;
+      this.setState({dropperCoords: []});
       this.completeLoad();
     });
   }
