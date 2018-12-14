@@ -77,7 +77,8 @@ export const ChartDataSetModel = types
     // if this is set the a2 / y axis max returns the max of the full data set, not just the visiblePoints
     expandOnly: false,
     fixedLabelRotation: types.maybe(types.number),
-    dataStartIdx: types.maybe(types.number)
+    dataStartIdx: types.maybe(types.number),
+    stack: types.maybe(types.string)
   })
   .views(self => ({
     get visibleDataPoints() {

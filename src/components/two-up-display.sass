@@ -53,6 +53,9 @@
         height: $two-up-button-icon-height
         width: $two-up-button-icon-width
         fill: $color-khaki-yellow
+      &.active
+        .button
+          fill: $two-up-button-icon-color-active
 
     &.organism
       .button-holder
@@ -75,6 +78,15 @@
     flex-grow: 1
     overflow: hidden
     position: relative
+
+    &.populations
+      background-color: $color-khaki-yellow-light2
+
+    &.organism
+      background-color: $color-salmon-orange-light2
+
+  .resizetofit
+    display: flex
 
   .scrollable
     overflow: auto

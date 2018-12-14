@@ -41,9 +41,7 @@ export class Chart extends React.Component<IChartProps, IChartState> {
       />;
     return (
       <div className="chart-container">
-        <div className="chart-display" data-test="chart-display">
-          {chart}
-        </div>
+        {chart}
       </div>
     );
   }

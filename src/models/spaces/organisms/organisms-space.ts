@@ -15,6 +15,31 @@ export const kSubstanceNames = [
 export const Substance = types.enumeration("Substance", kSubstanceNames);
 export type SubstanceType = typeof Substance.Type;
 
+type SubstanceInfo = {
+  [substance in SubstanceType]: {
+    displayName: string;
+    color: string;
+  };
+};
+export const kSubstanceInfo: SubstanceInfo = {
+  pheomelanin: {
+    displayName: "pheomelanin",
+    color: "#f4ce83"
+  },
+  signalProtein: {
+    displayName: "signal protein",
+    color: "#d88bff"
+  },
+  eumelanin: {
+    displayName: "eumelanin",
+    color: "#795423"
+  },
+  hormone: {
+    displayName: "hormone",
+    color: "#0adbd7"
+  },
+};
+
 type OrganelleInfo = {
   [organelle in OrganelleType]: {
     displayName: string;

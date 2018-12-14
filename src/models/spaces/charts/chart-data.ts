@@ -4,9 +4,15 @@ import { ChartDataSetModel, ChartDataSetModelType, ChartColors } from "./chart-d
 export const ChartDataModel = types
   .model("ChartData", {
     name: types.string,
-    dataSets: types.array(ChartDataSetModel)
+    dataSets: types.array(ChartDataSetModel),
+    labels: types.array(types.string)
   })
   .views(self => ({
+    get chartLabels() {
+      if (self.labels && self.labels.length > 0) {
+        return self.labels;
+      } else return [];
+    },
     // labels for a data point - essential for a bar graph, optional for a line
     get dataLabels() {
       if (self.dataSets && self.dataSets.length > 0) {
