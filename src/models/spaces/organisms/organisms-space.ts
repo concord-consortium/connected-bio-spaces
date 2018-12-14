@@ -1,20 +1,10 @@
 import { types, Instance } from "mobx-state-tree";
 import { ColorType, BackpackMouseType } from "../../backpack-mouse";
-import { OrganismsMouseModel } from "./organisms-mouse";
-import { OrganismsRowModel, OrganelleType, OrganismsRowModelType } from "./organisms-row";
-import { BackpackModelType } from "../../backpack";
 import { ProteinSpec } from "../../../components/spaces/proteins/protein-viewer";
 import MouseProteins from "../../../components/spaces/proteins/protein-specs/mouse-proteins";
 import { RightPanelType } from "../../ui";
-
-export const kSubstanceNames = [
-  "pheomelanin",
-  "signalProtein",
-  "eumelanin",
-  "hormone"
-];
-export const Substance = types.enumeration("Substance", kSubstanceNames);
-export type SubstanceType = typeof Substance.Type;
+import { OrganismsMouseModel, OrganelleType, SubstanceType } from "./organisms-mouse";
+import { OrganismsRowModel } from "./organisms-row";
 
 type SubstanceInfo = {
   [substance in SubstanceType]: {
@@ -52,6 +42,9 @@ type OrganelleInfo = {
     protein?: ProteinSpec;
   };
 };
+
+// Cell models can be viewed here:
+// https://docs.google.com/spreadsheets/d/19f0nk-F3UQ_-A-agq5JnuhJXGCtFYMT_JcYCQkyqnQI/edit
 export const kOrganelleInfo: OrganelleInfo = {
   nucleus: {
     displayName: "Nucleus",
@@ -62,7 +55,7 @@ export const kOrganelleInfo: OrganelleInfo = {
     substances: {
       signalProtein: {
         white: 0,
-        tan: 100,
+        tan: 110,
         brown: 170
       }
     }
@@ -86,12 +79,12 @@ export const kOrganelleInfo: OrganelleInfo = {
     substances: {
       eumelanin: {
         white: 0,
-        tan: 170,
+        tan: 280,
         brown: 340
       },
       pheomelanin: {
-        white: 316,
-        tan: 232,
+        white: 317,
+        tan: 207,
         brown: 147
       }
     }
