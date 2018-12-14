@@ -113,11 +113,6 @@ export const kOrganelleInfo: OrganelleInfo = {
   },
 };
 
-export const getSubstanceBaseValueForColor = (organelle: OrganelleType, substance: SubstanceType, color: ColorType) => {
-  const substanceValues = kOrganelleInfo[organelle].substances[substance];
-  return substanceValues ? substanceValues[color] : 0;
-};
-
 export const OrganismsSpaceModel = types
   .model("OrganismsSpace", {
     organismsMice: types.array(OrganismsMouseModel),
