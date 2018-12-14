@@ -108,6 +108,8 @@ export const OrganismsMouseModel = types
     },
   }))
   .actions(self => {
+    let timerId: NodeJS.Timer;
+
     function afterCreate() {
       // Initialize all possible organelle substance deltas to 0
       kAssayableOrganelles.forEach((organelle: OrganelleType) => {
@@ -117,12 +119,16 @@ export const OrganismsMouseModel = types
         });
       });
 
-      setInterval(() => {
+      timerId = setInterval(() => {
         if (!self.paused) {
           stepSubstanceAdditions();
           self.incrementTime(100);
         }
       }, 100);
+    }
+
+    function beforeDestroy() {
+      clearInterval(timerId);
     }
 
     function setPaused(paused: boolean) {
@@ -198,8 +204,9 @@ export const OrganismsMouseModel = types
     }
 
     return {
-      setPaused,
       afterCreate,
+      beforeDestroy,
+      setPaused,
       addSubstance
     };
   });
