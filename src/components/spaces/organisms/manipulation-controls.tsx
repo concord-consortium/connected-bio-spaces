@@ -4,7 +4,7 @@ import * as React from "react";
 import { BaseComponent, IBaseProps } from "../../base";
 
 import "./manipulation-controls.sass";
-import { ModeType } from "../../../models/spaces/organisms/organisms-row";
+import { ModeType, ZoomLevelType } from "../../../models/spaces/organisms/organisms-row";
 
 interface IProps extends IBaseProps {
   rowIndex: number;
@@ -17,17 +17,15 @@ export class ManipulationControls extends BaseComponent<IProps, IState> {
 
   public render() {
     const row = this.getControlsRow();
-    const inspectDisabledClass = row.zoomLevel === "protein" ? " " : " disabled";
-    const inspectActiveClass = row.mode === "inspect" ? " active" : "";
-    const inspectClass = "button" + inspectDisabledClass + inspectActiveClass;
-
     return (
       <div className="manipulation-controls" data-test="manipulations-panel">
-        <div className={this.getButtonClass("assay")} onClick={this.handleAssayClick}>Measure</div>
+        <div className={this.getButtonClass("assay", ["cell", "protein"])} onClick={this.handleAssayClick}>Measure</div>
         |
-        <div className={inspectClass} onClick={this.handleInspectClick}>Inspect</div>
+        <div className={this.getButtonClass("inspect", ["protein"])} onClick={this.handleInspectClick}>Inspect</div>
         |
-        <div className={this.getButtonClass("add")} onClick={this.handleAddSubstanceClick}>Add Substance</div>
+        <div className={this.getButtonClass("add", ["cell", "protein"])} onClick={this.handleAddSubstanceClick}>
+          Add Substance
+        </div>
         <select value={row.selectedSubstance} onChange={this.handleSubstanceChange}>
             <option value={"hormone"}>Hormone</option>
             <option value={"pheomelanin"}>Pheomelanin</option>
@@ -38,9 +36,9 @@ export class ManipulationControls extends BaseComponent<IProps, IState> {
     );
   }
 
-  private getButtonClass(buttonMode: ModeType) {
+  private getButtonClass(buttonMode: ModeType, enabledZooms: ZoomLevelType[]) {
     const row = this.getControlsRow();
-    const disabledClass = row.zoomLevel === "organism" ? " disabled" : "";
+    const disabledClass = enabledZooms.indexOf(row.zoomLevel) === -1 ? " disabled" : "";
     const activeClass = row.mode === buttonMode ? " active" : "";
 
     return "button" + disabledClass + activeClass;
