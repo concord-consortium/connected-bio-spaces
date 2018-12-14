@@ -5,6 +5,7 @@ import { OrganismsRowModel, OrganelleType, OrganismsRowModelType } from "./organ
 import { BackpackModelType } from "../../backpack";
 import { ProteinSpec } from "../../../components/spaces/proteins/protein-viewer";
 import MouseProteins from "../../../components/spaces/proteins/protein-specs/mouse-proteins";
+import { RightPanelType } from "../../ui";
 
 export const kSubstanceNames = [
   "pheomelanin",
@@ -123,7 +124,7 @@ export const OrganismsSpaceModel = types
   .model("OrganismsSpace", {
     organismsMice: types.array(OrganismsMouseModel),
     rows: types.optional(types.array(OrganismsRowModel),
-      [OrganismsRowModel.create(), OrganismsRowModel.create()]),
+      [OrganismsRowModel.create(), OrganismsRowModel.create({rightPanel: "data"})]),
     instructions: ""
   })
   .actions((self) => {
@@ -148,7 +149,21 @@ export const OrganismsSpaceModel = types
           organismsMouse = OrganismsMouseModel.create({ backpackMouse });
           self.organismsMice.push(organismsMouse);
         }
-        self.rows[rowIndex] = OrganismsRowModel.create({ organismsMouse });
+
+        // keep right panel as it was
+        let rightPanel: RightPanelType = rowIndex === 0 ? "instructions" : "data";
+        if (self.rows[rowIndex] && self.rows[rowIndex].rightPanel) {
+          rightPanel = self.rows[rowIndex].rightPanel;
+        }
+
+        // sync initial slider position
+        let proteinSliderStartPercent = 0;
+        const otherRow = -(rowIndex - 1);
+        if (self.rows[otherRow] && self.rows[otherRow].proteinSliderStartPercent) {
+          proteinSliderStartPercent = self.rows[otherRow].proteinSliderStartPercent;
+        }
+
+        self.rows[rowIndex] = OrganismsRowModel.create({ organismsMouse, proteinSliderStartPercent, rightPanel });
       }
     };
   });

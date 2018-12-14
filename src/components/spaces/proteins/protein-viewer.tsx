@@ -2,7 +2,7 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { BaseComponent, IBaseProps } from "../../base";
 import { withSize } from "react-sizeme";
-import AminoAcidSlider, { SLIDER_HEIGHT } from "./amino-acid-slider";
+import AminoAcidSlider, { kSliderHeight } from "./amino-acid-slider";
 import Protein from "./protein";
 import InfoBox from "./info-box";
 import { extractCodons } from "./util/dna-utils";
@@ -109,7 +109,7 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
           <div className="proteins">
             <Protein
               width={halfWidth}
-              height={height - SLIDER_HEIGHT}
+              height={height - kSliderHeight}
               selectionStartPercent={selectionStartPercent}
               updateSelectionStart={this.handleAnimateToSelectionStart}
               selectionPercent={protein1SelectionPercent}
@@ -122,7 +122,7 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
             { secondProtein
                 ? <Protein
                     width={width / 2}
-                    height={height - SLIDER_HEIGHT}
+                    height={height - kSliderHeight}
                     selectionStartPercent={selectionStartPercent}
                     updateSelectionStart={this.handleAnimateToSelectionStart}
                     selectionPercent={protein2SelectionPercent}

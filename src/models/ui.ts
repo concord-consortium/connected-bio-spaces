@@ -15,8 +15,6 @@ export function createUIModel(authoring: any): UIModelType {
         displayedSpace = "none";
   }
   return UIModel.create({
-    populationsRightPanel: "instructions",
-    organismRightPanel: ["instructions", "data"],
     investigationPanelSpace: displayedSpace,
     showPopulationSpace: authoring.showPopulationSpace,
     showBreedingSpace: authoring.showBreedingSpace,
@@ -27,8 +25,6 @@ export function createUIModel(authoring: any): UIModelType {
 
 export const UIModel = types
   .model("UI", {
-    populationsRightPanel: RightPanelTypeEnum,
-    organismRightPanel: types.array(RightPanelTypeEnum),
     investigationPanelSpace: SpaceTypeEnum,
     availableBackpackSlots: 6,
     showPopulationSpace: true,
@@ -38,12 +34,6 @@ export const UIModel = types
   })
   .actions((self) => {
     return {
-      setOrganismRightPanel(rowIndex: number, val: RightPanelType) {
-        self.organismRightPanel[rowIndex] = val;
-      },
-      setPopulationRightPanel(val: RightPanelType) {
-        self.populationsRightPanel = val;
-      },
       setInvestigationPanelSpace(space: SpaceType) {
         self.investigationPanelSpace = space;
       }

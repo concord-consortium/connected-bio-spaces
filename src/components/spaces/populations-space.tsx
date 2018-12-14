@@ -15,8 +15,8 @@ interface IState {}
 export class PopulationsSpaceComponent extends BaseComponent<IProps, IState> {
 
   public render() {
-    const {ui, populations} = this.stores;
-    const rightPanelType = ui.populationsRightPanel;
+    const { populations } = this.stores;
+    const rightPanelType = populations.rightPanel;
     const graphPanel = <Chart title="Population"
                           chartData={populations.currentData}
                           chartType={"line"}
@@ -33,16 +33,16 @@ export class PopulationsSpaceComponent extends BaseComponent<IProps, IState> {
         dataIconEnabled={true}
         informationIconEnabled={false}
         selectedRightPanel={rightPanelType}
-        onClickRightIcon={this.togglePopulationsGraph}
+        onClickRightIcon={this.setRightPanel}
         spaceClass="populations"
         rowNumber={undefined}
       />
     );
   }
 
-  private togglePopulationsGraph = (panelType: RightPanelType) => {
-    const {ui} = this.stores;
-    ui.setPopulationRightPanel(panelType);
+  private setRightPanel = (panelType: RightPanelType) => {
+    const { populations } = this.stores;
+    populations.setRightPanel(panelType);
   }
 
 }

@@ -12,7 +12,7 @@ const chainMargin = 4;          // space at start and end of chain
 const aminoAcidMargin = 2;      // space between AAs when no codons are showing
 const codonMargin = 6;          // space between codons
 
-export const SLIDER_HEIGHT = 50;
+export const kSliderHeight = 50;
 
 interface AminoAcidSliderProps {
   aminoAcids?: string;

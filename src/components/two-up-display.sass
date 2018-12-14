@@ -57,6 +57,13 @@
         .button
           fill: $two-up-button-icon-color-active
 
+      &.disabled
+        .button
+          opacity: 0.25
+      &.active
+        .button
+          fill: $two-up-button-icon-color-active
+
     &.organism
       .button-holder
         &:hover:not(.disabled)
@@ -67,12 +74,7 @@
           .button
             fill: $two-up-button-icon-color-active
 
-      &.disabled
-        .button
-          opacity: 0.25
-      &.active
-        .button
-          fill: $two-up-button-icon-color-active
+
 
   .content
     flex-grow: 1
