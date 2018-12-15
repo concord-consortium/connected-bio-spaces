@@ -24,6 +24,88 @@
     display: flex
     flex-direction: row
     width: 100%
+    background-color: $color-salmon-orange-dark2
 
   .organism-description
     text-align: center
+
+  .organism-button
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    height: 50px
+    width: 52px
+    margin: 4px
+    border: none
+    outline: none
+    border-radius: $component-border-radius
+    font-size: $font-size-label1
+    font-family: $font-stack
+    color: $color-salmon-orange-dark5
+    background-color: $color-salmon-orange-light2
+    cursor: pointer
+
+    &.zoom-in
+      width: 52px
+      font-size: $font-size-label3
+
+    &.zoom-out
+      width: 52px
+      font-size: $font-size-label3
+
+    &.add
+      width: 64px
+
+    &.select
+      height: 20px
+      width: 110px
+      font-size: $font-size-header
+      font-family: $font-stack
+
+    &.active
+      color: $color-white
+      background-color: $color-nav-cerulean-dark1
+
+    &.disabled
+      opacity: .5
+      pointer-events: none
+
+    .icon
+      margin: 0px
+      width: 44px
+      height: 28px
+      fill: $color-salmon-orange-dark2
+
+      &.active
+        fill: $color-white
+
+      &.disabled
+        opacity: .5
+
+  /* hover and mousedown states */
+  .organism-button:hover
+    background-color: $color-salmon-orange
+
+  .organism-button:active
+    color: $color-white
+    background-color: $color-salmon-orange-dark4
+
+  .organism-button:active .icon
+    fill: $color-white
+
+  /* hover and mousedown states of blue sticky button */
+  .organism-button.active:hover
+    background-color: $color-nav-cerulean-light1
+
+  .organism-button.active:active
+    color: $color-nav-cerulean-dark2
+    background-color: $color-nav-cerulean-light2
+
+  .organism-button:active .icon.sticky
+    fill: $color-nav-cerulean
+
+  .organism-button.sticky:active
+    color: $color-white
+    background-color: $color-nav-cerulean-dark1
+

@@ -19,19 +19,34 @@ export class ManipulationControls extends BaseComponent<IProps, IState> {
     const row = this.getControlsRow();
     return (
       <div className="manipulation-controls" data-test="manipulations-panel">
-        <div className={this.getButtonClass("assay", ["cell", "protein"])} onClick={this.handleAssayClick}>Measure</div>
-        |
-        <div className={this.getButtonClass("inspect", ["protein"])} onClick={this.handleInspectClick}>Inspect</div>
-        |
-        <div className={this.getButtonClass("add", ["cell", "protein"])} onClick={this.handleAddSubstanceClick}>
-          Add Substance
-        </div>
-        <select value={row.selectedSubstance} onChange={this.handleSubstanceChange}>
-            <option value={"hormone"}>Hormone</option>
-            <option value={"pheomelanin"}>Pheomelanin</option>
-            <option value={"eumelanin"}>Eumelanin</option>
-            <option value={"signalProtein"}>Signal Protein</option>
-          </select>
+        <button className={"organism-button sticky " + this.getButtonClass("assay", ["cell", "protein"])}
+                onClick={this.handleAssayClick} data-test="measure">
+          <svg className={"icon " + this.getButtonClass("assay", ["cell", "protein"])}>
+            <use xlinkHref="#icon-measure" />
+          </svg>
+          <div className="label">Measure</div>
+        </button>
+        <button className={"organism-button sticky " + this.getButtonClass("inspect", ["protein"])}
+                onClick={this.handleInspectClick} data-test="inspect">
+          <svg className={"icon " + this.getButtonClass("inspect", ["protein"])}>
+            <use xlinkHref="#icon-show-information" />
+          </svg>
+          <div className="label">Inspect</div>
+        </button>
+        <button className={"organism-button add sticky " + this.getButtonClass("add", ["cell", "protein"])}
+                onClick={this.handleAddSubstanceClick} data-test="add-substance">
+          <svg className={"icon " + this.getButtonClass("add", ["cell", "protein"])}>
+            <use xlinkHref="#icon-add-substance" />
+          </svg>
+          <div className="label">Add Substance</div>
+        </button>
+        <select className={"organism-button select " + this.getButtonClass("add", ["cell", "protein"])}
+                value={row.selectedSubstance} onChange={this.handleSubstanceChange}>
+          <option value={"hormone"}>Hormone</option>
+          <option value={"pheomelanin"}>Pheomelanin</option>
+          <option value={"eumelanin"}>Eumelanin</option>
+          <option value={"signalProtein"}>Signal Protein</option>
+        </select>
       </div>
     );
   }
@@ -41,7 +56,7 @@ export class ManipulationControls extends BaseComponent<IProps, IState> {
     const disabledClass = enabledZooms.indexOf(row.zoomLevel) === -1 ? " disabled" : "";
     const activeClass = row.mode === buttonMode ? " active" : "";
 
-    return "button" + disabledClass + activeClass;
+    return disabledClass + activeClass;
   }
 
   private getControlsRow = () => {
