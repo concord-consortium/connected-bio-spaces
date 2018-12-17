@@ -80,12 +80,9 @@ export const MousePopulationsModel = types
     return {
       views: {
         get interactive(): HawksMiceInteractive {
-          if (interactive) {
-            return interactive;
-          } else {
-            interactive = createInteractive(self as MousePopulationsModelType);
-            return interactive;
-          }
+          // always recreate
+          interactive = createInteractive(self as MousePopulationsModelType);
+          return interactive;
         },
 
         get chanceOfMutation() {
