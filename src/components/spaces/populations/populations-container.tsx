@@ -154,16 +154,14 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
     let colorReadable = "neutral";
     switch (environmentColor) {
       case "white":
-        colorReadable = "light";
+        colorReadable = "Beach";
         break;
       case "brown":
-        colorReadable = "dark";
+        colorReadable = "Field";
         break;
       case "neutral":
-        colorReadable = "neutral";
-        break;
       default:
-        colorReadable = "neutral";
+        colorReadable = "Mixed";
     }
     const colorClass = "environment-box " + colorReadable;
     return (
