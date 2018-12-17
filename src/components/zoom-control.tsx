@@ -16,8 +16,18 @@ export class ZoomControl extends BaseComponent<IProps, IState> {
   public render() {
     return (
       <div className="zoom-control-container" data-test="zoom-control-container">
-        <div className="zoom-control zoom-out" onClick={this.handleZoomOutButton} data-test="zoom-out">-</div>
-        <div className="zoom-control zoom-in" onClick={this.handleZoomInButton} data-test="zoom-in">+</div>
+        <button className="organism-button zoom-out" onClick={this.handleZoomOutButton} data-test="zoom-out">
+          <svg className="icon">
+            <use xlinkHref="#icon-zoomout" />
+          </svg>
+          <div className="label">Zoom Out</div>
+        </button>
+        <button className="organism-button zoom-in" onClick={this.handleZoomInButton} data-test="zoom-in">
+          <svg className="icon">
+            <use xlinkHref="#icon-zoomin" />
+          </svg>
+          <div className="label">Zoom In</div>
+        </button>
       </div>
     );
   }
