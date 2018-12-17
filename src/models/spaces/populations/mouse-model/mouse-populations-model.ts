@@ -63,7 +63,7 @@ export const MousePopulationsModel = types
     "chartData": types.optional(ChartDataModel, chartData)
   })
   .extend(self => {
-    let interactive: HawksMiceInteractive;
+    let interactive: HawksMiceInteractive | undefined;
 
     function addData(time: number, datum: any) {
       self.chartData.dataSets[0].addDataPoint(time, datum.numWhite, "");
@@ -71,18 +71,23 @@ export const MousePopulationsModel = types
       self.chartData.dataSets[2].addDataPoint(time, datum.numBrown, "");
     }
     Events.addEventListener(Environment.EVENTS.STEP, () => {
-      const date = interactive.environment.date;
-      if (date % 5 === 0) {
-        addData(date / 5, interactive.getData());
+      if (interactive) {
+        const date = interactive.environment.date;
+        if (date % 5 === 0) {
+          addData(date / 5, interactive.getData());
+        }
       }
     });
 
     return {
       views: {
         get interactive(): HawksMiceInteractive {
-          // always recreate
-          interactive = createInteractive(self as MousePopulationsModelType);
-          return interactive;
+          if (interactive) {
+            return interactive;
+          } else {
+            interactive = createInteractive(self as MousePopulationsModelType);
+            return interactive;
+          }
         },
 
         get chanceOfMutation() {
@@ -103,7 +108,9 @@ export const MousePopulationsModel = types
           self["inheritance.breedWithInheritance"] = value;
         },
         reset() {
-          interactive.reset();
+          if (interactive) {
+            interactive.reset();
+          }
           self.chartData.dataSets[0].clearDataPoints();
           self.chartData.dataSets[1].clearDataPoints();
           self.chartData.dataSets[2].clearDataPoints();
@@ -113,6 +120,9 @@ export const MousePopulationsModel = types
         },
         setShowHeteroStack(show: boolean) {
           self.showHeteroStack = show;
+        },
+        destroyInteractive() {
+          interactive = undefined;
         }
       }
     };

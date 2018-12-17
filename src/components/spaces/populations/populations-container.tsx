@@ -33,7 +33,7 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
   public componentWillUnmount() {
     const populations = this.props.stores && this.props.stores.populations;
     if (populations) {
-      populations.pause();
+      populations.close();
     }
   }
 

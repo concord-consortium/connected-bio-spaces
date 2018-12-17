@@ -90,6 +90,10 @@ export const PopulationsModel = types
         },
         setRightPanel(val: RightPanelType) {
           self.rightPanel = val;
+        },
+        close() {
+          self.model.interactive.stop();
+          self.model.destroyInteractive();
         }
       }
     };
