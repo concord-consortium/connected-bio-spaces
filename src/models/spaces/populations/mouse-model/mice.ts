@@ -5,7 +5,7 @@ const MouseGeneticSpec = {
   name: "Mouse",
   chromosomeNames: ["1", "XY"],
   chromosomeGeneMap: {
-    1: ["B"],
+    1: ["R"],
     XY: []
   },
   chromosomesLength: {
@@ -15,22 +15,22 @@ const MouseGeneticSpec = {
   },
   geneList: {
     color: {
-      alleles: ["B", "b"],
+      alleles: ["R", "C"],
       weights: [.5, .5],
       start: 10000000,
       length: 10584
     }
   },
   alleleLabelMap: {
-    "B": "Brown",
-    "b": "White",
+    "R": "Brown",
+    "C": "White",
     "": ""
   },
   traitRules: {
     color: {
-      white: [["b", "b"]],
-      tan: [["B", "b"]],
-      brown: [["B", "B"]]
+      white: [["C", "C"]],
+      tan: [["R", "C"]],
+      brown: [["R", "R"]]
     }
   }
 };
@@ -130,11 +130,11 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
       const tanChance = whiteChance + model["inheritance.randomOffspring.tan"] / 100;
       const rand = Math.random();
       if (rand < whiteChance) {
-        this.alleles.color = "a:b,b:b";
+        this.alleles.color = "a:C,b:C";
       } else if (rand < tanChance) {
-        this.alleles.color = Math.random() < 0.5 ? "a:B,b:b" : "a:b,b:B";
+        this.alleles.color = Math.random() < 0.5 ? "a:R,b:C" : "a:C,b:R";
       } else {
-        this.alleles.color = "a:B,b:B";
+        this.alleles.color = "a:R,b:R";
       }
       this.resetGeneticTraits();
     }

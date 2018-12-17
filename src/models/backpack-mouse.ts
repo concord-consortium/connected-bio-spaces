@@ -7,7 +7,7 @@ export type ColorType = typeof MouseColor.Type;
 export const SexTypeEnum = types.enumeration("type", ["male", "female"]);
 export type SexType = typeof SexTypeEnum.Type;
 
-export const GenotypeEnum = types.enumeration("type", ["BB", "Bb", "bB", "bb"]);
+export const GenotypeEnum = types.enumeration("type", ["RR", "RC", "CR", "CC"]);
 export type Genotype = typeof GenotypeEnum.Type;
 
 export const UNCOLLECTED_IMAGE = "assets/mouse_collect.png";
@@ -22,9 +22,9 @@ export const BackpackMouse = types
   .views(self => ({
     get baseColor(): ColorType {
       switch (self.genotype) {
-        case "BB":
+        case "RR":
           return "brown";
-        case "bb":
+        case "CC":
           return "white";
         default:
           return "tan";
@@ -32,16 +32,16 @@ export const BackpackMouse = types
     },
     get baseImage(): string {
       switch (self.genotype) {
-        case "BB":
+        case "RR":
           return "assets/mouse_field.png";
-        case "bb":
+        case "CC":
           return "assets/mouse_beach.png";
         default:
           return "assets/mouse_tan.png";
       }
     },
     get isHeterozygote(): boolean {
-      return (self.genotype === "Bb" || self.genotype === "bB");
+      return (self.genotype === "RC" || self.genotype === "CR");
     },
     setLabel(val: string) {
       self.label = val;
