@@ -30,6 +30,13 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
     super(props);
   }
 
+  public componentWillUnmount() {
+    const populations = this.props.stores && this.props.stores.populations;
+    if (populations) {
+      populations.pause();
+    }
+  }
+
   public render() {
     const populations = this.props.stores && this.props.stores.populations;
 
