@@ -66,9 +66,9 @@ const schema: JSONSchema6 = {
             "brown"
           ],
           enumNames: [
-            "White",
-            "Neutral",
-            "Brown"
+            "Beach",
+            "Mixed",
+            "Field"
           ]
         },
         showSwitchEnvironmentsButton: {
@@ -76,7 +76,7 @@ const schema: JSONSchema6 = {
           type: "boolean"
         },
         includeNeutralEnvironment: {
-          title: "Include neutral environment",
+          title: "Include mixed environment",
           type: "boolean"
         },
         initialPopulation: {
