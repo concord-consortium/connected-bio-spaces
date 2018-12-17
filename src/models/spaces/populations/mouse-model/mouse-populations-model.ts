@@ -79,6 +79,12 @@ export const MousePopulationsModel = types
       }
     });
 
+    function clearGraph() {
+      self.chartData.dataSets[0].clearDataPoints();
+      self.chartData.dataSets[1].clearDataPoints();
+      self.chartData.dataSets[2].clearDataPoints();
+    }
+
     return {
       views: {
         get interactive(): HawksMiceInteractive {
@@ -111,9 +117,7 @@ export const MousePopulationsModel = types
           if (interactive) {
             interactive.reset();
           }
-          self.chartData.dataSets[0].clearDataPoints();
-          self.chartData.dataSets[1].clearDataPoints();
-          self.chartData.dataSets[2].clearDataPoints();
+          clearGraph();
         },
         setShowSexStack(show: boolean) {
           self.showSexStack = show;
@@ -123,6 +127,7 @@ export const MousePopulationsModel = types
         },
         destroyInteractive() {
           interactive = undefined;
+          clearGraph();
         }
       }
     };
