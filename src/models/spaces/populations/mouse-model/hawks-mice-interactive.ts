@@ -109,6 +109,7 @@ export function createInteractive(model: MousePopulationsModelType) {
 
   function addAgent(species: Species, properties: [], traits: Trait[], location?: Rect) {
     const agent = species.createAgent(traits);
+    (agent as any).setTypeDescription();
     let coords;
     if (location) {
       coords = env.randomLocationWithin(location.x, location.y, location.width, location.height, true);

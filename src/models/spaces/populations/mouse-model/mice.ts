@@ -73,7 +73,16 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
         } else {
           this.setRandomColorGenetics();
         }
+
+        this.setTypeDescription();
       }
+    }
+
+    public setTypeDescription() {
+      const color = this.get("color");
+      const type = color === "white" ? "light brown" :
+        color === "tan" ? "medium brown" : "dark brown";
+      this.set("type", type);
     }
 
     public mate() {
@@ -150,8 +159,8 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
       CHANCE_OF_MUTATION: 0,
       INFO_VIEW_SCALE: 2,
       INFO_VIEW_PROPERTIES: {
-        "Fur color: ": "color",
-        "Sex: ": "sex"
+        "Type:": "type",
+        "Sex:": "sex"
       }
     },
     traits: [
