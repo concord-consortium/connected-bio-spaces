@@ -13,7 +13,7 @@ describe("backpack model", () => {
   });
 
   it("uses changes values", () => {
-    backpack.addCollectedMouse(BackpackMouse.create({sex: "male", genotype: "BB"}));
+    backpack.addCollectedMouse(BackpackMouse.create({sex: "male", genotype: "RR"}));
     expect(backpack.collectedMice.length).toBe(1);
     backpack.removeCollectedMouse(0);
     expect(backpack.collectedMice.length).toBe(0);
@@ -21,15 +21,15 @@ describe("backpack model", () => {
 
   it("has a maximum number of slots that can be used", () => {
     for (let i = 0; i < 5; i++) {
-      backpack.addCollectedMouse(BackpackMouse.create({sex: "male", genotype: "BB"}));
+      backpack.addCollectedMouse(BackpackMouse.create({sex: "male", genotype: "RR"}));
     }
     expect(backpack.collectedMice.length).toBe(5);
 
-    let addedSucessfully = backpack.addCollectedMouse(BackpackMouse.create({sex: "male", genotype: "BB"}));
+    let addedSucessfully = backpack.addCollectedMouse(BackpackMouse.create({sex: "male", genotype: "RR"}));
     expect(addedSucessfully).toBe(true);
     expect(backpack.collectedMice.length).toBe(6);
 
-    addedSucessfully = backpack.addCollectedMouse(BackpackMouse.create({sex: "male", genotype: "BB"}));
+    addedSucessfully = backpack.addCollectedMouse(BackpackMouse.create({sex: "male", genotype: "RR"}));
     expect(addedSucessfully).toBe(false);
     expect(backpack.collectedMice.length).toBe(6);
   });

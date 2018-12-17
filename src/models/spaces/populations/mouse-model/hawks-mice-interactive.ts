@@ -144,17 +144,17 @@ export function createInteractive(model: MousePopulationsModelType) {
     let alleleString;
     switch (color) {
       case "white":
-        alleleString = "a:b,b:b";
+        alleleString = "a:C,b:C";
         break;
       case "tan":
         const rand = Math.random();
         alleleString = rand < 0.5
-          ? "a:b,b:B"
-          : "a:B,b:b";
+          ? "a:C,b:R"
+          : "a:R,b:C";
         break;
       case "brown":
       default:
-        alleleString = "a:B,b:B";
+        alleleString = "a:R,b:R";
         break;
     }
     return createColorTraitByGenotype(alleleString);
@@ -249,13 +249,13 @@ export function createInteractive(model: MousePopulationsModelType) {
       // Make sure there are *some* white mice to ensure white mice are possible
       if (numWhite > 0 && numWhite < 10) {
         for (let i = 0; i < 3; i++) {
-          addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:b,b:b")]);
+          addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:C,b:C")]);
         }
       }
 
       if (numBrown > 0 && numBrown < 10) {
         for (let i = 0; i < 3; i++) {
-          addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:B,b:B")]);
+          addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:R,b:R")]);
         }
       }
     }

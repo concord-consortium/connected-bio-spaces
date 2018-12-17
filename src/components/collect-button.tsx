@@ -88,8 +88,8 @@ export class CollectButtonComponent extends BaseComponent<IProps, IState> {
     }
 
     const randSex = Math.random() > .5 ? "male" : "female";
-    const randGenotype = Math.random() > .5 ? (Math.random() > .5 ? "BB" : "Bb") :
-                                                  (Math.random() > .5 ? "bB" : "bb");
+    const randGenotype = Math.random() > .5 ? (Math.random() > .5 ? "RR" : "RC") :
+                                                  (Math.random() > .5 ? "CR" : "CC");
     backpack.addCollectedMouse(BackpackMouse.create({sex: randSex, genotype: randGenotype, label: randGenotype}));
   }
   private handleClickRemove = () => {
