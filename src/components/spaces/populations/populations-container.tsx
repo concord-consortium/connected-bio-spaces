@@ -31,14 +31,11 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
   }
 
   public componentWillUnmount() {
-    const populations = this.props.stores && this.props.stores.populations;
-    if (populations) {
-      populations.pause();
-    }
+    this.stores.populations.close();
   }
 
   public render() {
-    const populations = this.props.stores && this.props.stores.populations;
+    const populations = this.stores.populations;
 
     if (populations && populations.interactive) {
       const buttons = populations.toolbarButtons.map( (button, i) => {
@@ -183,24 +180,15 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
   }
 
   private handleClickRunButton = () => {
-    const populations = this.props.stores && this.props.stores.populations;
-    if (populations) {
-      populations.togglePlay();
-    }
+    this.stores.populations.togglePlay();
   }
 
   private handleClickInspectButton = () => {
-    const populations = this.props.stores && this.props.stores.populations;
-    if (populations) {
-      populations.toggleInteractionMode("inspect");
-    }
+    this.stores.populations.toggleInteractionMode("inspect");
   }
 
   private handleClickResetButton = () => {
-    const populations = this.props.stores && this.props.stores.populations;
-    if (populations) {
-      populations.reset();
-    }
+    this.stores.populations.reset();
   }
 
   private handleClickToolbarCheckbox = (button: ToolbarButton) => {
@@ -211,26 +199,21 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
   }
 
   private handleClickSelect = () => {
-    const populations = this.props.stores && this.props.stores.populations;
-    if (populations) {
-      populations.toggleInteractionMode("select");
-    }
+    this.stores.populations.toggleInteractionMode("select");
   }
 
   private handleAgentClicked = (evt: AgentEnvironmentMouseEvent) => {
-    const populations = this.props.stores && this.props.stores.populations;
+    const populations = this.stores.populations;
     if (populations && populations.interactionMode === "select" && evt.type === "click" && evt.agents.mice) {
       const selectedMouse = evt.agents.mice;
-      if (this.props.stores) {
-        const backpack = this.props.stores.backpack;
-        const backpackMouse = BackpackMouse.create({
-          sex: selectedMouse.get("sex"),
-          genotype: (selectedMouse as any)._genomeButtonsString()
-        });
-        const added = backpack.addCollectedMouse(backpackMouse);
-        if (added){
-          this.props.stores.populations.removeAgent(selectedMouse);
-        }
+      const backpack = this.stores.backpack;
+      const backpackMouse = BackpackMouse.create({
+        sex: selectedMouse.get("sex"),
+        genotype: (selectedMouse as any)._genomeButtonsString()
+      });
+      const added = backpack.addCollectedMouse(backpackMouse);
+      if (added){
+        this.stores.populations.removeAgent(selectedMouse);
       }
     }
   }
