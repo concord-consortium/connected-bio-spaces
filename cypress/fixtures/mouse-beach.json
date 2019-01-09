@@ -1,0 +1,7 @@
+{
+  "color": "white",
+  "baseImage": "assets/mouse-beach.png",
+  "sex": "female",
+  "genotype": "CC",
+  "isHeterozygote": "false"
+}
