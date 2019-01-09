@@ -1,0 +1,7 @@
+{
+  "color": "tan",
+  "baseImage": "assets/mouse-tan.png",
+  "sex": "female",
+  "genotype": "RC",
+  "isHeterozygote": "true"
+}

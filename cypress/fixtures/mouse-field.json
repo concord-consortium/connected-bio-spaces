@@ -1,0 +1,7 @@
+{
+  "color": "brown",
+  "baseImage": "assets/mouse-field.png",
+  "sex": "male",
+  "genotype": "RR",
+  "isHeterozygote": "false"
+}
