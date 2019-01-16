@@ -1,6 +1,6 @@
 class TwoUpView{
 
-  getTwoUpDisplay() {
+  getTwoUpView() {
     return cy.get("[data-test=two-up-display]");
   }
 

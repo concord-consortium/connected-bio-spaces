@@ -20,25 +20,24 @@ context("Test the population level", () => {
       twoUpView.getLeftTitle().should('be.visible')
       twoUpView.getRightTitle().should('be.visible')
     });
-
     it('exits two up view/population model and returns', () => {
       exploreNav.getExploreView('organism').click();
       fourUpView.getFourUpView().should('be.visible')
+      exploreNav.getExploreView('population').click();
     });
-
+    it("is visible by default", () => {
+      backpack.getEmptyCollectButton().find('img').should('have.length', 6);
+      backpack.getEmptyCollectButton().find('img').eq(1).should('have.class', 'icon')
+    });
   });
 
   context("Tools", () => {
-
     it("runs, resets, and adds hawks to model", () => {
-      cy.visit('/')
-      exploreNav.getExploreView('population').click();
       twoUpView.getTwoUpDisplay().should('be.visible')
       popToolBar.getPopTool('run').click({force:true}); //run
       popToolBar.getPopTool('reset').click({force:true}); //reset
       popToolBar.getPopTool('addHawks').click({force:true}); //add hawks
     });
-
     it('runs model after pausing and changing environment', () => {
       popToolBar.getPopTool('run').click({force:true});
       popToolBar.getPopTool('changeEnv').click({force:true});
@@ -46,7 +45,6 @@ context("Test the population level", () => {
       popToolBar.getPopTool('pause').click({force:true});
       popToolBar.getPopTool('addHawks').click({force:true});
     });
-
     it("verifies switching to and from Pop view renders correct window", () => {
       exploreNav.getExploreView('organism').click({force:true});
       exploreNav.getExploreView('population').click({force:true});
@@ -56,40 +54,14 @@ context("Test the population level", () => {
       exploreNav.getExploreView('population').click({force:true});
       exploreNav.getExploreView('organism').click({force:true});
       exploreNav.getExploreView('population').click({force:true});
+      popToolBar.getPopTool('canvas').ChildNodes
     });
-
-  });
-
-  context("Backpack Empty", () => {
-
-    it("is visible by default", () => {
-      cy.visit("/")
-      cy.get('div.button-holder.collect').find('img').should('have.length', 6);
-      cy.get('div.button-holder.collect').find('img').eq(1).should('have.class', 'icon')
-    });
-  });
-
-  context("Backpack Populated", () => {
-    it('modifies seed data', () => {
-
-     })
-
-    it("removes a mouse from the backpack", () => {
-
-    });
-
-    it("attempts to add more than 6 mice to backpack", () => {
-
-    });
-  });
-
-  context("Graph", () => {
-    it("is visible by default", () => {
-
-    });
-
-    it("verifies the legend shows correctly", () => {
-
+    it("collects a mouse and checks for backpack storage", () => {
+      popToolBar.getPopTool('collect').click({force:true})
+      popToolBar.getPopTool('canvas').click('left')
+      popToolBar.getPopTool('canvas').click('center')
+      popToolBar.getPopTool('canvas').click('right')
+      backpack.getFullCollectButton().should('be.visible')
     });
   });
 

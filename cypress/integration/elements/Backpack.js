@@ -8,8 +8,8 @@ class Backpack{
     return cy.get('[data-test=stored-mouse-class]')
   }
 
-  findXClose(){
-    return cy.get('[data-test=x-close-backpack]')
+  findXClose(index){
+    return cy.get('.collect-button-holder').eq(index).find('.x-close')
   }
 }
 export default Backpack;
