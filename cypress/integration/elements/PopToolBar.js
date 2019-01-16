@@ -20,6 +20,8 @@ class PopToolBar{
         return cy.get('[data-test=pop-toolbar]').find('button').eq(4)
       case('reset'):
         return cy.get('[data-test=pop-toolbar]').find('button').eq(5)
+      case('canvas'):
+        return cy.get('.populations-environment').find('canvas')
     }
   }
 }
