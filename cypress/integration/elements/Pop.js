@@ -1,7 +1,19 @@
-class PopToolBar{
+class Pop {
 
   getPopToolBar() {
     return cy.get('[data-test=pop-toolbar]')
+  }
+
+  getInspectInfo() {
+    return cy.get('.bubble')
+  }
+
+  getLineChart() {
+    return cy.get('data-test=line-chart')
+  }
+
+  getLineChartScroll() {
+    return cy.get('#line-chart-controls')
   }
 
   getPopTool(tool) {
@@ -21,8 +33,8 @@ class PopToolBar{
       case('reset'):
         return cy.get('[data-test=pop-toolbar]').find('button').eq(5)
       case('canvas'):
-        return cy.get('.populations-environment').find('canvas')
+        return cy.get('.populations-environment').find('canvas').eq(0)
     }
   }
 }
-export default PopToolBar;
+export default Pop;
