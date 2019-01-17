@@ -1,15 +1,20 @@
 class Backpack{
 
   getEmptyCollectButton() {
-    return cy.get('[data-test=empty-button]')
+    return cy.get('.left-nav-panel  [data-test=empty-button]')
   }
 
   getFullCollectButton() {
-    return cy.get('[data-test=stored-mouse-class]')
+    return cy.get('.left-nav-panel  [data-test=stored-mouse-class]')
+  }
+
+  getLegendComponents() {
+    return cy.get('.left-nav-panel .grid-item')
   }
 
   findXClose(index){
-    return cy.get('.collect-button-holder').eq(index).find('.x-close')
+    return cy.get('.left-nav-panel  [data-test=x-close-backpack]').eq(index)
   }
+
 }
 export default Backpack;

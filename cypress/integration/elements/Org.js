@@ -1,7 +1,27 @@
-class OrgToolBar{
+class Org{
 
-  getOrgToolBar() {
-    return cy.get('')
+  getOrganismView(position) {
+    if(position == 'top') {
+      return cy.get('.four-up-row.top-row [data-test=organism-view]')
+    } else if (position == 'bottom') {
+      return cy.get('.four-up-row.bottom-row [data-test=organism-view]')
+    }
+  }
+
+  getEmptyButton(position) {
+    if(position == 'top') {
+      return cy.get('.four-up-row.top-row [data-test=empty-button]')
+    } else if (position == 'bottom') {
+      return cy.get('.four-up-row.bottom-row [data-test=empty-button]')
+    }
+  }
+
+  getFullButton(position) {
+    if(position == 'top') {
+      return cy.get('.four-up-row.top-row [data-test=stored-mouse-class]')
+    } else if (position == 'bottom') {
+      return cy.get('.four-up-row.bottom-row [data-test=stored-mouse-class]')
+    }
   }
 
   getOrgTool(position, tool) {
@@ -20,6 +40,10 @@ class OrgToolBar{
                 return cy.get('[data-test=four-up-top] > [data-test=add-substance]')
               case('substance-list'):
                 return cy.get('[data-test=four-up-top] > [data-test=two-up-display] > [data-test=left-panel] > [data-test=left-content] > [data-test=organism-view-container] > .organism-controls > [data-test=manipulations-panel] > .select')
+              case('mouse-empty'):
+                return cy.get('.four-up-row.top-row [data-test=empty-button]')
+              case('mouse-full'):
+                return cy.get('.four-up-row.top-row [data-test=stored-mouse-class]');
             }
           }
         case('bottom'):
@@ -41,4 +65,4 @@ class OrgToolBar{
       }
     }
 }
-export default OrgToolBar;
+export default Org;
