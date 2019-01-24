@@ -8,6 +8,22 @@ class Org{
     }
   }
 
+  getCellView(position) {
+    if(position == 'top') {
+      return cy.get('.four-up-row.top-row [data-test=cell-zoon-panel]')
+    } else if (position == 'bottom') {
+      return cy.get('.four-up-row.bottom-row [data-test=cell-zoon-panel]')
+    }
+  }
+
+  getProteinView(position) {
+    if(position == 'top') {
+      return cy.get('.four-up-row.top-row [data-test=cell-zoon-panel]')
+    } else if (position == 'bottom') {
+      return cy.get('.four-up-row.bottom-row [data-test=cell-zoon-panel]')
+    }
+  }
+
   getEmptyButton(position) {
     if(position == 'top') {
       return cy.get('.four-up-row.top-row [data-test=empty-button]')

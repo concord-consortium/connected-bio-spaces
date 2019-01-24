@@ -8,8 +8,8 @@ class RightPanelContent {
     return cy.get("[data-test=two-up-display] > .left-abutment > [data-test=right-header] > :nth-child(2)");
   }
 
-  getInformation() {
-    return cy.get("[data-test=two-up-display] > .left-abutment > [data-test=right-header] > :nth-child(3)");
+  getInformationTabDisabled() {
+    return cy.get('[data-test=right-header] > .disabled')
   }
 
   getHighlightedTab() {
@@ -24,5 +24,9 @@ class RightPanelContent {
     return cy.get("[data-test=two-up-display] > .left-abutment > [data-test=right-content]")
   }
 
+  getDataContent() {
+    return cy.get('.chartjs-render-monitor')
+  }
+
 }
-export default RightPanelContentFourUp;
+export default RightPanelContent;

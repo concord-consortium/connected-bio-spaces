@@ -1,10 +1,12 @@
-import Backpack from './elements/Backpack'
-import ExploreNav from './elements/ExploreNav'
-import Pop from './elements/Pop'
-import Org from './elements/Org'
-import TwoUpView from './elements/TwoUpView'
-import FourUpView from './elements/FourUpView'
-import RightPanelContentFourUp from './elements/RightPanelContentFourUp'
+import Backpack from '../support/elements/Backpack'
+import ExploreNav from '../support/elements/ExploreNav'
+import Pop from '../support/elements/Pop'
+import Org from '../support/elements/Org'
+import TwoUpView from '../support/elements/TwoUpView'
+import FourUpView from '../support/elements/FourUpView'
+import RightPanelContentFourUp from '../support/elements/RightPanelContentFourUp'
+import RightPanelContent from '../support/elements/RightPanelContent'
+
 
 context("Connected Bio Smoke Test", () => {
 
@@ -15,19 +17,21 @@ context("Connected Bio Smoke Test", () => {
   let twoUpView = new TwoUpView;
   let fourUpView = new FourUpView;
   let rightPanelContentFourUp = new RightPanelContentFourUp;
+  let rightPanelContent = new RightPanelContent;
 
   before(function () {
     cy.visit('/')
   })
 
   context("Default Display", () => {
-    it('verifies no content', () => {
-      cy.get('.main-content.none').should('be.visible')
+    it('verifies load', () => {
+      cy.get('.main-content.none')
+        .should('be.visible')
     })
   })
 
   context("Left Nav", () => {
-    it('verifies no content', () => {
+    it('verifies different explore options are visible', () => {
       exploreNav.getExploreView('population')
         .should('be.visible');
       exploreNav.getExploreView('breeding')
@@ -121,18 +125,30 @@ context("Connected Bio Smoke Test", () => {
     }) **/
 
     it('collects mice, checks backpack for update', () => {
-      pop.getPopTool('collect').click({force:true})
-      pop.getPopTool('canvas').click('topLeft')
-      pop.getPopTool('canvas').click('top')
-      pop.getPopTool('canvas').click('topRight')
-      pop.getPopTool('canvas').click('left')
-      pop.getPopTool('canvas').click('center')
-      pop.getPopTool('canvas').click('right')
-      pop.getPopTool('canvas').click('bottomLeft')
-      pop.getPopTool('canvas').click('bottom')
-      pop.getPopTool('canvas').click('bottomRight')
-      pop.getPopTool('reset').click({force:true})
-      backpack.getFullCollectButton().should('be.visible')
+      pop.getPopTool('collect')
+        .click({force:true})
+      pop.getPopTool('canvas')
+        .click('topLeft')
+      pop.getPopTool('canvas')
+        .click('top')
+      pop.getPopTool('canvas')
+        .click('topRight')
+      pop.getPopTool('canvas')
+        .click('left')
+      pop.getPopTool('canvas')
+        .click('center')
+      pop.getPopTool('canvas')
+        .click('right')
+      pop.getPopTool('canvas')
+        .click('bottomLeft')
+      pop.getPopTool('canvas')
+        .click('bottom')
+      pop.getPopTool('canvas')
+        .click('bottomRight')
+      pop.getPopTool('reset')
+        .click({force:true})
+      backpack.getFullCollectButton()
+        .should('be.visible')
     })
 
     it('toggles sex and heterozygote checkboxes', () => {
@@ -142,32 +158,48 @@ context("Connected Bio Smoke Test", () => {
 
   context("Population and Graph", () => {
     it('check default tab statuses, titles, content', () => {
-      /*
-      ~check for instruction title, then content if specified
-      ~check data tab title, then empty content if possible
-      ~check for information tab title, content if needed
-      */
+      rightPanelContent.getTitle()
+        .contains('Instructions')
+        .should('be.visible')
+      rightPanelContent.getDataTab()
+        .should('be.visible')
+        .click({force:true})
+      rightPanelContent.getTitle()
+        .contains('Data')
+      rightPanelContent.getDataContent()
+        .should('exist')
+      rightPanelContent.getInformationTabDisabled()
+        .should('exist')
     })
 
-    it('play model, check for graph data instantiation', () => {
-
-    })
   })
 
   context("Organism model", () => {
     it('loads mice into backback and begins organism model', () => {
-      pop.getPopTool('collect').click({force:true})
-      pop.getPopTool('canvas').click('topLeft')
-      pop.getPopTool('canvas').click('top')
-      pop.getPopTool('canvas').click('topRight')
-      pop.getPopTool('canvas').click('left')
-      pop.getPopTool('canvas').click('center')
-      pop.getPopTool('canvas').click('right')
-      pop.getPopTool('canvas').click('bottomLeft')
-      pop.getPopTool('canvas').click('bottom')
-      pop.getPopTool('canvas').click('bottomRight')
-      backpack.getFullCollectButton().should('be.visible')
-      exploreNav.getExploreView('organism').click({force:true})
+      pop.getPopTool('collect')
+        .click({force:true})
+      pop.getPopTool('canvas')
+        .click('topLeft')
+      pop.getPopTool('canvas')
+        .click('top')
+      pop.getPopTool('canvas')
+        .click('topRight')
+      pop.getPopTool('canvas')
+        .click('left')
+      pop.getPopTool('canvas')
+        .click('center')
+      pop.getPopTool('canvas')
+        .click('right')
+      pop.getPopTool('canvas')
+        .click('bottomLeft')
+      pop.getPopTool('canvas')
+        .click('bottom')
+      pop.getPopTool('canvas')
+        .click('bottomRight')
+      backpack.getFullCollectButton()
+        .should('be.visible')
+      exploreNav.getExploreView('organism')
+        .click({force:true})
     })
     it("checks right panel default for tabs, titles, content", () => {
       rightPanelContentFourUp.getTitleFourUpTop()
@@ -207,10 +239,29 @@ context("Connected Bio Smoke Test", () => {
       org.getOrganismView('top')
         .should('exist')
     })
-    it('clicks', () => {
 
+    it('zooms into the cell view', () => {
+      org.getOrgTool('top','zoom-in')
+        .should('be.visible')
+        .click({force:true})
+      org.getCellView('top')
+        .should('exist')
     })
 
+    it('zooms into the protein view', () => {
+      org.getOrgTool('top','zoom-in')
+        .should('be.visible')
+        .click({force:true})
+      org.getProteinView('top')
+        .should('exist')
+    })
+    it('zooms out to cell view', () => {
+      org.getOrgTool('top','zoom-out')
+        .should('be.visible')
+        .click({force:true})
+      org.getProteinView('top')
+        .should('exist')
+    })
   })
 
 })

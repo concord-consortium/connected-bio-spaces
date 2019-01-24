@@ -1,0 +1,35 @@
+{
+  "curriculum": "mouse",
+  "topBar": true,
+  "spaces": {
+    "showPopulationSpace": true,
+    "showBreedingSpace": false,
+    "showOrganismSpace": false,
+    "showDNASpace": false,
+    "displayedSpace": "populations"
+  },
+  "populations": {
+    "environment": "white",
+    "showSwitchEnvironmentsButton": false,
+    "includeNeutralEnvironment": false,
+    "initialPopulation": {
+      "white": 100,
+      "tan": 0
+    },
+    "numHawks": 20,
+    "inheritance": {
+      "showStudentControlOfMutations": false,
+      "breedWithMutations": false,
+      "chanceOfMutations": 2,
+      "showStudentControlOfInheritance": false,
+      "breedWithInheritance": false,
+      "randomOffspring": {
+        "white": 33.33,
+        "tan": 33.33
+      }
+    }
+  },
+  "organism": {
+    "instructions": ""
+  }
+}

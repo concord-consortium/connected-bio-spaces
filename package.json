@@ -46,7 +46,7 @@
     "test:debug": "node --nolazy --inspect-brk ./node_modules/.bin/jest --runInBand --no-cache",
     "test:watch": "jest --watchAll",
     "test:coverage:watch": "jest --coverage --watchAll",
-    "test:cypress": "cypress run",
+    "test:cypress": "cypress run --browser chrome --headed --no-exit --spec 'cypress/integration/smoke-test.spec.js'",
     "test:cypress:open": "cypress open",
     "test:full": "npm-run-all test test:cypress"
   },
@@ -106,7 +106,7 @@
     "url-loader": "^1.1.1",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.1",
-    "webpack-dev-server": "^3.1.9"
+    "webpack-dev-server": "^3.1.14"
   },
   "dependencies": {
     "chart.js": "^2.7.3",
