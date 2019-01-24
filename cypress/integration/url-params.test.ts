@@ -1,4 +1,9 @@
+import ExploreNav from './elements/ExploreNav'
+
 context("Test URL parameters", () => {
+
+let exploreNav = new ExploreNav;
+
   describe("Top Bar", () => {
     it("is visible by default", () => {
       cy.visit("");
@@ -16,6 +21,14 @@ context("Test URL parameters", () => {
       cy.visit(`/?${showParams}`);
       cy.get(".top-bar").should("exist");
     });
+    it("is visible when specified", () => {
+     const hideParams = encodeURIComponent(JSON.stringify({spaces:{showPopulationSpace: false}}));
+     cy.visit(`/?${hideParams}`);
+      // cy.visit('/?{"spaces":{"showPopulationSpace": false}}')
+      exploreNav.getExploreView('population')
+        .should('not.be.visible')
+    });
+
   });
 
 });
