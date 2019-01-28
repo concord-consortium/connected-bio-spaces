@@ -119,7 +119,7 @@
     "mobx-state-tree": "^3.4.0",
     "organelle": "0.0.11",
     "populations-react": "0.0.2",
-    "populations.js": "^0.1.5",
+    "populations.js": "^0.1.7",
     "query-string": "^6.1.0",
     "rc-slider": "^8.6.3",
     "react": "^16.5.0",
