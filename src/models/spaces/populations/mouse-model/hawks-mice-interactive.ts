@@ -7,8 +7,9 @@ let environmentColor: EnvironmentColorType;
 
 function createEnvironment(color: EnvironmentColorType) {
   return new Environment({
-    columns: 45,
-    rows: 45,
+    width: 450,
+    height: 450,
+    viewWidth: 900,
     imgPath: `assets/curriculum/mouse/populations/${color}.png`,
     wrapEastWest: false,
     wrapNorthSouth: false
