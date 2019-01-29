@@ -1,8 +1,8 @@
-import Backpack from './elements/Backpack'
-import ExploreNav from './elements/ExploreNav'
-import Pop from './elements/pop'
-import TwoUpView from './elements/TwoUpView'
-import FourUpView from './elements/FourUpView'
+import Backpack from '../support/elements/Backpack'
+import ExploreNav from '../support/elements/ExploreNav'
+import Pop from '../support/elements/pop'
+import TwoUpView from '../support/elements/TwoUpView'
+import FourUpView from '../support/elements/FourUpView'
 
 context("Test the population level", () => {
 
