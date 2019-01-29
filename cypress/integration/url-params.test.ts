@@ -1,4 +1,4 @@
-import ExploreNav from './elements/ExploreNav'
+import ExploreNav from '../support/elements/ExploreNav'
 
 context("Test URL parameters", () => {
 

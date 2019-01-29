@@ -1,10 +1,10 @@
-import Backpack from './elements/Backpack'
-import ExploreNav from './elements/ExploreNav'
-import Pop from './elements/Pop'
-import Org from './elements/Org'
-import TwoUpView from './elements/TwoUpView'
-import FourUpView from './elements/FourUpView'
-import RightPanelContentFourUp from './elements/RightPanelContentFourUp'
+import Backpack from '../support/elements/Backpack'
+import ExploreNav from '../support/elements/ExploreNav'
+import Pop from '../support/elements/Pop'
+import Org from '../support/elements/Org'
+import TwoUpView from '../support/elements/TwoUpView'
+import FourUpView from '../support/elements/FourUpView'
+import RightPanelContentFourUp from '../support/elements/RightPanelContentFourUp'
 
 context("Test Organism Level", () => {
 
