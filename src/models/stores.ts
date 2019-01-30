@@ -18,21 +18,11 @@ export interface IStores {
   organisms: OrganismsSpaceModelType;
 }
 
-export interface ICreateStores {
-  ui?: UIModelType;
-  populations?: PopulationsModelType;
-  backpack?: BackpackModelType;
-  organisms?: OrganismsSpaceModelType;
-}
-
-export function createStores(params: ICreateStores, authoring: any): IStores {
+export function createStores(authoring: any): IStores {
   return {
-    ui: params && params.ui || createUIModel(authoring.spaces),
-    populations: params && params.populations ||
-      createPopulationsModel(authoring.curriculum, flatten(authoring.populations)),
-    backpack: params && params.backpack
-      || BackpackModel.create({}),
-    organisms: params && params.organisms ||
-      OrganismsSpaceModel.create(authoring.organism)
+    ui: createUIModel(authoring.spaces),
+    populations: createPopulationsModel(authoring.curriculum, flatten(authoring.populations)),
+    backpack: BackpackModel.create({}),
+    organisms: OrganismsSpaceModel.create(authoring.organism)
   };
 }
