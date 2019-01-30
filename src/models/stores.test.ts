@@ -12,7 +12,7 @@ describe("stores object", () => {
       stores.organisms.clearRowBackpackMouse(0);
       stores.organisms.clearRowBackpackMouse(1);
     }
-    stores = createStores({}, defaultAuthoring);
+    stores = createStores(defaultAuthoring);
   });
 
   it("supports creating dummy stores for testing", () => {
