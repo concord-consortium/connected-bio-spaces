@@ -39,13 +39,15 @@ export type MouseColors = "white" | "tan" | "brown";
 
 export function getMouseSpecies(model: MousePopulationsModelType) {
   class Mouse extends BasicAnimal {
-    public moving: boolean;
     public _closestAgents: any[] | null;
 
     constructor(args: any) {
       super(args);
       this.label = "Mouse";
-      this.moving = false;
+    }
+
+    public getMovement() {
+      return "walk";
     }
 
     public step() {
@@ -55,16 +57,51 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
       if (this.get("age") > this.species.defs.MATURITY_AGE && Math.random() < this.get("mating chance")) {
         this.mate();
       } else {
-        this.wander();
+        this.wander(null);
       }
       this._incrementAge();
       return this._checkSurvival();
+    }
+
+    public wander(speed: any){
+      if (speed == null) {
+        const defaultSpeed = this.get("default speed");
+        speed = this.get("speed");
+        speed += (Math.random() * 2 - 1) * .1;
+        speed = Math.min(Math.max(speed, defaultSpeed * .75), defaultSpeed * 1.25);
+        this.set("speed", speed);
+      }
+      const change = (Math.random() * 1 - .5) / 10;
+      let newDir = this.get("direction") + change;
+      const newAngle = (newDir * (180 / Math.PI) % 360);
+      if ((newAngle > 30 && newAngle < 150) || (newAngle > 210 && newAngle < 330)) {
+        newDir = this.get("direction") - change;
+      }
+
+      if (Math.random() < .03) {
+        newDir = Math.cos(newDir) > 0 ? newDir + Math.PI : newDir - Math.PI;
+      }
+      this.set("direction", newDir);
+      return this.move(speed);
     }
 
     // note, populations.js is a little confusing here (FIXME...). makeNewborn is called twice, once before
     // the organism object is created, and once after.
     public makeNewborn() {
       super.makeNewborn();
+      let newDir = this.get("direction");
+      const newAngle = (newDir * (180 / Math.PI) % 360);
+      if (newAngle > 30 && newAngle <= 90) {
+        newDir = (Math.PI / 6);
+      } else if (newAngle < 150 && newAngle > 90) {
+        newDir = (Math.PI * 5 / 6);
+      } else if (newAngle > 210 && newAngle <= 270) {
+        newDir = (Math.PI * 7 / 6);
+      } else if (newAngle > 270 && newAngle < 330) {
+        newDir = (Math.PI * 11 / 6);
+      }
+      this.set("direction", newDir);
+
       this.set("age", Math.round(Math.random() * 10));
 
       if (this.organism) {
@@ -95,7 +132,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
           return this.set("max offspring", 0);
         }
       } else {
-        return this.wander(this.get("speed") * Math.random() * 0.75);
+        return this.wander(this.get("default speed") * 0.75);
       }
     }
 
@@ -164,7 +201,8 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
       }
     },
     traits: [
-          new Trait({ name: "speed", default: 60 }),
+          new Trait({ name: "default speed", default: 6 }),
+          new Trait({ name: "speed", default: 6 }),
           new Trait({ name: "predator",
             default: [
               { name: "hawks" }
@@ -179,6 +217,9 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
           new Trait({ name: "metabolism", default: 0 }),
           new Trait({ name: "mating chance", default: 0 })
     ],
+    imageProperties: {
+      initialFlipDirection: "right"
+    },
     imageRules: [
       {
         name: "mouse",
@@ -186,11 +227,28 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
         rules: [
           {
             image: {
-              path: "assets/curriculum/mouse/populations/sandrat-light.png",
-              scale: 0.3,
+              animations: [
+                {
+                  path: "assets/curriculum/mouse/populations/sandrat-light-sprite.json",
+                  movement: "stopped",
+                  animationName: "stop-light",
+                  length: 0,
+                  loop: true,
+                  frameRate: 10
+                },
+                {
+                  path: "assets/curriculum/mouse/populations/sandrat-light-sprite.json",
+                  movement: "walk",
+                  animationName: "walk-light",
+                  length: 3,
+                  loop: true,
+                  frameRate: 10
+                }
+              ],
+              scale: 0.2,
               anchor: {
-                x: 0.8,
-                y: 0.47
+                x: 0.5,
+                y: 0.5
               }
             },
             useIf(agent: Agent) {
@@ -198,11 +256,28 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
             }
           }, {
             image: {
-              path: "assets/curriculum/mouse/populations/sandrat-tan.png",
-              scale: 0.3,
+              animations: [
+                {
+                  path: "assets/curriculum/mouse/populations/sandrat-tan-sprite.json",
+                  movement: "stopped",
+                  animationName: "stop-tan",
+                  length: 0,
+                  loop: true,
+                  frameRate: 10
+                },
+                {
+                  path: "assets/curriculum/mouse/populations/sandrat-tan-sprite.json",
+                  movement: "walk",
+                  animationName: "walk-tan",
+                  length: 3,
+                  loop: true,
+                  frameRate: 10
+                }
+              ],
+              scale: 0.2,
               anchor: {
-                x: 0.8,
-                y: 0.47
+                x: 0.5,
+                y: 0.5
               }
             },
             useIf(agent: Agent) {
@@ -210,11 +285,28 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
             }
           }, {
             image: {
-              path: "assets/curriculum/mouse/populations/sandrat-dark.png",
-              scale: 0.3,
+              animations: [
+                {
+                  path: "assets/curriculum/mouse/populations/sandrat-dark-sprite.json",
+                  movement: "stopped",
+                  animationName: "stop-dark",
+                  length: 0,
+                  loop: true,
+                  frameRate: 10
+                },
+                {
+                  path: "assets/curriculum/mouse/populations/sandrat-dark-sprite.json",
+                  movement: "walk",
+                  animationName: "walk-dark",
+                  length: 3,
+                  loop: true,
+                  frameRate: 10
+                }
+              ],
+              scale: 0.2,
               anchor: {
-                x: 0.8,
-                y: 0.47
+                x: 0.5,
+                y: 0.5
               }
             },
             useIf(agent: Agent) {
@@ -277,7 +369,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
           {
             image: {
               path: "assets/curriculum/mouse/populations/sandrat-light.png",
-              scale: 0.4,
+              scale: 0.25,
               anchor: {
                 x: 0.4,
                 y: 0.5
