@@ -1,15 +1,20 @@
 import { Provider } from "mobx-react";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import { merge } from "lodash";
 
 import { AppComponent } from "./components/app";
 import { createStores } from "./models/stores";
 
-import "./index.sass";
+import { defaultAuthoring } from "./components/authoring";
 import { urlParams } from "./utilities/url-params";
 import { AuthoringComponent } from "./components/authoring";
 
-const stores = createStores( urlParams );
+import "./index.sass";
+
+const initialStore = merge({}, defaultAuthoring, urlParams);
+
+const stores = createStores( initialStore );
 
 const appRoot = document.getElementById("app");
 
@@ -22,7 +27,7 @@ if (urlParams.authoring) {
 } else {
   ReactDOM.render(
     <Provider stores={stores}>
-      <AppComponent showTopBar={urlParams.topBar} />
+      <AppComponent showTopBar={initialStore.topBar} />
     </Provider>,
     appRoot
   );
