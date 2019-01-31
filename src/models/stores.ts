@@ -22,7 +22,7 @@ export function createStores(authoring: any): IStores {
   return {
     ui: createUIModel(authoring.spaces),
     populations: createPopulationsModel(authoring.curriculum, flatten(authoring.populations)),
-    backpack: BackpackModel.create({}),
+    backpack: BackpackModel.create(authoring.backpack),
     organisms: OrganismsSpaceModel.create({instructions: authoring.organism.instructions})
   };
 }

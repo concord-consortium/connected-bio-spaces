@@ -49,6 +49,53 @@ const schema: JSONSchema6 = {
         },
       }
     },
+    backpack: {
+      type: "object",
+      title: "Initial backpack",
+      properties: {
+        collectedMice: {
+          title: "",
+          type: "array",
+          maxItems: 6,
+          default: [],
+          items: {
+            type: "object",
+            properties: {
+              sex: {
+                title: "Sex",
+                type: "string",
+                enum: [
+                  "female",
+                  "male"
+                ],
+                enumNames: [
+                  "Female",
+                  "Male"
+                ],
+                default: "female"
+              },
+              genotype: {
+                title: "Genotype",
+                type: "string",
+                enum: [
+                  "RR",
+                  "RC",
+                  "CR",
+                  "CC"
+                ],
+                enumNames: [
+                  "RR (brown)",
+                  "RC (tan)",
+                  "CR (tan)",
+                  "CC (white)"
+                ],
+                default: "RR"
+              }
+            }
+          }
+        }
+      }
+    },
     populations: {
       title: "Populations Model",
       type: "object",
@@ -162,6 +209,9 @@ export const defaultAuthoring = {
     showDNASpace: true,
     displayedSpace: "none"
   },
+  backpack: {
+    collectedMice: []
+  },
   populations: {
     instructions: "",
     environment: "white",
@@ -193,6 +243,13 @@ export const defaultAuthoring = {
 const uiSchema = {
   curriculum: {
     "ui:readonly": true
+  },
+  backpack: {
+    "ui:options": {
+      addable: true,
+      orderable: true,
+      removable: true
+    },
   },
   populations: {
     instructions: {
