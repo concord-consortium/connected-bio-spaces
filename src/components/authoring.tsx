@@ -21,7 +21,7 @@ const schema: JSONSchema6 = {
       ]
     },
     topBar: {type: "boolean", title: "Show Top Bar"},
-    spaces: {
+    ui: {
       title: "Investigation Spaces",
       type: "object",
       properties: {
@@ -29,7 +29,7 @@ const schema: JSONSchema6 = {
         showBreedingSpace: {type: "boolean", title: "Show Breeding Space"},
         showOrganismSpace: {type: "boolean", title: "Show Organism Space"},
         showDNASpace: {type: "boolean", title: "Show DNA/Protein Space"},
-        displayedSpace: {
+        investigationPanelSpace: {
           title: "Initial displayed space",
           type: "string",
           enum: [
@@ -202,12 +202,12 @@ const schema: JSONSchema6 = {
 export const defaultAuthoring = {
   curriculum: "mouse",
   topBar: true,
-  spaces: {
+  ui: {
     showPopulationSpace: true,
     showBreedingSpace: true,
     showOrganismSpace: true,
     showDNASpace: true,
-    displayedSpace: "none"
+    investigationPanelSpace: "none"
   },
   backpack: {
     collectedMice: []

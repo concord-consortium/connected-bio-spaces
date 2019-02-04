@@ -18,9 +18,9 @@ export interface IStores {
 
 export function createStores(authoring: any): IStores {
   return {
-    ui: createUIModel(authoring.spaces),
-    populations: createPopulationsModel(authoring.curriculum, flatten(authoring.populations)),
+    ui: createUIModel(authoring.ui),
     backpack: BackpackModel.create(authoring.backpack),
+    populations: createPopulationsModel(authoring.curriculum, flatten(authoring.populations)),
     organisms: OrganismsSpaceModel.create(authoring.organism)
   };
 }
@@ -28,6 +28,9 @@ export function createStores(authoring: any): IStores {
 export function getUserSnapshot(stores: IStores) {
   return {
     version: STUDENT_DATA_VERSION,
+    ui: {
+      investigationPanelSpace: stores.ui.investigationPanelSpace
+    },
     backpack: {
       collectedMice: stores.backpack.collectedMice
     }
