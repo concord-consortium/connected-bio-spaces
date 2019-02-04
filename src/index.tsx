@@ -12,7 +12,7 @@ import { urlParams } from "./utilities/url-params";
 import { AuthoringComponent } from "./components/authoring";
 
 import "./index.sass";
-import { onSnapshot } from "mobx-state-tree"
+import { onSnapshot } from "mobx-state-tree";
 
 let modelInitialized = false;
 
@@ -20,14 +20,15 @@ function initializeModel(studentData: any) {
   if (modelInitialized) return;
   modelInitialized = true;
 
-
   const initialStore = merge({}, defaultAuthoring, urlParams, studentData);
   const stores = createStores( initialStore );
 
-  // Save data everytime backpack changes
-  onSnapshot(stores.backpack, () => {
+  // Save data everytime stores change
+  function saveUserData() {
     phone.post("interactiveState", getUserSnapshot(stores));
-  });
+  }
+  onSnapshot(stores.backpack, saveUserData);
+  onSnapshot(stores.ui, saveUserData);
 
   const appRoot = document.getElementById("app");
 
