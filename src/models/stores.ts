@@ -3,13 +3,11 @@ import { PopulationsModelType, createPopulationsModel } from "./spaces/populatio
 import { BackpackModel, BackpackModelType } from "./backpack";
 import { flatten } from "flat";
 import { OrganismsSpaceModel, OrganismsSpaceModelType } from "./spaces/organisms/organisms-space";
-import { OrganismsMouseModel } from "./spaces/organisms/organisms-mouse";
-import { OrganismsRowModel } from "./spaces/organisms/organisms-row";
-import { BackpackMouse } from "./backpack-mouse";
 
 export type Curriculum = "mouse";
 
-const currentCurriculum = "mouse";
+// allow for migration when needed
+const STUDENT_DATA_VERSION = 1;
 
 export interface IStores {
   ui: UIModelType;
@@ -23,6 +21,15 @@ export function createStores(authoring: any): IStores {
     ui: createUIModel(authoring.spaces),
     populations: createPopulationsModel(authoring.curriculum, flatten(authoring.populations)),
     backpack: BackpackModel.create(authoring.backpack),
-    organisms: OrganismsSpaceModel.create({instructions: authoring.organism.instructions})
+    organisms: OrganismsSpaceModel.create(authoring.organism)
+  };
+}
+
+export function getUserSnapshot(stores: IStores) {
+  return {
+    version: STUDENT_DATA_VERSION,
+    backpack: {
+      collectedMice: stores.backpack.collectedMice
+    }
   };
 }
