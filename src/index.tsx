@@ -5,17 +5,14 @@ import * as iframePhone from "iframe-phone";
 import { merge } from "lodash";
 
 import { AppComponent } from "./components/app";
-import { createStores } from "./models/stores";
+import { createStores, getUserSnapshot } from "./models/stores";
 
 import { defaultAuthoring } from "./components/authoring";
 import { urlParams } from "./utilities/url-params";
 import { AuthoringComponent } from "./components/authoring";
 
 import "./index.sass";
-import { onSnapshot } from "mobx-state-tree";
-
-// allow for migration when needed
-const STUDENT_DATA_VERSION = 1;
+import { onSnapshot } from "mobx-state-tree"
 
 let modelInitialized = false;
 
@@ -23,18 +20,13 @@ function initializeModel(studentData: any) {
   if (modelInitialized) return;
   modelInitialized = true;
 
+
   const initialStore = merge({}, defaultAuthoring, urlParams, studentData);
   const stores = createStores( initialStore );
 
   // Save data everytime backpack changes
-  onSnapshot(stores.backpack, backpackSnapshot => {
-    const saveData = {
-      version: STUDENT_DATA_VERSION,
-      backpack: {
-        collectedMice: backpackSnapshot.collectedMice
-      }
-    };
-    phone.post("interactiveState", saveData);
+  onSnapshot(stores.backpack, () => {
+    phone.post("interactiveState", getUserSnapshot(stores));
   });
 
   const appRoot = document.getElementById("app");
