@@ -88,12 +88,14 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
       const runButtonClass = populations.isPlaying ? "sticky" : "sticky-inactive";
       const inspectButtonClass = populations.interactionMode === "inspect" ? "sticky" : "sticky-off";
       const collectButtonClass = populations.interactionMode === "select" ? "sticky-alt" : "sticky-alt-off";
+      let containerClass = "populations-container " + (populations.interactionMode === "inspect" ? "inspect" : "");
+      containerClass = containerClass + (populations.interactionMode === "select" ? "select" : "");
       return (
         <div>
           <SizeMe monitorHeight={true}>
             {({ size }: SizeMeProps) => {
               return (
-                <div>
+                <div className={containerClass}>
                   {
                     (size && size.width)
                     ? <PopulationsView
