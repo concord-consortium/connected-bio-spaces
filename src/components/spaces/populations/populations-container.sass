@@ -237,8 +237,14 @@
     color: $color-nav-cinder
     background-color: $color-nav-cinder-light3
 
-.populations-environment
+.populations-container
+  cursor: auto
+  &.select
+    cursor: url('../../../assets/collect-cursor.png') 12 10, auto
+  &.inspect
+    cursor: url('../../../assets/inspect-cursor.png') 10 10, auto
 
+.populations-environment
   .bubble .content .details .agent-property-value
     clear: left
     float: left
