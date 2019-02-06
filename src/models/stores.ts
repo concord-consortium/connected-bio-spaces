@@ -1,10 +1,9 @@
-import { UIModel, UIModelType, createUIModel } from "./ui";
+import { UIModelType, createUIModel, SpaceType } from "./ui";
 import { PopulationsModelType, createPopulationsModel } from "./spaces/populations/populations";
 import { BackpackModel, BackpackModelType } from "./backpack";
 import { flatten } from "flat";
-import { OrganismsSpaceModel, OrganismsSpaceModelType, createOrganismsModel } from "./spaces/organisms/organisms-space";
-import { resolveIdentifier } from "mobx-state-tree";
-import { BackpackMouse } from "./backpack-mouse";
+import { OrganismsSpaceModelType, createOrganismsModel } from "./spaces/organisms/organisms-space";
+import { BackpackMouseType } from "./backpack-mouse";
 
 export type Curriculum = "mouse";
 
@@ -34,7 +33,18 @@ export function createStores(initialModel: any): IStores {
   };
 }
 
-export function getUserSnapshot(stores: IStores) {
+export interface UserSaveDataType {
+  version?: number;
+  ui?: {
+    investigationPanelSpace: SpaceType;
+  };
+  backpack?: {
+    collectedMice: BackpackMouseType[];
+  };
+  organisms?: OrganismsSpaceModelType;
+}
+
+export function getUserSnapshot(stores: IStores): UserSaveDataType {
   return {
     version: STUDENT_DATA_VERSION,
     ui: {

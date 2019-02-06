@@ -5,7 +5,7 @@ import * as iframePhone from "iframe-phone";
 import { merge } from "lodash";
 
 import { AppComponent } from "./components/app";
-import { createStores, getUserSnapshot } from "./models/stores";
+import { createStores, getUserSnapshot, UserSaveDataType } from "./models/stores";
 
 import { defaultAuthoring } from "./components/authoring";
 import { urlParams } from "./utilities/url-params";
@@ -16,11 +16,12 @@ import { onSnapshot } from "mobx-state-tree";
 
 let modelInitialized = false;
 
-function initializeModel(studentData: any) {
+function initializeModel(studentData: UserSaveDataType) {
   if (modelInitialized) return;
   modelInitialized = true;
 
   const initialStore = merge({}, defaultAuthoring, urlParams, studentData);
+
   const stores = createStores( initialStore );
 
   // Save data everytime stores change
@@ -56,7 +57,7 @@ phone.addListener("initInteractive", (data: {
     authoredState: any,
     interactiveState: any,
     linkedState: any}) => {
-  const studentData = data && (data.interactiveState || data.linkedState) || {};
+  const studentData: UserSaveDataType = data && (data.interactiveState || data.linkedState) || {};
   initializeModel(studentData);
 });
 
