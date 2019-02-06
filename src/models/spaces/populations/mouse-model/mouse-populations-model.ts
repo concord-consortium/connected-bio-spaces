@@ -60,7 +60,8 @@ export const MousePopulationsModel = types
     "inheritance.randomOffspring.tan": types.number,
     "showSexStack": false,
     "showHeteroStack": false,
-    "chartData": types.optional(ChartDataModel, chartData)
+    "chartData": types.optional(ChartDataModel, chartData),
+    "showMaxPoints": false
   })
   .extend(self => {
     let interactive: HawksMiceInteractive | undefined;
@@ -69,7 +70,22 @@ export const MousePopulationsModel = types
       self.chartData.dataSets[0].addDataPoint(time, datum.numWhite, "");
       self.chartData.dataSets[1].addDataPoint(time, datum.numTan, "");
       self.chartData.dataSets[2].addDataPoint(time, datum.numBrown, "");
+      if (self.showMaxPoints) {
+        displayMaxPoints();
+      }
     }
+
+    function displayMaxPoints() {
+      self.chartData.dataSets.forEach((dataSet: any) => {
+        dataSet.setMaxDataPoints(dataSet.dataPoints.length);
+      });
+    }
+    function displayRecentPoints() {
+      self.chartData.dataSets.forEach((dataSet: any) => {
+        dataSet.setMaxDataPoints(20);
+      });
+    }
+
     Events.addEventListener(Environment.EVENTS.STEP, () => {
       if (interactive) {
         const date = interactive.environment.date;
@@ -118,6 +134,14 @@ export const MousePopulationsModel = types
             interactive.reset();
           }
           clearGraph();
+        },
+        toggleShowMaxPoints() {
+          self.showMaxPoints = !self.showMaxPoints;
+          if (self.showMaxPoints) {
+            displayMaxPoints();
+          } else {
+            displayRecentPoints();
+          }
         },
         setShowSexStack(show: boolean) {
           self.showSexStack = show;
@@ -193,6 +217,19 @@ export const MousePopulationsModel = types
               self.setBreedWithInheritance(val);
             },
             enabled: self["inheritance.showStudentControlOfInheritance"]
+          });
+
+          return buttons;
+        },
+        get graphButtons(): ToolbarButton[] {
+          const buttons = [];
+
+          buttons.push({
+            title: "Scale",
+            value: self.showMaxPoints,
+            action: (val: boolean) => {
+              self.toggleShowMaxPoints();
+            }
           });
 
           return buttons;

@@ -22,6 +22,7 @@ interface IProps extends IBaseProps {
   rightPanel: React.ReactNode;
   spaceClass: string;
   rowNumber: number | undefined;
+  rightPanelButtons?: any;
 }
 interface IState {}
 
@@ -90,9 +91,37 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
         <div className={contentClass} data-test="right-content">
           {this.props.rightPanel}
         </div>
-        {/* <div className={"footer " + this.props.spaceClass} data-test="right-footer"/> // removed for time being*/}
+        {this.renderRightPanelFooter()}
       </div>
     );
+  }
+
+  private renderRightPanelFooter(){
+    if (this.props.spaceClass === "populations" && this.props.selectedRightPanel === "data") {
+      const buttons = this.props.rightPanelButtons.map( (button: any) => {
+        const type = button.type || "button";
+        let title = button.title;
+        if (button.title === "Scale") {
+          title = button.value ? "Show Recent Data" : "Show All Data";
+        }
+        if (type === "button") {
+          return (
+            <div key={button.title} className="button-holder" onClick={button.action}>
+              {title}
+            </div>
+          );
+        }
+      });
+
+      return (
+        <div className={"footer " + this.props.spaceClass} data-test="right-footer">
+          { buttons }
+        </div>
+      );
+    } else {
+      return null;
+    }
+
   }
 
   private handleClickRightIcon = (icon: RightPanelType, enabled?: boolean) => {

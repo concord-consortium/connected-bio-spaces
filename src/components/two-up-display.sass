@@ -91,7 +91,11 @@
     overflow: auto
 
   .footer
-    flex: 0 0 $two-up-header-height
+    display: flex
+    align-items: center
+    justify-content: center
+    flex: 0 0 $two-up-footer-height
+    width: 100%
     background-color: $two-up-header-bgcolor
     border-bottom-left-radius: $component-border-radius
     border-bottom-right-radius: $component-border-radius
@@ -101,6 +105,26 @@
 
     &.organism
       background-color: $color-simdata-carrot
+
+    .button-holder
+      flex-grow: 0
+      flex-shrink: 0
+      display: flex
+      align-items: center
+      justify-content: center
+      width: 140px
+      height: 30px
+      border-radius: $component-border-radius
+      font-size: 14px
+      font-family: $font-stack
+      color: $color-khaki-yellow-dark5
+      background-color: $color-khaki-yellow-light2
+      cursor: pointer
+      transition-duration: $fade-time
+      &:hover
+        background-color: $color-khaki-yellow
+      &:active
+        background-color: $color-khaki-yellow-dark4
 
 .left-abutment
   margin-left: $two-up-margin

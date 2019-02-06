@@ -60,6 +60,9 @@ export const PopulationsModel = types
         get toolbarButtons(): ToolbarButton[] {
           return self.model.toolbarButtons;
         },
+        get graphButtons(): ToolbarButton[] {
+          return self.model.graphButtons;
+        },
         get currentData(): ChartDataModelType {
           return self.model.chartData;
         }
