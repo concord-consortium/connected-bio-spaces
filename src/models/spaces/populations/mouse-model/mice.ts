@@ -247,7 +247,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
               ],
               scale: 0.2,
               anchor: {
-                x: 0.5,
+                x: 0.7,
                 y: 0.5
               }
             },
@@ -276,7 +276,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
               ],
               scale: 0.2,
               anchor: {
-                x: 0.5,
+                x: 0.7,
                 y: 0.5
               }
             },
@@ -305,7 +305,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
               ],
               scale: 0.2,
               anchor: {
-                x: 0.5,
+                x: 0.7,
                 y: 0.5
               }
             },
@@ -323,7 +323,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
               path: "assets/curriculum/mouse/populations/male-stack.png",
               scale: 0.4,
               anchor: {
-                x: 0.75,
+                x: 0.5,
                 y: 0.5
               }
             },
@@ -335,7 +335,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
               path: "assets/curriculum/mouse/populations/female-stack.png",
               scale: 0.4,
               anchor: {
-                x: 0.75,
+                x: 0.5,
                 y: 0.5
               }
             },
@@ -353,7 +353,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
               path: "assets/curriculum/mouse/populations/heterozygous-stack.png",
               scale: 0.4,
               anchor: {
-                x: 0.75,
+                x: 0.5,
                 y: 0.5
               }
             },
