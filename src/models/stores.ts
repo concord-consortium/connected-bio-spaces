@@ -21,7 +21,7 @@ export function createStores(authoring: any): IStores {
     ui: createUIModel(authoring.ui),
     backpack: BackpackModel.create(authoring.backpack),
     populations: createPopulationsModel(authoring.curriculum, flatten(authoring.populations)),
-    organisms: OrganismsSpaceModel.create(authoring.organism)
+    organisms: OrganismsSpaceModel.create(authoring.organisms)
   };
 }
 

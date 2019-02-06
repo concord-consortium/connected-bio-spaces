@@ -234,7 +234,7 @@ export const defaultAuthoring = {
       }
     }
   },
-  organism: {
+  organisms: {
     instructions: ""
   }
 
@@ -279,7 +279,7 @@ const uiSchema = {
       }
     }
   },
-  organism: {
+  organisms: {
     instructions: {
       "ui:widget": "textarea"
     }
