@@ -16,6 +16,7 @@ interface IState {}
 export class ManipulationControls extends BaseComponent<IProps, IState> {
 
   public render() {
+    const {organisms} = this.stores;
     const row = this.getControlsRow();
     return (
       <div className="manipulation-controls" data-test="manipulations-panel">
@@ -42,10 +43,10 @@ export class ManipulationControls extends BaseComponent<IProps, IState> {
         </button>
         <select className={"organism-button select " + this.getButtonClass("add", ["cell", "protein"])}
                 value={row.selectedSubstance} onChange={this.handleSubstanceChange}>
-          <option value={"hormone"}>Hormone</option>
-          <option value={"pheomelanin"}>Pheomelanin</option>
-          <option value={"eumelanin"}>Eumelanin</option>
-          <option value={"signalProtein"}>Signal Protein</option>
+          <option value={"hormone"}>{organisms.getSubstanceLabel("hormone")}</option>
+          <option value={"pheomelanin"}>{organisms.getSubstanceLabel("pheomelanin")}</option>
+          <option value={"eumelanin"}>{organisms.getSubstanceLabel("eumelanin")}</option>
+          <option value={"signalProtein"}>{organisms.getSubstanceLabel("signalProtein")}</option>
         </select>
       </div>
     );

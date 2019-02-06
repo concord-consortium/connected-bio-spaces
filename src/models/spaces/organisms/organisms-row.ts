@@ -38,7 +38,9 @@ export const OrganismsRowModel = types
         organelleLabels.push(organelleLabel);
       });
       kSubstanceNames.forEach((substance, index) => {
-        const substanceName: string = kSubstanceInfo[substance].displayName;
+        const substanceName: string = organisms
+          ? organisms.getSubstanceLabel(substance)
+          : kSubstanceInfo[substance].displayName;
         const substanceColor: string =  kSubstanceInfo[substance].color;
         const points: DataPointType[] = [];
         self.assayedOrganelles.forEach((organelle) => {

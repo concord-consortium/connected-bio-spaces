@@ -9,24 +9,29 @@ import { OrganismsRowModel } from "./organisms-row";
 type SubstanceInfo = {
   [substance in SubstanceType]: {
     displayName: string;
+    mysteryLabel: string;
     color: string;
   };
 };
 export const kSubstanceInfo: SubstanceInfo = {
   pheomelanin: {
     displayName: "pheomelanin",
+    mysteryLabel: "substance A",
     color: "#f4ce83"
   },
   signalProtein: {
     displayName: "signal protein",
+    mysteryLabel: "substance B",
     color: "#d88bff"
   },
   eumelanin: {
     displayName: "eumelanin",
+    mysteryLabel: "substance C",
     color: "#795423"
   },
   hormone: {
     displayName: "hormone",
+    mysteryLabel: "substance D",
     color: "#0adbd7"
   },
 };
@@ -130,6 +135,7 @@ export const OrganismsSpaceModel = types
     rows: types.optional(types.array(OrganismsRowModel),
       [OrganismsRowModel.create(), OrganismsRowModel.create({rightPanel: "data"})]),
     useMysteryOrganelles: false,
+    useMysterySubstances: false,
     instructions: ""
   })
   .views(self => {
@@ -139,6 +145,12 @@ export const OrganismsSpaceModel = types
           return kOrganelleInfo[organelle].mysteryLabel;
         }
         return kOrganelleInfo[organelle].displayName;
+      },
+      getSubstanceLabel(substance: SubstanceType) {
+        if (self.useMysterySubstances) {
+          return kSubstanceInfo[substance].mysteryLabel;
+        }
+        return kSubstanceInfo[substance].displayName;
       }
     };
   })
