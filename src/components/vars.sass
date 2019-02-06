@@ -32,7 +32,7 @@ $component-border-radius: 5px
 // fonts
 //
 $font-stack: Ubuntu, sans-serif
-$title-font-stack: Arial, Helvetica, sans-serif
+$instructions-font-stack: Arial, Helvetica, sans-serif
 $font-size-header: 14px
 $font-size-normal: 12px
 $font-size-label1: 11px
@@ -49,13 +49,10 @@ $fade-time: .1s
 //
 $color-black: #000000
 $color-white: #ffffff
-$color-red: #ff0000
-$color-yellow: #ffff00
-$color-blue: #0000ff
 $color-key-blue: #0099ff
 $color-key-red: #de444b
 $color-key-yellow: #ffff00
-$color-nav-reddish-btn: #c3550f
+$color-nav-cinder-dark4: #111416
 $color-nav-cinder-dark3: #2c3840
 $color-nav-cinder-dark2: #434e56
 $color-nav-cinder-dark1: #5d6e77
@@ -79,33 +76,49 @@ $color-nav-cerulean: #3cc8f5
 $color-nav-cerulean-light1: #7ad9f8
 $color-nav-cerulean-light2: #c8effc
 $color-nav-cerulean-light3: #ebf9fe
-$color-khaki-yellow: #FFD56D
-$color-khaki-yellow-light1: #FFDF91
-$color-khaki-yellow-light2: #FFECC0
-$color-khaki-yellow-dark1: #F0CA6E
-$color-khaki-yellow-dark2: #EBB93E
-$color-khaki-yellow-dark3: #DFB03F
-$color-khaki-yellow-dark4: #D49600
-$color-khaki-yellow-dark5: #976B00
-$color-plum-purple: #CD88E4
-$color-plum-purple-light1: #D9A5EB
-$color-plum-purple-light2: #F2CDED
-$color-plum-purple-dark1: #C486D8
-$color-plum-purple-dark2: #B05ECB
-$color-plum-purple-dark3: #A95CC1
-$color-plum-purple-dark4: #8D27AD
-$color-plum-purple-dark5: #641C7C
-$color-salmon-orange: #FFA56D
-$color-salmon-orange-light1: #FFBB91
-$color-salmon-orange-light2: #F9DAC6
-$color-salmon-orange-dark1: #F0A06E
-$color-salmon-orange-dark2: #EB813E
-$color-salmon-orange-dark3: #DF7D3F
-$color-salmon-orange-dark4: #D45200
-$color-salmon-orange-dark5: #973B00
+
+$color-simdata-amber: #ebb93e
+$color-simdata-amber-light1: #ffd56d
+$color-simdata-amber-light2: #ffecc0
+$color-simdata-amber-light3: #fff8e6
 $color-simdata-amber-dark1: #d49600
-$color-dark-gold: #EBB936
-$color-light-gold: #D8E0B0
+$color-simdata-amber-dark2: #976B00
+$color-simdata-amber-dark3: #6d4d00
+$color-simdata-carrot-dark3: #6d2b00
+$color-simdata-carrot-dark2: #973b00
+$color-simdata-carrot-dark1: #d45200
+$color-simdata-carrot: #eb813e
+$color-simdata-carrot-light1: #ffa56d
+$color-simdata-carrot-light2: #ffd9c0
+$color-simdata-carrot-light3: #ffefe6
+$color-simdata-brick-dark3: #6d0000
+$color-simdata-brick-dark2: #8e0a0a
+$color-simdata-brick-dark1: #c60e0e
+$color-simdata-brick: #df4a4a
+$color-simdata-brick-light1: #f57676
+$color-simdata-brick-light2: #ffbfbf
+$color-simdata-brick-light3: #ffe5e5
+$color-simdata-mulberry-dark3: #6d0031
+$color-simdata-mulberry-dark2: #930544
+$color-simdata-mulberry-dark1: #cc0860
+$color-simdata-mulberry: #e4448c
+$color-simdata-mulberry-light1: #fa73b0
+$color-simdata-mulberry-light2: #ffbfdc
+$color-simdata-mulberry-light3: #ffe6f2
+$color-simdata-dusk-dark3: #6d005d
+$color-simdata-dusk-dark2: #841574
+$color-simdata-dusk-dark1: #b81da1
+$color-simdata-dusk: #d355c1
+$color-simdata-dusk-light1: #eb80dc
+$color-simdata-dusk-light2: #fec1f6
+$color-simdata-dusk-light3: #ffe6fc
+$color-simdata-eggplant-dark3: #53006d
+$color-simdata-eggplant-dark2: #641c7c
+$color-simdata-eggplant-dark1: #8d27ad
+$color-simdata-eggplant: #b05ecb
+$color-simdata-eggplant-light1: #cd88e4
+$color-simdata-eggplant-light2: #ecc4f9
+$color-simdata-eggplant-light3: #f9e6ff
 
 $component-bgcolor: $color-white
 $main-content-bgcolor: $color-nav-cinder-light2
@@ -157,44 +170,44 @@ $explore-button-left-radius: 10px
 $explore-button-right-radius: 25px
 $explore-button-icon-left-radius: $explore-button-left-radius / 2
 
-$explore-button-pop-bgcolor: $color-khaki-yellow
-$explore-button-pop-icon-bgcolor: $color-khaki-yellow-light1
-$explore-button-pop-color: $color-khaki-yellow-dark5
-$explore-button-pop-hover-bgcolor: $color-khaki-yellow-dark2
-$explore-button-pop-hover-icon-bgcolor: $color-khaki-yellow-dark1
-$explore-button-pop-hover-color: $color-khaki-yellow-light2
-$explore-button-pop-active-bgcolor: $color-khaki-yellow-dark4
-$explore-button-pop-active-icon-bgcolor: $color-khaki-yellow-dark3
+$explore-button-pop-bgcolor: $color-simdata-amber-light1
+$explore-button-pop-icon-bgcolor: rgba(255, 255, 255, 0.25)
+$explore-button-pop-color: $color-simdata-amber-dark2
+$explore-button-pop-hover-bgcolor: $color-simdata-amber
+$explore-button-pop-hover-icon-bgcolor: rgba(255, 255, 255, 0.25)
+$explore-button-pop-hover-color: $color-simdata-amber-light2
+$explore-button-pop-active-bgcolor: $color-simdata-amber-dark1
+$explore-button-pop-active-icon-bgcolor: rgba(255, 255, 255, 0.25)
 $explore-button-pop-active-color: $color-white
 
-$explore-button-breed-bgcolor: $color-plum-purple
-$explore-button-breed-icon-bgcolor: $color-plum-purple-light1
-$explore-button-breed-color: $color-plum-purple-dark5
-$explore-button-breed-hover-bgcolor: $color-plum-purple-dark2
-$explore-button-breed-hover-icon-bgcolor: $color-plum-purple-dark1
-$explore-button-breed-hover-color: $color-plum-purple-light2
-$explore-button-breed-active-bgcolor: $color-plum-purple-dark4
-$explore-button-breed-active-icon-bgcolor: $color-plum-purple-dark3
+$explore-button-breed-bgcolor: $color-simdata-brick-light1
+$explore-button-breed-icon-bgcolor: rgba(255, 255, 255, 0.25)
+$explore-button-breed-color: $color-simdata-brick-dark2
+$explore-button-breed-hover-bgcolor: $color-simdata-brick
+$explore-button-breed-hover-icon-bgcolor: rgba(255, 255, 255, 0.25)
+$explore-button-breed-hover-color: $color-simdata-brick-light2
+$explore-button-breed-active-bgcolor: $color-simdata-brick-dark1
+$explore-button-breed-active-icon-bgcolor: rgba(255, 255, 255, 0.25)
 $explore-button-breed-active-color: $color-white
 
-$explore-button-org-bgcolor: $color-salmon-orange
-$explore-button-org-icon-bgcolor: $color-salmon-orange-light1
-$explore-button-org-color: $color-salmon-orange-dark5
-$explore-button-org-hover-bgcolor: $color-salmon-orange-dark2
-$explore-button-org-hover-icon-bgcolor: $color-salmon-orange-dark1
-$explore-button-org-hover-color: $color-salmon-orange-light2
-$explore-button-org-active-bgcolor: $color-salmon-orange-dark4
-$explore-button-org-active-icon-bgcolor: $color-salmon-orange-dark3
+$explore-button-org-bgcolor: $color-simdata-carrot-light1
+$explore-button-org-icon-bgcolor: rgba(255, 255, 255, 0.25)
+$explore-button-org-color: $color-simdata-carrot-dark2
+$explore-button-org-hover-bgcolor: $color-simdata-carrot
+$explore-button-org-hover-icon-bgcolor: rgba(255, 255, 255, 0.25)
+$explore-button-org-hover-color: $color-simdata-carrot-light2
+$explore-button-org-active-bgcolor: $color-simdata-carrot-dark1
+$explore-button-org-active-icon-bgcolor: rgba(255, 255, 255, 0.25)
 $explore-button-org-active-color: $color-white
 
-$explore-button-dna-bgcolor: $color-nav-cerulean
-$explore-button-dna-icon-bgcolor: $color-nav-cerulean-light1
-$explore-button-dna-color: $color-nav-cerulean-dark5
-$explore-button-dna-hover-bgcolor: $color-nav-cerulean-dark2
-$explore-button-dna-hover-icon-bgcolor: $color-nav-cerulean-dark1
-$explore-button-dna-hover-color: $color-nav-cerulean-light2
-$explore-button-dna-active-bgcolor: $color-nav-cerulean-dark4
-$explore-button-dna-active-icon-bgcolor: $color-nav-cerulean-dark3
+$explore-button-dna-bgcolor: $color-simdata-mulberry-light1
+$explore-button-dna-icon-bgcolor: rgba(255, 255, 255, 0.25)
+$explore-button-dna-color: $color-simdata-mulberry-dark2
+$explore-button-dna-hover-bgcolor: $color-simdata-mulberry
+$explore-button-dna-hover-icon-bgcolor: rgba(255, 255, 255, 0.25)
+$explore-button-dna-hover-color: $color-simdata-mulberry-light2
+$explore-button-dna-active-bgcolor: $color-simdata-mulberry-dark1
+$explore-button-dna-active-icon-bgcolor: rgba(255, 255, 255, 0.25)
 $explore-button-dna-active-color: $color-white
 
 
@@ -218,9 +231,8 @@ $collect-button-icon-height: 45px
 // two-up display
 //
 $two-up-header-height: 30px
-$two-up-bgcolor: $color-khaki-yellow-dark4
 $two-up-header-color: $color-white
-$two-up-header-bgcolor: $color-dark-gold
+$two-up-header-bgcolor: $color-simdata-amber
 $two-up-button-background: $color-simdata-amber-dark1
 $two-up-button-icon-color-active: $color-white
 $two-up-button-icon-height: 18px
