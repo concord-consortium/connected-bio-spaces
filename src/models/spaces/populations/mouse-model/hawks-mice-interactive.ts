@@ -13,7 +13,8 @@ function createEnvironment(color: EnvironmentColorType) {
     viewWidth: 900,
     imgPath: `assets/curriculum/mouse/populations/${color}.png`,
     wrapEastWest: false,
-    wrapNorthSouth: false
+    wrapNorthSouth: false,
+    depthPerception : true
   });
 }
 
