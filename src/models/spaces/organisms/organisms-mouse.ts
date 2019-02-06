@@ -46,11 +46,20 @@ export const OrganismsMouseModel = types
   .model("OrganismsMouse", {
     id: types.optional(types.identifier, () => uuid()),
     backpackMouse: types.reference(BackpackMouse),
-    substanceDeltas: types.map(types.map(SubstanceDelta)),
-    time: 0,
     paused: false
   })
-  .views(self => {
+  .extend(self => {
+
+    let time = 0;
+
+    const substanceDeltas = new Map();
+
+    kAssayableOrganelles.forEach((organelle: OrganelleType) => {
+      substanceDeltas.set(organelle, new Map());
+      kSubstanceNames.forEach((substance: SubstanceType) => {
+        substanceDeltas.get(organelle)!.set(substance, SubstanceDelta.create());
+      });
+    });
 
     function getSubstanceBaseValue(organelle: OrganelleType, substance: SubstanceType) {
       const color = self.backpackMouse.baseColor;
@@ -59,7 +68,7 @@ export const OrganismsMouseModel = types
     }
 
     function getSubstanceDelta(organelle: OrganelleType, substance: SubstanceType) {
-      return self.substanceDeltas.get(organelle)!.get(substance)!;
+      return substanceDeltas.get(organelle)!.get(substance)!;
     }
 
     function getSubstanceValue(organelle: OrganelleType, substance: SubstanceType) {
@@ -78,53 +87,15 @@ export const OrganismsMouseModel = types
       return Math.max(0, Math.min(1, eumelaninLevel / 500)) * 100;
     }
 
-    return {
-      getSubstanceBaseValue,
-      getSubstanceDelta,
-      getSubstanceValue,
-      getPercentDarkness,
-      get modelProperties() {
-        const darkness = self.backpackMouse.baseColor === "white"
-          ? 0
-          : self.backpackMouse.baseColor === "tan"
-            ? 1
-            : 2;
-        return {
-          albino: false,
-          working_tyr1: false,
-          working_myosin_5a: true,
-          open_gates: false,
-          eumelanin: getPercentDarkness(),
-          hormone_spawn_period: 40,
-          base_darkness: darkness
-        };
+    const timerId = setInterval(() => {
+      if (!self.paused) {
+        stepSubstanceAdditions();
+        incrementTime(100);
       }
-    };
-  })
-  .actions((self) => ({
-    // Actions invoked in a callback must be performed on `self` - such functions are defined here for use below
-    incrementTime(millis: number) {
-      self.time += millis;
-    },
-  }))
-  .actions(self => {
-    let timerId: NodeJS.Timer;
+    }, 100);
 
-    function afterCreate() {
-      // Initialize all possible organelle substance deltas to 0
-      kAssayableOrganelles.forEach((organelle: OrganelleType) => {
-        self.substanceDeltas.set(organelle, {});
-        kSubstanceNames.forEach((substance: SubstanceType) => {
-          self.substanceDeltas.get(organelle)!.set(substance, SubstanceDelta.create());
-        });
-      });
-
-      timerId = setInterval(() => {
-        if (!self.paused) {
-          stepSubstanceAdditions();
-          self.incrementTime(100);
-        }
-      }, 100);
+    function incrementTime(millis: number) {
+      time += millis;
     }
 
     function beforeDestroy() {
@@ -136,18 +107,18 @@ export const OrganismsMouseModel = types
     }
 
     function stepSubstanceAdditions() {
-      const extracellularHormone = self.getSubstanceValue("extracellular", "hormone");
-      const cytoplasmProtein = self.getSubstanceValue("cytoplasm", "signalProtein");
-      const melanosomeEumelanin = self.getSubstanceValue("melanosome", "eumelanin");
-      const melanosomePheomelanin = self.getSubstanceValue("melanosome", "pheomelanin");
+      const extracellularHormone = getSubstanceValue("extracellular", "hormone");
+      const cytoplasmProtein = getSubstanceValue("cytoplasm", "signalProtein");
+      const melanosomeEumelanin = getSubstanceValue("melanosome", "eumelanin");
+      const melanosomePheomelanin = getSubstanceValue("melanosome", "pheomelanin");
 
       const organismColor = self.backpackMouse.baseColor;
 
       kAssayableOrganelles.forEach((organelle: OrganelleType) => {
         kSubstanceNames.forEach((substance: SubstanceType) => {
-          const delta = self.getSubstanceDelta(organelle, substance);
+          const delta = getSubstanceDelta(organelle, substance);
 
-          if (self.time < delta.decayStart) {
+          if (time < delta.decayStart) {
             return;
           }
 
@@ -191,23 +162,46 @@ export const OrganismsMouseModel = types
           }
 
           // You can never subtract more of a substance than there is to begin with
-          const minDelta = -1 * self.getSubstanceBaseValue(organelle, substance);
+          const minDelta = -1 * getSubstanceBaseValue(organelle, substance);
           delta.setAmount(Math.max(delta.amount + birthRate - deathRate, minDelta));
         });
       });
     }
 
     function addSubstance(organelle: OrganelleType, substance: SubstanceType, inc: number) {
-      const delta = self.getSubstanceDelta(organelle, substance);
+      const delta = getSubstanceDelta(organelle, substance);
       delta.setAmount(delta.amount + inc);
-      delta.setDecayStart(self.time + 3500);
+      delta.setDecayStart(time + 3500);
     }
 
     return {
-      afterCreate,
-      beforeDestroy,
-      setPaused,
-      addSubstance
+      views: {
+        getSubstanceBaseValue,
+        getSubstanceDelta,
+        getSubstanceValue,
+        getPercentDarkness,
+        get modelProperties() {
+          const darkness = self.backpackMouse.baseColor === "white"
+            ? 0
+            : self.backpackMouse.baseColor === "tan"
+              ? 1
+              : 2;
+          return {
+            albino: false,
+            working_tyr1: false,
+            working_myosin_5a: true,
+            open_gates: false,
+            eumelanin: getPercentDarkness(),
+            hormone_spawn_period: 40,
+            base_darkness: darkness
+          };
+        }
+      },
+      actions: {
+        beforeDestroy,
+        setPaused,
+        addSubstance
+      }
     };
   });
 
