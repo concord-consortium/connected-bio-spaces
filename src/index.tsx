@@ -5,7 +5,7 @@ import * as iframePhone from "iframe-phone";
 import { merge } from "lodash";
 
 import { AppComponent } from "./components/app";
-import { createStores, getUserSnapshot, UserSaveDataType } from "./models/stores";
+import { createStores, getUserSnapshot, UserSaveDataType, ConnectedBioModelCreationType } from "./models/stores";
 
 import { defaultAuthoring } from "./components/authoring";
 import { urlParams } from "./utilities/url-params";
@@ -20,7 +20,7 @@ function initializeModel(studentData: UserSaveDataType) {
   if (modelInitialized) return;
   modelInitialized = true;
 
-  const initialStore = merge({}, defaultAuthoring, urlParams, studentData);
+  const initialStore: ConnectedBioModelCreationType = merge({}, defaultAuthoring, urlParams, studentData);
 
   const stores = createStores( initialStore );
 

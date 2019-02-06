@@ -4,6 +4,8 @@ import { BackpackModel, BackpackModelType } from "./backpack";
 import { flatten } from "flat";
 import { OrganismsSpaceModelType, createOrganismsModel } from "./spaces/organisms/organisms-space";
 import { BackpackMouseType } from "./backpack-mouse";
+import { ConnectedBioAuthoring } from "../authoring";
+import { QueryParams } from "../utilities/url-params";
 
 export type Curriculum = "mouse";
 
@@ -17,7 +19,9 @@ export interface IStores {
   organisms: OrganismsSpaceModelType;
 }
 
-export function createStores(initialModel: any): IStores {
+export type ConnectedBioModelCreationType = ConnectedBioAuthoring & QueryParams & UserSaveDataType;
+
+export function createStores(initialModel: ConnectedBioModelCreationType): IStores {
   const ui = createUIModel(initialModel.ui);
   const backpack = BackpackModel.create(initialModel.backpack);
   const populations = createPopulationsModel(initialModel.curriculum, flatten(initialModel.populations));

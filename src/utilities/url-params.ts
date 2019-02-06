@@ -1,9 +1,10 @@
-export interface QueryParams {
-  topBar?: boolean;
+import { ConnectedBioAuthoring } from "../authoring";
+
+export interface QueryParams extends ConnectedBioAuthoring {
   authoring?: boolean;
 }
 
-let params: any;
+let params: QueryParams;
 
 try {
   const queryString = location.search.length > 1 ? decodeURIComponent(location.search.substring(1)) : "{}";
