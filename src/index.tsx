@@ -29,6 +29,7 @@ function initializeModel(studentData: any) {
   }
   onSnapshot(stores.backpack, saveUserData);
   onSnapshot(stores.ui, saveUserData);
+  onSnapshot(stores.organisms, saveUserData);
 
   const appRoot = document.getElementById("app");
 

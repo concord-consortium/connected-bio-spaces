@@ -2,7 +2,9 @@ import { UIModel, UIModelType, createUIModel } from "./ui";
 import { PopulationsModelType, createPopulationsModel } from "./spaces/populations/populations";
 import { BackpackModel, BackpackModelType } from "./backpack";
 import { flatten } from "flat";
-import { OrganismsSpaceModel, OrganismsSpaceModelType } from "./spaces/organisms/organisms-space";
+import { OrganismsSpaceModel, OrganismsSpaceModelType, createOrganismsModel } from "./spaces/organisms/organisms-space";
+import { resolveIdentifier } from "mobx-state-tree";
+import { BackpackMouse } from "./backpack-mouse";
 
 export type Curriculum = "mouse";
 
@@ -16,12 +18,19 @@ export interface IStores {
   organisms: OrganismsSpaceModelType;
 }
 
-export function createStores(authoring: any): IStores {
+export function createStores(initialModel: any): IStores {
+  const ui = createUIModel(initialModel.ui);
+  const backpack = BackpackModel.create(initialModel.backpack);
+  const populations = createPopulationsModel(initialModel.curriculum, flatten(initialModel.populations));
+  // since organisms may contain references to backpack mice, yet is in a different tree, we need to pass them in
+  // explicitly so they can be found
+  const organisms = createOrganismsModel(initialModel.organisms, backpack);
+
   return {
-    ui: createUIModel(authoring.ui),
-    backpack: BackpackModel.create(authoring.backpack),
-    populations: createPopulationsModel(authoring.curriculum, flatten(authoring.populations)),
-    organisms: OrganismsSpaceModel.create(authoring.organisms)
+    ui,
+    backpack,
+    populations,
+    organisms
   };
 }
 
@@ -33,6 +42,7 @@ export function getUserSnapshot(stores: IStores) {
     },
     backpack: {
       collectedMice: stores.backpack.collectedMice
-    }
+    },
+    organisms: stores.organisms
   };
 }
