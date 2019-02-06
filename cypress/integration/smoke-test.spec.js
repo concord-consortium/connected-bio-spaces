@@ -110,20 +110,6 @@ context("Connected Bio Smoke Test", () => {
       cy.wait(2000)
     })
 
-/*  No way to detect inspection information since click is not conistent for mice
-    it('inspects a mouse and verifies details', () => {
-      pop.getPopTool('inspect').click({force:true})
-      pop.getPopTool('canvas').click({force:true},'topLeft')
-      pop.getPopTool('canvas').click({force:true},'top')
-      pop.getPopTool('canvas').click({force:true},'topRight')
-      pop.getPopTool('canvas').click({force:true},'left')
-      pop.getPopTool('canvas').click({force:true},'center')
-      pop.getPopTool('canvas').click({force:true},'right')
-      pop.getPopTool('canvas').click({force:true},'bottomLeft')
-      pop.getPopTool('canvas').click({force:true},'bottom')
-      pop.getPopTool('canvas').click({force:true},'bottomRight')
-    }) **/
-
     it('collects mice, checks backpack for update', () => {
       pop.getPopTool('collect')
         .click({force:true})

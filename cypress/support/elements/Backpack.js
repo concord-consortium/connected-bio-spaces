@@ -1,7 +1,11 @@
 class Backpack{
 
   getEmptyCollectButton() {
-    return cy.get('.left-nav-panel  [data-test=empty-button]')
+    return cy.get(this.emptyCollectionButton());
+  }
+
+  emptyCollectionButton() {
+    return ('.left-nav-panel  [data-test=empty-button]')
   }
 
   getFullCollectButton() {
