@@ -228,10 +228,11 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
   public render() {
     const {organisms} = this.stores;
     const {mode} = this.props;
+    const {getOrganelleLabel} = organisms;
     // const hoverLabel = appStore.mysteryLabels ?
     //   mysteryOrganelleNames[this.state.hoveredOrganelle] : this.state.hoveredOrganelle;
     const hoveredOrganelle = organisms.rows[this.props.rowIndex].hoveredOrganelle;
-    const hoverLabel = hoveredOrganelle ? kOrganelleInfo[hoveredOrganelle].displayName : undefined;
+    const hoverLabel = hoveredOrganelle ? getOrganelleLabel(hoveredOrganelle) : undefined;
     const hoverDiv = hoverLabel
       ? (
         <div className="hover-location" data-test="hover-label">

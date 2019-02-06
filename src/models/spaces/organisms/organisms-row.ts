@@ -1,10 +1,10 @@
-import { types, Instance } from "mobx-state-tree";
+import { types, Instance, getParentOfType } from "mobx-state-tree";
 import { ChartDataModelType, ChartDataModel } from "../charts/chart-data";
 import { RightPanelTypeEnum, RightPanelType } from "../../ui";
 import { DataPoint, ChartDataSetModel, DataPointType, ChartDataSetModelType } from "../charts/chart-data-set";
 import { OrganismsMouseModel, Organelle, Substance, kSubstanceNames,
   OrganelleType, SubstanceType } from "./organisms-mouse";
-import { kSubstanceInfo } from "./organisms-space";
+import { kSubstanceInfo, OrganismsSpaceModel, OrganismsSpaceModelType, kOrganelleInfo } from "./organisms-space";
 
 export const Mode = types.enumeration("type", ["add", "subtract", "assay", "inspect", "normal"]);
 export type ModeType = typeof Mode.Type;
@@ -31,8 +31,11 @@ export const OrganismsRowModel = types
       const chartDataSets: ChartDataSetModelType[] = [];
       const organelleLabels: string[] = [];
 
+      const organisms = getParentOfType(self, OrganismsSpaceModel);
+
       self.assayedOrganelles.forEach((organelle) => {
-        organelleLabels.push(organelle);
+        const organelleLabel = organisms ? organisms.getOrganelleLabel(organelle) : organelle;
+        organelleLabels.push(organelleLabel);
       });
       kSubstanceNames.forEach((substance, index) => {
         const substanceName: string = kSubstanceInfo[substance].displayName;
@@ -43,7 +46,8 @@ export const OrganismsRowModel = types
             return;
           }
           const substanceValue = self.organismsMouse.getSubstanceValue(organelle, substance);
-          points.push(DataPoint.create({ a1: substanceValue, a2: 0, label: `${organelle} ${substanceName}` }));
+          const organelleLabel = organisms ? organisms.getOrganelleLabel(organelle) : organelle;
+          points.push(DataPoint.create({ a1: substanceValue, a2: 0, label: `${organelleLabel} ${substanceName}` }));
         });
         const stackNum = "Stack " + index;
         chartDataSets.push(ChartDataSetModel.create({

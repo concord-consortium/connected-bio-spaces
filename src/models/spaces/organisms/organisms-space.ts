@@ -34,6 +34,7 @@ export const kSubstanceInfo: SubstanceInfo = {
 type OrganelleInfo = {
   [organelle in OrganelleType]: {
     displayName: string;
+    mysteryLabel: string;
     substances: {
       [substance in SubstanceType]?: {
         [color in ColorType]: number;
@@ -48,10 +49,12 @@ type OrganelleInfo = {
 export const kOrganelleInfo: OrganelleInfo = {
   nucleus: {
     displayName: "Nucleus",
+    mysteryLabel: "Location 2",
     substances: {}
   },
   cytoplasm: {
     displayName: "Cytoplasm",
+    mysteryLabel: "Location 3",
     substances: {
       signalProtein: {
         white: 0,
@@ -62,10 +65,12 @@ export const kOrganelleInfo: OrganelleInfo = {
   },
   golgi: {
     displayName: "Golgi",
+    mysteryLabel: "",
     substances: {}
   },
   extracellular: {
     displayName: "Extracellular",
+    mysteryLabel: "Location 4",
     substances: {
       hormone: {
         white: 125,
@@ -76,6 +81,7 @@ export const kOrganelleInfo: OrganelleInfo = {
   },
   melanosome: {
     displayName: "Melanosome",
+    mysteryLabel: "Location 1",
     substances: {
       eumelanin: {
         white: 0,
@@ -91,24 +97,29 @@ export const kOrganelleInfo: OrganelleInfo = {
   },
   receptor: {
     displayName: "Receptor",
+    mysteryLabel: "",
     substances: {}
   },
   receptorWorking: {
     displayName: "Receptor",
+    mysteryLabel: "",
     substances: {},
     protein: MouseProteins.receptor.working
   },
   receptorBroken: {
     displayName: "Receptor",
+    mysteryLabel: "",
     substances: {},
     protein: MouseProteins.receptor.broken
   },
   gate: {
     displayName: "Gate",
+    mysteryLabel: "",
     substances: {}
   },
   nearbyCell: {
     displayName: "Nearby Cell",
+    mysteryLabel: "Location 5",
     substances: {}
   },
 };
@@ -118,7 +129,18 @@ export const OrganismsSpaceModel = types
     organismsMice: types.array(OrganismsMouseModel),
     rows: types.optional(types.array(OrganismsRowModel),
       [OrganismsRowModel.create(), OrganismsRowModel.create({rightPanel: "data"})]),
+    useMysteryOrganelles: false,
     instructions: ""
+  })
+  .views(self => {
+    return {
+      getOrganelleLabel(organelle: OrganelleType) {
+        if (self.useMysteryOrganelles) {
+          return kOrganelleInfo[organelle].mysteryLabel;
+        }
+        return kOrganelleInfo[organelle].displayName;
+      }
+    };
   })
   .actions((self) => {
     function clearRowBackpackMouse(rowIndex: number) {
