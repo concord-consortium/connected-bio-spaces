@@ -242,7 +242,7 @@ export const defaultAuthoring = {
       }
     }
   },
-  organism: {
+  organisms: {
     instructions: "",
     useMysteryOrganelles: false,
     useMysterySubstances: false
@@ -289,7 +289,7 @@ const uiSchema = {
       }
     }
   },
-  organism: {
+  organisms: {
     instructions: {
       "ui:widget": "textarea"
     }
