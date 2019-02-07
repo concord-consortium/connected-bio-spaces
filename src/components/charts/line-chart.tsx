@@ -76,7 +76,7 @@ const lineDatasetDefaults: ChartData<any> = {
 
 const lineData = (chartData: ChartDataModelType) => {
   const lineDatasets = [];
-  for (const d of chartData.dataSets) {
+  for (const d of chartData.visibleDataSets) {
     const dset = Object.assign({}, lineDatasetDefaults, {
       label: d.name,
       data: d.timeSeriesXY

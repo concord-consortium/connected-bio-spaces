@@ -95,7 +95,8 @@ export const ChartDataSetModel = types
     // changing. Rather, we downsample all the data up to a certain point, then add growWindow more points as-is,
     // and then resample the entire set and start again.
     // In order to always downsample the entire dataset (e.g. for static data), set downsampleGrowWindow: 1.
-    downsampleGrowWindow: 40
+    downsampleGrowWindow: 40,
+    display: true
   })
   .views(self => ({
     get visibleDataPoints() {
