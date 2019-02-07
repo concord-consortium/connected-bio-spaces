@@ -82,7 +82,18 @@ export const hawkSpecies = new Species({
     rules: [{
       image: {
         path: "assets/curriculum/mouse/populations/hawk.png",
-        scale: 0.3,
+        scale: 0.19,
+        anchor: {
+          x: 0.5,
+          y: 0.2
+        }
+      },
+      useIf: (agent: Agent) => agent.get("current behavior") === BasicAnimal.BEHAVIOR.EATING
+    },
+    {
+      image: {
+        path: "assets/curriculum/mouse/populations/hawk.png",
+        scale: 0.23,
         anchor: {
           x: 0.5,
           y: 0.2
