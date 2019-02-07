@@ -84,12 +84,20 @@ export function createInteractive(model: MousePopulationsModelType) {
   let numWhite: number;
   let numTan: number;
   let numBrown: number;
+  let numCC: number;
+  let numCR: number;
+  let numRC: number;
+  let numRR: number;
 
   function resetVars() {
     addedHawks = false;
     numWhite = 0;
     numTan = 0;
     numBrown = 0;
+    numCC = 0;
+    numCR = 0;
+    numRC = 0;
+    numRR = 0;
   }
 
   function addInitialMicePopulation(num: number) {
@@ -210,7 +218,11 @@ export function createInteractive(model: MousePopulationsModelType) {
     return {
       numWhite,
       numTan,
-      numBrown
+      numBrown,
+      numCC,
+      numCR,
+      numRC,
+      numRR
     };
   };
 
@@ -250,13 +262,24 @@ export function createInteractive(model: MousePopulationsModelType) {
     numWhite = 0;
     numTan = 0;
     numBrown = 0;
+    numCC = 0;
+    numCR = 0;
+    numRC = 0;
+    numRR = 0;
     allMice.forEach((mouse) => {
       if (mouse.get("color") === "white") {
         numWhite++;
+        numCC++;
       } else if (mouse.get("color") === "tan") {
         numTan++;
+        if (mouse.alleles.color === "a:C,b:R") {
+          numCR++;
+        } else {
+          numRC++;
+        }
       } else if (mouse.get("color") === "brown") {
         numBrown++;
+        numRR++;
       }
     });
 
