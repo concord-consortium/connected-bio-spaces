@@ -97,6 +97,32 @@ const chartData = {
       display: false,
       axisLabelA1: "Weeks",
       axisLabelA2: "Percent (%)"
+    },
+    {
+      name: "C",
+      dataPoints: [],
+      color: "#f4ce83",
+      maxPoints: 20,
+      fixedMinA2: 0,
+      fixedMaxA2: 100,
+      expandOnly: true,
+      fixedLabelRotation: 0,
+      display: false,
+      axisLabelA1: "Weeks",
+      axisLabelA2: "Percent (%)"
+    },
+    {
+      name: "R",
+      dataPoints: [],
+      color: "#795423",
+      maxPoints: 20,
+      fixedMinA2: 0,
+      fixedMaxA2: 100,
+      expandOnly: true,
+      fixedLabelRotation: 0,
+      display: false,
+      axisLabelA1: "Weeks",
+      axisLabelA2: "Percent (%)"
     }
   ]
  };
@@ -140,6 +166,9 @@ export const MousePopulationsModel = types
       self.chartData.dataSets[4].addDataPoint(time, datum.numCR, "");
       self.chartData.dataSets[5].addDataPoint(time, datum.numRC, "");
       self.chartData.dataSets[6].addDataPoint(time, datum.numRR, "");
+
+      self.chartData.dataSets[7].addDataPoint(time, datum.numC, "");
+      self.chartData.dataSets[8].addDataPoint(time, datum.numR, "");
     }
 
     function displayMaxPoints() {
@@ -226,6 +255,9 @@ export const MousePopulationsModel = types
           self.chartData.dataSets[4].display = type === "genotype";
           self.chartData.dataSets[5].display = type === "genotype";
           self.chartData.dataSets[6].display = type === "genotype";
+
+          self.chartData.dataSets[7].display = type === "alleles";
+          self.chartData.dataSets[8].display = type === "alleles";
         },
         destroyInteractive() {
           interactive = undefined;
@@ -326,6 +358,14 @@ export const MousePopulationsModel = types
             value: self.chartType === "genotype",
             action: (val: boolean) => {
               self.setChartType("genotype");
+            },
+            section: "data"
+          });
+          buttons.push({
+            title: "Graph Alleles",
+            value: self.chartType === "alleles",
+            action: (val: boolean) => {
+              self.setChartType("alleles");
             },
             section: "data"
           });

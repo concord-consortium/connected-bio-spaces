@@ -88,6 +88,8 @@ export function createInteractive(model: MousePopulationsModelType) {
   let numCR: number;
   let numRC: number;
   let numRR: number;
+  let numC: number;
+  let numR: number;
 
   function resetVars() {
     addedHawks = false;
@@ -98,6 +100,8 @@ export function createInteractive(model: MousePopulationsModelType) {
     numCR = 0;
     numRC = 0;
     numRR = 0;
+    numC = 0;
+    numR = 0;
   }
 
   function addInitialMicePopulation(num: number) {
@@ -222,7 +226,9 @@ export function createInteractive(model: MousePopulationsModelType) {
       numCC,
       numCR,
       numRC,
-      numRR
+      numRR,
+      numC,
+      numR
     };
   };
 
@@ -266,10 +272,13 @@ export function createInteractive(model: MousePopulationsModelType) {
     numCR = 0;
     numRC = 0;
     numRR = 0;
+    numC = 0;
+    numR = 0;
     allMice.forEach((mouse) => {
       if (mouse.get("color") === "white") {
         numWhite++;
         numCC++;
+        numC += 2;
       } else if (mouse.get("color") === "tan") {
         numTan++;
         if (mouse.alleles.color === "a:C,b:R") {
@@ -277,11 +286,17 @@ export function createInteractive(model: MousePopulationsModelType) {
         } else {
           numRC++;
         }
+        numC++;
+        numR++;
       } else if (mouse.get("color") === "brown") {
         numBrown++;
         numRR++;
+        numR += 2;
       }
     });
+    const totalAlleles = numC + numR;
+    numC = (numC / totalAlleles) * 100;
+    numR = (numR / totalAlleles) * 100;
 
     // If there are no specific selective pressures (ie there are no hawks, or the hawks eat
     // everything with equal probability), the population should be 'stabilized', so that no
