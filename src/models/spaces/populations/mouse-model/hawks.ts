@@ -1,4 +1,4 @@
-import { BasicAnimal, Species, Trait, Agent } from "populations.js";
+import { BasicAnimal, Species, Trait, Agent, AgentDistance } from "populations.js";
 
 let nextZIndex = 2;
 
@@ -25,7 +25,11 @@ class Hawk extends BasicAnimal {
   }
 
   public wander() {
-    (this as any).zIndex(this._baseZIndex);
+    let newHeight = this.get("height") + 1;
+    newHeight = Math.min(newHeight, 10);
+    this.set("height", newHeight);
+    // a lower hawk is always below a higher one, and at the same level one is always higher
+    (this as any).zIndex(this._baseZIndex + (newHeight * 10));
     this.set("current behavior", BasicAnimal.BEHAVIOR.WANDERING);
     const speed = this.get("speed") - 3;
     const delta = Math.sqrt(10 / (1 + (9 * Math.pow(Math.cos(this._circleCount), 2)))) * Math.cos(this._circleCount);
@@ -49,9 +53,13 @@ class Hawk extends BasicAnimal {
     return this.move(speed);
   }
 
-  public eat() {
-    super.eat();
-    (this as any).zIndex(this._baseZIndex - 2);
+  public chase(agentDistance: AgentDistance) {
+    super.chase(agentDistance);
+
+    let newHeight = this.get("height") - 1;
+    newHeight = Math.max(newHeight, 1);
+    this.set("height", newHeight);
+    (this as any).zIndex(this._baseZIndex + (newHeight * 10));
   }
 }
 
@@ -81,7 +89,8 @@ export const hawkSpecies = new Species({
     new Trait({ name: "wings", default: 0 }),
     new Trait({ name: "mating desire bonus", default: -40 }),
     new Trait({ name: "hunger bonus", default: 100 }),
-    new Trait({ name: "is immortal", default: true })
+    new Trait({ name: "is immortal", default: true }),
+    new Trait({ name: "height", default: 10 })
   ],
   imageProperties: {
     rotate: true,
@@ -93,13 +102,85 @@ export const hawkSpecies = new Species({
     rules: [{
       image: {
         path: "assets/curriculum/mouse/populations/hawk.png",
+        // Annoying that we can't simply make scale a computed property.
+        // Something for the next version of populations.js ...
+        scale: 0.18,
+        anchor: {
+          x: 0.5,
+          y: 0.2
+        }
+      },
+      useIf: (agent: Agent) => agent.get("height") <= 2
+    }, {
+      image: {
+        path: "assets/curriculum/mouse/populations/hawk.png",
+        scale: 0.185,
+        anchor: {
+          x: 0.5,
+          y: 0.2
+        }
+      },
+      useIf: (agent: Agent) => agent.get("height") <= 3
+    }, {
+      image: {
+        path: "assets/curriculum/mouse/populations/hawk.png",
         scale: 0.19,
         anchor: {
           x: 0.5,
           y: 0.2
         }
       },
-      useIf: (agent: Agent) => agent.get("current behavior") === BasicAnimal.BEHAVIOR.EATING
+      useIf: (agent: Agent) => agent.get("height") <= 4
+    }, {
+      image: {
+        path: "assets/curriculum/mouse/populations/hawk.png",
+        scale: 0.195,
+        anchor: {
+          x: 0.5,
+          y: 0.2
+        }
+      },
+      useIf: (agent: Agent) => agent.get("height") <= 5
+    }, {
+      image: {
+        path: "assets/curriculum/mouse/populations/hawk.png",
+        scale: 0.21,
+        anchor: {
+          x: 0.5,
+          y: 0.2
+        }
+      },
+      useIf: (agent: Agent) => agent.get("height") <= 6
+    }, {
+      image: {
+        path: "assets/curriculum/mouse/populations/hawk.png",
+        scale: 0.215,
+        anchor: {
+          x: 0.5,
+          y: 0.2
+        }
+      },
+      useIf: (agent: Agent) => agent.get("height") <= 7
+    }, {
+      image: {
+        path: "assets/curriculum/mouse/populations/hawk.png",
+        scale: 0.22,
+        anchor: {
+          x: 0.5,
+          y: 0.2
+        }
+      },
+      useIf: (agent: Agent) => agent.get("height") <= 8
+    }, {
+      image: {
+        path: "assets/curriculum/mouse/populations/hawk.png",
+        scale: 0.225,
+        anchor: {
+          x: 0.5,
+          y: 0.2
+        }
+      },
+      useIf: (agent: Agent) => agent.get("height") <= 9
     },
     {
       image: {
