@@ -1,13 +1,18 @@
 import { BasicAnimal, Species, Trait, Agent } from "populations.js";
 
+let nextZIndex = 2;
+
 class Hawk extends BasicAnimal {
 
   private _circleCount = 0;
+  private _baseZIndex = nextZIndex;
 
   constructor(args: any) {
     super(args);
     this.label = "Hawk";
     this._viewLayer = 3;
+    (this as any).zIndex(this._baseZIndex);
+    nextZIndex++;
   }
 
   public isInteractive() {      // FIXME: Would be nice to set this better in populations
@@ -20,6 +25,7 @@ class Hawk extends BasicAnimal {
   }
 
   public wander() {
+    (this as any).zIndex(this._baseZIndex);
     this.set("current behavior", BasicAnimal.BEHAVIOR.WANDERING);
     const speed = this.get("speed") - 3;
     const delta = Math.sqrt(10 / (1 + (9 * Math.pow(Math.cos(this._circleCount), 2)))) * Math.cos(this._circleCount);
@@ -41,6 +47,11 @@ class Hawk extends BasicAnimal {
     }
     this._circleCount += 0.01;
     return this.move(speed);
+  }
+
+  public eat() {
+    super.eat();
+    (this as any).zIndex(this._baseZIndex - 2);
   }
 }
 
