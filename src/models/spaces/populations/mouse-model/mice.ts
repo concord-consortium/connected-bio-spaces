@@ -230,9 +230,9 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
               animations: [
                 {
                   path: "assets/curriculum/mouse/populations/sandrat-light-sprite.json",
-                  movement: "stopped",
+                  movement: "stop",
                   animationName: "stop-light",
-                  length: 0,
+                  length: 1,
                   loop: true,
                   frameRate: 10
                 },
@@ -240,9 +240,9 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
                   path: "assets/curriculum/mouse/populations/sandrat-light-sprite.json",
                   movement: "walk",
                   animationName: "walk-light",
-                  length: 3,
+                  length: 5,
                   loop: true,
-                  frameRate: 10
+                  frameRate: 25
                 }
               ],
               scale: 0.2,
@@ -259,9 +259,9 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
               animations: [
                 {
                   path: "assets/curriculum/mouse/populations/sandrat-tan-sprite.json",
-                  movement: "stopped",
+                  movement: "stop",
                   animationName: "stop-tan",
-                  length: 0,
+                  length: 1,
                   loop: true,
                   frameRate: 10
                 },
@@ -269,9 +269,9 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
                   path: "assets/curriculum/mouse/populations/sandrat-tan-sprite.json",
                   movement: "walk",
                   animationName: "walk-tan",
-                  length: 3,
+                  length: 5,
                   loop: true,
-                  frameRate: 10
+                  frameRate: 25
                 }
               ],
               scale: 0.2,
@@ -288,9 +288,9 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
               animations: [
                 {
                   path: "assets/curriculum/mouse/populations/sandrat-dark-sprite.json",
-                  movement: "stopped",
+                  movement: "stop",
                   animationName: "stop-dark",
-                  length: 0,
+                  length: 1,
                   loop: true,
                   frameRate: 10
                 },
@@ -298,9 +298,9 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
                   path: "assets/curriculum/mouse/populations/sandrat-dark-sprite.json",
                   movement: "walk",
                   animationName: "walk-dark",
-                  length: 3,
+                  length: 5,
                   loop: true,
-                  frameRate: 10
+                  frameRate: 25
                 }
               ],
               scale: 0.2,
