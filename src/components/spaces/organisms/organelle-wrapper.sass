@@ -1,3 +1,5 @@
+@import "../../vars"
+
 .model-wrapper
   position: relative
   cursor: default
@@ -11,13 +13,16 @@
 .hover-location
     position: absolute
     top: 45px
-    right: 5px
+    right: 0
     min-width: 94px
-    height: 18px
-    background: #FFFFFFAA
+    height: 23px
+    color: #fff
+    background: $color-simdata-carrot
     border: 1px solid #444
-    padding: 2px
+    padding: 2px 6px
     text-align: center
-
+    border: 2px solid #fff
+    border-right: none
+    border-radius: 0 0 0 5px
 .temp-dropper
   position: absolute
