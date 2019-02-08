@@ -4,6 +4,7 @@ import { BaseComponent, IBaseProps } from "./base";
 
 import "./two-up-display.sass";
 import { RightPanelType } from "../models/ui";
+import { ToolbarButton } from "../models/spaces/populations/populations";
 
 const titles: {[key in RightPanelType]: string} = {
   instructions: "Instructions",
@@ -22,7 +23,7 @@ interface IProps extends IBaseProps {
   rightPanel: React.ReactNode;
   spaceClass: string;
   rowNumber: number | undefined;
-  rightPanelButtons?: any;
+  rightPanelButtons?: ToolbarButton[];
 }
 interface IState {}
 
@@ -97,7 +98,9 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
   }
 
   private renderRightPanelFooter(){
-    if (this.props.spaceClass === "populations" && this.props.selectedRightPanel === "data") {
+    if (this.props.spaceClass === "populations" &&
+        this.props.selectedRightPanel === "data" &&
+        this.props.rightPanelButtons) {
       const buttons = this.props.rightPanelButtons.map( (button: any) => {
         const type = button.type || "button";
         let title = button.title;
