@@ -91,7 +91,11 @@
     overflow: auto
 
   .footer
-    flex: 0 0 $two-up-header-height
+    display: flex
+    align-items: center
+    justify-content: center
+    flex: 0 0 $two-up-footer-height
+    width: 100%
     background-color: $two-up-header-bgcolor
     border-bottom-left-radius: $component-border-radius
     border-bottom-right-radius: $component-border-radius
@@ -101,6 +105,31 @@
 
     &.organism
       background-color: $color-simdata-carrot
+
+    .button-holder
+      flex-grow: 0
+      flex-shrink: 0
+      display: flex
+      align-items: center
+      justify-content: center
+      width: 140px
+      height: 30px
+      border-radius: 13px
+      font-size: 11px
+      font-family: $font-stack
+      color: $color-simdata-amber-dark2
+      background-color: $color-simdata-amber-light2
+      cursor: pointer
+      transition-duration: $fade-time
+      &:hover
+        background-color: $color-simdata-amber-light1
+      &:active
+        background-color: $color-simdata-amber-dark1
+        color: $color-white
+      &.disabled
+        opacity: .5
+        pointer-events: none
+
 
 .left-abutment
   margin-left: $two-up-margin
