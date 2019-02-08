@@ -47,7 +47,7 @@ export const hawkSpecies = new Species({
     rules: [{
       image: {
         path: "assets/curriculum/mouse/populations/hawk.png",
-        scale: 0.15,
+        scale: 0.3,
         anchor: {
           x: 0.5,
           y: 0.2

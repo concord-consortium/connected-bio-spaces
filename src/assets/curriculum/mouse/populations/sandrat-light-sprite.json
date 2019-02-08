@@ -1,0 +1,52 @@
+{
+  "frames": {
+    "stop-light-0" : {
+      "frame": {"x":0,"y":0,"w":250,"h":108},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":250,"h":108},
+      "sourceSize": {"w":250,"h":108}
+    },
+    "walk-light-0" : {
+      "frame": {"x":250,"y":0,"w":250,"h":108},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":250,"h":108},
+      "sourceSize": {"w":250,"h":108}
+    },
+    "walk-light-1" : {
+      "frame": {"x":500,"y":0,"w":250,"h":108},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":250,"h":108},
+      "sourceSize": {"w":250,"h":108}
+    },
+    "walk-light-2" : {
+      "frame": {"x":750,"y":0,"w":250,"h":108},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":250,"h":108},
+      "sourceSize": {"w":250,"h":108}
+    },
+    "walk-light-3" : {
+      "frame": {"x":1000,"y":0,"w":250,"h":108},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":250,"h":108},
+      "sourceSize": {"w":250,"h":108}
+    },
+    "walk-light-4" : {
+      "frame": {"x":1250,"y":0,"w":250,"h":108},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":250,"h":108},
+      "sourceSize": {"w":250,"h":108}
+    }
+  },
+  "meta": {
+    "image": "sandrat-light-sprite.png",
+    "format": "RGBA8888",
+    "size": {"w":1500,"h":108},
+    "scale": "1"
+  }
+}

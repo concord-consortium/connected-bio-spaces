@@ -1,4 +1,5 @@
-import { Interactive, Environment, Rule, Agent, Events, Species, Rect, Trait, ToolButton } from "populations.js";
+import { Interactive, Environment, Rule, Agent, Events, Species, Rect, Trait,
+  ToolButton, helpers } from "populations.js";
 import { MousePopulationsModelType, EnvironmentColorType } from "./mouse-populations-model";
 import { getMouseSpecies, MouseColors } from "./mice";
 import { hawkSpecies } from "./hawks";
@@ -7,11 +8,13 @@ let environmentColor: EnvironmentColorType;
 
 function createEnvironment(color: EnvironmentColorType) {
   return new Environment({
-    columns: 45,
-    rows: 45,
+    width: 450,
+    height: 450,
+    viewWidth: 900,
     imgPath: `assets/curriculum/mouse/populations/${color}.png`,
     wrapEastWest: false,
-    wrapNorthSouth: false
+    wrapNorthSouth: false,
+    depthPerception : true
   });
 }
 
@@ -22,6 +25,7 @@ interface IInitialColorSpecs {
 }
 
 export class HawksMiceInteractive extends Interactive {
+  public setup: () => void;
   public addInitialHawksPopulation: (num: number) => void;
   public switchEnvironments: (includeNeutralEnvironment: boolean) => void;
   public getData: () => any;
@@ -32,6 +36,7 @@ export class HawksMiceInteractive extends Interactive {
 
 export function createInteractive(model: MousePopulationsModelType) {
   const mouseSpecies = getMouseSpecies(model);
+
   environmentColor = model.environment;
   const env = createEnvironment(environmentColor);
 
@@ -67,6 +72,14 @@ export function createInteractive(model: MousePopulationsModelType) {
     ]
   });
 
+  const backgroundImages = ["assets/curriculum/mouse/populations/brown.png",
+                            "assets/curriculum/mouse/populations/neutral.png",
+                            "assets/curriculum/mouse/populations/white.png"];
+
+  helpers.preload([mouseSpecies, {preload: backgroundImages}], () => {
+    interactive.setup();
+  });
+
   let addedHawks: boolean;
   let numWhite: number;
   let numTan: number;
@@ -99,13 +112,12 @@ export function createInteractive(model: MousePopulationsModelType) {
     }
   }
 
-  function setup() {
+  interactive.setup = () => {
     resetVars();
     addInitialMicePopulation(30);
-  }
+  };
 
-  setup();
-  Events.addEventListener(Environment.EVENTS.RESET, setup);
+  Events.addEventListener(Environment.EVENTS.RESET, interactive.setup);
 
   function addAgent(species: Species, properties: [], traits: Trait[], location?: Rect) {
     const agent = species.createAgent(traits);
