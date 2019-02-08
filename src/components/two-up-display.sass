@@ -114,17 +114,22 @@
       justify-content: center
       width: 140px
       height: 30px
-      border-radius: $component-border-radius
-      font-size: 14px
+      border-radius: 13px
+      font-size: 11px
       font-family: $font-stack
-      color: $color-khaki-yellow-dark5
-      background-color: $color-khaki-yellow-light2
+      color: $color-simdata-amber-dark2
+      background-color: $color-simdata-amber-light2
       cursor: pointer
       transition-duration: $fade-time
       &:hover
-        background-color: $color-khaki-yellow
+        background-color: $color-simdata-amber-light1
       &:active
-        background-color: $color-khaki-yellow-dark4
+        background-color: $color-simdata-amber-dark1
+        color: $color-white
+      &.disabled
+        opacity: .5
+        pointer-events: none
+
 
 .left-abutment
   margin-left: $two-up-margin
