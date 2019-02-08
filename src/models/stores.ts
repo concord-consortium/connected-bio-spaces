@@ -33,6 +33,6 @@ export function createStores(params: ICreateStores, authoring: any): IStores {
     backpack: params && params.backpack
       || BackpackModel.create({}),
     organisms: params && params.organisms ||
-      OrganismsSpaceModel.create({instructions: authoring.organism.instructions})
+      OrganismsSpaceModel.create(authoring.organism)
   };
 }

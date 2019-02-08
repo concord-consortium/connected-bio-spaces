@@ -146,7 +146,15 @@ const schema: JSONSchema6 = {
         instructions: {
           title: "Instructions (as markdown)",
           type: "string"
-        }
+        },
+        useMysteryOrganelles: {
+          title: "Show mystery location labels",
+          type: "boolean"
+        },
+        useMysterySubstances: {
+          title: "Show mystery substance labels",
+          type: "boolean"
+        },
       }
     }
   }
@@ -185,7 +193,9 @@ export const defaultAuthoring = {
     }
   },
   organism: {
-    instructions: ""
+    instructions: "",
+    useMysteryOrganelles: false,
+    useMysterySubstances: false
   }
 
 };
