@@ -5,170 +5,24 @@ import "./authoring.sass";
 import Form, { ISubmitEvent } from "react-jsonschema-form";
 import { QueryParams } from "../utilities/url-params";
 import { JSONSchema6 } from "json-schema";
+import * as authoringSchema from "../authoring-schema.json";
+import { ConnectedBioAuthoring } from "../authoring";
 
 interface IProps extends IBaseProps {}
 interface IState {}
 
-const schema: JSONSchema6 = {
-  title: "Connected Bio Parameters",
-  type: "object",
-  properties: {
-    curriculum: {
-      title: "Unit",
-      type: "string",
-      oneOf: [
-        { enum: ["mouse"], title: "Mouse" }
-      ]
-    },
-    topBar: {type: "boolean", title: "Show Top Bar"},
-    spaces: {
-      title: "Investigation Spaces",
-      type: "object",
-      properties: {
-        showPopulationSpace: {type: "boolean", title: "Show Populations Space"},
-        showBreedingSpace: {type: "boolean", title: "Show Breeding Space"},
-        showOrganismSpace: {type: "boolean", title: "Show Organism Space"},
-        showDNASpace: {type: "boolean", title: "Show DNA/Protein Space"},
-        displayedSpace: {
-          title: "Initial displayed space",
-          type: "string",
-          enum: [
-            "none",
-            "populations",
-            "breeding",
-            "organism",
-            "dna"
-          ],
-          enumNames: [
-            "none",
-            "Populations",
-            "Breeding",
-            "Organism",
-            "DNA"
-          ]
-        },
-      }
-    },
-    populations: {
-      title: "Populations Model",
-      type: "object",
-      properties: {
-        instructions: {
-          title: "Instructions (as markdown)",
-          type: "string"
-        },
-        environment: {
-          title: "Initial environment",
-          type: "string",
-          enum: [
-            "white",
-            "neutral",
-            "brown"
-          ],
-          enumNames: [
-            "Beach",
-            "Mixed",
-            "Field"
-          ]
-        },
-        showSwitchEnvironmentsButton: {
-          title: "Enable change environments button",
-          type: "boolean"
-        },
-        includeNeutralEnvironment: {
-          title: "Include mixed environment",
-          type: "boolean"
-        },
-        initialPopulation: {
-          title: "Initial mouse population",
-          type: "object",
-          properties: {
-            white: {
-              title: "White (%)",
-              type: "number"
-            },
-            tan: {
-              title: "Tan (%)",
-              type: "number"
-            }
-          }
-        },
-        numHawks: {
-          title: "Number of hawks",
-          type: "number"
-        },
-        inheritance: {
-          title: "Inheritance",
-          type: "object",
-          properties: {
-            showStudentControlOfMutations: {
-              title: "Enable student mutation control",
-              type: "boolean"
-            },
-            breedWithMutations: {
-              title: "Breed with mutations",
-              type: "boolean"
-            },
-            chanceOfMutations: {
-              title: "Chance of mutations (%)",
-              type: "number"
-            },
-            showStudentControlOfInheritance: {
-              title: "Enable student inheritance control",
-              type: "boolean"
-            },
-            breedWithInheritance: {
-              title: "Breed with inheritance",
-              type: "boolean"
-            },
-            randomOffspring: {
-              title: "Proportions of random offspring when breeding without inheritance",
-              type: "object",
-              properties: {
-                white: {
-                  title: "White (%)",
-                  type: "number"
-                },
-                tan: {
-                  title: "Tan (%)",
-                  type: "number"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    organism: {
-      title: "Organism Model",
-      type: "object",
-      properties: {
-        instructions: {
-          title: "Instructions (as markdown)",
-          type: "string"
-        },
-        useMysteryOrganelles: {
-          title: "Show mystery location labels",
-          type: "boolean"
-        },
-        useMysterySubstances: {
-          title: "Show mystery substance labels",
-          type: "boolean"
-        },
-      }
-    }
-  }
-};
-
-export const defaultAuthoring = {
+export const defaultAuthoring: ConnectedBioAuthoring = {
   curriculum: "mouse",
   topBar: true,
-  spaces: {
+  ui: {
     showPopulationSpace: true,
     showBreedingSpace: true,
     showOrganismSpace: true,
     showDNASpace: true,
-    displayedSpace: "none"
+    investigationPanelSpace: "none"
+  },
+  backpack: {
+    collectedMice: []
   },
   populations: {
     instructions: "",
@@ -192,7 +46,7 @@ export const defaultAuthoring = {
       }
     }
   },
-  organism: {
+  organisms: {
     instructions: "",
     useMysteryOrganelles: false,
     useMysterySubstances: false
@@ -203,6 +57,13 @@ export const defaultAuthoring = {
 const uiSchema = {
   curriculum: {
     "ui:readonly": true
+  },
+  backpack: {
+    "ui:options": {
+      addable: true,
+      orderable: true,
+      removable: true
+    },
   },
   populations: {
     instructions: {
@@ -232,7 +93,7 @@ const uiSchema = {
       }
     }
   },
-  organism: {
+  organisms: {
     instructions: {
       "ui:widget": "textarea"
     }
@@ -248,7 +109,7 @@ export class AuthoringComponent extends BaseComponent<IProps, IState> {
     return (
       <div className="authoring">
         <Form
-          schema={schema}
+          schema={authoringSchema as JSONSchema6}
           formData={defaultAuthoring}
           uiSchema={uiSchema}
           onSubmit={onSubmit} />

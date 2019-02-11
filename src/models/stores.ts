@@ -1,15 +1,16 @@
-import { UIModel, UIModelType, createUIModel } from "./ui";
+import { UIModelType, createUIModel, SpaceType } from "./ui";
 import { PopulationsModelType, createPopulationsModel } from "./spaces/populations/populations";
 import { BackpackModel, BackpackModelType } from "./backpack";
 import { flatten } from "flat";
-import { OrganismsSpaceModel, OrganismsSpaceModelType } from "./spaces/organisms/organisms-space";
-import { OrganismsMouseModel } from "./spaces/organisms/organisms-mouse";
-import { OrganismsRowModel } from "./spaces/organisms/organisms-row";
-import { BackpackMouse } from "./backpack-mouse";
+import { OrganismsSpaceModelType, createOrganismsModel } from "./spaces/organisms/organisms-space";
+import { BackpackMouseType } from "./backpack-mouse";
+import { ConnectedBioAuthoring } from "../authoring";
+import { QueryParams } from "../utilities/url-params";
 
 export type Curriculum = "mouse";
 
-const currentCurriculum = "mouse";
+// allow for migration when needed
+const STUDENT_DATA_VERSION = 1;
 
 export interface IStores {
   ui: UIModelType;
@@ -18,21 +19,44 @@ export interface IStores {
   organisms: OrganismsSpaceModelType;
 }
 
-export interface ICreateStores {
-  ui?: UIModelType;
-  populations?: PopulationsModelType;
-  backpack?: BackpackModelType;
+export type ConnectedBioModelCreationType = ConnectedBioAuthoring & QueryParams & UserSaveDataType;
+
+export function createStores(initialModel: ConnectedBioModelCreationType): IStores {
+  const ui = createUIModel(initialModel.ui);
+  const backpack = BackpackModel.create(initialModel.backpack);
+  const populations = createPopulationsModel(initialModel.curriculum, flatten(initialModel.populations));
+  // since organisms may contain references to backpack mice, yet is in a different tree, we need to pass them in
+  // explicitly so they can be found
+  const organisms = createOrganismsModel(initialModel.organisms, backpack);
+
+  return {
+    ui,
+    backpack,
+    populations,
+    organisms
+  };
+}
+
+export interface UserSaveDataType {
+  version?: number;
+  ui?: {
+    investigationPanelSpace: SpaceType;
+  };
+  backpack?: {
+    collectedMice: BackpackMouseType[];
+  };
   organisms?: OrganismsSpaceModelType;
 }
 
-export function createStores(params: ICreateStores, authoring: any): IStores {
+export function getUserSnapshot(stores: IStores): UserSaveDataType {
   return {
-    ui: params && params.ui || createUIModel(authoring.spaces),
-    populations: params && params.populations ||
-      createPopulationsModel(authoring.curriculum, flatten(authoring.populations)),
-    backpack: params && params.backpack
-      || BackpackModel.create({}),
-    organisms: params && params.organisms ||
-      OrganismsSpaceModel.create(authoring.organism)
+    version: STUDENT_DATA_VERSION,
+    ui: {
+      investigationPanelSpace: stores.ui.investigationPanelSpace
+    },
+    backpack: {
+      collectedMice: stores.backpack.collectedMice
+    },
+    organisms: stores.organisms
   };
 }

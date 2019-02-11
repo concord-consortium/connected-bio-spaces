@@ -1,10 +1,11 @@
-import { types, Instance } from "mobx-state-tree";
-import { ColorType, BackpackMouseType } from "../../backpack-mouse";
+import { types, Instance, resolveIdentifier } from "mobx-state-tree";
+import { ColorType, BackpackMouseType, BackpackMouse } from "../../backpack-mouse";
 import { ProteinSpec } from "../../../components/spaces/proteins/protein-viewer";
 import MouseProteins from "../../../components/spaces/proteins/protein-specs/mouse-proteins";
 import { RightPanelType } from "../../ui";
 import { OrganismsMouseModel, OrganelleType, SubstanceType } from "./organisms-mouse";
 import { OrganismsRowModel } from "./organisms-row";
+import { BackpackModelType } from "../../backpack";
 
 type SubstanceInfo = {
   [substance in SubstanceType]: {
@@ -128,6 +129,18 @@ export const kOrganelleInfo: OrganelleInfo = {
     substances: {}
   },
 };
+
+export function createOrganismsModel(organismsProps: any, backpack: BackpackModelType) {
+  if (organismsProps.organismsMice) {
+    organismsProps.organismsMice = organismsProps.organismsMice.map((organismMouse: any) => {
+      return {
+        ...organismMouse,
+        backpackMouse: resolveIdentifier(BackpackMouse, backpack, organismMouse.backpackMouse)
+      };
+    });
+  }
+  return OrganismsSpaceModel.create(organismsProps);
+}
 
 export const OrganismsSpaceModel = types
   .model("OrganismsSpace", {

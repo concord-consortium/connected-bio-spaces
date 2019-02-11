@@ -115,6 +115,16 @@ export const OrganismsRowModel = types
         self.selectedSubstance = substance;
       }
     };
+  })
+  .postProcessSnapshot(snapshot => {
+    // remove props we don't need to serialize
+    const {
+      hoveredOrganelle,
+      selectedOrganelle,
+      selectedSubstance,
+      ...remainder
+    } = snapshot;
+    return remainder;
   });
 
 export type OrganismsRowModelType = Instance<typeof OrganismsRowModel>;

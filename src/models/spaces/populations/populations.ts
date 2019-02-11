@@ -4,11 +4,12 @@ import { Interactive, Events, Environment, Agent } from "populations.js";
 import { ChartDataModelType } from "../charts/chart-data";
 import { type } from "os";
 import { RightPanelTypeEnum, RightPanelType } from "../../ui";
+import { Unit } from "../../../authoring";
 
 const ModelsUnion = types.union(MousePopulationsModel);
 type ModelsUnionType = MousePopulationsModelType;
 
-export function createPopulationsModel(curriculumName: string, authoring: any): PopulationsModelType {
+export function createPopulationsModel(curriculumName: Unit = "mouse", authoring: any): PopulationsModelType {
   switch (curriculumName) {
     case "mouse":
     default:

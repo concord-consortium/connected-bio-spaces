@@ -1,0 +1,217 @@
+{
+  "title": "Connected Bio Authoring",
+  "type": "object",
+  "properties": {
+    "curriculum": {
+      "title": "Unit",
+      "type": "string",
+      "oneOf": [
+        {
+          "enum": [
+            "mouse"
+          ],
+          "title": "Mouse"
+        }
+      ]
+    },
+    "topBar": {
+      "type": "boolean",
+      "title": "Show Top Bar"
+    },
+    "ui": {
+      "title": "Investigation Spaces",
+      "type": "object",
+      "properties": {
+        "showPopulationSpace": {
+          "type": "boolean",
+          "title": "Show Populations Space"
+        },
+        "showBreedingSpace": {
+          "type": "boolean",
+          "title": "Show Breeding Space"
+        },
+        "showOrganismSpace": {
+          "type": "boolean",
+          "title": "Show Organism Space"
+        },
+        "showDNASpace": {
+          "type": "boolean",
+          "title": "Show DNA/Protein Space"
+        },
+        "investigationPanelSpace": {
+          "title": "Initial displayed space",
+          "type": "string",
+          "enum": [
+            "none",
+            "populations",
+            "breeding",
+            "organism",
+            "dna"
+          ],
+          "enumNames": [
+            "none",
+            "Populations",
+            "Breeding",
+            "Organism",
+            "DNA"
+          ]
+        }
+      }
+    },
+    "backpack": {
+      "type": "object",
+      "title": "Initial backpack",
+      "properties": {
+        "collectedMice": {
+          "title": "",
+          "type": "array",
+          "maxItems": 6,
+          "default": [],
+          "items": {
+            "type": "object",
+            "properties": {
+              "sex": {
+                "title": "Sex",
+                "type": "string",
+                "enum": [
+                  "female",
+                  "male"
+                ],
+                "enumNames": [
+                  "Female",
+                  "Male"
+                ],
+                "default": "female"
+              },
+              "genotype": {
+                "title": "Genotype",
+                "type": "string",
+                "enum": [
+                  "RR",
+                  "RC",
+                  "CR",
+                  "CC"
+                ],
+                "enumNames": [
+                  "RR (brown)",
+                  "RC (tan)",
+                  "CR (tan)",
+                  "CC (white)"
+                ],
+                "default": "RR"
+              }
+            }
+          }
+        }
+      }
+    },
+    "populations": {
+      "title": "Populations Model",
+      "type": "object",
+      "properties": {
+        "instructions": {
+          "title": "Instructions (as markdown)",
+          "type": "string"
+        },
+        "environment": {
+          "title": "Initial environment",
+          "type": "string",
+          "enum": [
+            "white",
+            "neutral",
+            "brown"
+          ],
+          "enumNames": [
+            "Beach",
+            "Mixed",
+            "Field"
+          ]
+        },
+        "showSwitchEnvironmentsButton": {
+          "title": "Enable change environments button",
+          "type": "boolean"
+        },
+        "includeNeutralEnvironment": {
+          "title": "Include mixed environment",
+          "type": "boolean"
+        },
+        "initialPopulation": {
+          "title": "Initial mouse population",
+          "type": "object",
+          "properties": {
+            "white": {
+              "title": "White (%)",
+              "type": "number"
+            },
+            "tan": {
+              "title": "Tan (%)",
+              "type": "number"
+            }
+          }
+        },
+        "numHawks": {
+          "title": "Number of hawks",
+          "type": "number"
+        },
+        "inheritance": {
+          "title": "Inheritance",
+          "type": "object",
+          "properties": {
+            "showStudentControlOfMutations": {
+              "title": "Enable student mutation control",
+              "type": "boolean"
+            },
+            "breedWithMutations": {
+              "title": "Breed with mutations",
+              "type": "boolean"
+            },
+            "chanceOfMutations": {
+              "title": "Chance of mutations (%)",
+              "type": "number"
+            },
+            "showStudentControlOfInheritance": {
+              "title": "Enable student inheritance control",
+              "type": "boolean"
+            },
+            "breedWithInheritance": {
+              "title": "Breed with inheritance",
+              "type": "boolean"
+            },
+            "randomOffspring": {
+              "title": "Proportions of random offspring when breeding without inheritance",
+              "type": "object",
+              "properties": {
+                "white": {
+                  "title": "White (%)",
+                  "type": "number"
+                },
+                "tan": {
+                  "title": "Tan (%)",
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "organisms": {
+      "title": "Organism Model",
+      "type": "object",
+      "properties": {
+        "instructions": {
+          "title": "Instructions (as markdown)",
+          "type": "string"
+        },
+        "useMysteryOrganelles": {
+          "title": "Show mystery location labels",
+          "type": "boolean"
+        },
+        "useMysterySubstances": {
+          "title": "Show mystery substance labels",
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

@@ -7,7 +7,7 @@ export const RightPanelTypeEnum = types.enumeration("type", ["instructions", "da
 export type RightPanelType = typeof RightPanelTypeEnum.Type;
 
 export function createUIModel(authoring: any): UIModelType {
-  let displayedSpace = authoring.displayedSpace;
+  let displayedSpace = authoring.investigationPanelSpace;
   if (!authoring.showPopulationSpace && displayedSpace === "populations" ||
       !authoring.showBreedingSpace && displayedSpace === "breeding" ||
       !authoring.showOrganismSpace && displayedSpace === "organism" ||

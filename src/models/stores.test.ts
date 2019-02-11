@@ -1,4 +1,4 @@
-import { createStores, IStores } from "./stores";
+import { createStores, IStores, ConnectedBioModelCreationType } from "./stores";
 import { defaultAuthoring } from "../components/authoring";
 import { MousePopulationsModelType } from "./spaces/populations/mouse-model/mouse-populations-model";
 
@@ -12,7 +12,7 @@ describe("stores object", () => {
       stores.organisms.clearRowBackpackMouse(0);
       stores.organisms.clearRowBackpackMouse(1);
     }
-    stores = createStores({}, defaultAuthoring);
+    stores = createStores((defaultAuthoring as any) as ConnectedBioModelCreationType);
   });
 
   it("supports creating dummy stores for testing", () => {
