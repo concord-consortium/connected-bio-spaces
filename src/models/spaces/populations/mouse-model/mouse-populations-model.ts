@@ -226,10 +226,13 @@ export const MousePopulationsModel = types
 
           buttons.push({
             title: "Scale",
+            type: "float-button",
             value: self.showMaxPoints,
             action: (val: boolean) => {
               self.toggleShowMaxPoints();
-            }
+            },
+            floatCorner: "upper-right",
+            section: "data"
           });
 
           return buttons;

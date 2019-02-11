@@ -93,23 +93,49 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
           {this.props.rightPanel}
         </div>
         {this.renderRightPanelFooter()}
+        {this.renderFloatButtons()}
       </div>
     );
   }
 
-  private renderRightPanelFooter(){
-    if (this.props.spaceClass === "populations" &&
-        this.props.selectedRightPanel === "data" &&
-        this.props.rightPanelButtons) {
-      const buttons = this.props.rightPanelButtons.map( (button: any) => {
+  private renderRightPanelFooter() {
+    if (this.props.rightPanelButtons) {
+      let buttons = null;
+      buttons = this.props.rightPanelButtons.map( (button: any) => {
         const type = button.type || "button";
-        let title = button.title;
-        if (button.title === "Scale") {
-          title = button.value ? "Show Recent Data" : "Show All Data";
-        }
-        if (type === "button") {
+        if (type === "button" && this.props.selectedRightPanel === button.section) {
           return (
             <div key={button.title} className="button-holder" onClick={button.action}>
+              {button.title}
+            </div>
+          );
+        }
+      });
+      const footerClass = "footer " + this.props.spaceClass + " " + this.props.selectedRightPanel;
+      return (
+        <div className={footerClass} data-test="right-footer">
+          { buttons ? buttons : null }
+        </div>
+      );
+    } else {
+      return null;
+    }
+
+  }
+
+  private renderFloatButtons() {
+    if (this.props.rightPanelButtons) {
+      let buttons = null;
+      buttons = this.props.rightPanelButtons.map( (button: any) => {
+        const type = button.type || "button";
+        if (type === "float-button" && this.props.selectedRightPanel === button.section) {
+          let title = button.title;
+          if (button.title === "Scale") {
+            title = button.value ? "Show Recent Data" : "Show All Data";
+          }
+          const buttonClass = "button-holder " + type + " " + button.floatCorner;
+          return (
+            <div key={button.title} className={buttonClass} onClick={button.action}>
               {title}
             </div>
           );
@@ -117,14 +143,13 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
       });
 
       return (
-        <div className={"footer " + this.props.spaceClass} data-test="right-footer">
-          { buttons }
+        <div className="float-buttons" data-test="right-float-buttons">
+          { buttons ? buttons : null }
         </div>
       );
     } else {
       return null;
     }
-
   }
 
   private handleClickRightIcon = (icon: RightPanelType, enabled?: boolean) => {

@@ -29,6 +29,8 @@ export interface ToolbarButton {
   value?: boolean;
   action: (e: (React.MouseEvent<HTMLButtonElement> | boolean)) => void;
   enabled?: boolean;
+  floatCorner?: string;
+  section?: string;
 }
 
 const InteractionModeEnum = types.enumeration("interaction", ["none", "select", "inspect"]);

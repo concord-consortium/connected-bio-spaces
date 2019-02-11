@@ -16,6 +16,19 @@
   margin: $double-two-up-margin
   overflow: hidden
 
+  .button-holder
+    flex-grow: 0
+    flex-shrink: 0
+    display: flex
+    align-items: center
+    justify-content: center
+    height: 30px
+    &:hover:not(.disabled)
+      cursor: pointer
+    &.disabled
+      opacity: .5
+      pointer-events: none
+
   .header
     flex: 0 0 $two-up-header-height
     display: flex
@@ -25,10 +38,8 @@
     text-align: center
     background-color: $two-up-header-bgcolor
     margin-bottom: 2px
-
     &.populations
       background-color: $color-simdata-amber
-
     &.organism
       background-color: $color-simdata-carrot
 
@@ -36,29 +47,13 @@
       flex-grow: 1
 
     .button-holder
-      flex-grow: 0
-      flex-shrink: 0
-      display: flex
-      align-items: center
-      justify-content: center
       width: 30px
-      height: 30px
-
       &:hover:not(.disabled)
         background-color: $two-up-button-background
-        cursor: pointer
-
       .button
         height: $two-up-button-icon-height
         width: $two-up-button-icon-width
         fill: $color-simdata-amber-light1
-      &.active
-        .button
-          fill: $two-up-button-icon-color-active
-
-      &.disabled
-        .button
-          opacity: 0.25
       &.active
         .button
           fill: $two-up-button-icon-color-active
@@ -94,42 +89,55 @@
     display: flex
     align-items: center
     justify-content: center
-    flex: 0 0 $two-up-footer-height
+    height: $two-up-footer-height
     width: 100%
+    margin-top: 2px
     background-color: $two-up-header-bgcolor
     border-bottom-left-radius: $component-border-radius
     border-bottom-right-radius: $component-border-radius
+    transition-property: height
+    transition-duration: $fade-time
 
     &.populations
       background-color: $color-simdata-amber
+    &.data
+      height: 45px
 
     &.organism
       background-color: $color-simdata-carrot
 
     .button-holder
-      flex-grow: 0
-      flex-shrink: 0
-      display: flex
-      align-items: center
-      justify-content: center
       width: 140px
-      height: 30px
       border-radius: 13px
       font-size: 11px
       font-family: $font-stack
       color: $color-simdata-amber-dark2
       background-color: $color-simdata-amber-light2
-      cursor: pointer
       transition-duration: $fade-time
-      &:hover
+      &:hover:not(.disabled)
         background-color: $color-simdata-amber-light1
-      &:active
+      &:active:not(.disabled)
         background-color: $color-simdata-amber-dark1
         color: $color-white
-      &.disabled
-        opacity: .5
-        pointer-events: none
 
+  .float-buttons
+    .button-holder
+      position: absolute
+      top: 111px
+      right: 17px
+      width: 114px
+      height: 29px
+      border-radius: 5px
+      font-size: 11px
+      font-family: $font-stack
+      color: $color-simdata-amber-dark2
+      background-color: $color-simdata-amber-light2
+      transition-duration: $fade-time
+      &:hover:not(.disabled)
+        background-color: $color-simdata-amber-light1
+      &:active:not(.disabled)
+        background-color: $color-simdata-amber-dark1
+        color: $color-white
 
 .left-abutment
   margin-left: $two-up-margin
