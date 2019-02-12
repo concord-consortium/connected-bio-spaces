@@ -22,6 +22,7 @@ interface IProps extends IBaseProps {
   selectedAminoAcidIndex: number;
   selectedAminoAcidXLocation: number;
   showInfoBox: boolean;
+  infoBoxAlert: boolean;
   aminoAcidWidth?: number;            // Width of one amino acid in the slider elements, in pixels
   codonWidth?: number;                // Width of one codon in the slider elements, in pixels
   showDNA?: boolean;
@@ -40,6 +41,7 @@ interface DefaultProps {
   selectedAminoAcidIndex: number;
   selectedAminoAcidXLocation: number;
   showInfoBox: boolean;
+  infoBoxAlert: boolean;
   aminoAcidWidth: number;
   codonWidth: number;
   showDNA: boolean;
@@ -64,6 +66,7 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
     selectedAminoAcidIndex: 0,
     selectedAminoAcidXLocation: 0,
     showInfoBox: false,
+    infoBoxAlert: false,
     aminoAcidWidth: 14,
     codonWidth: 29,
     showDNA: false,
@@ -86,7 +89,7 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
       protein, aminoAcidWidth,
       secondProtein, showDNA, showAminoAcidsOnProtein, dnaSwitchable,
       selectionStartPercent, selectedAminoAcidIndex, selectedAminoAcidXLocation,
-      showInfoBox
+      showInfoBox, infoBoxAlert
     } = this.props as PropsWithDefaults;
 
     const { width } = this.props.size;
@@ -108,6 +111,8 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
       aminoAcids2 = getAminoAcidsFromCodons(codons2);
       protein2SelectionPercent = selectionWidth / (aminoAcids2.length * aminoAcidWidth);
     }
+
+    const infoOptionsClass = "info-and-options" + (infoBoxAlert ? " alert" : "");
 
     return (
       <div className="protein-viewer">
@@ -183,7 +188,7 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
             }
           </div>
         </div>
-        <div className="info-and-options">
+        <div className={infoOptionsClass}>
           {showInfoBox &&
             <InfoBox
               aminoAcids={aminoAcids}

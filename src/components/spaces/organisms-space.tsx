@@ -10,6 +10,8 @@ import { OrganismsContainer } from "./organisms/organisms-container";
 import ProteinViewer from "./proteins/protein-viewer";
 import { RightPanelType } from "../../models/ui";
 import { kOrganelleInfo } from "../../models/spaces/organisms/organisms-space";
+import { extractCodons } from "./proteins/util/dna-utils";
+import { getAminoAcidsFromCodons } from "./proteins/util/amino-acid-utils";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -69,6 +71,23 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
       showProteinAminoAcidsOnProtein, showProteinDNA,
       rightPanel } = row;
 
+    let aminoAcidBoxAlert = false;
+    if (selectedOrganelle && kOrganelleInfo[selectedOrganelle].protein) {
+      const otherRow = organisms.rows[rowIndex ? 0 : 1];
+      if (otherRow.selectedOrganelle && kOrganelleInfo[otherRow.selectedOrganelle].protein) {
+        const protein1 = kOrganelleInfo[selectedOrganelle].protein;
+        const protein2 = kOrganelleInfo[otherRow.selectedOrganelle].protein;
+
+        const codons1 = extractCodons(protein1!.dna);
+        const codons2 = extractCodons(protein2!.dna);
+        const aminoAcids1 = getAminoAcidsFromCodons(codons1);
+        const aminoAcids2 = getAminoAcidsFromCodons(codons2);
+        if (aminoAcids1[proteinSliderSelectedAminoAcidIndex] !== aminoAcids2[proteinSliderSelectedAminoAcidIndex]) {
+          aminoAcidBoxAlert = true;
+        }
+      }
+    }
+
     const rightPanelContent = (() => {
       switch (rightPanel) {
         case "instructions":
@@ -96,6 +115,7 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
               setSelectStartPercent={this.handleSetSelectStartPercent}
               setSelectedAminoAcidIndex={this.handleUpdateSelectedAminoAcidIndex}
               toggleShowInfoBox={this.toggleShowInfoBox}
+              infoBoxAlert={aminoAcidBoxAlert}
             />;
           } else {
             return (
