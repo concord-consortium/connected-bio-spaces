@@ -275,14 +275,32 @@ export function createInteractive(model: MousePopulationsModelType) {
       }
     }
 
+    // Insurance: Ensure there are always at least two rabbits of the correct color.
+    // We need to catch it before there are zero. Once there are zero, we can't create any out
+    // of thin air. (E.g. user eliminated one population then changed environment)
+    if (environmentColor === "white" && numWhite > 1 && numWhite < 3) {
+      for (let i = 0; i < 2; i++) {
+        addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:C,b:C")]);
+      }
+    } else if (environmentColor === "neutral" && numTan > 1 && numTan < 3) {
+      for (let i = 0; i < 2; i++) {
+        addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:C,b:R")]);
+      }
+    } else if (environmentColor === "brown" && numBrown > 1 && numBrown < 3) {
+      for (let i = 0; i < 2; i++) {
+        addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:R,b:R")]);
+      }
+    }
+
     // Reproduction rates go to zero when the population reaches a 'carrying capacity' of 50
     setProperty(allMice, "mating chance", -.005 * numMice + .25);
 
-    if (this.addedMice && addedHawks) {
+    // If there is only one color left, and it is the "wrong" color, reduce carrying capacity
+    if (addedHawks && (numBrown === numMice || numWhite === numMice)) {
       allMice.forEach((mouse) => {
         if (mouse.get("color") !== environmentColor) {
           // Reduce the carrying capacity to 10 if mice are vulnerable to a predator
-          mouse.set("mating chance", -.025 * this.numMice + .25);
+          mouse.set("mating chance", -.025 * numMice + .25);
         }
       });
     }
