@@ -103,6 +103,10 @@ const lineData = (chartData: ChartDataModelType) => {
       dset.minRotation = d.fixedLabelRotation;
       dset.maxRotation = d.fixedLabelRotation;
     }
+    // optimize rendering
+    if (d.visibleDataPoints.length >= 80) {
+      dset.lineTension = 0;
+    }
     lineDatasets.push(dset);
   }
 
