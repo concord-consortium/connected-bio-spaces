@@ -154,7 +154,8 @@ export const OrganismsSpaceModel = types
   .volatile(self => ({
     proteinSliderStartPercent: 0,
     proteinSliderSelectedAminoAcidIndex: 0,
-    proteinSliderSelectedAminoAcidXLocation: 0
+    proteinSliderSelectedAminoAcidXLocation: 0,
+    showProteinInfoBox: false
   }))
   .views(self => {
     return {
@@ -211,6 +212,9 @@ export const OrganismsSpaceModel = types
         self.proteinSliderSelectedAminoAcidIndex = selectedAminoAcidIndex;
         self.proteinSliderSelectedAminoAcidXLocation = selectedAminoAcidXLocation;
       },
+      toggleShowInfoBox() {
+        self.showProteinInfoBox = !self.showProteinInfoBox;
+      }
     };
   });
 

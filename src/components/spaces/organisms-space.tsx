@@ -55,10 +55,15 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
     organisms.setProteinSliderSelectedAminoAcidIndex(selectedAminoAcidIndex, selectedAminoAcidXLocation);
   }
 
+  private toggleShowInfoBox = () => {
+    const { organisms } = this.stores;
+    organisms.toggleShowInfoBox();
+  }
+
   private getOrganismsRow(rowIndex: number) {
     const { organisms } = this.stores;
     const { proteinSliderStartPercent, proteinSliderSelectedAminoAcidIndex,
-      proteinSliderSelectedAminoAcidXLocation } = organisms;
+      proteinSliderSelectedAminoAcidXLocation, showProteinInfoBox } = organisms;
     const row = organisms.rows[rowIndex];
     const { currentData, selectedOrganelle,
       showProteinAminoAcidsOnProtein, showProteinDNA,
@@ -82,6 +87,7 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
               selectionStartPercent={proteinSliderStartPercent}
               selectedAminoAcidIndex={proteinSliderSelectedAminoAcidIndex}
               selectedAminoAcidXLocation={proteinSliderSelectedAminoAcidXLocation}
+              showInfoBox={showProteinInfoBox}
               showAminoAcidsOnProtein={showProteinAminoAcidsOnProtein}
               showDNA={showProteinDNA}
               dnaSwitchable={true}
@@ -89,6 +95,7 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
               toggleShowingAminoAcidsOnProtein={this.toggleShowingAminoAcidsOnViewer(rowIndex)}
               setSelectStartPercent={this.handleSetSelectStartPercent}
               setSelectedAminoAcidIndex={this.handleUpdateSelectedAminoAcidIndex}
+              toggleShowInfoBox={this.toggleShowInfoBox}
             />;
           } else {
             return (
