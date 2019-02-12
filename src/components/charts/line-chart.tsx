@@ -107,6 +107,9 @@ const lineData = (chartData: ChartDataModelType) => {
     if (d.visibleDataPoints.length >= 80) {
       dset.lineTension = 0;
     }
+
+    dset.dataPoints = d.visibleDataPoints;
+
     lineDatasets.push(dset);
   }
 
