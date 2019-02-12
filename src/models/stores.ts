@@ -6,6 +6,8 @@ import { OrganismsSpaceModelType, createOrganismsModel } from "./spaces/organism
 import { BackpackMouseType } from "./backpack-mouse";
 import { ConnectedBioAuthoring } from "../authoring";
 import { QueryParams } from "../utilities/url-params";
+import { OrganismsMouseModelType } from "./spaces/organisms/organisms-mouse";
+import { OrganismsRowModelType } from "./spaces/organisms/organisms-row";
 
 export type Curriculum = "mouse";
 
@@ -45,10 +47,14 @@ export interface UserSaveDataType {
   backpack?: {
     collectedMice: BackpackMouseType[];
   };
-  organisms?: OrganismsSpaceModelType;
+  organisms?: {
+    organismsMice: OrganismsMouseModelType[],
+    rows: OrganismsRowModelType[]
+  };
 }
 
 export function getUserSnapshot(stores: IStores): UserSaveDataType {
+  const {organismsMice, rows} = stores.organisms;
   return {
     version: STUDENT_DATA_VERSION,
     ui: {
@@ -57,6 +63,9 @@ export function getUserSnapshot(stores: IStores): UserSaveDataType {
     backpack: {
       collectedMice: stores.backpack.collectedMice
     },
-    organisms: stores.organisms
+    organisms: {
+      organismsMice,
+      rows
+    }
   };
 }
