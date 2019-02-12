@@ -151,6 +151,11 @@ export const OrganismsSpaceModel = types
     useMysterySubstances: false,
     instructions: ""
   })
+  .volatile(self => ({
+    proteinSliderStartPercent: 0,
+    proteinSliderSelectedAminoAcidIndex: 0,
+    proteinSliderSelectedAminoAcidXLocation: 0
+  }))
   .views(self => {
     return {
       getOrganelleLabel(organelle: OrganelleType) {
@@ -196,15 +201,16 @@ export const OrganismsSpaceModel = types
           rightPanel = self.rows[rowIndex].rightPanel;
         }
 
-        // sync initial slider position
-        let proteinSliderStartPercent = 0;
-        const otherRow = -(rowIndex - 1);
-        if (self.rows[otherRow] && self.rows[otherRow].proteinSliderStartPercent) {
-          proteinSliderStartPercent = self.rows[otherRow].proteinSliderStartPercent;
-        }
+        self.rows[rowIndex] = OrganismsRowModel.create({ organismsMouse, rightPanel });
+      },
 
-        self.rows[rowIndex] = OrganismsRowModel.create({ organismsMouse, proteinSliderStartPercent, rightPanel });
-      }
+      setProteinSliderStartPercent(val: number) {
+        self.proteinSliderStartPercent = val;
+      },
+      setProteinSliderSelectedAminoAcidIndex: (selectedAminoAcidIndex: number, selectedAminoAcidXLocation: number) => {
+        self.proteinSliderSelectedAminoAcidIndex = selectedAminoAcidIndex;
+        self.proteinSliderSelectedAminoAcidXLocation = selectedAminoAcidXLocation;
+      },
     };
   });
 

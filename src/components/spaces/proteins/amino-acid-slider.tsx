@@ -103,6 +103,10 @@ export default class AminoAcidSlider extends Component<AminoAcidSliderProps, Ami
       document.removeEventListener("mousemove", this.onMouseMove);
       document.removeEventListener("mouseup", this.onMouseUp);
     }
+    if (this.currentlySelectedAminoAcidIndex !== this.props.selectedAminoAcidIndex) {
+      this.props.updateSelectedAminoAcidIndex(this.currentlySelectedAminoAcidIndex,
+        this.getXLocationOfAminoAcid(this.currentlySelectedAminoAcidIndex));
+    }
   }
 
   /** distance between amino acids */
@@ -318,11 +322,6 @@ export default class AminoAcidSlider extends Component<AminoAcidSliderProps, Ami
     const maxSelectionStartPercent = 1 - this.aminoAcidSelectionWidthPercent;
 
     this.props.updateSelectionStart(Math.max(0, Math.min(newStartPercent, maxSelectionStartPercent)));
-
-    if (this.currentlySelectedAminoAcidIndex !== this.props.selectedAminoAcidIndex) {
-      this.props.updateSelectedAminoAcidIndex(this.currentlySelectedAminoAcidIndex,
-        this.getXLocationOfAminoAcid(this.currentlySelectedAminoAcidIndex));
-    }
 
     evt.stopPropagation();
     evt.preventDefault();

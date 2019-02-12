@@ -47,15 +47,21 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
   private handleSetSelectStartPercent = (percent: number) => {
     const { organisms } = this.stores;
     // set on both simultaneously
-    organisms.rows[0].setProteinSliderStartPercent(percent);
-    organisms.rows[1].setProteinSliderStartPercent(percent);
+    organisms.setProteinSliderStartPercent(percent);
+  }
+
+  private handleUpdateSelectedAminoAcidIndex = (selectedAminoAcidIndex: number, selectedAminoAcidXLocation: number) => {
+    const { organisms } = this.stores;
+    organisms.setProteinSliderSelectedAminoAcidIndex(selectedAminoAcidIndex, selectedAminoAcidXLocation);
   }
 
   private getOrganismsRow(rowIndex: number) {
     const { organisms } = this.stores;
+    const { proteinSliderStartPercent, proteinSliderSelectedAminoAcidIndex,
+      proteinSliderSelectedAminoAcidXLocation } = organisms;
     const row = organisms.rows[rowIndex];
     const { currentData, selectedOrganelle,
-      showProteinAminoAcidsOnProtein, showProteinDNA, proteinSliderStartPercent,
+      showProteinAminoAcidsOnProtein, showProteinDNA,
       rightPanel } = row;
 
     const rightPanelContent = (() => {
@@ -74,12 +80,15 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
             return <ProteinViewer
               protein={kOrganelleInfo[selectedOrganelle].protein}
               selectionStartPercent={proteinSliderStartPercent}
+              selectedAminoAcidIndex={proteinSliderSelectedAminoAcidIndex}
+              selectedAminoAcidXLocation={proteinSliderSelectedAminoAcidXLocation}
               showAminoAcidsOnProtein={showProteinAminoAcidsOnProtein}
               showDNA={showProteinDNA}
               dnaSwitchable={true}
               toggleShowDNA={this.toggleShowDNA(rowIndex)}
               toggleShowingAminoAcidsOnProtein={this.toggleShowingAminoAcidsOnViewer(rowIndex)}
               setSelectStartPercent={this.handleSetSelectStartPercent}
+              setSelectedAminoAcidIndex={this.handleUpdateSelectedAminoAcidIndex}
             />;
           } else {
             return (

@@ -22,7 +22,6 @@ export const OrganismsRowModel = types
     zoomLevel: types.optional(ZoomLevel, "organism"),
     showProteinDNA: false,
     showProteinAminoAcidsOnProtein: false,
-    proteinSliderStartPercent: 0,
     rightPanel: types.optional(RightPanelTypeEnum, "instructions"),
     selectedSubstance: types.optional(Substance, "hormone")
   })
@@ -104,9 +103,6 @@ export const OrganismsRowModel = types
       },
       setShowProteinAminoAcidsOnProtein(val: boolean) {
         self.showProteinAminoAcidsOnProtein = val;
-      },
-      setProteinSliderStartPercent(val: number) {
-        self.proteinSliderStartPercent = val;
       },
       setRightPanel(val: RightPanelType) {
         self.rightPanel = val;

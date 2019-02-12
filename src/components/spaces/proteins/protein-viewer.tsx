@@ -19,6 +19,8 @@ interface IProps extends IBaseProps {
   protein: ProteinSpec;
   secondProtein?: ProteinSpec;
   selectionStartPercent?: number;
+  selectedAminoAcidIndex: number;
+  selectedAminoAcidXLocation: number;
   aminoAcidWidth?: number;            // Width of one amino acid in the slider elements, in pixels
   codonWidth?: number;                // Width of one codon in the slider elements, in pixels
   showDNA?: boolean;
@@ -27,11 +29,14 @@ interface IProps extends IBaseProps {
   toggleShowDNA: () => void;
   toggleShowingAminoAcidsOnProtein: () => void;
   setSelectStartPercent: (percent: number) => void;
+  setSelectedAminoAcidIndex: (selectedAminoAcidIndex: number, selectedAminoAcidXLocation: number) => void;
   size: {width: number};              // From SizeMe
 }
 
 interface DefaultProps {
   selectionStartPercent: number;
+  selectedAminoAcidIndex: number;
+  selectedAminoAcidXLocation: number;
   aminoAcidWidth: number;
   codonWidth: number;
   showDNA: boolean;
@@ -44,8 +49,6 @@ type PropsWithDefaults = IProps & DefaultProps;
 interface IState {
   animating: boolean;
   selectionStartPercentTarget: number;
-  selectedAminoAcidIndex: number;
-  selectedAminoAcidXLocation: number;
   showingInfoBox: boolean;
   marks: number[];
 }
@@ -56,6 +59,8 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
 
   public static defaultProps: DefaultProps = {
     selectionStartPercent: 0,
+    selectedAminoAcidIndex: 0,
+    selectedAminoAcidXLocation: 0,
     aminoAcidWidth: 14,
     codonWidth: 29,
     showDNA: false,
@@ -69,8 +74,6 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
     this.state = {
       animating: false,
       selectionStartPercentTarget: 0,
-      selectedAminoAcidIndex: 0,
-      selectedAminoAcidXLocation: 0,
       showingInfoBox: false,
       marks: []
     };
@@ -80,7 +83,7 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
     const {
       protein, aminoAcidWidth,
       secondProtein, showDNA, showAminoAcidsOnProtein, dnaSwitchable,
-      selectionStartPercent
+      selectionStartPercent, selectedAminoAcidIndex, selectedAminoAcidXLocation
     } = this.props as PropsWithDefaults;
 
     const { width } = this.props.size;
@@ -145,7 +148,7 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
               selectionWidth={selectionWidth}
               selectionStartPercent={selectionStartPercent}
               updateSelectionStart={this.handleUpdateSelectionStart}
-              selectedAminoAcidIndex={this.state.selectedAminoAcidIndex}
+              selectedAminoAcidIndex={selectedAminoAcidIndex}
               updateSelectedAminoAcidIndex={this.handleUpdateSelectedAminoAcidIndex}
               onClick={this.handleAminoAcidSliderClick}
               marks={this.state.marks}
@@ -162,7 +165,7 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
                 selectionWidth={selectionWidth}
                 selectionStartPercent={selectionStartPercent}
                 updateSelectionStart={this.handleUpdateSelectionStart}
-                selectedAminoAcidIndex={this.state.selectedAminoAcidIndex}
+                selectedAminoAcidIndex={selectedAminoAcidIndex}
                 updateSelectedAminoAcidIndex={this.handleUpdateSelectedAminoAcidIndex}
                 onClick={this.handleAminoAcidSliderClick}
                 marks={this.state.marks}
@@ -178,8 +181,8 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
             <InfoBox
               aminoAcids={aminoAcids}
               secondAminoAcids={aminoAcids2}
-              selection={this.state.selectedAminoAcidIndex}
-              selectedAminoAcidXLocation={this.state.selectedAminoAcidXLocation}
+              selection={selectedAminoAcidIndex}
+              selectedAminoAcidXLocation={selectedAminoAcidXLocation}
               marks={this.state.marks}
               onMarkLocation={this.handleMark}
               width={width - 26}
@@ -243,13 +246,10 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
 
   private handleUpdateSelectedAminoAcidIndex = (selectedAminoAcidIndex: number,
                                                 selectedAminoAcidXLocation: number, showInfo?: boolean) => {
-    this.setState({
-      selectedAminoAcidIndex,
-      selectedAminoAcidXLocation
-    });
+    this.props.setSelectedAminoAcidIndex(selectedAminoAcidIndex, selectedAminoAcidXLocation);
 
     if (showInfo) {
-      if (!this.state.showingInfoBox || selectedAminoAcidIndex !== this.state.selectedAminoAcidIndex) {
+      if (!this.state.showingInfoBox || selectedAminoAcidIndex !== this.props.selectedAminoAcidIndex) {
         this.setState({
           showingInfoBox: true
         });
