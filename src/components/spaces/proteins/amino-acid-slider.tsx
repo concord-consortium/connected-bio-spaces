@@ -29,8 +29,10 @@ interface AminoAcidSliderProps {
   dnaFontHeight?: number;
   dimUnselected: boolean;
   updateSelectionStart: (selectionStart: number) => void;
+  animateToSelectionStart: (selectionStart: number) => void;
+  onAminoAcidClick: (isSelected: boolean) => void;
   updateSelectedAminoAcidIndex: (selectedAminoAcidIndex: number,
-                                 selectedAminoAcidXLocation: number, showInfo?: boolean) => void;
+                                 selectedAminoAcidXLocation: number) => void;
   onClick: () => void;
 }
 
@@ -304,6 +306,22 @@ export default class AminoAcidSlider extends Component<AminoAcidSliderProps, Ami
     lastMouseDownTime = Date.now();
   }
 
+  /**
+   * returns an appropriate selection start for a given selected amino acid.
+   * Inverse of get currentlySelectedAminoAcidIndex.
+   */
+  private getSelectionStartPercentForAminoAcid(index: number) {
+    const { aminoAcids } = this.props as PropsWithDefaults;
+    const numAAinSelectionBox = aminoAcids.length * this.aminoAcidSelectionWidthPercent;
+    // Calculate position along selection box where AA is selected.
+    // From 0-10% of travel, we go from the left edge to the center of the box. From 10-90% we stay at the center. From
+    // 90-100% we move to the far right edge.
+    const selectionPercentAlongBox = this.travelPercent < 0.1
+      ? this.travelPercent * 5
+      : this.travelPercent > 0.9 ? 0.5 + ((this.travelPercent - 0.9) * 5) : 0.5;
+    return (index - (numAAinSelectionBox * selectionPercentAlongBox)) / (aminoAcids.length - 1);
+  }
+
   private onMouseUp = (evt: MouseEvent) => {
     this.setState({dragging: false});
     evt.stopPropagation();
@@ -340,7 +358,8 @@ export default class AminoAcidSlider extends Component<AminoAcidSliderProps, Ami
 
   private onAminoAcidSelection = (index: number) => {
     return (evt: React.MouseEvent<SVGGElement>) => {
-      this.props.updateSelectedAminoAcidIndex(index, this.getXLocationOfAminoAcid(index), true);
+      this.props.onAminoAcidClick(index === this.currentlySelectedAminoAcidIndex);
+      this.props.animateToSelectionStart(this.getSelectionStartPercentForAminoAcid(index));
       evt.stopPropagation();
       evt.preventDefault();
     };

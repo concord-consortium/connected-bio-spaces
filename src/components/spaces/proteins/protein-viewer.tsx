@@ -151,7 +151,9 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
               selectionWidth={selectionWidth}
               selectionStartPercent={selectionStartPercent}
               updateSelectionStart={this.handleUpdateSelectionStart}
+              animateToSelectionStart={this.handleAnimateToSelectionStart}
               selectedAminoAcidIndex={selectedAminoAcidIndex}
+              onAminoAcidClick={this.handleAminoAcidClick}
               updateSelectedAminoAcidIndex={this.handleUpdateSelectedAminoAcidIndex}
               onClick={this.handleAminoAcidSliderClick}
               marks={this.state.marks}
@@ -168,7 +170,9 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
                 selectionWidth={selectionWidth}
                 selectionStartPercent={selectionStartPercent}
                 updateSelectionStart={this.handleUpdateSelectionStart}
+                animateToSelectionStart={this.handleAnimateToSelectionStart}
                 selectedAminoAcidIndex={selectedAminoAcidIndex}
+                onAminoAcidClick={this.handleAminoAcidClick}
                 updateSelectedAminoAcidIndex={this.handleUpdateSelectedAminoAcidIndex}
                 onClick={this.handleAminoAcidSliderClick}
                 marks={this.state.marks}
@@ -231,37 +235,44 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
     }, this.animate);
   }
 
-  private animate = () => {
+  private animate = (fast?: boolean) => {
     const { selectionStartPercent } = this.props as PropsWithDefaults;
     const { selectionStartPercentTarget, animating } = this.state;
     if (!animating) return;
+
     let speed;
-    if (selectionStartPercent > selectionStartPercentTarget) {
-      speed = Math.max(-0.02, selectionStartPercentTarget - selectionStartPercent);
-    } else {
-      speed = Math.min(0.02, selectionStartPercentTarget - selectionStartPercent);
-    }
-    this.props.setSelectStartPercent(selectionStartPercent + speed);
-    if (selectionStartPercentTarget - selectionStartPercent !== 0) {
-      window.requestAnimationFrame(this.animate);
-    }
-  }
 
-  private handleUpdateSelectedAminoAcidIndex = (selectedAminoAcidIndex: number,
-                                                selectedAminoAcidXLocation: number, showInfo?: boolean) => {
-    this.props.setSelectedAminoAcidIndex(selectedAminoAcidIndex, selectedAminoAcidXLocation);
-
-    if (showInfo) {
-      if (!this.props.showInfoBox ||
-          (this.props.showInfoBox && selectedAminoAcidIndex === this.props.selectedAminoAcidIndex)) {
-        this.props.toggleShowInfoBox();
+    // if the initial request is far away, keep fast for all frames. Otherwise go slow.
+    if (!fast) {
+      if (Math.abs(selectionStartPercentTarget - selectionStartPercent) > 0.035) {
+        fast = true;
       }
     }
 
+    const maxSpeed = fast ? 0.02 : 0.001;
+    if (selectionStartPercent > selectionStartPercentTarget) {
+      speed = Math.max(-maxSpeed, selectionStartPercentTarget - selectionStartPercent);
+    } else {
+      speed = Math.min(maxSpeed, selectionStartPercentTarget - selectionStartPercent);
+    }
+    this.props.setSelectStartPercent(selectionStartPercent + speed);
+    if (selectionStartPercentTarget - selectionStartPercent !== 0) {
+      window.requestAnimationFrame(() => this.animate(fast));
+    }
+  }
+
+  private handleAminoAcidClick = (isSelected: boolean) => {
+    if (!this.props.showInfoBox || (this.props.showInfoBox && isSelected)) {
+      this.props.toggleShowInfoBox();
+    }
   }
 
   private handleAminoAcidSliderClick = () => {
     this.props.toggleShowInfoBox();
+  }
+
+  private handleUpdateSelectedAminoAcidIndex = (selectedAminoAcidIndex: number, selectedAminoAcidXLocation: number) => {
+    this.props.setSelectedAminoAcidIndex(selectedAminoAcidIndex, selectedAminoAcidXLocation);
   }
 
   private handleMark = (location: number) => {
