@@ -49,7 +49,7 @@ export class LineChartControls extends BaseComponent<IChartControlProps, IChartC
     const { chartData, isPlaying } = this.props;
     const { scrubberPosition, scrubberMin, scrubberMax } = this.state;
     const pos = scrubberPosition ? scrubberPosition : 0;
-    const timelineVisible = chartData.pointCount > chartData.maxPoints;
+    const timelineVisible = chartData.maxPoints > 0 && chartData.pointCount > chartData.maxPoints;
 
     const trackStyle = { backgroundColor: colors.chartColor5, height: 10 };
     const handleStyle = {
