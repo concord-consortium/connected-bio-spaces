@@ -22,7 +22,12 @@
     display: flex
     align-items: center
     justify-content: center
+    width: 30px
     height: 30px
+    font-size: 11px
+    font-family: $font-stack
+    color: $color-simdata-amber-dark2
+    transition-duration: $fade-time
     &:hover:not(.disabled)
       cursor: pointer
     &.disabled
@@ -47,7 +52,6 @@
       flex-grow: 1
 
     .button-holder
-      width: 30px
       &:hover:not(.disabled)
         background-color: $two-up-button-background
       .button
@@ -97,23 +101,17 @@
     border-bottom-right-radius: $component-border-radius
     transition-property: height
     transition-duration: $fade-time
-
     &.populations
       background-color: $color-simdata-amber
     &.data
       height: 45px
-
     &.organism
       background-color: $color-simdata-carrot
 
     .button-holder
       width: 140px
       border-radius: 13px
-      font-size: 11px
-      font-family: $font-stack
-      color: $color-simdata-amber-dark2
       background-color: $color-simdata-amber-light2
-      transition-duration: $fade-time
       &:hover:not(.disabled)
         background-color: $color-simdata-amber-light1
       &:active:not(.disabled)
@@ -123,16 +121,13 @@
   .float-buttons
     .button-holder
       position: absolute
-      top: 111px
-      right: 17px
       width: 114px
       height: 29px
       border-radius: 5px
-      font-size: 11px
-      font-family: $font-stack
-      color: $color-simdata-amber-dark2
       background-color: $color-simdata-amber-light2
-      transition-duration: $fade-time
+      &.upper-right
+        top: 111px
+        right: 17px
       &:hover:not(.disabled)
         background-color: $color-simdata-amber-light1
       &:active:not(.disabled)
