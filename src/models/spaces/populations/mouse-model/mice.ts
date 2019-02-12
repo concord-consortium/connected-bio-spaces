@@ -73,7 +73,8 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
       }
       const change = (Math.random() * 1 - .5) / 10;
       let newDir = this.get("direction") + change;
-      const newAngle = (newDir * (180 / Math.PI) % 360);
+      let newAngle = (newDir * (180 / Math.PI) % 360);
+      newAngle = newAngle < 0 ? 360 + newAngle : newAngle;
       if ((newAngle > 45 && newAngle < 135) || (newAngle > 225 && newAngle < 315)) {
         newDir = this.get("direction") - change;
       }
@@ -90,7 +91,8 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
     public makeNewborn() {
       super.makeNewborn();
       let newDir = this.get("direction");
-      const newAngle = (newDir * (180 / Math.PI) % 360);
+      let newAngle = (newDir * (180 / Math.PI) % 360);
+      newAngle = newAngle < 0 ? 360 + newAngle : newAngle;
       if (newAngle > 45 && newAngle <= 90) {
         newDir = (Math.PI / 4);
       } else if (newAngle < 135 && newAngle > 90) {
