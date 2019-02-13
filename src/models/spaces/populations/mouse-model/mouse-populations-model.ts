@@ -9,15 +9,15 @@ import { ChartAnnotationModel, ChartAnnotationType } from "../../charts/chart-an
 const dataColors = {
   white: {
     mice: "#f4ce83",
-    environment: "rgba(251,235,205, 0.5)"
+    environment: "rgb(251,235,205)"
   },
   neutral: {
     mice: "#db9e26",
-    environment: "rgba(241,216,168, 0.5)"
+    environment: "rgb(241,216,168)"
   },
   brown: {
     mice: "#795423",
-    environment: "rgba(201,187,167, 0.5)"
+    environment: "rgb(201,187,167)"
   }
 };
 
@@ -237,21 +237,19 @@ export const MousePopulationsModel = types
       }
     });
 
-    let lastBoxAnnotation: ChartAnnotationType;
-
     function setupGraph() {
       self.chartData.dataSets.forEach(d => d.clearDataPoints());
       self.chartData.clearAnnotations();
       hawksAdded = false;
-      lastBoxAnnotation = ChartAnnotationModel.create({
-        type: "box",
-        color: dataColors[self.environment].environment,
-        xMin: 0,
-        xMax: Infinity,
-        yMin: 0,
-        yMax: Infinity
-      });
-      self.chartData.addAnnotation(lastBoxAnnotation);
+      self.chartData.addAnnotation(ChartAnnotationModel.create({
+        type: "verticalLine",
+        value: 0,
+        color: "black",
+        label: self.environment,
+        labelOffset: -30,
+        labelColor: "black",
+        labelBackgroundColor: dataColors[self.environment].environment
+      }));
     }
 
     setupGraph();
@@ -279,16 +277,15 @@ export const MousePopulationsModel = types
           self.environment = color;
           if (interactive) {
             const date = interactive.environment.date;
-            lastBoxAnnotation.setBounds({xMax: date});
-            lastBoxAnnotation = ChartAnnotationModel.create({
-              type: "box",
-              color: dataColors[color].environment,
-              xMin: date,
-              xMax: Infinity,
-              yMin: 0,
-              yMax: Infinity
-            });
-            self.chartData.addAnnotation(lastBoxAnnotation);
+            self.chartData.addAnnotation(ChartAnnotationModel.create({
+              type: "verticalLine",
+              value: date,
+              color: "black",
+              label: color,
+              labelOffset: -30,
+              labelColor: "black",
+              labelBackgroundColor: dataColors[color].environment
+            }));
           }
         },
         setBreedWithMutations(value: boolean) {

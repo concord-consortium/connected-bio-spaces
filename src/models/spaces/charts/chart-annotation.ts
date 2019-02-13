@@ -18,6 +18,8 @@ export const ChartAnnotationModel = types
     thickness: types.optional(types.number, 2),
     dashArray: types.array(types.number),
     label: types.maybe(types.string),
+    labelColor: types.optional(types.string, "white"),
+    labelBackgroundColor: types.optional(types.string, "rgba(0,0,0,0.8)"),
     labelOffset: types.optional(types.number, 0),
     xMin: types.maybe(types.number),
     xMax: types.maybe(types.number),
@@ -39,7 +41,9 @@ export const ChartAnnotationModel = types
           value: self.value,
           label: {
             position: "right",
-            yAdjust: self.labelOffset
+            yAdjust: self.labelOffset,
+            fontColor: self.labelColor,
+            backgroundColor: self.labelBackgroundColor
           },
           ...formatted
         };
@@ -51,7 +55,9 @@ export const ChartAnnotationModel = types
           value: self.value,
           label: {
             position: "top",
-            xAdjust: self.labelOffset
+            xAdjust: self.labelOffset,
+            fontColor: self.labelColor,
+            backgroundColor: self.labelBackgroundColor
           },
           ...formatted
         };
