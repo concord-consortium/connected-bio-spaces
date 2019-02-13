@@ -1,8 +1,10 @@
 import { types, Instance } from "mobx-state-tree";
 import { createInteractive, HawksMiceInteractive } from "./hawks-mice-interactive";
-import { Interactive, Events, Environment } from "populations.js";
+import { Interactive, Events, Environment, Agent } from "populations.js";
 import { ToolbarButton } from "../populations";
 import { ChartDataModel } from "../../charts/chart-data";
+import { hawkSpecies } from "./hawks";
+import { ChartAnnotationModel } from "../../charts/chart-annotation";
 
 const chartNames = {
   color: "Fur Color vs Time",
@@ -204,8 +206,26 @@ export const MousePopulationsModel = types
       }
     });
 
+    let hawksAdded = false;
+    Events.addEventListener(Environment.EVENTS.AGENT_ADDED, (evt: any) => {
+      if (interactive) {
+        if (!hawksAdded && evt.detail && evt.detail.agent.species.speciesName === "hawks") {
+          self.chartData.addAnnotation(ChartAnnotationModel.create({
+            type: "verticalLine",
+            value: interactive.environment.date,
+            dashArray: [10, 3],
+            label: "Hawks added",
+            labelOffset: -50
+          }));
+          hawksAdded = true;
+        }
+      }
+    });
+
     function clearGraph() {
       self.chartData.dataSets.forEach(d => d.clearDataPoints());
+      self.chartData.clearAnnotations();
+      hawksAdded = false;
     }
 
     return {
