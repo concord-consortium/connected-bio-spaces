@@ -4,6 +4,7 @@ import { observer } from "mobx-react";
 import { merge } from "lodash";
 import { ChartDataModelType } from "../../models/spaces/charts/chart-data";
 import { ChartOptions } from "chart.js";
+import "chartjs-plugin-annotation";
 import { ChartColors } from "../../models/spaces/charts/chart-data-set";
 import { hexToRGBValue } from "../../utilities/color-utils";
 import { LineChartControls } from "./line-chart-controls";
@@ -19,6 +20,12 @@ interface ILineProps {
 interface ILineState { }
 
 const defaultOptions: ChartOptions = {
+  plugins: {
+    annotation: {
+      drawTime: "beforeDatasetsDraw",
+      annotations: []
+    }
+  },
   animation: {
     duration: 0
   },
@@ -35,6 +42,7 @@ const defaultOptions: ChartOptions = {
   scales: {
     display: false,
     yAxes: [{
+      id: "y-axis-0",
       ticks: {
         min: 0,
         max: 100
@@ -45,6 +53,7 @@ const defaultOptions: ChartOptions = {
       }
     }],
     xAxes: [{
+      id: "x-axis-0",
       display: true,
       ticks: {
         min: 0,
@@ -159,7 +168,12 @@ export class LineChart extends BaseComponent<ILineProps, ILineState> {
             labelString: chartData.axisLabelA1
           }
         }]
-      }
+      },
+      plugins: {
+        annotation: {
+          annotations: chartData.formattedAnnotations
+        }
+      },
     });
     const w = width ? width : 400;
     const h = height ? height : 400;
