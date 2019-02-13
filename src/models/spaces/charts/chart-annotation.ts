@@ -27,7 +27,6 @@ export const ChartAnnotationModel = types
   .views(self => ({
     get formatted() {
       let formatted: any = {
-        value: self.value,
         borderColor: self.color,
         borderWidth: self.thickness
       };
@@ -37,6 +36,7 @@ export const ChartAnnotationModel = types
           type: "line",
           mode: "horizontal",
           scaleID: "y-axis-0",
+          value: self.value,
           label: {
             position: "right",
             yAdjust: self.labelOffset
@@ -48,10 +48,21 @@ export const ChartAnnotationModel = types
           type: "line",
           mode: "vertical",
           scaleID: "x-axis-0",
+          value: self.value,
           label: {
             position: "top",
             xAdjust: self.labelOffset
           },
+          ...formatted
+        };
+      } else if (self.type === "box") {
+        const { xMin, xMax, yMin, yMax } = self;
+        formatted = {
+          type: "box",
+          xScaleID: "x-axis-0",
+          yScaleID: "y-axis-0",
+          backgroundColor: self.color,
+          xMin, xMax, yMin, yMax,
           ...formatted
         };
       }

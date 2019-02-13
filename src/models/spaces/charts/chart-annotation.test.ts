@@ -56,6 +56,30 @@ describe("chart annotations", () => {
     });
   });
 
+  it("can create a box annotation", () => {
+    annotation = ChartAnnotationModel.create({
+      type: "box",
+      xMin: 25,
+      xMax: 40,
+      yMax: 20,
+      yMin:  15,
+      color: "red"
+    });
+
+    expect(annotation.formatted).toEqual({
+      type: "box",
+      xScaleID: "x-axis-0",
+      yScaleID: "y-axis-0",
+      xMin: 25,
+      xMax: 40,
+      yMax: 20,
+      yMin:  15,
+      borderColor: "red",
+      borderWidth: 2,
+      backgroundColor: "red",
+    });
+  });
+
   it("can create a chart with annotations", () => {
     chart = ChartDataModel.create({
       name: "Samples",
