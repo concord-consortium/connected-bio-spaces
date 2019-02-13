@@ -122,14 +122,20 @@ export const ChartDataSetModel = types
       if (self.fixedMaxA1 !== undefined && self.dataPoints.length <= self.fixedMaxA1) {
         return self.fixedMaxA1;
       } else if (!self.visibleDataPoints || self.visibleDataPoints.length === 0) {
-        if (self.maxPoints) {
+        if (self.initialMaxA1){
+          return self.initialMaxA1;
+        } else if (self.maxPoints) {
           return self.maxPoints;
         } else {
           return defaultMax;
         }
       } else if (self.visibleDataPoints && self.visibleDataPoints.length > 0 &&
         self.maxPoints && self.visibleDataPoints.length < self.maxPoints) {
-        return self.maxPoints;
+          if (self.initialMaxA1){
+            return self.initialMaxA1;
+          } else {
+            return self.maxPoints;
+          }
       } else {
         return Math.max(...self.visibleDataPoints.map(p => p.a1));
       }
