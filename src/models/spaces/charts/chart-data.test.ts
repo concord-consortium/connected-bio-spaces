@@ -15,7 +15,10 @@ describe("chart data model", () => {
       name: "Sample Dataset1",
       dataPoints: points,
       color: "#ff0000",
-      maxPoints: 100
+      maxPoints: 100,
+      downsample: true,
+      downsampleMaxLength: 120,
+      downsampleGrowWindow: 40
     }));
 
     chart = ChartDataModel.create({
@@ -122,8 +125,6 @@ describe("chart data model", () => {
     expect(chart.dataSets[0].maxA1).toEqual(75);
   });
 
-  // assumes MAX_TOTAL_POINTS = 120, GROW_WINDOW = 40. If these change, we
-  // should add a setter.
   it.only("can downsample its visible data", () => {
     chart.dataSets[0].setMaxDataPoints(-1);
 

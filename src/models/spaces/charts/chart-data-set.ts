@@ -86,7 +86,16 @@ export const ChartDataSetModel = types
     dataStartIdx: types.maybe(types.number),
     stack: types.maybe(types.string),
     axisLabelA1: types.maybe(types.string),
-    axisLabelA2: types.maybe(types.string)
+    axisLabelA2: types.maybe(types.string),
+    // Sets whether we start downsampling the data after a certain number of points, for performant live data
+    downsample: true,
+    // The maximum points the visible data will ever contain, if we downsample
+    downsampleMaxLength: 120,
+    // For live data, we may not want to downsample the data every step, or we'll see the past data points constantly
+    // changing. Rather, we downsample all the data up to a certain point, then add growWindow more points as-is,
+    // and then resample the entire set and start again.
+    // In order to always downsample the entire dataset (e.g. for static data), set downsampleGrowWindow: 1.
+    downsampleGrowWindow: 40
   })
   .views(self => ({
     get visibleDataPoints() {
@@ -107,11 +116,12 @@ export const ChartDataSetModel = types
       // We could just always downsample to MAX_TOTAL_POINTS, but that results in the points changing every
       // tick, which is visually annoying, so instead we downsample up to MAX_TOTAL_POINTS - GROW_WINDOW, and
       // then add on the remainder as-is, and then downsample again when we grow past our window
-      if (points.length > (MAX_TOTAL_POINTS - GROW_WINDOW)) {
-        const grow = points.length % GROW_WINDOW;
-        const dataToSample = self.dataPoints.slice(0, points.length - grow);
-        const sampledData = downsample(dataToSample, (MAX_TOTAL_POINTS - GROW_WINDOW));
-        points = grow ? sampledData.concat(points.slice(-grow)) : sampledData;
+      const {downsampleMaxLength: max, downsampleGrowWindow: growWindow} = self;
+      if (self.downsample && points.length > (max - growWindow)) {
+        const tailLength = points.length % growWindow;
+        const dataToSample = self.dataPoints.slice(0, points.length - tailLength);
+        const sampledData = downsample(dataToSample, (max - growWindow));
+        points = tailLength ? sampledData.concat(points.slice(-tailLength)) : sampledData;
       }
       return points;
     }
