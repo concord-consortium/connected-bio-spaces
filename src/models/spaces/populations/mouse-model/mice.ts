@@ -104,7 +104,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
       }
       this.set("direction", newDir);
 
-      this.set("age", Math.round(Math.random() * 10));
+      this.set("age", 1);
 
       if (this.organism) {
         if (model["inheritance.breedWithInheritance"]) {
@@ -193,6 +193,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
     agentClass: Mouse,
     geneticSpecies: MouseGeneticSpec,
     defs: {
+      MAX_AGE: 3000,
       MAX_HEALTH: 1,
       MATURITY_AGE: 9,
       CHANCE_OF_MUTATION: 0,

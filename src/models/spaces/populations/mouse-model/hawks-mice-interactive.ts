@@ -134,6 +134,9 @@ export function createInteractive(model: MousePopulationsModelType) {
     for (const prop of properties) {
       agent.set(prop[0], prop[1]);
     }
+
+    agent.set("age", Math.round(Math.random() * 10));
+
     env.addAgent(agent);
   }
 
