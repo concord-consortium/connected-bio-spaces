@@ -4,7 +4,22 @@ import { Interactive, Events, Environment, Agent } from "populations.js";
 import { ToolbarButton } from "../populations";
 import { ChartDataModel } from "../../charts/chart-data";
 import { hawkSpecies } from "./hawks";
-import { ChartAnnotationModel } from "../../charts/chart-annotation";
+import { ChartAnnotationModel, ChartAnnotationType } from "../../charts/chart-annotation";
+
+const dataColors = {
+  white: {
+    mice: "#f4ce83",
+    environment: "rgba(251,235,205, 0.5)"
+  },
+  neutral: {
+    mice: "#db9e26",
+    environment: "rgba(241,216,168, 0.5)"
+  },
+  brown: {
+    mice: "#795423",
+    environment: "rgba(201,187,167, 0.5)"
+  }
+};
 
 const chartNames = {
   color: "Fur Color vs Time",
@@ -18,7 +33,7 @@ const chartData = {
     {
       name: "White mice",
       dataPoints: [],
-      color: "#f4ce83",
+      color: dataColors.white.mice,
       maxPoints: 20,
       initialMaxA1: 100,
       fixedMinA2: 0,
@@ -31,7 +46,7 @@ const chartData = {
     {
       name: "Tan mice",
       dataPoints: [],
-      color: "#db9e26",
+      color: dataColors.neutral.mice,
       maxPoints: 20,
       initialMaxA1: 100,
       fixedMinA2: 0,
@@ -44,7 +59,7 @@ const chartData = {
     {
       name: "Brown mice",
       dataPoints: [],
-      color: "#795423",
+      color: dataColors.brown.mice,
       maxPoints: 20,
       initialMaxA1: 100,
       fixedMinA2: 0,
@@ -222,11 +237,24 @@ export const MousePopulationsModel = types
       }
     });
 
-    function clearGraph() {
+    let lastBoxAnnotation: ChartAnnotationType;
+
+    function setupGraph() {
       self.chartData.dataSets.forEach(d => d.clearDataPoints());
       self.chartData.clearAnnotations();
       hawksAdded = false;
+      lastBoxAnnotation = ChartAnnotationModel.create({
+        type: "box",
+        color: dataColors[self.environment].environment,
+        xMin: 0,
+        xMax: Infinity,
+        yMin: 0,
+        yMax: Infinity
+      });
+      self.chartData.addAnnotation(lastBoxAnnotation);
     }
+
+    setupGraph();
 
     return {
       views: {
@@ -249,6 +277,19 @@ export const MousePopulationsModel = types
       actions: {
         setEnvironmentColor(color: EnvironmentColorType) {
           self.environment = color;
+          if (interactive) {
+            const date = interactive.environment.date;
+            lastBoxAnnotation.setBounds({xMax: date});
+            lastBoxAnnotation = ChartAnnotationModel.create({
+              type: "box",
+              color: dataColors[color].environment,
+              xMin: date,
+              xMax: Infinity,
+              yMin: 0,
+              yMax: Infinity
+            });
+            self.chartData.addAnnotation(lastBoxAnnotation);
+          }
         },
         setBreedWithMutations(value: boolean) {
           self["inheritance.breedWithMutations"] = value;
@@ -260,7 +301,7 @@ export const MousePopulationsModel = types
           if (interactive) {
             interactive.reset();
           }
-          clearGraph();
+          setupGraph();
         },
         toggleShowMaxPoints() {
           self.showMaxPoints = !self.showMaxPoints;
@@ -295,7 +336,7 @@ export const MousePopulationsModel = types
         },
         destroyInteractive() {
           interactive = undefined;
-          clearGraph();
+          setupGraph();
         }
       }
     };
