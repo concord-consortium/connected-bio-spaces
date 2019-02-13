@@ -78,6 +78,18 @@ export const ChartAnnotationModel = types
 
       return formatted;
     }
+  }))
+  .actions(self => ({
+    setValue: (value: number) => {
+      self.value = value;
+    },
+
+    setBounds: (bounds: {xMin?: number, xMax?: number, yMin?: number, yMax?: number}) => {
+      if (bounds.xMin) self.xMin = bounds.xMin;
+      if (bounds.xMax) self.xMax = bounds.xMax;
+      if (bounds.yMin) self.yMin = bounds.yMin;
+      if (bounds.yMax) self.yMax = bounds.yMax;
+    }
   }));
 
 export type ChartAnnotationType = Instance<typeof ChartAnnotationModel>;
