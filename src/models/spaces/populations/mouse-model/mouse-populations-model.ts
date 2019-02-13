@@ -211,6 +211,15 @@ export const MousePopulationsModel = types
       });
     }
 
+    Events.addEventListener(Environment.EVENTS.START, () => {
+      if (interactive) {
+        const date = interactive.environment.date;
+        if (date === 0) {
+          addData(date, interactive.getData());
+        }
+      }
+    });
+
     Events.addEventListener(Environment.EVENTS.STEP, () => {
       if (interactive) {
         const date = interactive.environment.date;

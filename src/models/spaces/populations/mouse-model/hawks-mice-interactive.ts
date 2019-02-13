@@ -112,10 +112,13 @@ export function createInteractive(model: MousePopulationsModelType) {
       const tanCap = whiteCap + Math.round((num / 100) * model["initialPopulation.tan"]);
       if (i < whiteCap) {
         colorTrait = createColorTraitByPhenotype("white");
+        numWhite++;
       } else if (i < tanCap) {
         colorTrait = createColorTraitByPhenotype("tan");
+        numTan++;
       } else {
         colorTrait = createColorTraitByPhenotype("brown");
+        numBrown++;
       }
 
       addAgent(mouseSpecies, [], [
