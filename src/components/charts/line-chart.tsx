@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Scatter, ChartData } from "react-chartjs-2";
 import { observer } from "mobx-react";
+import { merge } from "lodash";
 import { ChartDataModelType } from "../../models/spaces/charts/chart-data";
 import { ChartOptions } from "chart.js";
 import { ChartColors } from "../../models/spaces/charts/chart-data-set";
@@ -37,10 +38,14 @@ const defaultOptions: ChartOptions = {
       ticks: {
         min: 0,
         max: 100
+      },
+      scaleLabel: {
+        display: true,
+        fontSize: 12
       }
     }],
     xAxes: [{
-      display: false,
+      display: true,
       ticks: {
         min: 0,
         max: 20
@@ -120,24 +125,18 @@ export class LineChart extends BaseComponent<ILineProps, ILineState> {
     const chartDisplay = lineData(chartData);
     const graphs: JSX.Element[] = [];
     const minMaxValues = chartData.minMaxAll;
-    const options: ChartOptions = Object.assign({}, defaultOptions, {
+    const options: ChartOptions = merge({}, defaultOptions, {
       title: {
         text: chartData.name
       },
       scales: {
-        display: false,
         yAxes: [{
           ticks: {
             min: minMaxValues.minA2,
             max: minMaxValues.maxA2
-          },
-          scaleLabel: {
-            display: true,
-            fontSize: 12
           }
         }],
         xAxes: [{
-          display: true,
           ticks: {
             min: minMaxValues.minA1,
             max: minMaxValues.maxA1,
