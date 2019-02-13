@@ -15,7 +15,9 @@ const chartData = {
       fixedMinA2: 0,
       fixedMaxA2: 50,
       expandOnly: true,
-      fixedLabelRotation: 0
+      fixedLabelRotation: 0,
+      axisLabelA1: "Weeks",
+      axisLabelA2: "Number of mice"
     },
     {
       name: "Tan mice",
@@ -25,7 +27,9 @@ const chartData = {
       fixedMinA2: 0,
       fixedMaxA2: 50,
       expandOnly: true,
-      fixedLabelRotation: 0
+      fixedLabelRotation: 0,
+      axisLabelA1: "Weeks",
+      axisLabelA2: "Number of mice"
     },
     {
       name: "Brown mice",
@@ -35,7 +39,9 @@ const chartData = {
       fixedMinA2: 0,
       fixedMaxA2: 50,
       expandOnly: true,
-      fixedLabelRotation: 0
+      fixedLabelRotation: 0,
+      axisLabelA1: "Weeks",
+      axisLabelA2: "Number of mice"
     }
   ]
  };

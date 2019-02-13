@@ -134,6 +134,10 @@ export class LineChart extends BaseComponent<ILineProps, ILineState> {
           ticks: {
             min: minMaxValues.minA2,
             max: minMaxValues.maxA2
+          },
+          scaleLabel: {
+            display: !!chartData.axisLabelA2,
+            labelString: chartData.axisLabelA2
           }
         }],
         xAxes: [{
@@ -142,6 +146,10 @@ export class LineChart extends BaseComponent<ILineProps, ILineState> {
             max: minMaxValues.maxA1,
             minRotation: chartData.dataLabelRotation,
             maxRotation: chartData.dataLabelRotation
+          },
+          scaleLabel: {
+            display: !!chartData.axisLabelA1,
+            labelString: chartData.axisLabelA1
           }
         }]
       }
