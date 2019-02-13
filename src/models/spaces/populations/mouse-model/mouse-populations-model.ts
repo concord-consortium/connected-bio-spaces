@@ -5,7 +5,7 @@ import { ToolbarButton } from "../populations";
 import { ChartDataModel } from "../../charts/chart-data";
 
 const chartData = {
-  name: "Samples",
+  name: "Fur Color vs Time",
   dataSets: [
     {
       name: "White mice",
