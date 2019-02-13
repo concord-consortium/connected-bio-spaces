@@ -1,11 +1,13 @@
 import { types, Instance } from "mobx-state-tree";
 import { ChartDataSetModel, ChartDataSetModelType, ChartColors } from "./chart-data-set";
+import { ChartAnnotationModel, ChartAnnotationType } from "./chart-annotation";
 
 export const ChartDataModel = types
   .model("ChartData", {
     name: types.string,
     dataSets: types.array(ChartDataSetModel),
-    labels: types.array(types.string)
+    labels: types.array(types.string),
+    annotations: types.array(ChartAnnotationModel)
   })
   .views(self => ({
     get chartLabels() {
@@ -66,6 +68,10 @@ export const ChartDataModel = types
 
     get axisLabelA2() {
       return self.dataSets[0].axisLabelA2;
+    },
+
+    get formattedAnnotations() {
+      return self.annotations.map(a => a.formatted);
     }
   }))
   .extend(self => {
@@ -93,11 +99,21 @@ export const ChartDataModel = types
       });
     }
 
+    function addAnnotation(annotation: ChartAnnotationType) {
+      self.annotations.push(annotation);
+    }
+
+    function clearAnnotations() {
+      self.annotations.clear();
+    }
+
     return {
       actions: {
         allData,
         addDataSet,
-        setDataSetSubset
+        setDataSetSubset,
+        addAnnotation,
+        clearAnnotations
       }
     };
   });
