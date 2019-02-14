@@ -100,7 +100,7 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
     const aminoAcids = getAminoAcidsFromCodons(codons);
 
     const halfWidth = width / 2;
-    const selectionWidth = halfWidth / 2;
+    const selectionWidth = showDNA ? halfWidth / 4 : halfWidth / 2;
 
     const protein1SelectionPercent =  selectionWidth / (aminoAcids.length * aminoAcidWidth);
     let codons2;
