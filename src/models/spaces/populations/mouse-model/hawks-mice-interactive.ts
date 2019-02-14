@@ -294,6 +294,11 @@ export function createInteractive(model: MousePopulationsModelType) {
         numR += 2;
       }
     });
+    numCC = (numCC / allMice.length) * 100;
+    numCR = (numCR / allMice.length) * 100;
+    numRC = (numRC / allMice.length) * 100;
+    numRR = (numRR / allMice.length) * 100;
+
     const totalAlleles = numC + numR;
     numC = (numC / totalAlleles) * 100;
     numR = (numR / totalAlleles) * 100;
