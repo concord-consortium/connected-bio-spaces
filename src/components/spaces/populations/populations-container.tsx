@@ -6,7 +6,7 @@ import { BaseComponent, IBaseProps } from "../../base";
 
 import "./populations-container.sass";
 import { ToolbarButton } from "../../../models/spaces/populations/populations";
-import { AgentEnvironmentMouseEvent } from "populations.js";
+import { AgentEnvironmentMouseEvent, Agent } from "populations.js";
 import { BackpackMouse } from "../../../models/backpack-mouse";
 
 import { EnvironmentColorType } from "../../../models/spaces/populations/mouse-model/mouse-populations-model";
@@ -21,6 +21,8 @@ interface SizeMeProps {
 interface IProps extends IBaseProps {}
 interface IState {
 }
+
+let currentHighlightMouse: Agent | undefined;
 
 @inject("stores")
 @observer
@@ -102,7 +104,7 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
                         interactive={populations.interactive}
                         width={size.width}
                         agentClickDistance={20}
-                        onAgentMouseEvent={this.handleAgentClicked} />
+                        onAgentMouseEvent={this.handleAgentMouseEvent} />
                     : null
                   }
                 </div>
@@ -204,18 +206,30 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
     this.stores.populations.toggleInteractionMode("select");
   }
 
-  private handleAgentClicked = (evt: AgentEnvironmentMouseEvent) => {
+  private handleAgentMouseEvent = (evt: AgentEnvironmentMouseEvent) => {
     const populations = this.stores.populations;
-    if (populations && populations.interactionMode === "select" && evt.type === "click" && evt.agents.mice) {
-      const selectedMouse = evt.agents.mice;
-      const backpack = this.stores.backpack;
-      const backpackMouse = BackpackMouse.create({
-        sex: selectedMouse.get("sex"),
-        genotype: (selectedMouse as any)._genomeButtonsString()
-      });
-      const added = backpack.addCollectedMouse(backpackMouse);
-      if (added){
-        this.stores.populations.removeAgent(selectedMouse);
+    if (populations) {
+      if (evt.agents && evt.agents.mice) {
+        if (evt.type === "click" && populations.interactionMode === "select") {
+          const selectedMouse = evt.agents.mice;
+          const backpack = this.stores.backpack;
+          const backpackMouse = BackpackMouse.create({
+            sex: selectedMouse.get("sex"),
+            genotype: (selectedMouse as any)._genomeButtonsString()
+          });
+          const added = backpack.addCollectedMouse(backpackMouse);
+          if (added){
+            this.stores.populations.removeAgent(selectedMouse);
+          }
+        } else if (evt.type === "mousemove" && populations.interactionMode !== "none") {
+          if (currentHighlightMouse) {
+            currentHighlightMouse.set("hover", "");
+          }
+          currentHighlightMouse = evt.agents.mice;
+          currentHighlightMouse.set("hover", populations.interactionMode);
+        }
+      } else if (currentHighlightMouse) {
+        currentHighlightMouse.set("hover", "");
       }
     }
   }
