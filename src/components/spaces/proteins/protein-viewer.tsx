@@ -19,6 +19,10 @@ interface IProps extends IBaseProps {
   protein: ProteinSpec;
   secondProtein?: ProteinSpec;
   selectionStartPercent?: number;
+  selectedAminoAcidIndex: number;
+  selectedAminoAcidXLocation: number;
+  showInfoBox: boolean;
+  infoBoxAlert: boolean;
   aminoAcidWidth?: number;            // Width of one amino acid in the slider elements, in pixels
   codonWidth?: number;                // Width of one codon in the slider elements, in pixels
   showDNA?: boolean;
@@ -27,11 +31,17 @@ interface IProps extends IBaseProps {
   toggleShowDNA: () => void;
   toggleShowingAminoAcidsOnProtein: () => void;
   setSelectStartPercent: (percent: number) => void;
+  setSelectedAminoAcidIndex: (selectedAminoAcidIndex: number, selectedAminoAcidXLocation: number) => void;
+  toggleShowInfoBox: () => void;
   size: {width: number};              // From SizeMe
 }
 
 interface DefaultProps {
   selectionStartPercent: number;
+  selectedAminoAcidIndex: number;
+  selectedAminoAcidXLocation: number;
+  showInfoBox: boolean;
+  infoBoxAlert: boolean;
   aminoAcidWidth: number;
   codonWidth: number;
   showDNA: boolean;
@@ -44,9 +54,6 @@ type PropsWithDefaults = IProps & DefaultProps;
 interface IState {
   animating: boolean;
   selectionStartPercentTarget: number;
-  selectedAminoAcidIndex: number;
-  selectedAminoAcidXLocation: number;
-  showingInfoBox: boolean;
   marks: number[];
 }
 
@@ -56,6 +63,10 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
 
   public static defaultProps: DefaultProps = {
     selectionStartPercent: 0,
+    selectedAminoAcidIndex: 0,
+    selectedAminoAcidXLocation: 0,
+    showInfoBox: false,
+    infoBoxAlert: false,
     aminoAcidWidth: 14,
     codonWidth: 29,
     showDNA: false,
@@ -69,9 +80,6 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
     this.state = {
       animating: false,
       selectionStartPercentTarget: 0,
-      selectedAminoAcidIndex: 0,
-      selectedAminoAcidXLocation: 0,
-      showingInfoBox: false,
       marks: []
     };
   }
@@ -80,7 +88,8 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
     const {
       protein, aminoAcidWidth,
       secondProtein, showDNA, showAminoAcidsOnProtein, dnaSwitchable,
-      selectionStartPercent
+      selectionStartPercent, selectedAminoAcidIndex, selectedAminoAcidXLocation,
+      showInfoBox, infoBoxAlert
     } = this.props as PropsWithDefaults;
 
     const { width } = this.props.size;
@@ -91,7 +100,7 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
     const aminoAcids = getAminoAcidsFromCodons(codons);
 
     const halfWidth = width / 2;
-    const selectionWidth = halfWidth / 2;
+    const selectionWidth = halfWidth / 4;
 
     const protein1SelectionPercent =  selectionWidth / (aminoAcids.length * aminoAcidWidth);
     let codons2;
@@ -102,6 +111,8 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
       aminoAcids2 = getAminoAcidsFromCodons(codons2);
       protein2SelectionPercent = selectionWidth / (aminoAcids2.length * aminoAcidWidth);
     }
+
+    const infoOptionsClass = "info-and-options" + (infoBoxAlert ? " alert" : "");
 
     return (
       <div className="protein-viewer">
@@ -145,12 +156,14 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
               selectionWidth={selectionWidth}
               selectionStartPercent={selectionStartPercent}
               updateSelectionStart={this.handleUpdateSelectionStart}
-              selectedAminoAcidIndex={this.state.selectedAminoAcidIndex}
+              animateToSelectionStart={this.handleAnimateToSelectionStart}
+              selectedAminoAcidIndex={selectedAminoAcidIndex}
+              onAminoAcidClick={this.handleAminoAcidClick}
               updateSelectedAminoAcidIndex={this.handleUpdateSelectedAminoAcidIndex}
               onClick={this.handleAminoAcidSliderClick}
               marks={this.state.marks}
               showDNA={showDNA}
-              dimUnselected={this.state.showingInfoBox}
+              dimUnselected={showInfoBox}
             />
             {
               aminoAcids2 &&
@@ -162,24 +175,26 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
                 selectionWidth={selectionWidth}
                 selectionStartPercent={selectionStartPercent}
                 updateSelectionStart={this.handleUpdateSelectionStart}
-                selectedAminoAcidIndex={this.state.selectedAminoAcidIndex}
+                animateToSelectionStart={this.handleAnimateToSelectionStart}
+                selectedAminoAcidIndex={selectedAminoAcidIndex}
+                onAminoAcidClick={this.handleAminoAcidClick}
                 updateSelectedAminoAcidIndex={this.handleUpdateSelectedAminoAcidIndex}
                 onClick={this.handleAminoAcidSliderClick}
                 marks={this.state.marks}
-                dimUnselected={this.state.showingInfoBox}
+                dimUnselected={showInfoBox}
                 showDNA={showDNA}
                 highlightColor="4, 255, 0"
               />
             }
           </div>
         </div>
-        <div className="info-and-options">
-          {this.state.showingInfoBox &&
+        <div className={infoOptionsClass}>
+          {showInfoBox &&
             <InfoBox
               aminoAcids={aminoAcids}
               secondAminoAcids={aminoAcids2}
-              selection={this.state.selectedAminoAcidIndex}
-              selectedAminoAcidXLocation={this.state.selectedAminoAcidXLocation}
+              selection={selectedAminoAcidIndex}
+              selectedAminoAcidXLocation={selectedAminoAcidXLocation}
               marks={this.state.marks}
               onMarkLocation={this.handleMark}
               width={width - 26}
@@ -225,45 +240,44 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
     }, this.animate);
   }
 
-  private animate = () => {
+  private animate = (fast?: boolean) => {
     const { selectionStartPercent } = this.props as PropsWithDefaults;
     const { selectionStartPercentTarget, animating } = this.state;
     if (!animating) return;
+
     let speed;
-    if (selectionStartPercent > selectionStartPercentTarget) {
-      speed = Math.max(-0.02, selectionStartPercentTarget - selectionStartPercent);
-    } else {
-      speed = Math.min(0.02, selectionStartPercentTarget - selectionStartPercent);
-    }
-    this.props.setSelectStartPercent(selectionStartPercent + speed);
-    if (selectionStartPercentTarget - selectionStartPercent !== 0) {
-      window.requestAnimationFrame(this.animate);
-    }
-  }
 
-  private handleUpdateSelectedAminoAcidIndex = (selectedAminoAcidIndex: number,
-                                                selectedAminoAcidXLocation: number, showInfo?: boolean) => {
-    this.setState({
-      selectedAminoAcidIndex,
-      selectedAminoAcidXLocation
-    });
-
-    if (showInfo) {
-      if (!this.state.showingInfoBox || selectedAminoAcidIndex !== this.state.selectedAminoAcidIndex) {
-        this.setState({
-          showingInfoBox: true
-        });
-      } else {
-        this.setState({showingInfoBox: false});
+    // if the initial request is far away, keep fast for all frames. Otherwise go slow.
+    if (!fast) {
+      if (Math.abs(selectionStartPercentTarget - selectionStartPercent) > 0.035) {
+        fast = true;
       }
     }
 
+    const maxSpeed = fast ? 0.02 : 0.001;
+    if (selectionStartPercent > selectionStartPercentTarget) {
+      speed = Math.max(-maxSpeed, selectionStartPercentTarget - selectionStartPercent);
+    } else {
+      speed = Math.min(maxSpeed, selectionStartPercentTarget - selectionStartPercent);
+    }
+    this.props.setSelectStartPercent(selectionStartPercent + speed);
+    if (selectionStartPercentTarget - selectionStartPercent !== 0) {
+      window.requestAnimationFrame(() => this.animate(fast));
+    }
+  }
+
+  private handleAminoAcidClick = (isSelected: boolean) => {
+    if (!this.props.showInfoBox || (this.props.showInfoBox && isSelected)) {
+      this.props.toggleShowInfoBox();
+    }
   }
 
   private handleAminoAcidSliderClick = () => {
-    this.setState({
-      showingInfoBox: !this.state.showingInfoBox
-    });
+    this.props.toggleShowInfoBox();
+  }
+
+  private handleUpdateSelectedAminoAcidIndex = (selectedAminoAcidIndex: number, selectedAminoAcidXLocation: number) => {
+    this.props.setSelectedAminoAcidIndex(selectedAminoAcidIndex, selectedAminoAcidXLocation);
   }
 
   private handleMark = (location: number) => {
