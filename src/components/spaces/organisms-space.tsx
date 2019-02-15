@@ -12,6 +12,7 @@ import { RightPanelType } from "../../models/ui";
 import { kOrganelleInfo } from "../../models/spaces/organisms/organisms-space";
 import { extractCodons } from "./proteins/util/dna-utils";
 import { getAminoAcidsFromCodons } from "./proteins/util/amino-acid-utils";
+import { CollectButtonComponent } from "../collect-button";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -67,6 +68,7 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
     const { proteinSliderStartPercent, proteinSliderSelectedAminoAcidIndex,
       proteinSliderSelectedAminoAcidXLocation, showProteinInfoBox } = organisms;
     const row = organisms.rows[rowIndex];
+    const { organismsMouse } = row;
     const { currentData, selectedOrganelle,
       showProteinAminoAcidsOnProtein, showProteinDNA,
       rightPanel } = row;
@@ -127,24 +129,45 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
     })();
 
     return (
-      <TwoUpDisplayComponent
-        leftTitle="Explore: Organism"
-        leftPanel={<OrganismsContainer rowIndex={rowIndex}/>}
-        rightPanel={rightPanelContent}
-        instructionsIconEnabled={true}
-        dataIconEnabled={true}
-        informationIconEnabled={true}
-        selectedRightPanel={rightPanel}
-        onClickRightIcon={this.setRightPanel(rowIndex)}
-        spaceClass="organism"
-        rowNumber={rowIndex}
-      />
+      <div className="fullwidth">
+        <CollectButtonComponent
+          backpackMouse={organismsMouse && organismsMouse.backpackMouse}
+          clickEmpty={this.clickEmpty(rowIndex)}
+          clickClose={this.clickClose(rowIndex)}
+        />
+        <TwoUpDisplayComponent
+          leftTitle="Explore: Organism"
+          leftPanel={<OrganismsContainer rowIndex={rowIndex}/>}
+          rightPanel={rightPanelContent}
+          instructionsIconEnabled={true}
+          dataIconEnabled={true}
+          informationIconEnabled={true}
+          selectedRightPanel={rightPanel}
+          onClickRightIcon={this.setRightPanel(rowIndex)}
+          spaceClass="organism"
+          rowNumber={rowIndex}
+        />
+      </div>
     );
   }
 
   private setRightPanel = (rowIndex: number) => (panelType: RightPanelType) => {
     const { organisms } = this.stores;
     organisms.rows[rowIndex].setRightPanel(panelType);
+  }
+
+  private clickEmpty = (rowIndex: number) => () => {
+    const { backpack, organisms } = this.stores;
+    const { activeMouse } = backpack;
+    if (activeMouse != null) {
+      organisms.setRowBackpackMouse(rowIndex, activeMouse);
+      backpack.deselectMouse();
+    }
+  }
+
+  private clickClose = (rowIndex: number) => () => {
+    const { organisms } = this.stores;
+    organisms.clearRowBackpackMouse(rowIndex);
   }
 
 }

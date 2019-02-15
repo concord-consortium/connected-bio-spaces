@@ -10,6 +10,7 @@ interface IProps extends IBaseProps {
   clickMouse?: () => void;
   clickEmpty?: () => void;
   clickClose?: () => void;
+  index?: number;
 }
 interface IState {}
 
@@ -73,7 +74,7 @@ export class CollectButtonComponent extends BaseComponent<IProps, IState> {
             </div>
           </div>
         </div>
-        <div className="index uncollected">{backpackMouseIndex > -1 ? backpackMouseIndex + 1 : ""}</div>
+        <div className="index uncollected">{this.props.index}</div>
       </div>
     );
   }
