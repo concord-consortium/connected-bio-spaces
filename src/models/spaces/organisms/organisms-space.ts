@@ -16,22 +16,22 @@ type SubstanceInfo = {
 };
 export const kSubstanceInfo: SubstanceInfo = {
   pheomelanin: {
-    displayName: "pheomelanin",
+    displayName: "Pheomelanin",
     mysteryLabel: "substance A",
     color: "#f4ce83"
   },
   signalProtein: {
-    displayName: "signal protein",
+    displayName: "Signal Protein",
     mysteryLabel: "substance B",
     color: "#d88bff"
   },
   eumelanin: {
-    displayName: "eumelanin",
+    displayName: "Eumelanin",
     mysteryLabel: "substance C",
     color: "#795423"
   },
   hormone: {
-    displayName: "hormone",
+    displayName: "Hormone",
     mysteryLabel: "substance D",
     color: "#0adbd7"
   },

@@ -1,16 +1,28 @@
 @import vars
 
-.zoom-control-container
+.zoom-container
   display: flex
-  flex-direction: row
+  flex-direction: column
+  background-color: rgba(212, 82, 0, .5)
 
-  .zoom-control
-    width: $explore-button-height
-    height: $explore-button-height
-    background-color: $color3-6
-    margin: $quarter-margin $half-margin
-    border-radius: $explore-button-right-radius
-    color: $color3-1
-    font-weight: bold
-    &:hover
-      background-color: $color3-7
+  .label
+    font-size: 11px
+    color: $color-simdata-carrot-light2
+
+  .zoom-control-container
+    display: flex
+    flex-direction: row
+
+    .organism-button
+      height: 26px
+      width: 26px
+      margin: 5px 5px 2px 5px
+      &.zoom-out
+        margin-right: 3px
+        border-radius: $explore-button-right-radius 0 0 $explore-button-right-radius
+      &.zoom-in
+        margin-left: 0px
+        border-radius: 0 $explore-button-right-radius $explore-button-right-radius 0
+      .icon
+        height: 18px
+        width: 18px
