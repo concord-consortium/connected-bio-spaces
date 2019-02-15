@@ -218,12 +218,44 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
           new Trait({ name: "max offspring", default: 3 }),
           new Trait({ name: "min offspring", default: 2 }),
           new Trait({ name: "metabolism", default: 0 }),
-          new Trait({ name: "mating chance", default: 0 })
+          new Trait({ name: "mating chance", default: 0 }),
+          new Trait({ name: "hover", default: "" })
     ],
     imageProperties: {
       initialFlipDirection: "right"
     },
     imageRules: [
+      {
+        name: "hover-indicator",
+        contexts: ["environment"],
+        rules: [
+          {
+            image: {
+              path: "assets/curriculum/mouse/populations/inspect-stack.png",
+              scale: 0.3,
+              anchor: {
+                x: 0.5,
+                y: 0.5
+              }
+            },
+            useIf(agent: Agent) {
+              return agent.get("hover") === "inspect";
+            }
+          }, {
+            image: {
+              path: "assets/curriculum/mouse/populations/select-stack.png",
+              scale: 0.3,
+              anchor: {
+                x: 0.5,
+                y: 0.5
+              }
+            },
+            useIf(agent: Agent) {
+              return agent.get("hover") === "select";
+            }
+          }
+        ]
+      },
       {
         name: "mouse",
         contexts: ["environment", "carry-tool"],
