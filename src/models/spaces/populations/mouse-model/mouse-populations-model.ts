@@ -4,8 +4,14 @@ import { Interactive, Events, Environment } from "populations.js";
 import { ToolbarButton } from "../populations";
 import { ChartDataModel } from "../../charts/chart-data";
 
+const chartNames = {
+  color: "Fur Color vs Time",
+  genotype: "Genotypes vs Time",
+  alleles: "Alleles vs Time"
+};
+
 const chartData = {
-  name: "Fur Color vs Time",
+  name: chartNames.color,
   dataSets: [
     {
       name: "White mice",
@@ -252,6 +258,8 @@ export const MousePopulationsModel = types
         },
         setChartType(type: ChartType) {
           self.chartType = type;
+
+          self.chartData.name = chartNames[type];
 
           self.chartData.dataSets[0].display = type === "color";
           self.chartData.dataSets[1].display = type === "color";
