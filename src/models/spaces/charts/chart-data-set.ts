@@ -73,12 +73,17 @@ export const ChartDataSetModel = types
     fixedMaxA1: types.maybe(types.number),
     fixedMinA2: types.maybe(types.number),
     fixedMaxA2: types.maybe(types.number),
+    // if x data points are not sequential 1,2,3..., and we are setting maxPoints, we need to have an
+    // initial maximum which is not simply the value of maxPoints, which is otherwise the default.
+    initialMaxA1: types.maybe(types.number),
     // expandOnly is used for y-axis scaling. When requesting min/max point values,
     // if this is set the a2 / y axis max returns the max of the full data set, not just the visiblePoints
     expandOnly: false,
     fixedLabelRotation: types.maybe(types.number),
     dataStartIdx: types.maybe(types.number),
-    stack: types.maybe(types.string)
+    stack: types.maybe(types.string),
+    axisLabelA1: types.maybe(types.string),
+    axisLabelA2: types.maybe(types.string)
   })
   .views(self => ({
     get visibleDataPoints() {
@@ -117,14 +122,20 @@ export const ChartDataSetModel = types
       if (self.fixedMaxA1 !== undefined && self.dataPoints.length <= self.fixedMaxA1) {
         return self.fixedMaxA1;
       } else if (!self.visibleDataPoints || self.visibleDataPoints.length === 0) {
-        if (self.maxPoints) {
+        if (self.initialMaxA1){
+          return self.initialMaxA1;
+        } else if (self.maxPoints) {
           return self.maxPoints;
         } else {
           return defaultMax;
         }
       } else if (self.visibleDataPoints && self.visibleDataPoints.length > 0 &&
         self.maxPoints && self.visibleDataPoints.length < self.maxPoints) {
-        return self.maxPoints;
+          if (self.initialMaxA1){
+            return self.initialMaxA1;
+          } else {
+            return self.maxPoints;
+          }
       } else {
         return Math.max(...self.visibleDataPoints.map(p => p.a1));
       }

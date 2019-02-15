@@ -5,37 +5,46 @@ import { ToolbarButton } from "../populations";
 import { ChartDataModel } from "../../charts/chart-data";
 
 const chartData = {
-  name: "Samples",
+  name: "Fur Color vs Time",
   dataSets: [
     {
       name: "White mice",
       dataPoints: [],
       color: "#f4ce83",
       maxPoints: 20,
+      initialMaxA1: 100,
       fixedMinA2: 0,
       fixedMaxA2: 50,
       expandOnly: true,
-      fixedLabelRotation: 0
+      fixedLabelRotation: 0,
+      axisLabelA1: "Weeks",
+      axisLabelA2: "Number of mice"
     },
     {
       name: "Tan mice",
       dataPoints: [],
       color: "#db9e26",
       maxPoints: 20,
+      initialMaxA1: 100,
       fixedMinA2: 0,
       fixedMaxA2: 50,
       expandOnly: true,
-      fixedLabelRotation: 0
+      fixedLabelRotation: 0,
+      axisLabelA1: "Weeks",
+      axisLabelA2: "Number of mice"
     },
     {
       name: "Brown mice",
       dataPoints: [],
       color: "#795423",
       maxPoints: 20,
+      initialMaxA1: 100,
       fixedMinA2: 0,
       fixedMaxA2: 50,
       expandOnly: true,
-      fixedLabelRotation: 0
+      fixedLabelRotation: 0,
+      axisLabelA1: "Weeks",
+      axisLabelA2: "Number of mice"
     }
   ]
  };
@@ -89,8 +98,9 @@ export const MousePopulationsModel = types
     Events.addEventListener(Environment.EVENTS.STEP, () => {
       if (interactive) {
         const date = interactive.environment.date;
+        // add data every 5th step
         if (date % 5 === 0) {
-          addData(date / 5, interactive.getData());
+          addData(date, interactive.getData());
         }
       }
     });
