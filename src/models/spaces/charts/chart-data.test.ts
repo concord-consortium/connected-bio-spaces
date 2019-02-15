@@ -15,7 +15,10 @@ describe("chart data model", () => {
       name: "Sample Dataset1",
       dataPoints: points,
       color: "#ff0000",
-      maxPoints: 100
+      maxPoints: 100,
+      downsample: true,
+      downsampleMaxLength: 120,
+      downsampleGrowWindow: 40
     }));
 
     chart = ChartDataModel.create({
@@ -94,5 +97,54 @@ describe("chart data model", () => {
     expect(chart.dataSets[0].dataA1[0]).toEqual(50);
     expect(chart.dataSets[0].dataA2[0]).toEqual(70);
     expect(chart.dataSets[0].dataA1[2]).toBeUndefined();
+  });
+
+  it("can truncate its visible data", () => {
+    chart.dataSets[0].addDataPoint(65, 75, "delta");
+    chart.dataSets[0].addDataPoint(70, 85, "echo");
+    chart.dataSets[0].addDataPoint(75, 80, "foxtrot");
+
+    chart.dataSets[0].setMaxDataPoints(2);
+
+    expect(chart.dataSets[0].dataPoints.length).toEqual(6);
+    expect(chart.dataSets[0].visibleDataPoints.length).toEqual(2);
+    expect(chart.dataSets[0].minA1).toEqual(70);
+    expect(chart.dataSets[0].maxA1).toEqual(75);
+  });
+
+  it("can show all visible data", () => {
+    chart.dataSets[0].addDataPoint(65, 75, "delta");
+    chart.dataSets[0].addDataPoint(70, 85, "echo");
+    chart.dataSets[0].addDataPoint(75, 80, "foxtrot");
+
+    chart.dataSets[0].setMaxDataPoints(-1);
+
+    expect(chart.dataSets[0].dataPoints.length).toEqual(6);
+    expect(chart.dataSets[0].visibleDataPoints.length).toEqual(6);
+    expect(chart.dataSets[0].minA1).toEqual(0);
+    expect(chart.dataSets[0].maxA1).toEqual(75);
+  });
+
+  it.only("can downsample its visible data", () => {
+    chart.dataSets[0].setMaxDataPoints(-1);
+
+    for (let i = 0; i < 200; i++) {
+      chart.dataSets[0].addDataPoint(i, 100 + i, "");
+    }
+
+    expect(chart.dataSets[0].dataPoints.length).toEqual(203);
+    expect(chart.dataSets[0].visibleDataPoints.length).toEqual(83);   // 80 downsampled points and 3 additional
+
+    for (let i = 0; i < 36; i++) {
+      chart.dataSets[0].addDataPoint(i, 300 + i, "");
+    }
+
+    expect(chart.dataSets[0].dataPoints.length).toEqual(239);
+    expect(chart.dataSets[0].visibleDataPoints.length).toEqual(119);   // 80 downsampled points and 39 additional
+
+    chart.dataSets[0].addDataPoint(0, 400, "");
+
+    expect(chart.dataSets[0].dataPoints.length).toEqual(240);
+    expect(chart.dataSets[0].visibleDataPoints.length).toEqual(80);   // 80 downsampled points
   });
 });

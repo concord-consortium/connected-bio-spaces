@@ -79,14 +79,11 @@ export const MousePopulationsModel = types
       self.chartData.dataSets[0].addDataPoint(time, datum.numWhite, "");
       self.chartData.dataSets[1].addDataPoint(time, datum.numTan, "");
       self.chartData.dataSets[2].addDataPoint(time, datum.numBrown, "");
-      if (self.showMaxPoints) {
-        displayMaxPoints();
-      }
     }
 
     function displayMaxPoints() {
       self.chartData.dataSets.forEach((dataSet: any) => {
-        dataSet.setMaxDataPoints(dataSet.dataPoints.length);
+        dataSet.setMaxDataPoints(-1);
       });
     }
     function displayRecentPoints() {
