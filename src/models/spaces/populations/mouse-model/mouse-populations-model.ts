@@ -4,8 +4,14 @@ import { Interactive, Events, Environment } from "populations.js";
 import { ToolbarButton } from "../populations";
 import { ChartDataModel } from "../../charts/chart-data";
 
+const chartNames = {
+  color: "Fur Color vs Time",
+  genotype: "Genotypes vs Time",
+  alleles: "Alleles vs Time"
+};
+
 const chartData = {
-  name: "Fur Color vs Time",
+  name: chartNames.color,
   dataSets: [
     {
       name: "White mice",
@@ -45,12 +51,99 @@ const chartData = {
       fixedLabelRotation: 0,
       axisLabelA1: "Weeks",
       axisLabelA2: "Number of mice"
+    },
+    {
+      name: "CC",
+      dataPoints: [],
+      color: "#f4ce83",
+      maxPoints: 20,
+      initialMaxA1: 100,
+      fixedMinA2: 0,
+      fixedMaxA2: 100,
+      expandOnly: true,
+      fixedLabelRotation: 0,
+      display: false,
+      axisLabelA1: "Weeks",
+      axisLabelA2: "Percent (%)"
+    },
+    {
+      name: "CR",
+      dataPoints: [],
+      color: "#db9e26",
+      maxPoints: 20,
+      initialMaxA1: 100,
+      fixedMinA2: 0,
+      fixedMaxA2: 100,
+      expandOnly: true,
+      fixedLabelRotation: 0,
+      display: false,
+      axisLabelA1: "Weeks",
+      axisLabelA2: "Percent (%)"
+    },
+    {
+      name: "RC",
+      dataPoints: [],
+      color: "#db9e26",
+      maxPoints: 20,
+      initialMaxA1: 100,
+      fixedMinA2: 0,
+      fixedMaxA2: 100,
+      expandOnly: true,
+      fixedLabelRotation: 0,
+      display: false,
+      axisLabelA1: "Weeks",
+      axisLabelA2: "Percent (%)"
+    },
+    {
+      name: "RR",
+      dataPoints: [],
+      color: "#795423",
+      maxPoints: 20,
+      initialMaxA1: 100,
+      fixedMinA2: 0,
+      fixedMaxA2: 100,
+      expandOnly: true,
+      fixedLabelRotation: 0,
+      display: false,
+      axisLabelA1: "Weeks",
+      axisLabelA2: "Percent (%)"
+    },
+    {
+      name: "C",
+      dataPoints: [],
+      color: "#f4ce83",
+      maxPoints: 20,
+      initialMaxA1: 100,
+      fixedMinA2: 0,
+      fixedMaxA2: 100,
+      expandOnly: true,
+      fixedLabelRotation: 0,
+      display: false,
+      axisLabelA1: "Weeks",
+      axisLabelA2: "Percent (%)"
+    },
+    {
+      name: "R",
+      dataPoints: [],
+      color: "#795423",
+      maxPoints: 20,
+      initialMaxA1: 100,
+      fixedMinA2: 0,
+      fixedMaxA2: 100,
+      expandOnly: true,
+      fixedLabelRotation: 0,
+      display: false,
+      axisLabelA1: "Weeks",
+      axisLabelA2: "Percent (%)"
     }
   ]
  };
 
 const EnvironmentColorTypeEnum = types.enumeration("environment", ["white", "neutral", "brown"]);
 export type EnvironmentColorType = typeof EnvironmentColorTypeEnum.Type;
+
+const ChartTypeEnum = types.enumeration("chart", ["color", "genotype", "alleles"]);
+export type ChartType = typeof ChartTypeEnum.Type;
 
 export const MousePopulationsModel = types
   .model("MousePopulations", {
@@ -70,7 +163,8 @@ export const MousePopulationsModel = types
     "showSexStack": false,
     "showHeteroStack": false,
     "chartData": types.optional(ChartDataModel, chartData),
-    "showMaxPoints": false
+    "showMaxPoints": false,
+    "chartType": types.optional(ChartTypeEnum, "color")
   })
   .extend(self => {
     let interactive: HawksMiceInteractive | undefined;
@@ -79,6 +173,14 @@ export const MousePopulationsModel = types
       self.chartData.dataSets[0].addDataPoint(time, datum.numWhite, "");
       self.chartData.dataSets[1].addDataPoint(time, datum.numTan, "");
       self.chartData.dataSets[2].addDataPoint(time, datum.numBrown, "");
+
+      self.chartData.dataSets[3].addDataPoint(time, datum.numCC, "");
+      self.chartData.dataSets[4].addDataPoint(time, datum.numCR, "");
+      self.chartData.dataSets[5].addDataPoint(time, datum.numRC, "");
+      self.chartData.dataSets[6].addDataPoint(time, datum.numRR, "");
+
+      self.chartData.dataSets[7].addDataPoint(time, datum.numC, "");
+      self.chartData.dataSets[8].addDataPoint(time, datum.numR, "");
     }
 
     function displayMaxPoints() {
@@ -103,9 +205,7 @@ export const MousePopulationsModel = types
     });
 
     function clearGraph() {
-      self.chartData.dataSets[0].clearDataPoints();
-      self.chartData.dataSets[1].clearDataPoints();
-      self.chartData.dataSets[2].clearDataPoints();
+      self.chartData.dataSets.forEach(d => d.clearDataPoints());
     }
 
     return {
@@ -155,6 +255,23 @@ export const MousePopulationsModel = types
         },
         setShowHeteroStack(show: boolean) {
           self.showHeteroStack = show;
+        },
+        setChartType(type: ChartType) {
+          self.chartType = type;
+
+          self.chartData.name = chartNames[type];
+
+          self.chartData.dataSets[0].display = type === "color";
+          self.chartData.dataSets[1].display = type === "color";
+          self.chartData.dataSets[2].display = type === "color";
+
+          self.chartData.dataSets[3].display = type === "genotype";
+          self.chartData.dataSets[4].display = type === "genotype";
+          self.chartData.dataSets[5].display = type === "genotype";
+          self.chartData.dataSets[6].display = type === "genotype";
+
+          self.chartData.dataSets[7].display = type === "alleles";
+          self.chartData.dataSets[8].display = type === "alleles";
         },
         destroyInteractive() {
           interactive = undefined;
@@ -239,6 +356,31 @@ export const MousePopulationsModel = types
               self.toggleShowMaxPoints();
             },
             floatCorner: "upper-right",
+            section: "data"
+          });
+
+          buttons.push({
+            title: "Graph Fur Colors",
+            value: self.chartType === "color",
+            action: (val: boolean) => {
+              self.setChartType("color");
+            },
+            section: "data"
+          });
+          buttons.push({
+            title: "Graph Genotypes",
+            value: self.chartType === "genotype",
+            action: (val: boolean) => {
+              self.setChartType("genotype");
+            },
+            section: "data"
+          });
+          buttons.push({
+            title: "Graph Alleles",
+            value: self.chartType === "alleles",
+            action: (val: boolean) => {
+              self.setChartType("alleles");
+            },
             section: "data"
           });
 

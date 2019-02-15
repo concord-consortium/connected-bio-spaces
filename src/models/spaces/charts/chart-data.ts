@@ -8,6 +8,11 @@ export const ChartDataModel = types
     labels: types.array(types.string)
   })
   .views(self => ({
+    get visibleDataSets() {
+      return self.dataSets.filter(d => d.display);
+    }
+  }))
+  .views(self => ({
     get chartLabels() {
       if (self.labels && self.labels.length > 0) {
         return self.labels;
@@ -15,13 +20,13 @@ export const ChartDataModel = types
     },
     // labels for a data point - essential for a bar graph, optional for a line
     get dataLabels() {
-      if (self.dataSets && self.dataSets.length > 0) {
-        return self.dataSets[0].dataLabels;
+      if (self.visibleDataSets && self.visibleDataSets.length > 0) {
+        return self.visibleDataSets[0].dataLabels;
       } else return [];
     },
     get dataLabelRotation() {
-      if (self.dataSets && self.dataSets.length > 0) {
-        return self.dataSets[0].fixedLabelRotation;
+      if (self.visibleDataSets && self.visibleDataSets.length > 0) {
+        return self.visibleDataSets[0].fixedLabelRotation;
       } else return;
     },
     get minMaxAll() {
@@ -30,7 +35,7 @@ export const ChartDataModel = types
       const minA1Values: number[] = [];
       const minA2Values: number[] = [];
 
-      self.dataSets.forEach((d) => {
+      self.visibleDataSets.forEach((d) => {
         maxA1Values.push(d.maxA1 || 100);
         maxA2Values.push(d.maxA2 || 100);
         minA1Values.push(d.minA1 || 0);
@@ -49,23 +54,23 @@ export const ChartDataModel = types
     },
 
     get maxPoints() {
-      return self.dataSets[0].maxPoints;
+      return self.visibleDataSets[0].maxPoints;
     },
 
     get pointCount() {
-      return self.dataSets[0].dataPoints.length;
+      return self.visibleDataSets[0].dataPoints.length;
     },
 
     get subsetIdx() {
-      return self.dataSets[0].dataStartIdx;
+      return self.visibleDataSets[0].dataStartIdx;
     },
 
     get axisLabelA1() {
-      return self.dataSets[0].axisLabelA1;
+      return self.visibleDataSets[0].axisLabelA1;
     },
 
     get axisLabelA2() {
-      return self.dataSets[0].axisLabelA2;
+      return self.visibleDataSets[0].axisLabelA2;
     }
   }))
   .extend(self => {

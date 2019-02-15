@@ -84,12 +84,24 @@ export function createInteractive(model: MousePopulationsModelType) {
   let numWhite: number;
   let numTan: number;
   let numBrown: number;
+  let numCC: number;
+  let numCR: number;
+  let numRC: number;
+  let numRR: number;
+  let numC: number;
+  let numR: number;
 
   function resetVars() {
     addedHawks = false;
     numWhite = 0;
     numTan = 0;
     numBrown = 0;
+    numCC = 0;
+    numCR = 0;
+    numRC = 0;
+    numRR = 0;
+    numC = 0;
+    numR = 0;
   }
 
   function addInitialMicePopulation(num: number) {
@@ -210,7 +222,13 @@ export function createInteractive(model: MousePopulationsModelType) {
     return {
       numWhite,
       numTan,
-      numBrown
+      numBrown,
+      numCC,
+      numCR,
+      numRC,
+      numRR,
+      numC,
+      numR
     };
   };
 
@@ -250,15 +268,40 @@ export function createInteractive(model: MousePopulationsModelType) {
     numWhite = 0;
     numTan = 0;
     numBrown = 0;
+    numCC = 0;
+    numCR = 0;
+    numRC = 0;
+    numRR = 0;
+    numC = 0;
+    numR = 0;
     allMice.forEach((mouse) => {
       if (mouse.get("color") === "white") {
         numWhite++;
+        numCC++;
+        numC += 2;
       } else if (mouse.get("color") === "tan") {
         numTan++;
+        if (mouse.alleles.color === "a:C,b:R") {
+          numCR++;
+        } else {
+          numRC++;
+        }
+        numC++;
+        numR++;
       } else if (mouse.get("color") === "brown") {
         numBrown++;
+        numRR++;
+        numR += 2;
       }
     });
+    numCC = (numCC / allMice.length) * 100;
+    numCR = (numCR / allMice.length) * 100;
+    numRC = (numRC / allMice.length) * 100;
+    numRR = (numRR / allMice.length) * 100;
+
+    const totalAlleles = numC + numR;
+    numC = (numC / totalAlleles) * 100;
+    numR = (numR / totalAlleles) * 100;
 
     // If there are no specific selective pressures (ie there are no hawks, or the hawks eat
     // everything with equal probability), the population should be 'stabilized', so that no

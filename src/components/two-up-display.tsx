@@ -104,8 +104,9 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
       buttons = this.props.rightPanelButtons.map( (button: any) => {
         const type = button.type || "button";
         if (type === "button" && this.props.selectedRightPanel === button.section) {
+          const className = "button-holder" + (button.value ? " active" : "");
           return (
-            <div key={button.title} className="button-holder" onClick={button.action}>
+            <div key={button.title} className={className} onClick={button.action}>
               {button.title}
             </div>
           );
