@@ -8,31 +8,32 @@
   width: $collect-button-holder-height
   justify-content: center
   align-items: center
-  margin-bottom: $double-component-margin
+  margin-bottom: $triple-component-margin
 
   .x-close
     position: absolute
-    display: flex
-    justify-content: center
-    align-items: center
-    top: -2px
-    left: 78px
-    padding: 2px
-    color: $color-white
-    font-family: $font-stack
-    font-weight: bold
-    width: 20px
-    height: 20px
-    border-top-left-radius: $collect-button-radius
-    border-top-right-radius: $collect-button-radius
+    top: 1px
+    left: 76px
+    width: 24px
+    height: 21px
+    border-top-left-radius: 12px
+    border-top-right-radius: 12px
     transform: rotate(45deg)
     transition-property: background-color
     transition-duration: $fade-time
+    &.shown:hover
+      background-color: $color-nav-cerulean-dark1
+      cursor: pointer
+    &.shown:hover + .collect-button-outline
+      background-color: $color-nav-cerulean-dark1
 
     .icon
+      position: absolute
+      top: 5px
+      left: 6px
       transform: rotate(-45deg)
-      width: 11px
-      height: 11px
+      width: 12px
+      height: 12px
       fill: $color-white
 
   .index
@@ -41,8 +42,8 @@
     left: 0px
     padding: 1px
     font-family: $font-stack
-    font-size: 13px
-    font-weight: bold
+    font-size: 14px
+    font-weight: 700
     color: $color-nav-cerulean-dark2
 
     &.uncollected
@@ -87,23 +88,18 @@
       width: $collect-button-inner-border-width
       height: $collect-button-inner-border-height
 
+      .icon
+        height: $collect-button-icon-height
+        width: $collect-button-icon-width
+
       &.heterozygote
         border-radius: $collect-button-inner-border-radius
         border: $collect-button-border-width dotted $color-key-blue
 
-    .icon
-      height: $collect-button-icon-height
 
     .label
       font-size: $font-size-label2
       color: $color-nav-cerulean-dark2
-
-.x-close:hover
-  background-color: $color-nav-cerulean-dark1
-  cursor: pointer
-
-.x-close:hover + .collect-button-outline
-  background-color: $color-nav-cerulean-dark1
 
 // styles below only for when we are in the backpack
 .left-nav-panel
@@ -122,27 +118,46 @@
   .collect-button-holder
     position: absolute
     z-index: 999
+    .x-close
+      left: 94px
+      transform: rotate(60deg)
+      .icon
+        transform: rotate(-60deg)
+    .index
+      left: 17px
+      font-size: 12px
+      color: $color-white
+    .collect-button-outline
+      width: 84px
+      height: 84px
+      left: 13px
+      &.uncollected.placeable:hover
+        background-color: $color-white
+        cursor: pointer
+    .collect-button
+      width: 70px
+      height: 70px
+      .inner-outline
+        width: 60px
+        height: 60px
+        .icon
+          width: 53px
+          height: 35px
+      &.uncollected.placeable:active
+        background-color: $color-nav-cerulean-light1
 .four-up-row.top-row
   .x-close
-    left: 98px
-    top: 8px
+    top: 10px
   .index
-    left: 17px
-    top: 11px
-    color: $color-white
-  .collect-button-outline
-    position: relative
-    top: 3px
-    left: 18px
-.four-up-row.bottom-row
-  .x-close
-    left: 98px
-    top: 3px
-  .index
-    left: 17px
-    top: 6px
-    color: $color-white
+    top: 13px
   .collect-button-outline
     position: relative
     top: -2px
-    left: 18px
+.four-up-row.bottom-row
+  .x-close
+    top: 7px
+  .index
+    top: 8px
+  .collect-button-outline
+    position: relative
+    top: -7px

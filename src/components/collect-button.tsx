@@ -10,6 +10,7 @@ interface IProps extends IBaseProps {
   clickMouse?: () => void;
   clickEmpty?: () => void;
   clickClose?: () => void;
+  placeable?: boolean;
   index?: number;
 }
 interface IState {}
@@ -19,7 +20,6 @@ interface IState {}
 export class CollectButtonComponent extends BaseComponent<IProps, IState> {
 
   public render() {
-    const { backpack } = this.stores;
     const { backpackMouse } = this.props;
     let className = "collect-button-holder";
     if (!backpackMouse) className += " uncollected";
@@ -41,7 +41,7 @@ export class CollectButtonComponent extends BaseComponent<IProps, IState> {
     const innerOutlineClass: string = mouse.isHeterozygote ? "inner-outline heterozygote" : "inner-outline";
     return (
       <div>
-        <div className="x-close" onClick={handleClose} data-test="x-close-backpack">
+        <div className="x-close shown" onClick={handleClose} data-test="x-close-backpack">
           <svg className="icon">
             <use xlinkHref="#icon-close" />
           </svg>
@@ -61,14 +61,16 @@ export class CollectButtonComponent extends BaseComponent<IProps, IState> {
     );
   }
   private renderEmpty() {
-    const { backpack } = this.stores;
-    const { backpackMouse, clickEmpty } = this.props;
-    const backpackMouseIndex = backpack.getMouseIndex(backpackMouse);
+    const { clickEmpty } = this.props;
     const handleClick = clickEmpty ? clickEmpty : this.handleClickButton;
+    const placeableClass = this.props.placeable ? "placeable " : "";
     return (
       <div>
-        <div className="collect-button-outline uncollected">
-          <div className={"collect-button uncollected"} onClick={handleClick} data-test="empty-button">
+        <div className="x-close" />
+        <div className={"collect-button-outline uncollected " + placeableClass}>
+          <div className={"collect-button uncollected " + placeableClass}
+               onClick={handleClick}
+               data-test="empty-button">
             <div className={"inner-outline"}>
               <img src={UNCOLLECTED_IMAGE} className="icon"/>
             </div>

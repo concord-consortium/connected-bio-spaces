@@ -64,7 +64,8 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
   }
 
   private getOrganismsRow(rowIndex: number) {
-    const { organisms } = this.stores;
+    const { backpack, organisms } = this.stores;
+    const { activeMouse } = backpack;
     const { proteinSliderStartPercent, proteinSliderSelectedAminoAcidIndex,
       proteinSliderSelectedAminoAcidXLocation, showProteinInfoBox } = organisms;
     const row = organisms.rows[rowIndex];
@@ -132,8 +133,10 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
       <div className="fullwidth">
         <CollectButtonComponent
           backpackMouse={organismsMouse && organismsMouse.backpackMouse}
+          clickMouse={this.clickMouse}
           clickEmpty={this.clickEmpty(rowIndex)}
           clickClose={this.clickClose(rowIndex)}
+          placeable={activeMouse != null}
         />
         <TwoUpDisplayComponent
           leftTitle="Explore: Organism"
@@ -154,6 +157,10 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
   private setRightPanel = (rowIndex: number) => (panelType: RightPanelType) => {
     const { organisms } = this.stores;
     organisms.rows[rowIndex].setRightPanel(panelType);
+  }
+
+  private clickMouse = () => {
+    // Clicks only work on empty slots
   }
 
   private clickEmpty = (rowIndex: number) => () => {
