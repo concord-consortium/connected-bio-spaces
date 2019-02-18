@@ -35,7 +35,7 @@ const chartData = {
       dataPoints: [],
       color: dataColors.white.mice,
       maxPoints: 20,
-      initialMaxA1: 100,
+      initialMaxA1: 50,
       fixedMinA2: 0,
       fixedMaxA2: 50,
       expandOnly: true,
@@ -48,7 +48,7 @@ const chartData = {
       dataPoints: [],
       color: dataColors.neutral.mice,
       maxPoints: 20,
-      initialMaxA1: 100,
+      initialMaxA1: 50,
       fixedMinA2: 0,
       fixedMaxA2: 50,
       expandOnly: true,
@@ -61,7 +61,7 @@ const chartData = {
       dataPoints: [],
       color: dataColors.brown.mice,
       maxPoints: 20,
-      initialMaxA1: 100,
+      initialMaxA1: 50,
       fixedMinA2: 0,
       fixedMaxA2: 50,
       expandOnly: true,
@@ -233,7 +233,7 @@ export const MousePopulationsModel = types
         const date = interactive.environment.date;
         // add data every 5th step
         if (date % 5 === 0) {
-          addData(date, interactive.getData());
+          addData(date / 2, interactive.getData());
         }
       }
     });
