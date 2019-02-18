@@ -245,12 +245,17 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
         <img src="assets/cell-zoom/dropper.png" width="32px" data-test="dropper"/>
       </div>
     ));
-    const dropperCursor = hoveredOrganelle && this.isModeDropper(mode);
+    let modeClass;
+    if (hoveredOrganelle && this.isModeDropper(mode)){
+      modeClass = "dropper";
+    } else if (mode === "inspect") {
+      modeClass = "inspect";
+    }
     const width = this.props.width ? Math.min(this.props.width, MODEL_WIDTH) : MODEL_WIDTH;
     const style = {height: MODEL_HEIGHT, width};
     return (
       <div
-        className={"model-wrapper" + (dropperCursor ? " dropper" : "")}
+        className={"model-wrapper" + (modeClass ? " " + modeClass : "")}
         style={style}
         onClick={this.forceDropper}
         onMouseUp={this.forceDropper}
