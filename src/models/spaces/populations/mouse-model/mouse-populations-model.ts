@@ -162,6 +162,12 @@ export type EnvironmentColorType = typeof EnvironmentColorTypeEnum.Type;
 const ChartTypeEnum = types.enumeration("chart", ["color", "genotype", "alleles"]);
 export type ChartType = typeof ChartTypeEnum.Type;
 
+export const EnvironmentColorNames = {
+  white: "Beach",
+  neutral: "Mixed",
+  brown: "Field"
+};
+
 export const MousePopulationsModel = types
   .model("MousePopulations", {
     "environment": EnvironmentColorTypeEnum,
@@ -185,6 +191,8 @@ export const MousePopulationsModel = types
   })
   .extend(self => {
     let interactive: HawksMiceInteractive | undefined;
+    let lastEnvironmentColorAnnotationDate = 0;
+    let lastEnvironmentColorAnnotation: ChartAnnotationType;
 
     function addData(time: number, datum: any) {
       self.chartData.dataSets[0].addDataPoint(time, datum.numWhite, "");
@@ -234,31 +242,48 @@ export const MousePopulationsModel = types
     Events.addEventListener(Environment.EVENTS.AGENT_ADDED, (evt: any) => {
       if (interactive) {
         if (!hawksAdded && evt.detail && evt.detail.agent.species.speciesName === "hawks") {
+          const timeSinceLastAnnotation = interactive.environment.date - lastEnvironmentColorAnnotationDate;
+          const yOffset = timeSinceLastAnnotation < 30 ? 30 : 0;
           self.chartData.addAnnotation(ChartAnnotationModel.create({
             type: "verticalLine",
             value: interactive.environment.date,
-            dashArray: [10, 3],
             label: "Hawks added",
-            labelOffset: -50
+            labelXOffset: -50,
+            labelYOffset: yOffset
           }));
           hawksAdded = true;
         }
       }
     });
 
+    function addEnvironmentAnnotation(date: number, color: EnvironmentColorType) {
+      const now = interactive ? interactive.environment.date : 0;
+      const timeSinceLastAnnotation = now - lastEnvironmentColorAnnotationDate;
+      if (timeSinceLastAnnotation < 10 && lastEnvironmentColorAnnotation) {
+        self.chartData.removeAnnotation(lastEnvironmentColorAnnotation);
+      }
+
+      const colorAnnotation = ChartAnnotationModel.create({
+        type: "verticalLine",
+        value: date,
+        color: "black",
+        label: "   ",
+        expandLabel: EnvironmentColorNames[color],
+        labelXOffset: -15,
+        expandOffset: -27,
+        labelColor: "black",
+        labelBackgroundColor: dataColors[color].environment
+      });
+      self.chartData.addAnnotation(colorAnnotation);
+      lastEnvironmentColorAnnotationDate = date;
+      lastEnvironmentColorAnnotation = colorAnnotation;
+    }
+
     function setupGraph() {
       self.chartData.dataSets.forEach(d => d.clearDataPoints());
       self.chartData.clearAnnotations();
       hawksAdded = false;
-      self.chartData.addAnnotation(ChartAnnotationModel.create({
-        type: "verticalLine",
-        value: 0,
-        color: "black",
-        label: self.environment,
-        labelOffset: -30,
-        labelColor: "black",
-        labelBackgroundColor: dataColors[self.environment].environment
-      }));
+      addEnvironmentAnnotation(0, self.environment);
     }
 
     setupGraph();
@@ -285,16 +310,7 @@ export const MousePopulationsModel = types
         setEnvironmentColor(color: EnvironmentColorType) {
           self.environment = color;
           if (interactive) {
-            const date = interactive.environment.date;
-            self.chartData.addAnnotation(ChartAnnotationModel.create({
-              type: "verticalLine",
-              value: date,
-              color: "black",
-              label: color,
-              labelOffset: -30,
-              labelColor: "black",
-              labelBackgroundColor: dataColors[color].environment
-            }));
+            addEnvironmentAnnotation(interactive.environment.date, color);
           }
         },
         setBreedWithMutations(value: boolean) {
