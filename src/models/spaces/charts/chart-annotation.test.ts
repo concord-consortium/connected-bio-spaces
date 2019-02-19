@@ -22,7 +22,10 @@ describe("chart annotations", () => {
         content: "Test",
         enabled: true,
         position: "top",
-        xAdjust: 0
+        xAdjust: 0,
+        yAdjust: 0,
+        backgroundColor: "rgba(0,0,0,0.8)",
+        fontColor: "white"
       },
       borderColor: "red",
       borderDash: [10, 3],
@@ -35,7 +38,7 @@ describe("chart annotations", () => {
       type: "horizontalLine",
       value: 10,
       label: "Test",
-      labelOffset: 10,
+      labelXOffset: 10,
       color: "blue",
       thickness: 5
     });
@@ -49,7 +52,10 @@ describe("chart annotations", () => {
         content: "Test",
         enabled: true,
         position: "right",
-        yAdjust: 10
+        xAdjust: 10,
+        yAdjust: 0,
+        backgroundColor: "rgba(0,0,0,0.8)",
+        fontColor: "white"
       },
       borderColor: "blue",
       borderWidth: 5
@@ -95,8 +101,7 @@ describe("chart annotations", () => {
       scaleID: "x-axis-0",
       value: 20,
       label: {
-        position: "top",
-        xAdjust: 0
+        position: "top"
       },
       borderColor: "red",
       borderWidth: 2
@@ -119,8 +124,7 @@ describe("chart annotations", () => {
       scaleID: "y-axis-0",
       value: 0,
       label: {
-        position: "right",
-        yAdjust: 0
+        position: "right"
       },
       borderColor: "red",
       borderWidth: 2

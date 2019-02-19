@@ -108,6 +108,10 @@ export const ChartDataModel = types
       self.annotations.push(annotation);
     }
 
+    function removeAnnotation(annotation: ChartAnnotationType) {
+      self.annotations.remove(annotation);
+    }
+
     function clearAnnotations() {
       self.annotations.clear();
     }
@@ -118,6 +122,7 @@ export const ChartDataModel = types
         addDataSet,
         setDataSetSubset,
         addAnnotation,
+        removeAnnotation,
         clearAnnotations
       }
     };

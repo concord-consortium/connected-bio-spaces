@@ -23,6 +23,7 @@ const defaultOptions: ChartOptions = {
   plugins: {
     annotation: {
       drawTime: "beforeDatasetsDraw",
+      events: ["click", "mouseenter", "mouseleave"],
       annotations: []
     }
   },

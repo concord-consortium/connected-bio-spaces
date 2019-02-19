@@ -12,20 +12,38 @@ import { types, Instance } from "mobx-state-tree";
 
 export const ChartAnnotationModel = types
   .model("ChartAnnotation", {
-    type: types.string,   // "horizontalLine", "verticalLine", "box"
+    // "horizontalLine", "verticalLine", "box"
+    type: types.string,
+    // x value for vertical line, y value for horizontal
     value: types.maybe(types.number),
+    // line styling
     color: types.optional(types.string, "red"),
     thickness: types.optional(types.number, 2),
     dashArray: types.array(types.number),
+    // text label. Note: only available for line annotations.
     label: types.maybe(types.string),
     labelColor: types.optional(types.string, "white"),
     labelBackgroundColor: types.optional(types.string, "rgba(0,0,0,0.8)"),
-    labelOffset: types.optional(types.number, 0),
+    labelXOffset: types.optional(types.number, 0),
+    labelYOffset: types.optional(types.number, 0),
+    // if present, will add mouse rollover and click handlers
+    expandLabel: types.maybe(types.string),
+    // additional offset for rollovers of different lenghts
+    expandOffset: types.optional(types.number, 0),
+    // bounds for box labels. Infinity is permitted
     xMin: types.maybe(types.number),
     xMax: types.maybe(types.number),
     yMax: types.maybe(types.number),
     yMin: types.maybe(types.number)
   })
+  .volatile(self => ({
+    showingExpandLabel: false
+  }))
+  .actions(self => ({
+    setShowingExpandLabel: (val: boolean) => {
+      self.showingExpandLabel = val;
+    }
+  }))
   .views(self => ({
     get formatted() {
       let formatted: any = {
@@ -40,10 +58,7 @@ export const ChartAnnotationModel = types
           scaleID: "y-axis-0",
           value: self.value,
           label: {
-            position: "right",
-            yAdjust: self.labelOffset,
-            fontColor: self.labelColor,
-            backgroundColor: self.labelBackgroundColor
+            position: "right"
           },
           ...formatted
         };
@@ -54,10 +69,7 @@ export const ChartAnnotationModel = types
           scaleID: "x-axis-0",
           value: self.value,
           label: {
-            position: "top",
-            xAdjust: self.labelOffset,
-            fontColor: self.labelColor,
-            backgroundColor: self.labelBackgroundColor
+            position: "top"
           },
           ...formatted
         };
@@ -74,12 +86,32 @@ export const ChartAnnotationModel = types
       }
 
       if (self.label) {
-        formatted.label.enabled = true;
-        formatted.label.content = self.label;
+        const content = self.showingExpandLabel ? self.expandLabel : self.label;
+        const xAdjust = self.showingExpandLabel ? self.expandOffset : self.labelXOffset;
+
+        formatted.label = {
+          ...formatted.label,
+          enabled: true,
+          content,
+          xAdjust,
+          yAdjust: self.labelYOffset,
+          fontColor: self.labelColor,
+          backgroundColor: self.labelBackgroundColor
+        };
       }
 
       if (self.dashArray.length) {
         formatted.borderDash = self.dashArray;
+      }
+
+      if (self.expandLabel) {
+        const expand = (val: boolean) => () => {
+          self.setShowingExpandLabel(val);
+          this.chartInstance.update();
+        };
+        formatted.onMouseenter = () => self.setShowingExpandLabel(true);
+        formatted.onMouseleave = () => self.setShowingExpandLabel(false);
+        formatted.onClick = () => self.setShowingExpandLabel(!self.showingExpandLabel);
       }
 
       return formatted;
