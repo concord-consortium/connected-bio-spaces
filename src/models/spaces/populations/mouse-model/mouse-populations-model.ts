@@ -385,6 +385,7 @@ export const MousePopulationsModel = types
 
           buttons.push({
             title: "Add",
+            iconName: "icon-add-hawks",
             action: (e: any) => {
               self.interactive.addInitialHawksPopulation(self.numHawks);
             }

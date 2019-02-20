@@ -45,7 +45,7 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
         const type = button.type || "button";
         if (type === "button") {
           const buttonClass = button.enabled === false ? "population-button disabled" : "population-button";
-          const iconName = "#icon-" + button.title.toLowerCase();
+          const iconName = "#" + button.iconName;
           return (
             <button key={button.title} className={buttonClass}
                     onClick={button.action} data-test={button.title.replace(/ /g, "-")}>

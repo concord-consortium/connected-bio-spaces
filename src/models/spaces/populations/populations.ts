@@ -23,6 +23,7 @@ export function createPopulationsModel(curriculumName: Unit = "mouse", authoring
 export interface ToolbarButton {
   title: string;
   imageClass?: string;
+  iconName?: string;
   secondaryTitle?: string;
   secondaryTitleImageClass?: string;
   type?: string;
