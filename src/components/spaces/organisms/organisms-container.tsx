@@ -51,7 +51,7 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
           }}
         </SizeMe>
         <div className="organism-controls">
-          <ZoomControl handleZoom={this.zoomChange} />
+          <ZoomControl handleZoom={this.zoomChange} rowIndex={rowIndex} />
           <ManipulationControls rowIndex={rowIndex} />
         </div>
       </div>

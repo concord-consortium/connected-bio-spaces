@@ -221,13 +221,9 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     this.addAgentsOverTime(species, state, location, 1, 9);
   }
 
-  public isModeDropper(mode: ModeType) {
-    return mode === "assay" || mode === "add" || mode === "subtract";
-  }
-
   public render() {
     const {organisms} = this.stores;
-    const {mode} = this.props;
+    const {mode, zoomLevel} = this.props;
     const {getOrganelleLabel} = organisms;
     // const hoverLabel = appStore.mysteryLabels ?
     //   mysteryOrganelleNames[this.state.hoveredOrganelle] : this.state.hoveredOrganelle;
@@ -240,22 +236,26 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
         </div>)
       : null;
 
+    let cursorClass: string = mode;
+    const substance = organisms.rows[this.props.rowIndex].selectedSubstance;
+    cursorClass = cursorClass + (mode === "add" ? "-" + substance : "");
+    if (zoomLevel !== "protein" && cursorClass === "inspect") {
+      cursorClass = "";
+    }
+    if (!hoveredOrganelle || (mode === "inspect" && !hoveredOrganelle.includes("receptor"))) {
+      cursorClass += "-disabled";
+    }
+
     const droppers: any = this.state.dropperCoords.map((dropperCoord: any, i: number) => (
-      <div className="temp-dropper" key={i} style={{left: dropperCoord.x - 6, top: dropperCoord.y - 28}}>
-        <img src="assets/cell-zoom/dropper.png" width="32px" data-test="dropper"/>
+      <div className="temp-dropper" key={i} style={{left: dropperCoord.x - 9, top: dropperCoord.y - 41}}>
+        <img src={"assets/cell-zoom/add-" + substance + "-cursor.png"} width="43px" data-test="dropper"/>
       </div>
     ));
-    let modeClass;
-    if (hoveredOrganelle && this.isModeDropper(mode)){
-      modeClass = "dropper";
-    } else if (mode === "inspect") {
-      modeClass = "inspect";
-    }
     const width = this.props.width ? Math.min(this.props.width, MODEL_WIDTH) : MODEL_WIDTH;
     const style = {height: MODEL_HEIGHT, width};
     return (
       <div
-        className={"model-wrapper" + (modeClass ? " " + modeClass : "")}
+        className={"model-wrapper " + cursorClass}
         style={style}
         onClick={this.forceDropper}
         onMouseUp={this.forceDropper}

@@ -12,7 +12,7 @@ describe("Organisms Space model", () => {
     });
 
     it("has default labels for substances", () => {
-      expect(organisms.getSubstanceLabel("pheomelanin")).toEqual("pheomelanin");
+      expect(organisms.getSubstanceLabel("pheomelanin")).toEqual("Pheomelanin");
     });
 
     it("has default labels for organelles", () => {

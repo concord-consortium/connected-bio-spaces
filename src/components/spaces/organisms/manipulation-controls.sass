@@ -1,24 +1,89 @@
+@import "../../vars"
+
 .manipulation-controls
   display: flex
-  flex-grow: 1
   justify-content: center
   align-items: center
 
-  .button
-    border: 1px solid black
-    background-color: white
-    padding: 3px
-    display: inline-block
-    cursor: pointer
-    margin: 0 3px
-
+  .substance-type-container
+    border-style: solid
+    border-color: $color-simdata-carrot-light2
+    border-width: 1px 1px 1px 0
+    border-radius: 0 5px 5px 0
+    font-size: 11px
+    width: 153px
+    height: 38px
+    display: flex
+    flex-direction: column
+    justify-content: center
+    background-color: $color-simdata-carrot-light1
     &.disabled
+      background-color: #F59355
+      border-color: #F5AD7F
       pointer-events: none
-      color: lightgray
+    &.active
+      color: $color-white
+      border-color: $color-simdata-carrot-dark1
 
-    &.active,
-    &:active
-      background-color: gray
+    .button-row
+      position: relative
+      display: flex
+      justify-content: space-between
+      width: 155px
+      &.top
+        left: -7px
+        top: -2px
+      &.bottom
+        left: -7px
+        top: 2px
+
+    .radio-button
+      display: flex
+      align-items: center
+      color: $color-simdata-carrot-dark2
+      cursor: pointer
+      &:hover .hormone
+        background-color: rgba(0, 204, 153, .5)
+      &:hover .signal-protein
+        background-color: rgba(41, 171, 226, .5)
+      &:hover .pheomelanin
+        background-color: rgba(223, 195, 157, .5)
+      &:hover .eumelanin
+        background-color: rgba(93, 53, 21, .5)
+      &:active
+        color: $color-white
+      &.active
+        color: $color-white
+      .label
+        &.disabled
+          opacity: .5
+      .radio-outer-circle
+        height: 15px
+        width: 15px
+        border-radius: 50%
+        display: flex
+        align-items: center
+        justify-content: center
+        background-color: $color-simdata-carrot-light1
+        margin-right: 1px
+      .radio-circle
+        height: 7px
+        width: 7px
+        border-radius: 50%
+        border-style: solid
+        border-width: 3px
+        background-color: $color-simdata-carrot-light2
+        border-color: $color-simdata-carrot-light2
+        &.hormone.active
+          background-color: $color-data-hormone
+        &.signal-protein.active
+          background-color: $color-data-signalprotein
+        &.pheomelanin.active
+          background-color: $color-data-mousebrown-light-rep
+        &.eumelanin.active
+          background-color: $color-data-mousebrown-dark-rep
+        &.disabled
+          opacity: .5
 
   select
     font-size: inherit

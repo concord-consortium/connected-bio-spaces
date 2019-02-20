@@ -20,10 +20,12 @@
     position: absolute
     bottom: 0px
     text-align: center
+    justify-content: center
     font-size: 1.2em
     display: flex
     flex-direction: row
     width: 100%
+    height: 50px
     background-color: $color-simdata-carrot
     border-style: solid
     border-color: white
@@ -37,9 +39,12 @@
     flex-direction: column
     justify-content: center
     align-items: center
-    height: 50px
+    height: 40px
     width: 52px
-    margin: 4px
+    margin-top: 5px
+    margin-left: 5px
+    margin-right: 0px
+    margin-bottom: 5px
     border: none
     outline: none
     border-radius: $component-border-radius
@@ -48,67 +53,54 @@
     color: $color-simdata-carrot-dark2
     background-color: $color-simdata-carrot-light2
     cursor: pointer
-
-    &.zoom-in
-      width: 52px
-      font-size: $font-size-label3
-
-    &.zoom-out
-      width: 52px
-      font-size: $font-size-label3
-
-    &.add
-      width: 64px
+    &:hover
+      background-color: $color-simdata-carrot-light1
+    &:hover + .substance-type-container
+      border-color: $color-simdata-carrot-light1
+    &:active
+      color: $color-white
+      background-color: $color-simdata-carrot-dark1
+    &:active + .substance-type-container
+      border-color: $color-simdata-carrot-dark1
 
     &.select
       height: 20px
       width: 110px
       font-size: $font-size-header
       font-family: $font-stack
-
+    &.sticky:active
+      color: $color-white
+      background-color: $color-simdata-carrot-dark1
+    &.sticky:active .icon
+      fill: $color-white
     &.active
       color: $color-white
-      background-color: $color-nav-cerulean-dark1
-
+      background-color: $color-simdata-carrot-dark1
+    &.active:hover
+      color: $color-white
+      background-color: $color-simdata-carrot-light1
+    &.active:active
+      color: $color-simdata-carrot-dark2
+      background-color: $color-simdata-carrot-light2
+    &.active:active + .substance-type-container
+      border-color: $color-simdata-carrot-light2
+    &.active:active .icon
+      fill: $color-simdata-carrot
     &.disabled
       opacity: .5
       pointer-events: none
+    &.add
+      border-radius: 5px 0 0 5px
 
     .icon
       margin: 0px
       width: 44px
-      height: 28px
+      height: 21px
       fill: $color-simdata-carrot
-
+      &:active
+        fill: $color-white
       &.active
         fill: $color-white
-
-      &.disabled
-        opacity: .5
-
-  /* hover and mousedown states */
-  .organism-button:hover
-    background-color: $color-simdata-carrot-light1
-
-  .organism-button:active
-    color: $color-white
-    background-color: $color-simdata-carrot-dark1
-
-  .organism-button:active .icon
-    fill: $color-white
-
-  /* hover and mousedown states of blue sticky button */
-  .organism-button.active:hover
-    background-color: $color-nav-cerulean-light1
-
-  .organism-button.active:active
-    color: $color-nav-cerulean-dark2
-    background-color: $color-nav-cerulean-light2
-
-  .organism-button:active .icon.sticky
-    fill: $color-nav-cerulean
-
-  .organism-button.sticky:active
-    color: $color-white
-    background-color: $color-nav-cerulean-dark1
+      &.active:active
+        fill: $color-simdata-carrot
 
