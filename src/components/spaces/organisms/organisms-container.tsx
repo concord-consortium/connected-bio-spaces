@@ -39,12 +39,6 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
 
     return (
       <div className="organisms-container" data-test="organism-view-container">
-        <CollectButtonComponent
-          backpackMouse={organismsMouse && organismsMouse.backpackMouse}
-          clickMouse={this.clickMouse}
-          clickEmpty={this.clickEmpty}
-          clickClose={this.clickClose}
-        />
         <SizeMe monitorHeight={true}>
           {(sizeProps: SizeMeProps) => {
             return  this.organismZoomedView(organismsRow, zoomLevel, rowIndex, mode, sizeProps);
@@ -99,23 +93,4 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
     }
   }
 
-  private clickMouse = () => {
-    // Clicks only work on empty slots
-  }
-
-  private clickEmpty = () => {
-    const { backpack, organisms } = this.stores;
-    const { rowIndex } = this.props;
-    const { activeMouse } = backpack;
-    if (activeMouse != null) {
-      organisms.setRowBackpackMouse(rowIndex, activeMouse);
-      backpack.deselectMouse();
-    }
-  }
-
-  private clickClose = () => {
-    const { organisms } = this.stores;
-    const { rowIndex } = this.props;
-    organisms.clearRowBackpackMouse(rowIndex);
-  }
 }

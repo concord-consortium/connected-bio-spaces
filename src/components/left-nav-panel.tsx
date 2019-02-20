@@ -68,6 +68,7 @@ export class LeftNavPanelComponent extends BaseComponent<IProps, IState> {
                       return <CollectButtonComponent
                                backpackMouse={collectedMouse}
                                key={index}
+                               index={index + 1}
                              />;
                     });
     for (let sl = 0; sl < emptySlots; sl++) {
@@ -85,6 +86,7 @@ export class LeftNavPanelComponent extends BaseComponent<IProps, IState> {
       <CollectButtonComponent
         backpackMouse={undefined}
         key={index}
+        index={index + 1}
       />
     );
   }
