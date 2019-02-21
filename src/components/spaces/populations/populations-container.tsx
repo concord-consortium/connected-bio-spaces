@@ -9,7 +9,8 @@ import { ToolbarButton } from "../../../models/spaces/populations/populations";
 import { AgentEnvironmentMouseEvent, Agent } from "populations.js";
 import { BackpackMouse } from "../../../models/backpack-mouse";
 
-import { EnvironmentColorType } from "../../../models/spaces/populations/mouse-model/mouse-populations-model";
+import { EnvironmentColorType,
+  EnvironmentColorNames } from "../../../models/spaces/populations/mouse-model/mouse-populations-model";
 
 interface SizeMeProps {
   size?: {
@@ -151,19 +152,8 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
     }
   }
 
-  private renderChangeButtonText = (environmentColor?: EnvironmentColorType) => {
-    let colorReadable = "neutral";
-    switch (environmentColor) {
-      case "white":
-        colorReadable = "Beach";
-        break;
-      case "brown":
-        colorReadable = "Field";
-        break;
-      case "neutral":
-      default:
-        colorReadable = "Mixed";
-    }
+  private renderChangeButtonText = (environmentColor: EnvironmentColorType) => {
+    const colorReadable = EnvironmentColorNames[environmentColor];
     const colorClass = "environment-box " + colorReadable;
     return (
       <div className={colorClass}>{colorReadable}</div>
