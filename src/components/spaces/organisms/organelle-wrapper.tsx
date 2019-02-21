@@ -215,10 +215,14 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
   }
 
   public addSignalProtein(organelleType: OrganelleType, location: {x: number, y: number}) {
-    const inIntercell = organelleType === "extracellular";
-    const species = "gProteinPart";
-    const state = inIntercell ? "find_flowing_path" : "in_cell_from_click";
-    this.addAgentsOverTime(species, state, location, 1, 9);
+    const { rowIndex } = this.props;
+    const { organisms } = this.stores;
+    if (organisms.rows[rowIndex].zoomLevel === "protein") {
+      const inIntercell = organelleType === "extracellular";
+      const species = "gProteinPart";
+      const state = inIntercell ? "find_flowing_path" : "in_cell_from_click";
+      this.addAgentsOverTime(species, state, location, 1, 9);
+    }
   }
 
   public render() {
