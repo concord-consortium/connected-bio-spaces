@@ -366,16 +366,31 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
 
       // go from lightest to darkest in HSL space, which provides the best gradual transition
 
-      // lightest brown: rgb(244, 212, 141) : hsl(41°, 82%, 75%)
-      // darkest brown:  rgb(124, 81, 21)   : hsl(35°, 71%, 28%)
-      const light = [41, 82, 75];
-      const dark = [35, 71, 28];
+      // spec'd beach brown: rgb(223, 195, 157) : hsl(35°, 51%, 75%)
+      // spec'd field brown: rgb(93, 53, 21)    : hsl(27°, 63%, 22%) at 68% darkness
+      // calculated darkest brown:              : hsl(23°, 68.6%, -3%)
+      const light = [35, 51, 75];
+      const dark = [23, 68.6, -3];
       const color = light.map( (c, i) => Math.round(c + (dark[i] - c) * (percentDarkness / 100)) );
       const colorStr = `hsl(${color[0]},${color[1]}%,${color[2]}%)`;
 
       const cellFill = model.view.getModelSvgObjectById("cellshape_0_Layer0_0_FILL");
       if (cellFill) {
         cellFill.setColor(colorStr);
+      }
+
+      // border
+      // spec'd beach brown: rgb(255, 227, 190) : hsl(34°, 100%, 87%)
+      // spec'd field brown: rgb(215, 149, 97)  : hsl(26°, 60%, 61%) at 68% darkness
+      // calculated darkest brown:              : hsl(22°, 41%, 49%)
+      const lightBorder = [34, 100, 87];
+      const darkBorder = [22, 41, 49];
+      const colorBorder = lightBorder.map( (c, i) => Math.round(c + (darkBorder[i] - c) * (percentDarkness / 100)) );
+      const colorStrBorder = `hsla(${colorBorder[0]},${colorBorder[1]}%,${colorBorder[2]}%,0.6)`;
+
+      const cellBorder = model.view.getModelSvgObjectById("cellshape_0_Layer0_0_1_STROKES");
+      if (cellBorder) {
+        cellBorder.set("stroke", colorStrBorder);
       }
 
       const modelProperties: any = organismsMouse.modelProperties;
