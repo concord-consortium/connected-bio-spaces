@@ -27,6 +27,7 @@ interface IInitialColorSpecs {
 export class HawksMiceInteractive extends Interactive {
   public setup: () => void;
   public addInitialHawksPopulation: (num: number) => void;
+  public removeHawks: () => void;
   public switchEnvironments: (includeNeutralEnvironment: boolean) => void;
   public getData: () => any;
   public removeAgent: (agent: Agent) => void;
@@ -204,6 +205,17 @@ export function createInteractive(model: MousePopulationsModelType) {
     }
   }
   interactive.addInitialHawksPopulation = addInitialHawksPopulation;
+
+  function removeHawks() {
+    for (const agent of interactive.environment.agents) {
+      if (agent.species === hawkSpecies) {
+        agent.die();
+      }
+    }
+    interactive.environment.removeDeadAgents();
+    addedHawks = false;
+  }
+  interactive.removeHawks = removeHawks;
 
   interactive.switchEnvironments = (includeNeutralEnvironment: boolean) => {
     if (environmentColor === "white") {

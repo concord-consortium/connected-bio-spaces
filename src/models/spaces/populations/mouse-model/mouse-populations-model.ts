@@ -191,6 +191,9 @@ export const MousePopulationsModel = types
     "enableGenotypeChart": true,
     "enableAllelesChart": true
   })
+  .volatile(self => ({
+    hawksAdded: false
+  }))
   .extend(self => {
     let interactive: HawksMiceInteractive | undefined;
     let lastEnvironmentColorAnnotationDate = 0;
@@ -370,6 +373,9 @@ export const MousePopulationsModel = types
           chartType = type;
           setupChartForChartType();
         },
+        setHawksAdded(val: boolean) {
+          self.hawksAdded = val;
+        },
         destroyInteractive() {
           interactive = undefined;
           setupGraph();
@@ -383,13 +389,25 @@ export const MousePopulationsModel = types
         get toolbarButtons(): ToolbarButton[] {
           const buttons = [];
 
-          buttons.push({
-            title: "Add",
-            iconName: "icon-add-hawks",
-            action: (e: any) => {
-              self.interactive.addInitialHawksPopulation(self.numHawks);
-            }
-          });
+          if (!self.hawksAdded) {
+            buttons.push({
+              title: "Add",
+              iconName: "icon-add-hawks",
+              action: (e: any) => {
+                self.interactive.addInitialHawksPopulation(self.numHawks);
+                self.setHawksAdded(true);
+              }
+            });
+          } else {
+            buttons.push({
+              title: "Remove",
+              iconName: "icon-remove-hawks",
+              action: (e: any) => {
+                self.interactive.removeHawks();
+                self.setHawksAdded(false);
+              }
+            });
+          }
 
           buttons.push({
             title: "Change",
