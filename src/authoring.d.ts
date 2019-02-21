@@ -29,6 +29,9 @@ export type EnableStudentInheritanceControl = boolean;
 export type BreedWithInheritance = boolean;
 export type White1 = number;
 export type Tan1 = number;
+export type EnableColorChart = boolean;
+export type EnableGenotypeChart = boolean;
+export type EnableAllelesChart = boolean;
 export type InstructionsAsMarkdown1 = string;
 export type ShowMysteryLocationLabels = boolean;
 export type ShowMysterySubstanceLabels = boolean;
@@ -66,6 +69,9 @@ export interface PopulationsModel {
   initialPopulation?: InitialMousePopulation;
   numHawks?: NumberOfHawks;
   inheritance?: Inheritance;
+  enableColorChart?: EnableColorChart;
+  enableGenotypeChart?: EnableGenotypeChart;
+  enableAllelesChart?: EnableAllelesChart;
   [k: string]: any;
 }
 export interface InitialMousePopulation {

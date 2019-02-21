@@ -44,7 +44,10 @@ export const defaultAuthoring: ConnectedBioAuthoring = {
         white: 33.33,
         tan: 33.33
       }
-    }
+    },
+    enableColorChart: true,
+    enableGenotypeChart: true,
+    enableAllelesChart: true
   },
   organisms: {
     instructions: "",
