@@ -187,12 +187,35 @@ export const MousePopulationsModel = types
     "showHeteroStack": false,
     "chartData": types.optional(ChartDataModel, chartData),
     "showMaxPoints": false,
-    "chartType": types.optional(ChartTypeEnum, "color")
+    "enableColorChart": true,
+    "enableGenotypeChart": true,
+    "enableAllelesChart": true
   })
   .extend(self => {
     let interactive: HawksMiceInteractive | undefined;
     let lastEnvironmentColorAnnotationDate = 0;
     let lastEnvironmentColorAnnotation: ChartAnnotationType;
+
+    let chartType: ChartType = self.enableColorChart ? "color" :
+      self.enableGenotypeChart ? "genotype" :
+      self.enableAllelesChart ? "alleles" : "color";
+
+    function setupChartForChartType() {
+      self.chartData.name = chartNames[chartType];
+
+      self.chartData.dataSets[0].display = chartType === "color";
+      self.chartData.dataSets[1].display = chartType === "color";
+      self.chartData.dataSets[2].display = chartType === "color";
+
+      self.chartData.dataSets[3].display = chartType === "genotype";
+      self.chartData.dataSets[4].display = chartType === "genotype";
+      self.chartData.dataSets[5].display = chartType === "genotype";
+      self.chartData.dataSets[6].display = chartType === "genotype";
+
+      self.chartData.dataSets[7].display = chartType === "alleles";
+      self.chartData.dataSets[8].display = chartType === "alleles";
+    }
+    setupChartForChartType();
 
     function addData(time: number, datum: any) {
       self.chartData.dataSets[0].addDataPoint(time, datum.numWhite, "");
@@ -299,6 +322,10 @@ export const MousePopulationsModel = types
           }
         },
 
+        get chartType(): ChartType {
+          return chartType;
+        },
+
         get chanceOfMutation() {
           if (!self["inheritance.breedWithMutations"]) {
             return 0;
@@ -340,21 +367,8 @@ export const MousePopulationsModel = types
           self.showHeteroStack = show;
         },
         setChartType(type: ChartType) {
-          self.chartType = type;
-
-          self.chartData.name = chartNames[type];
-
-          self.chartData.dataSets[0].display = type === "color";
-          self.chartData.dataSets[1].display = type === "color";
-          self.chartData.dataSets[2].display = type === "color";
-
-          self.chartData.dataSets[3].display = type === "genotype";
-          self.chartData.dataSets[4].display = type === "genotype";
-          self.chartData.dataSets[5].display = type === "genotype";
-          self.chartData.dataSets[6].display = type === "genotype";
-
-          self.chartData.dataSets[7].display = type === "alleles";
-          self.chartData.dataSets[8].display = type === "alleles";
+          chartType = type;
+          setupChartForChartType();
         },
         destroyInteractive() {
           interactive = undefined;
@@ -448,7 +462,8 @@ export const MousePopulationsModel = types
             action: (val: boolean) => {
               self.setChartType("color");
             },
-            section: "data"
+            section: "data",
+            disabled: !self.enableColorChart
           });
           buttons.push({
             title: "Graph Genotypes",
@@ -456,7 +471,8 @@ export const MousePopulationsModel = types
             action: (val: boolean) => {
               self.setChartType("genotype");
             },
-            section: "data"
+            section: "data",
+            disabled: !self.enableGenotypeChart
           });
           buttons.push({
             title: "Graph Alleles",
@@ -464,7 +480,8 @@ export const MousePopulationsModel = types
             action: (val: boolean) => {
               self.setChartType("alleles");
             },
-            section: "data"
+            section: "data",
+            disabled: !self.enableAllelesChart
           });
 
           return buttons;

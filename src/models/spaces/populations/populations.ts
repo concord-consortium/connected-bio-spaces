@@ -31,6 +31,7 @@ export interface ToolbarButton {
   enabled?: boolean;
   floatCorner?: string;
   section?: string;
+  disabled?: boolean;
 }
 
 const InteractionModeEnum = types.enumeration("interaction", ["none", "select", "inspect"]);
