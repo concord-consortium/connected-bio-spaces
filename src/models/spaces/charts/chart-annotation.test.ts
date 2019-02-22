@@ -74,6 +74,7 @@ describe("chart annotations", () => {
 
     expect(annotation.formatted).toEqual({
       type: "box",
+      drawTime: "beforeDatasetsDraw",
       xScaleID: "x-axis-0",
       yScaleID: "y-axis-0",
       xMin: 25,
