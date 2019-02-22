@@ -192,6 +192,18 @@
               }
             }
           }
+        },
+        "enableColorChart": {
+          "title": "Enable color chart",
+          "type": "boolean"
+        },
+        "enableGenotypeChart": {
+          "title": "Enable genotype chart",
+          "type": "boolean"
+        },
+        "enableAllelesChart": {
+          "title": "Enable alleles chart",
+          "type": "boolean"
         }
       }
     },
