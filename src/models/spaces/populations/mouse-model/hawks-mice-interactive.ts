@@ -50,11 +50,11 @@ export function createInteractive(model: MousePopulationsModelType) {
               ? brownness = .5
               : brownness = 1;
           if (agent.get("color") === "brown") {
-            return agent.set("chance of being seen", 0.6 - (brownness * 0.6));
+            return agent.set("chance of being seen", 0.2 - (brownness * 0.2));
           } else if (agent.get("color") === "tan") {
-            return agent.set("chance of being seen", 0.3);
+            return agent.set("chance of being seen", 0.08);
           } else {
-            return agent.set("chance of being seen", brownness * 0.6);
+            return agent.set("chance of being seen", brownness * 0.2);
           }
         }
       }

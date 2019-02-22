@@ -125,7 +125,7 @@ describe("chart data model", () => {
     expect(chart.dataSets[0].maxA1).toEqual(75);
   });
 
-  it.only("can downsample its visible data", () => {
+  it("can downsample its visible data", () => {
     chart.dataSets[0].setMaxDataPoints(-1);
 
     for (let i = 0; i < 200; i++) {

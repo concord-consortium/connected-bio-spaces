@@ -193,7 +193,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
     agentClass: Mouse,
     geneticSpecies: MouseGeneticSpec,
     defs: {
-      MAX_AGE: 3000,
+      MAX_AGE: 20000,
       MAX_HEALTH: 1,
       MATURITY_AGE: 9,
       CHANCE_OF_MUTATION: 0,
