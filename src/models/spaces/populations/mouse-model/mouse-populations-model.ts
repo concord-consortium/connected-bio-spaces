@@ -245,6 +245,13 @@ export const MousePopulationsModel = types
       });
     }
 
+    function getModelDate() {
+      if (interactive) {
+        return interactive.environment.date / 10;
+      }
+      return 0;
+    }
+
     Events.addEventListener(Environment.EVENTS.START, () => {
       if (interactive) {
         const date = interactive.environment.date;
@@ -259,25 +266,7 @@ export const MousePopulationsModel = types
         const date = interactive.environment.date;
         // add data every 5th step
         if (date % 5 === 0) {
-          addData(date / 10, interactive.getData());
-        }
-      }
-    });
-
-    let hawksAdded = false;
-    Events.addEventListener(Environment.EVENTS.AGENT_ADDED, (evt: any) => {
-      if (interactive) {
-        if (!hawksAdded && evt.detail && evt.detail.agent.species.speciesName === "hawks") {
-          const timeSinceLastAnnotation = interactive.environment.date - lastEnvironmentColorAnnotationDate;
-          const yOffset = timeSinceLastAnnotation < 30 ? 30 : 0;
-          self.chartData.addAnnotation(ChartAnnotationModel.create({
-            type: "verticalLine",
-            value: interactive.environment.date,
-            label: "Hawks added",
-            labelXOffset: -50,
-            labelYOffset: yOffset
-          }));
-          hawksAdded = true;
+          addData(getModelDate(), interactive.getData());
         }
       }
     });
@@ -291,7 +280,7 @@ export const MousePopulationsModel = types
 
       const colorAnnotation = ChartAnnotationModel.create({
         type: "verticalLine",
-        value: date,
+        value: getModelDate(),
         color: "black",
         label: "   ",
         expandLabel: EnvironmentColorNames[color],
@@ -308,7 +297,6 @@ export const MousePopulationsModel = types
     function setupGraph() {
       self.chartData.dataSets.forEach(d => d.clearDataPoints());
       self.chartData.clearAnnotations();
-      hawksAdded = false;
       addEnvironmentAnnotation(0, self.environment);
     }
 
@@ -334,6 +322,10 @@ export const MousePopulationsModel = types
             return 0;
           }
           return self["inheritance.chanceOfMutations"] / 100;
+        },
+
+        get modelDate() {
+          return getModelDate();
         }
       },
       actions: {
@@ -384,6 +376,17 @@ export const MousePopulationsModel = types
     };
   })
   .extend(self => {
+    function addHawksAnnotation(added: boolean) {
+      const label = added ? "Hawks added" : "Hawks removed";
+      const labelXOffset = added ? -50 : -60;
+      self.chartData.addAnnotation(ChartAnnotationModel.create({
+        type: "verticalLine",
+        value: self.modelDate,
+        label,
+        labelXOffset,
+        labelYOffset: 30
+      }));
+    }
     return {
       views: {
         get toolbarButtons(): ToolbarButton[] {
@@ -396,6 +399,7 @@ export const MousePopulationsModel = types
               action: (e: any) => {
                 self.interactive.addInitialHawksPopulation(self.numHawks);
                 self.setHawksAdded(true);
+                addHawksAnnotation(true);
               }
             });
           } else {
@@ -405,6 +409,7 @@ export const MousePopulationsModel = types
               action: (e: any) => {
                 self.interactive.removeHawks();
                 self.setHawksAdded(false);
+                addHawksAnnotation(false);
               }
             });
           }
