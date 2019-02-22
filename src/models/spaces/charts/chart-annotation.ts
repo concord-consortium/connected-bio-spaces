@@ -77,6 +77,7 @@ export const ChartAnnotationModel = types
         const { xMin, xMax, yMin, yMax } = self;
         formatted = {
           type: "box",
+          drawTime: "beforeDatasetsDraw",
           xScaleID: "x-axis-0",
           yScaleID: "y-axis-0",
           backgroundColor: self.color,

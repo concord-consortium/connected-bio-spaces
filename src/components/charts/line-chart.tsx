@@ -22,7 +22,7 @@ interface ILineState { }
 const defaultOptions: ChartOptions = {
   plugins: {
     annotation: {
-      drawTime: "beforeDatasetsDraw",
+      drawTime: "afterDraw",
       events: ["click", "mouseenter", "mouseleave"],
       annotations: []
     }
