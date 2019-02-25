@@ -16,13 +16,13 @@ rules:
   initialization:
   - if:
       fact: rand
-      greaterThan: 90
+      greaterThan: 85
     then:
       switch_state: heading_to_receptor_1
     else:
       if:
         fact: rand
-        greaterThan: 80
+        greaterThan: 70
       then:
         switch_state: heading_to_receptor_2
       else:

@@ -10,9 +10,10 @@ spawn:
   never: true
 dieWhenExitingWorld: false
 properties:
-  size: 1.1
+  size: 1.8
   speed: [0.5, 0.8]
   rand: [0, 1]
+  direction: 40
 rules:
   initialization:
   - if:
@@ -110,23 +111,23 @@ rules:
       world.g_protein_1_bound: true
   - move_to:
       selector: "#path-away-from-receptor-part"
-  - change:
-      prop: direction
-      by: 5
-      until: 172
       finally:
         switch_state: bound_1
+  - change:
+      prop: direction
+      by: -5
+      until: 0
   bind_to_second_receptor:
   - set:
       world.g_protein_2_bound: true
   - move_to:
       selector: "#path-away-from-second-receptor-part"
-  - change:
-      prop: direction
-      by: 5
-      until: 176
       finally:
         switch_state: bound_2
+  - change:
+      prop: direction
+      by: -5
+      until: 10
   bound_1:
   - if:
       fact: world.hormone_1_bound
