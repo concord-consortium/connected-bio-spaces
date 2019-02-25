@@ -192,7 +192,7 @@ export const OrganismsMouseModel = types
             working_myosin_5a: true,
             open_gates: false,
             eumelanin: getPercentDarkness(),
-            hormone_spawn_period: 40,
+            hormone_spawn_period: 45,
             base_darkness: darkness
           };
         }
