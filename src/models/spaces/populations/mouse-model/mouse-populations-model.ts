@@ -31,7 +31,7 @@ const chartData = {
   name: chartNames.color,
   dataSets: [
     {
-      name: "White mice",
+      name: "Light Brown",
       dataPoints: [],
       color: dataColors.white.mice,
       maxPoints: 25,
@@ -44,7 +44,7 @@ const chartData = {
       axisLabelA2: "Number of mice"
     },
     {
-      name: "Tan mice",
+      name: "Medium Brown",
       dataPoints: [],
       color: dataColors.neutral.mice,
       maxPoints: 25,
@@ -57,7 +57,7 @@ const chartData = {
       axisLabelA2: "Number of mice"
     },
     {
-      name: "Brown mice",
+      name: "Dark Brown",
       dataPoints: [],
       color: dataColors.brown.mice,
       maxPoints: 25,
@@ -70,7 +70,7 @@ const chartData = {
       axisLabelA2: "Number of mice"
     },
     {
-      name: "CC",
+      name: "CC Mice",
       dataPoints: [],
       color: "#f4ce83",
       maxPoints: 25,
@@ -84,7 +84,7 @@ const chartData = {
       axisLabelA2: "Percent (%)"
     },
     {
-      name: "CR",
+      name: "CR Mice",
       dataPoints: [],
       color: "#db9e26",
       maxPoints: 25,
@@ -98,7 +98,7 @@ const chartData = {
       axisLabelA2: "Percent (%)"
     },
     {
-      name: "RC",
+      name: "RC Mice",
       dataPoints: [],
       color: "#db9e26",
       maxPoints: 25,
@@ -112,7 +112,7 @@ const chartData = {
       axisLabelA2: "Percent (%)"
     },
     {
-      name: "RR",
+      name: "RR Mice",
       dataPoints: [],
       color: "#795423",
       maxPoints: 25,
@@ -126,7 +126,7 @@ const chartData = {
       axisLabelA2: "Percent (%)"
     },
     {
-      name: "C",
+      name: "C Alleles",
       dataPoints: [],
       color: "#f4ce83",
       maxPoints: 25,
@@ -140,7 +140,7 @@ const chartData = {
       axisLabelA2: "Percent (%)"
     },
     {
-      name: "R",
+      name: "R Alleles",
       dataPoints: [],
       color: "#795423",
       maxPoints: 25,
