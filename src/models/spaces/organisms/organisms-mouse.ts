@@ -18,10 +18,10 @@ export const Organelle = types.enumeration("Organelle", [
 export type OrganelleType = typeof Organelle.Type;
 
 export const kSubstanceNames = [
-  "pheomelanin",
+  "hormone",
   "signalProtein",
-  "eumelanin",
-  "hormone"
+  "pheomelanin",
+  "eumelanin"
 ];
 export const Substance = types.enumeration("Substance", kSubstanceNames);
 export type SubstanceType = typeof Substance.Type;

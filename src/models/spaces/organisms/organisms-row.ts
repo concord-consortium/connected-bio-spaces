@@ -28,19 +28,20 @@ export const OrganismsRowModel = types
   .views(self => ({
     get currentData(): ChartDataModelType {
       const chartDataSets: ChartDataSetModelType[] = [];
-      const organelleLabels: string[] = [];
+      const organelleLabels: any = [];
 
       const organisms = getParentOfType(self, OrganismsSpaceModel);
 
       self.assayedOrganelles.forEach((organelle) => {
         const organelleLabel = organisms ? organisms.getOrganelleLabel(organelle) : organelle;
-        organelleLabels.push(organelleLabel);
+        organelleLabels.push(organelleLabel.split(" "));
       });
       kSubstanceNames.forEach((substance, index) => {
         const substanceName: string = organisms
           ? organisms.getSubstanceLabel(substance)
           : kSubstanceInfo[substance].displayName;
         const substanceColor: string =  kSubstanceInfo[substance].color;
+        const substancePattern = kSubstanceInfo[substance].graphPattern;
         const points: DataPointType[] = [];
         self.assayedOrganelles.forEach((organelle) => {
           if (!self.organismsMouse) {
@@ -55,6 +56,7 @@ export const OrganismsRowModel = types
           name: substanceName,
           dataPoints: points,
           color: substanceColor,
+          graphPattern: substancePattern,
           fixedMaxA2: 800,
           fixedMaxA1: 800,
           stack: stackNum

@@ -5,6 +5,7 @@ import { ChartDataModelType } from "../../models/spaces/charts/chart-data";
 import { ChartOptions, ChartType } from "chart.js";
 import { ChartColors } from "../../models/spaces/charts/chart-data-set";
 import { hexToRGBValue } from "../../utilities/color-utils";
+import { draw } from "patternomaly";
 
 interface IBarProps {
   chartData: ChartDataModelType;
@@ -27,22 +28,36 @@ const defaultOptions: ChartOptions = {
         // Hidden labels, like for "extra" bars, are marked with a "#"
         return legendItem.text.indexOf("#") === -1;
       },
-      boxWidth: 50
+      fontFamily: "Arial",
+      fontSize: 12,
+      fontColor: "#434e56",
+      boxWidth: 12,
+      padding: 10,
     }
   },
+  layout: {
+    padding: {
+      left: 0,
+      right: 10,
+      top: 0,
+      bottom: 0
+    }
+ },
   maintainAspectRatio: false,
   scales: {
     xAxes: [{
       ticks: {
         min: 0,
-        max: 100
+        max: 100,
+        fontSize: 10
       },
       stacked: true
     }],
     yAxes: [{
       ticks: {
         min: 0,
-        max: 100
+        max: 100,
+        fontSize: 10
       },
       stacked: true
     }]
@@ -56,7 +71,7 @@ const barDatasetDefaults: ChartData<any> = {
   label: "",
   fill: false,
   data: [0],
-  borderWidth: 2
+  borderWidth: 0
 };
 
 const barData = (chartData: ChartDataModelType) => {
@@ -69,7 +84,13 @@ const barData = (chartData: ChartDataModelType) => {
     const seriesOpacity = d.backgroundOpacity ? d.backgroundOpacity : 0.4;
     if (d.color) {
       // One color for all bars
-      dset.backgroundColor = hexToRGBValue(d.color, seriesOpacity);
+      if (d.graphPattern !== undefined) {
+        dset.backgroundColor = [draw(d.graphPattern, hexToRGBValue(d.color, 1.0), "#FFF", 10),
+                                draw(d.graphPattern, hexToRGBValue(d.color, 1.0), "#FFF", 10),
+                                draw(d.graphPattern, hexToRGBValue(d.color, 1.0), "#FFF", 10)];
+      } else {
+        dset.backgroundColor = hexToRGBValue(d.color, 1.0);
+      }
       dset.borderColor = hexToRGBValue(d.color, 1.0);
     } else if (d.pointColors) {
       // If we have specified point colors, use those first to color each bar,

@@ -99,8 +99,10 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
   }
 
   private renderRightPanelFooter() {
+    const footerClass = "footer " + this.props.spaceClass + " " + this.props.selectedRightPanel;
+
+    let buttons = null;
     if (this.props.rightPanelButtons) {
-      let buttons = null;
       buttons = this.props.rightPanelButtons.map( (button: any) => {
         const type = button.type || "button";
         if (type === "button" && this.props.selectedRightPanel === button.section) {
@@ -117,16 +119,12 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
           );
         }
       });
-      const footerClass = "footer " + this.props.spaceClass + " " + this.props.selectedRightPanel;
-      return (
-        <div className={footerClass} data-test="right-footer">
-          { buttons ? buttons : null }
-        </div>
-      );
-    } else {
-      return null;
     }
-
+    return (
+      <div className={footerClass} data-test="right-footer">
+        { buttons ? buttons : null }
+      </div>
+    );
   }
 
   private renderFloatButtons() {
