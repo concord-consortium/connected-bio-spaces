@@ -7,8 +7,11 @@ import { QueryParams } from "../utilities/url-params";
 import { JSONSchema6 } from "json-schema";
 import * as authoringSchema from "../authoring-schema.json";
 import { ConnectedBioAuthoring } from "../authoring";
+import { ConnectedBioModelCreationType } from "../models/stores";
 
-interface IProps extends IBaseProps {}
+interface IProps extends IBaseProps {
+  initialAuthoring: ConnectedBioModelCreationType;
+}
 interface IState {}
 
 export const defaultAuthoring: ConnectedBioAuthoring = {
@@ -106,14 +109,16 @@ const uiSchema = {
 export class AuthoringComponent extends BaseComponent<IProps, IState> {
   public render() {
     const onSubmit = (e: ISubmitEvent<QueryParams>) => {
-      const encodedParams = encodeURIComponent(JSON.stringify(e.formData));
+      const authoredForm = e.formData;
+      delete authoredForm.authoring;
+      const encodedParams = encodeURIComponent(JSON.stringify(authoredForm));
       window.open(`${location.origin}${location.pathname}?${encodedParams}`, "connected-bio-spaces");
     };
     return (
       <div className="authoring">
         <Form
           schema={authoringSchema as JSONSchema6}
-          formData={defaultAuthoring}
+          formData={this.props.initialAuthoring}
           uiSchema={uiSchema}
           onSubmit={onSubmit} />
       </div>
