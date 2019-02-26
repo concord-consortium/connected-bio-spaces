@@ -7,13 +7,15 @@ export interface QueryParams extends ConnectedBioAuthoring {
 let params: QueryParams;
 
 try {
-  const queryString = location.search.length > 1 ? decodeURIComponent(location.search.substring(1)) : "{}";
+  const queryString = location.search.length > 1
+    ? decodeURIComponent(location.search.substring(1).replace("authoring", ""))
+    : "{}";
   params = JSON.parse(queryString);
 } catch (e) {
   params = {};
 }
 
-if (location.search === "?authoring") {
+if (location.search.indexOf("authoring") > -1) {
   params.authoring = true;
 }
 
