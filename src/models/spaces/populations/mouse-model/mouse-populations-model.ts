@@ -400,7 +400,8 @@ export const MousePopulationsModel = types
                 self.interactive.addInitialHawksPopulation(self.numHawks);
                 self.setHawksAdded(true);
                 addHawksAnnotation(true);
-              }
+              },
+              enabled: (self.numHawks > 0)
             });
           } else {
             buttons.push({
@@ -410,7 +411,8 @@ export const MousePopulationsModel = types
                 self.interactive.removeHawks();
                 self.setHawksAdded(false);
                 addHawksAnnotation(false);
-              }
+              },
+              enabled: (self.numHawks > 0)
             });
           }
 
