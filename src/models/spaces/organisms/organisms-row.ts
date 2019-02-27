@@ -21,7 +21,7 @@ export const OrganismsRowModel = types
     assayedOrganelles: types.array(Organelle),
     zoomLevel: types.optional(ZoomLevel, "organism"),
     showProteinDNA: false,
-    showProteinAminoAcidsOnProtein: false,
+    showProteinAminoAcidsOnProtein: true,
     rightPanel: types.optional(RightPanelTypeEnum, "instructions"),
     selectedSubstance: types.optional(Substance, "hormone")
   })
