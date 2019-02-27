@@ -8,6 +8,7 @@ import { ConnectedBioAuthoring } from "../authoring";
 import { QueryParams } from "../utilities/url-params";
 import { OrganismsMouseModelType } from "./spaces/organisms/organisms-mouse";
 import { OrganismsRowModelType } from "./spaces/organisms/organisms-row";
+import { autorun } from "mobx";
 
 export type Curriculum = "mouse";
 
@@ -30,6 +31,16 @@ export function createStores(initialModel: ConnectedBioModelCreationType): IStor
   // since organisms may contain references to backpack mice, yet is in a different tree, we need to pass them in
   // explicitly so they can be found
   const organisms = createOrganismsModel(initialModel.organisms, backpack);
+
+  // inform organisms space if user selects a backpack mouse
+  autorun(() => {
+    if (ui.investigationPanelSpace === "organism" && backpack.activeMouse) {
+      const organismAdded = organisms.activeBackpackMouseUpdated(backpack.activeMouse);
+      if (organismAdded) {
+        backpack.deselectMouse();
+      }
+    }
+  });
 
   return {
     ui,

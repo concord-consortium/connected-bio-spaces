@@ -159,6 +159,15 @@ export const OrganismsSpaceModel = types
   }))
   .views(self => {
     return {
+      get firstEmptyRow() {
+        if (!self.rows[0].organismsMouse) {
+          return 0;
+        }
+        if (!self.rows[1].organismsMouse) {
+          return 1;
+        }
+        return null;
+      },
       getOrganelleLabel(organelle: OrganelleType) {
         if (self.useMysteryOrganelles) {
           return kOrganelleInfo[organelle].mysteryLabel;
@@ -216,6 +225,14 @@ export const OrganismsSpaceModel = types
         self.showProteinInfoBox = !self.showProteinInfoBox;
       }
     };
-  });
+  })
+  .actions(self => ({
+    activeBackpackMouseUpdated(backpackMouse: BackpackMouseType) {
+      if (self.firstEmptyRow !== null) {
+        self.setRowBackpackMouse(self.firstEmptyRow, backpackMouse);
+        return true;
+      }
+    }
+  }));
 
 export type OrganismsSpaceModelType = Instance<typeof OrganismsSpaceModel>;
