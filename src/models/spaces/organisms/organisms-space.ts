@@ -153,13 +153,13 @@ export const OrganismsSpaceModel = types
       [OrganismsRowModel.create(), OrganismsRowModel.create({rightPanel: "data"})]),
     useMysteryOrganelles: false,
     useMysterySubstances: false,
-    instructions: ""
+    instructions: "",
+    showProteinInfoBox: false
   })
   .volatile(self => ({
     proteinSliderStartPercent: 0,
     proteinSliderSelectedAminoAcidIndex: 0,
-    proteinSliderSelectedAminoAcidXLocation: 0,
-    showProteinInfoBox: false
+    proteinSliderSelectedAminoAcidXLocation: 0
   }))
   .views(self => {
     return {
