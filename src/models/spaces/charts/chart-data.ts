@@ -6,7 +6,7 @@ export const ChartDataModel = types
   .model("ChartData", {
     name: types.string,
     dataSets: types.array(ChartDataSetModel),
-    labels: types.array(types.string),
+    labels: types.array(types.array(types.string)),
     annotations: types.array(ChartAnnotationModel)
   })
   .views(self => ({

@@ -59,6 +59,9 @@ export const DataPoint = types
   });
 export type DataPointType = typeof DataPoint.Type;
 
+export const GraphPatternTypeEnum = types.enumeration("type", ["diagonal", "diagonal-right-left"]);
+export type GraphPatternType = typeof GraphPatternTypeEnum.Type;
+
 export const ChartDataSetModel = types
   .model("ChartDataSet", {
     name: types.string,
@@ -70,6 +73,7 @@ export const ChartDataSetModel = types
     pointColors: types.maybe(types.array(types.string)),
     // For bars, can vary opacity of the bar by dataset to show a second dataset with less opacity
     backgroundOpacity: types.maybe(types.number),
+    graphPattern: types.maybe(GraphPatternTypeEnum),
     // If maxPoints is 0 we will always work with the entire data set
     maxPoints: types.optional(types.number, -1),
     fixedMinA1: types.maybe(types.number),

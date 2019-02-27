@@ -6,34 +6,38 @@ import { RightPanelType } from "../../ui";
 import { OrganismsMouseModel, OrganelleType, SubstanceType } from "./organisms-mouse";
 import { OrganismsRowModel } from "./organisms-row";
 import { BackpackModelType } from "../../backpack";
+import { GraphPatternType } from "../charts/chart-data-set";
 
 type SubstanceInfo = {
   [substance in SubstanceType]: {
     displayName: string;
     mysteryLabel: string;
     color: string;
+    graphPattern?: GraphPatternType;
   };
 };
 export const kSubstanceInfo: SubstanceInfo = {
-  pheomelanin: {
-    displayName: "Pheomelanin",
-    mysteryLabel: "substance A",
-    color: "#f4ce83"
+  hormone: {
+    displayName: "Hormone",
+    mysteryLabel: "substance D",
+    color: "#00cc99",
+    graphPattern: "diagonal"
   },
   signalProtein: {
     displayName: "Signal Protein",
     mysteryLabel: "substance B",
-    color: "#d88bff"
+    color: "#29abe2",
+    graphPattern: "diagonal-right-left"
+  },
+  pheomelanin: {
+    displayName: "Pheomelanin",
+    mysteryLabel: "substance A",
+    color: "#dfc39d",
   },
   eumelanin: {
     displayName: "Eumelanin",
     mysteryLabel: "substance C",
-    color: "#795423"
-  },
-  hormone: {
-    displayName: "Hormone",
-    mysteryLabel: "substance D",
-    color: "#0adbd7"
+    color: "#5d3515",
   },
 };
 
@@ -75,7 +79,7 @@ export const kOrganelleInfo: OrganelleInfo = {
     substances: {}
   },
   extracellular: {
-    displayName: "Extracellular",
+    displayName: "Extracellular Space",
     mysteryLabel: "Location 4",
     substances: {
       hormone: {
