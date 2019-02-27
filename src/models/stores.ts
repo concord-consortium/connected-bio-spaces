@@ -9,6 +9,7 @@ import { QueryParams } from "../utilities/url-params";
 import { OrganismsMouseModelType } from "./spaces/organisms/organisms-mouse";
 import { OrganismsRowModelType } from "./spaces/organisms/organisms-row";
 import { autorun } from "mobx";
+import { onAction } from "mobx-state-tree";
 
 export type Curriculum = "mouse";
 
@@ -39,6 +40,21 @@ export function createStores(initialModel: ConnectedBioModelCreationType): IStor
       if (organismAdded) {
         backpack.deselectMouse();
       }
+    }
+  });
+
+  // Prevent user from having to deselect and reselect a selected backpack mouse in order to
+  // add to a row.
+  // deselect mice on space changes
+  onAction(ui, call => {
+    if (call.name === "setInvestigationPanelSpace") {
+      backpack.deselectMouse();
+    }
+  });
+  // and when organism rows are cleared
+  onAction(organisms, call => {
+    if (call.name === "clearRowBackpackMouse") {
+      backpack.deselectMouse();
     }
   });
 
