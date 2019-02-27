@@ -158,10 +158,7 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
               updateSelectionStart={this.handleUpdateSelectionStart}
               animateToSelectionStart={this.handleAnimateToSelectionStart}
               selectedAminoAcidIndex={selectedAminoAcidIndex}
-              onAminoAcidClick={this.handleAminoAcidClick}
               updateSelectedAminoAcidIndex={this.handleUpdateSelectedAminoAcidIndex}
-              onClick={this.handleAminoAcidSliderClick}
-              marks={this.state.marks}
               showDNA={showDNA}
               dimUnselected={showInfoBox}
             />
@@ -177,9 +174,7 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
                 updateSelectionStart={this.handleUpdateSelectionStart}
                 animateToSelectionStart={this.handleAnimateToSelectionStart}
                 selectedAminoAcidIndex={selectedAminoAcidIndex}
-                onAminoAcidClick={this.handleAminoAcidClick}
                 updateSelectedAminoAcidIndex={this.handleUpdateSelectedAminoAcidIndex}
-                onClick={this.handleAminoAcidSliderClick}
                 marks={this.state.marks}
                 dimUnselected={showInfoBox}
                 showDNA={showDNA}
@@ -201,6 +196,14 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
             />
           }
           <div className="options">
+            <label>
+              <input
+                name="showInfoBox"
+                type="checkbox"
+                checked={showInfoBox}
+                onChange={this.handleShowInfoBoxToggle} />
+              Show Amino Acid Info
+            </label>
             {
               dnaSwitchable &&
               <label>
@@ -266,16 +269,6 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
     }
   }
 
-  private handleAminoAcidClick = (isSelected: boolean) => {
-    if (!this.props.showInfoBox || (this.props.showInfoBox && isSelected)) {
-      this.props.toggleShowInfoBox();
-    }
-  }
-
-  private handleAminoAcidSliderClick = () => {
-    this.props.toggleShowInfoBox();
-  }
-
   private handleUpdateSelectedAminoAcidIndex = (selectedAminoAcidIndex: number, selectedAminoAcidXLocation: number) => {
     this.props.setSelectedAminoAcidIndex(selectedAminoAcidIndex, selectedAminoAcidXLocation);
   }
@@ -298,6 +291,10 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
 
   private handleAminoAcidsToggle = () => {
     this.props.toggleShowingAminoAcidsOnProtein();
+  }
+
+  private handleShowInfoBoxToggle = () => {
+    this.props.toggleShowInfoBox();
   }
 }
 

@@ -225,8 +225,8 @@ export const OrganismsSpaceModel = types
         self.proteinSliderSelectedAminoAcidIndex = selectedAminoAcidIndex;
         self.proteinSliderSelectedAminoAcidXLocation = selectedAminoAcidXLocation;
       },
-      toggleShowInfoBox() {
-        self.showProteinInfoBox = !self.showProteinInfoBox;
+      setShowInfoBox(val: boolean) {
+        self.showProteinInfoBox = val;
       }
     };
   })
