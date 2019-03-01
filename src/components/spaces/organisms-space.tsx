@@ -133,8 +133,6 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
       <div className="fullwidth">
         <CollectButtonComponent
           backpackMouse={organismsMouse && organismsMouse.backpackMouse}
-          clickMouse={this.clickMouse}
-          clickEmpty={this.clickEmpty(rowIndex)}
           clickClose={this.clickClose(rowIndex)}
           placeable={activeMouse != null}
         />
@@ -157,19 +155,6 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
   private setRightPanel = (rowIndex: number) => (panelType: RightPanelType) => {
     const { organisms } = this.stores;
     organisms.rows[rowIndex].setRightPanel(panelType);
-  }
-
-  private clickMouse = () => {
-    // Clicks only work on empty slots
-  }
-
-  private clickEmpty = (rowIndex: number) => () => {
-    const { backpack, organisms } = this.stores;
-    const { activeMouse } = backpack;
-    if (activeMouse != null) {
-      organisms.setRowBackpackMouse(rowIndex, activeMouse);
-      backpack.deselectMouse();
-    }
   }
 
   private clickClose = (rowIndex: number) => () => {

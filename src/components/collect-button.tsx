@@ -47,7 +47,7 @@ export class CollectButtonComponent extends BaseComponent<IProps, IState> {
           </svg>
         </div>
         <div className="collect-button-outline">
-          <div className={buttonClass} onClick={handleMouse} data-test="stored-mouse-class">
+          <div className={buttonClass} onMouseDown={handleMouse} data-test="stored-mouse-class">
             <div className={innerOutlineClass} data-test="inner-outline">
               <img src={mouse.baseImage} className="icon" data-test="stored-mouse-image"/>
               <div className="label" data-test="stored-mouse-label">{mouse.label}</div>
