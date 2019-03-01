@@ -8,10 +8,10 @@ spawn:
   never: true
 dieWhenExitingWorld: false
 properties:
-  size: 1
+  size: 1.7
   speed: 0.9
   image_selector: gbodypart1
-  direction: 172
+  direction: 0
 initialState: findPathStart
 rules:
   findPathStart:

@@ -124,7 +124,7 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
               selectionStartPercent={selectionStartPercent}
               updateSelectionStart={this.handleAnimateToSelectionStart}
               selectionPercent={protein1SelectionPercent}
-              viewBox="0 0 222 206"
+              viewBox="0 0 254 222"
               svg={protein.svgImage}
               marks={this.state.marks.map(loc => (loc + 0.5) / aminoAcids.length)}
               aminoAcids={aminoAcids}

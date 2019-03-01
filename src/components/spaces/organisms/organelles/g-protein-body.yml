@@ -5,9 +5,9 @@ spawn:
   never: true
 dieWhenExitingWorld: false
 properties:
-  size: 1
+  size: 1.7
   speed: 0.7
-  drection: 172
+  drection: 0
   image_selector: gbodypart2
   second_receptor: false
 rules:

@@ -136,16 +136,16 @@ export const OrganismsMouseModel = types
                 ? organismColor === "brown"
                   ? (180 + .8 * extracellularHormone) / 10
                   : organismColor === "tan"
-                    ? (90 + .8 * extracellularHormone) / 10
+                    ? (70 + .8 * extracellularHormone) / 10
                     : 25 / 10
                 : 0;
               deathRate = (25 + 1.5 * cytoplasmProtein) / 10;
               break;
             case "eumelanin":
               birthRate = organelle === "melanosome"
-                ? organismColor !== "white"
-                  ? (280 + 1.5 * cytoplasmProtein) / 10
-                  : (25 + 1.8 * cytoplasmProtein) / 10
+                ? organismColor !== "brown"
+                  ? (25 + 1.8 * cytoplasmProtein) / 10
+                  : (280 + 1.5 * cytoplasmProtein) / 10
                 : 0;
               deathRate = (25 + 1.5 * melanosomeEumelanin) / 10;
               break;
@@ -192,7 +192,7 @@ export const OrganismsMouseModel = types
             working_myosin_5a: true,
             open_gates: false,
             eumelanin: getPercentDarkness(),
-            hormone_spawn_period: 40,
+            hormone_spawn_period: 45,
             base_darkness: darkness
           };
         }
