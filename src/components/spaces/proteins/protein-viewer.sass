@@ -1,23 +1,47 @@
 .protein-viewer
   display: flex
-  align-items: center
   position: initial !important
 
 .proteins
   display: flex
 
+  .protein
+    display: flex
+    padding: 0 10px
+
+  .protein > svg
+    height: 40vh
+
 .amino-acids
   position: absolute
   bottom: 5px
 
-.options
-  position: absolute
-  bottom: 5px
-  display: flex
-  flex-direction: column
-  align-items: flex-start
+.info-and-options
+  font-size: 0.8em;
 
-.info-box-wrapper
-  position: absolute
-  right: 230px
-  bottom: 230px
+  .options
+    position: absolute
+    bottom: 5px
+    display: flex
+    flex-direction: column
+    align-items: flex-start
+
+  .info-box-wrapper
+    right: 230px
+    bottom: 230px
+
+@media screen and (max-height: 570px)
+  .info-and-options
+    font-size: 2.5vh
+
+    .info
+      padding: 0.5vh
+
+    .info > div
+      padding: 0.5vh
+
+    .info>svg
+      width: 4vh
+
+    .options > label
+      margin-bottom: -3px

@@ -2,7 +2,6 @@ import * as React from "react";
 import { svgPathProperties } from "svg-path-properties";
 import parseSVG, { closestPointOnPath } from "./util/svg-utils";
 import { getAminoAcidColor } from "./util/amino-acid-utils";
-import "./protein.sass";
 
 interface ProteinProps {
   svg: string;

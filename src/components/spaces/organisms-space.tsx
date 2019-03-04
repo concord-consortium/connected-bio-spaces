@@ -60,7 +60,7 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
 
   private toggleShowInfoBox = () => {
     const { organisms } = this.stores;
-    organisms.toggleShowInfoBox();
+    organisms.setShowInfoBox(!organisms.showProteinInfoBox);
   }
 
   private getOrganismsRow(rowIndex: number) {

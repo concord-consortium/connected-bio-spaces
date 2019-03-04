@@ -30,10 +30,8 @@ interface AminoAcidSliderProps {
   dimUnselected: boolean;
   updateSelectionStart: (selectionStart: number) => void;
   animateToSelectionStart: (selectionStart: number) => void;
-  onAminoAcidClick: (isSelected: boolean) => void;
   updateSelectedAminoAcidIndex: (selectedAminoAcidIndex: number,
                                  selectedAminoAcidXLocation: number) => void;
-  onClick: () => void;
 }
 
 // annoying pattern because Typescript doesn't underdtand default props.
@@ -259,8 +257,7 @@ export default class AminoAcidSlider extends Component<AminoAcidSliderProps, Ami
 
     return (
       <div className={wrapperClass} style={frameStyle} ref={this.setWrapperRef}
-          onMouseDown={this.onMouseDown}
-          onClick={this.onClick}>
+          onMouseDown={this.onMouseDown}>
         <div
           className="selection"
           style={selectStyle}
@@ -345,20 +342,8 @@ export default class AminoAcidSlider extends Component<AminoAcidSliderProps, Ami
     evt.preventDefault();
   }
 
-  private onClick = () => {
-    // if it was to short
-    if (Date.now() - lastMouseDownTime > maxClickTime) return;
-    // or if we have stated dragging
-    if (this.props.selectionStartPercent !== this.state.draggingInitialStartPercent) return;
-
-    if (this.props.onClick) {
-      this.props.onClick();
-    }
-  }
-
   private onAminoAcidSelection = (index: number) => {
     return (evt: React.MouseEvent<SVGGElement>) => {
-      this.props.onAminoAcidClick(index === this.currentlySelectedAminoAcidIndex);
       this.props.animateToSelectionStart(this.getSelectionStartPercentForAminoAcid(index));
       evt.stopPropagation();
       evt.preventDefault();
