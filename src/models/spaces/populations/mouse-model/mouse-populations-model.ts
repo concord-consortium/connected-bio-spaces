@@ -345,6 +345,7 @@ export const MousePopulationsModel = types
           if (interactive) {
             interactive.reset();
           }
+          this.setHawksAdded(false);
           setupGraph();
         },
         toggleShowMaxPoints() {
