@@ -15,7 +15,7 @@ try {
   params = {};
 }
 
-if (location.search.indexOf("authoring") > -1) {
+if (location.search.indexOf("authoring") === 1) {
   params.authoring = true;
 }
 
