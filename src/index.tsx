@@ -22,25 +22,25 @@ function initializeModel(studentData: UserSaveDataType) {
 
   const initialStore: ConnectedBioModelCreationType = merge({}, defaultAuthoring, urlParams, studentData);
 
-  const stores = createStores( initialStore );
-
-  // Save data everytime stores change
-  function saveUserData() {
-    phone.post("interactiveState", getUserSnapshot(stores));
-  }
-  onSnapshot(stores.backpack, saveUserData);
-  onSnapshot(stores.ui, saveUserData);
-  onSnapshot(stores.organisms, saveUserData);
-
   const appRoot = document.getElementById("app");
 
   if (urlParams.authoring) {
     appRoot!.classList.add("authoring");
     ReactDOM.render((
-      <AuthoringComponent />
+      <AuthoringComponent initialAuthoring={initialStore} />
       ), appRoot
     );
   } else {
+    const stores = createStores( initialStore );
+
+    // Save data everytime stores change
+    const saveUserData = () => {
+      phone.post("interactiveState", getUserSnapshot(stores));
+    };
+    onSnapshot(stores.backpack, saveUserData);
+    onSnapshot(stores.ui, saveUserData);
+    onSnapshot(stores.organisms, saveUserData);
+
     ReactDOM.render(
       <Provider stores={stores}>
         <AppComponent showTopBar={initialStore.topBar} />
