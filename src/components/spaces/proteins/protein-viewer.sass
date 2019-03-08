@@ -1,6 +1,12 @@
 .protein-viewer
   display: flex
   position: initial !important
+  height: 100%
+
+.proteins-and-sliders
+  display: flex
+  flex-direction: column
+  justify-content: space-between
 
 .proteins
   display: flex
@@ -8,13 +14,11 @@
   .protein
     display: flex
     padding: 0 10px
+    height: 100%
 
   .protein > svg
-    height: 40vh
-
-.amino-acids
-  position: absolute
-  bottom: 5px
+    height: 100%
+    position: relative
 
 .info-and-options
   font-size: 0.8em;
