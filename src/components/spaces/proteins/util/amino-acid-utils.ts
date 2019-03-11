@@ -40,7 +40,7 @@ export const aminoAcids: {[key: string]: AminoAcidType} = {
     fullName: "Cysteine",
     threeLetterAbbreviation: "Cys",
     codons: ["TGT", "TGC"],
-    group: aminoAcidGroups.Polar
+    group: aminoAcidGroups.Hydrophobic
   },
   D: {
     fullName: "Aspartic acid",
@@ -70,7 +70,7 @@ export const aminoAcids: {[key: string]: AminoAcidType} = {
     fullName: "Histidine",
     threeLetterAbbreviation: "His",
     codons: ["CAT", "CAC"],
-    group: aminoAcidGroups.Polar
+    group: aminoAcidGroups.Positive
   },
   I: {
     fullName: "Isoleucine",
