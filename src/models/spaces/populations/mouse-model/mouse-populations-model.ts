@@ -5,6 +5,7 @@ import { ToolbarButton } from "../populations";
 import { ChartDataModel } from "../../charts/chart-data";
 import { hawkSpecies } from "./hawks";
 import { ChartAnnotationModel, ChartAnnotationType } from "../../charts/chart-annotation";
+import { observable } from "mobx";
 
 const dataColors = {
   white: {
@@ -199,24 +200,26 @@ export const MousePopulationsModel = types
     let lastEnvironmentColorAnnotationDate = 0;
     let lastEnvironmentColorAnnotation: ChartAnnotationType;
 
-    let chartType: ChartType = self.enableColorChart ? "color" :
+    const initialChart: ChartType = self.enableColorChart ? "color" :
       self.enableGenotypeChart ? "genotype" :
       self.enableAllelesChart ? "alleles" : "color";
+    const chartType = observable.box(initialChart);
 
     function setupChartForChartType() {
-      self.chartData.name = chartNames[chartType];
+      const chartString = chartType.get();
+      self.chartData.name = chartNames[chartString as ChartType];
 
-      self.chartData.dataSets[0].display = chartType === "color";
-      self.chartData.dataSets[1].display = chartType === "color";
-      self.chartData.dataSets[2].display = chartType === "color";
+      self.chartData.dataSets[0].display = chartString === "color";
+      self.chartData.dataSets[1].display = chartString === "color";
+      self.chartData.dataSets[2].display = chartString === "color";
 
-      self.chartData.dataSets[3].display = chartType === "genotype";
-      self.chartData.dataSets[4].display = chartType === "genotype";
-      self.chartData.dataSets[5].display = chartType === "genotype";
-      self.chartData.dataSets[6].display = chartType === "genotype";
+      self.chartData.dataSets[3].display = chartString === "genotype";
+      self.chartData.dataSets[4].display = chartString === "genotype";
+      self.chartData.dataSets[5].display = chartString === "genotype";
+      self.chartData.dataSets[6].display = chartString === "genotype";
 
-      self.chartData.dataSets[7].display = chartType === "alleles";
-      self.chartData.dataSets[8].display = chartType === "alleles";
+      self.chartData.dataSets[7].display = chartString === "alleles";
+      self.chartData.dataSets[8].display = chartString === "alleles";
     }
     setupChartForChartType();
 
@@ -314,7 +317,7 @@ export const MousePopulationsModel = types
         },
 
         get chartType(): ChartType {
-          return chartType;
+          return chartType.get();
         },
 
         get chanceOfMutation() {
@@ -363,7 +366,7 @@ export const MousePopulationsModel = types
           self.showHeteroStack = show;
         },
         setChartType(type: ChartType) {
-          chartType = type;
+          chartType.set(type);
           setupChartForChartType();
         },
         setHawksAdded(val: boolean) {
