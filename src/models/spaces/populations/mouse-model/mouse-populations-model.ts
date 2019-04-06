@@ -190,7 +190,8 @@ export const MousePopulationsModel = types
     "showMaxPoints": false,
     "enableColorChart": true,
     "enableGenotypeChart": true,
-    "enableAllelesChart": true
+    "enableAllelesChart": true,
+    "userChartType": types.union(types.undefined, ChartTypeEnum)
   })
   .volatile(self => ({
     hawksAdded: false
@@ -200,13 +201,15 @@ export const MousePopulationsModel = types
     let lastEnvironmentColorAnnotationDate = 0;
     let lastEnvironmentColorAnnotation: ChartAnnotationType;
 
-    const initialChart: ChartType = self.enableColorChart ? "color" :
+    function getChartTypeOrDefault() {
+      return self.userChartType ? self.userChartType :
+      self.enableColorChart ? "color" :
       self.enableGenotypeChart ? "genotype" :
       self.enableAllelesChart ? "alleles" : "color";
-    const chartType = observable.box(initialChart);
+    }
 
     function setupChartForChartType() {
-      const chartString = chartType.get();
+      const chartString = getChartTypeOrDefault();
       self.chartData.name = chartNames[chartString as ChartType];
 
       self.chartData.dataSets[0].display = chartString === "color";
@@ -317,7 +320,7 @@ export const MousePopulationsModel = types
         },
 
         get chartType(): ChartType {
-          return chartType.get();
+          return getChartTypeOrDefault();
         },
 
         get chanceOfMutation() {
@@ -366,7 +369,7 @@ export const MousePopulationsModel = types
           self.showHeteroStack = show;
         },
         setChartType(type: ChartType) {
-          chartType.set(type);
+          self.userChartType = type;
           setupChartForChartType();
         },
         setHawksAdded(val: boolean) {
