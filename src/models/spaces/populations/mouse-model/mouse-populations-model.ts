@@ -1,11 +1,9 @@
 import { types, Instance } from "mobx-state-tree";
 import { createInteractive, HawksMiceInteractive } from "./hawks-mice-interactive";
-import { Interactive, Events, Environment, Agent } from "populations.js";
+import { Events, Environment } from "populations.js";
 import { ToolbarButton } from "../populations";
 import { ChartDataModel } from "../../charts/chart-data";
-import { hawkSpecies } from "./hawks";
 import { ChartAnnotationModel, ChartAnnotationType } from "../../charts/chart-annotation";
-import { observable } from "mobx";
 
 const dataColors = {
   white: {
@@ -190,11 +188,11 @@ export const MousePopulationsModel = types
     "showMaxPoints": false,
     "enableColorChart": true,
     "enableGenotypeChart": true,
-    "enableAllelesChart": true,
-    "userChartType": types.union(types.undefined, ChartTypeEnum)
+    "enableAllelesChart": true
   })
   .volatile(self => ({
-    hawksAdded: false
+    hawksAdded: false,
+    userChartType: undefined as (ChartType | undefined)
   }))
   .extend(self => {
     let interactive: HawksMiceInteractive | undefined;
