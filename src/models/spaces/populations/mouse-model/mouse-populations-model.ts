@@ -1,11 +1,9 @@
 import { types, Instance } from "mobx-state-tree";
 import { createInteractive, HawksMiceInteractive } from "./hawks-mice-interactive";
-import { Interactive, Events, Environment, Agent } from "populations.js";
+import { Events, Environment } from "populations.js";
 import { ToolbarButton } from "../populations";
 import { ChartDataModel } from "../../charts/chart-data";
-import { hawkSpecies } from "./hawks";
 import { ChartAnnotationModel, ChartAnnotationType } from "../../charts/chart-annotation";
-import { observable } from "mobx";
 
 const dataColors = {
   white: {
@@ -193,20 +191,23 @@ export const MousePopulationsModel = types
     "enableAllelesChart": true
   })
   .volatile(self => ({
-    hawksAdded: false
+    hawksAdded: false,
+    userChartType: undefined as (ChartType | undefined)
   }))
   .extend(self => {
     let interactive: HawksMiceInteractive | undefined;
     let lastEnvironmentColorAnnotationDate = 0;
     let lastEnvironmentColorAnnotation: ChartAnnotationType;
 
-    const initialChart: ChartType = self.enableColorChart ? "color" :
+    function getChartTypeOrDefault() {
+      return self.userChartType ? self.userChartType :
+      self.enableColorChart ? "color" :
       self.enableGenotypeChart ? "genotype" :
       self.enableAllelesChart ? "alleles" : "color";
-    const chartType = observable.box(initialChart);
+    }
 
     function setupChartForChartType() {
-      const chartString = chartType.get();
+      const chartString = getChartTypeOrDefault();
       self.chartData.name = chartNames[chartString as ChartType];
 
       self.chartData.dataSets[0].display = chartString === "color";
@@ -317,7 +318,7 @@ export const MousePopulationsModel = types
         },
 
         get chartType(): ChartType {
-          return chartType.get();
+          return getChartTypeOrDefault();
         },
 
         get chanceOfMutation() {
@@ -366,7 +367,7 @@ export const MousePopulationsModel = types
           self.showHeteroStack = show;
         },
         setChartType(type: ChartType) {
-          chartType.set(type);
+          self.userChartType = type;
           setupChartForChartType();
         },
         setHawksAdded(val: boolean) {
