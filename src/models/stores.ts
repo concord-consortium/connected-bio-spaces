@@ -10,6 +10,7 @@ import { OrganismsMouseModelType } from "./spaces/organisms/organisms-mouse";
 import { OrganismsRowModelType } from "./spaces/organisms/organisms-row";
 import { autorun } from "mobx";
 import { onAction } from "mobx-state-tree";
+import { BreedingModelType, BreedingModel } from "./spaces/breeding/breeding";
 
 export type Curriculum = "mouse";
 
@@ -21,6 +22,7 @@ export interface IStores {
   populations: PopulationsModelType;
   backpack: BackpackModelType;
   organisms: OrganismsSpaceModelType;
+  breeding: BreedingModelType;
 }
 
 export type ConnectedBioModelCreationType = ConnectedBioAuthoring & QueryParams & UserSaveDataType;
@@ -29,14 +31,20 @@ export function createStores(initialModel: ConnectedBioModelCreationType): IStor
   const ui = createUIModel(initialModel.ui);
   const backpack = BackpackModel.create(initialModel.backpack);
   const populations = createPopulationsModel(initialModel.curriculum, flatten(initialModel.populations));
-  // since organisms may contain references to backpack mice, yet is in a different tree, we need to pass them in
-  // explicitly so they can be found
+  // since organisms and breeding may contain references to backpack mice, yet are in different trees,
+  // we need to pass them in explicitly so they can be found
   const organisms = createOrganismsModel(initialModel.organisms, backpack);
+  const breeding = BreedingModel.create({});
 
   // inform organisms space if user selects a backpack mouse
   autorun(() => {
     if (ui.investigationPanelSpace === "organism" && backpack.activeMouse) {
       const organismAdded = organisms.activeBackpackMouseUpdated(backpack.activeMouse);
+      if (organismAdded) {
+        backpack.deselectMouse();
+      }
+    } else if (ui.investigationPanelSpace === "breeding" && backpack.activeMouse) {
+      const organismAdded = breeding.activeBackpackMouseUpdated(backpack.activeMouse);
       if (organismAdded) {
         backpack.deselectMouse();
       }
@@ -62,7 +70,8 @@ export function createStores(initialModel: ConnectedBioModelCreationType): IStor
     ui,
     backpack,
     populations,
-    organisms
+    organisms,
+    breeding
   };
 }
 
