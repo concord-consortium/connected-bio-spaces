@@ -22,7 +22,7 @@ interface IProps extends IBaseProps {
   onClickRightIcon?: (icon: RightPanelType) => void;
   rightPanel: React.ReactNode;
   spaceClass: string;
-  rowNumber: number | undefined;
+  rowNumber?: number;
   rightPanelButtons?: ToolbarButton[];
 }
 interface IState {}

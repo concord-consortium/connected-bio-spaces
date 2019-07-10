@@ -4,7 +4,6 @@ import { SizeMe } from "react-sizeme";
 import { BaseComponent, IBaseProps } from "../../base";
 import { ZoomControl } from "../../zoom-control";
 import { OrganismView } from "./organism-view";
-import { CollectButtonComponent } from "../../collect-button";
 
 import "./organisms-container.sass";
 import { ZoomLevelType, OrganismsRowModelType, ModeType } from "../../../models/spaces/organisms/organisms-row";

@@ -35,7 +35,6 @@ export class PopulationsSpaceComponent extends BaseComponent<IProps, IState> {
         selectedRightPanel={rightPanelType}
         onClickRightIcon={this.setRightPanel}
         spaceClass="populations"
-        rowNumber={undefined}
         rightPanelButtons={populations.graphButtons}
       />
     );
