@@ -34,7 +34,7 @@ export function createStores(initialModel: ConnectedBioModelCreationType): IStor
   // since organisms and breeding may contain references to backpack mice, yet are in different trees,
   // we need to pass them in explicitly so they can be found
   const organisms = createOrganismsModel(initialModel.organisms, backpack);
-  const breeding = BreedingModel.create({});
+  const breeding = BreedingModel.create(initialModel.breeding);
 
   // inform organisms space if user selects a backpack mouse
   autorun(() => {

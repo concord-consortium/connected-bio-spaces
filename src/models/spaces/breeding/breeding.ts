@@ -4,16 +4,19 @@ import { BackpackMouse, BackpackMouseType } from "../../backpack-mouse";
 import { breed } from "../../../utilities/genetics";
 
 type Parent = "mother" | "father";
+export const BreedingTypeEnum = types.enumeration("type", ["litter", "singleGamete"]);
+export type BreedingType = typeof BreedingTypeEnum.Type;
 
 export const BreedingModel = types
   .model("Breeding", {
+    breedingType: types.optional(BreedingTypeEnum, "litter"),
     mother: types.maybe(types.reference(BackpackMouse)),
     father: types.maybe(types.reference(BackpackMouse)),
     offspring: types.maybe(BackpackMouse),
     litter: types.array(BackpackMouse),
     litterSize: 8,
     rightPanel: types.optional(RightPanelTypeEnum, "instructions"),
-    instructions: "Blah blah"
+    instructions: ""
   })
   .actions(self => ({
     activeBackpackMouseUpdated(backpackMouse: BackpackMouseType) {

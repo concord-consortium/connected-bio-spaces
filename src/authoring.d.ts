@@ -35,6 +35,8 @@ export type EnableAllelesChart = boolean;
 export type InstructionsAsMarkdown1 = string;
 export type ShowMysteryLocationLabels = boolean;
 export type ShowMysterySubstanceLabels = boolean;
+export type InstructionsAsMarkdown2 = string;
+export type BreedingType = "litter" | "singleGamete";
 
 export interface ConnectedBioAuthoring {
   curriculum?: Unit;
@@ -43,6 +45,7 @@ export interface ConnectedBioAuthoring {
   backpack?: InitialBackpack;
   populations?: PopulationsModel;
   organisms?: OrganismModel;
+  breeding?: BreedingModel;
   [k: string]: any;
 }
 export interface InvestigationSpaces {
@@ -97,5 +100,10 @@ export interface OrganismModel {
   instructions?: InstructionsAsMarkdown1;
   useMysteryOrganelles?: ShowMysteryLocationLabels;
   useMysterySubstances?: ShowMysterySubstanceLabels;
+  [k: string]: any;
+}
+export interface BreedingModel {
+  instructions?: InstructionsAsMarkdown2;
+  breedingType?: BreedingType;
   [k: string]: any;
 }

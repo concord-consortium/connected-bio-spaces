@@ -56,6 +56,10 @@ export const defaultAuthoring: ConnectedBioAuthoring = {
     instructions: "",
     useMysteryOrganelles: false,
     useMysterySubstances: false
+  },
+  breeding: {
+    instructions: "",
+    breedingType: "litter"
   }
 
 };
@@ -100,6 +104,11 @@ const uiSchema = {
     }
   },
   organisms: {
+    instructions: {
+      "ui:widget": "textarea"
+    }
+  },
+  breeding: {
     instructions: {
       "ui:widget": "textarea"
     }
