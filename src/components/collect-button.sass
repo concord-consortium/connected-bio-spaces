@@ -163,12 +163,13 @@
     top: -7px
 
 $breeding-scale: 1.4
+$litter-scale: 0.7
 
 .breeding
   .collect-button-holder
     height: $collect-button-holder-width * $breeding-scale
     width: $collect-button-holder-height * $breeding-scale
-    margin-bottom: $triple-component-margin * $breeding-scale
+    margin-bottom: 0
 
     .x-close
       top: 1px * $breeding-scale
@@ -209,3 +210,49 @@ $breeding-scale: 1.4
         &.heterozygote
           border-radius: $collect-button-inner-border-radius * $breeding-scale
           border-width: $collect-button-border-width * $breeding-scale
+
+  .litter
+    .collect-button-holder
+      height: $collect-button-holder-width * $litter-scale
+      width: $collect-button-holder-height * $litter-scale
+      margin-bottom: $triple-component-margin * $litter-scale
+
+      .x-close
+        top: 1px * $litter-scale
+        left: 76px * $litter-scale
+        width: 24px * $litter-scale
+        height: 21px * $litter-scale
+        border-top-left-radius: 12px * $litter-scale
+        border-top-right-radius: 12px * $litter-scale
+
+        .icon
+          top: 5px * $litter-scale
+          left: 6px * $litter-scale
+          width: 12px * $litter-scale
+          height: 12px * $litter-scale
+
+      .index
+        padding: 1px * $litter-scale
+
+      .collect-button-outline
+        width: $collect-button-outline-width * $litter-scale
+        height: $collect-button-outline-height * $litter-scale
+        border-radius: $collect-button-radius * $litter-scale
+
+      .collect-button
+        width: $collect-button-width * $litter-scale
+        height: $collect-button-height * $litter-scale
+        border-width: $collect-button-border-width * $litter-scale
+        border-radius: $collect-button-radius * $litter-scale
+
+        .inner-outline
+          width: $collect-button-inner-border-width * $litter-scale
+          height: $collect-button-inner-border-height * $litter-scale
+
+          .icon
+            height: $collect-button-icon-height * $litter-scale
+            width: $collect-button-icon-width * $litter-scale
+
+          &.heterozygote
+            border-radius: $collect-button-inner-border-radius * $litter-scale
+            border-width: $collect-button-border-width * $litter-scale

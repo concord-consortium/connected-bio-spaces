@@ -16,7 +16,10 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
 
   public render() {
     const { breeding } = this.stores;
-    const { mother, father } = breeding;
+    const { mother, father, litter } = breeding;
+    const readyToBreed = mother && father;
+
+    const breedButtonClass = "button-holder" + (readyToBreed ? "" : " disabled");
 
     return (
       <div className="breeding-container">
@@ -42,8 +45,30 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
             organism={father}
           />
         </div>
+        <div className="breed-button">
+          <div className={breedButtonClass} onClick={this.breedLitter}>
+            Breed
+          </div>
+        </div>
+        <div className="litter">
+          {
+            litter.map((org, i) =>
+              <CollectButtonComponent
+                key={`offspring-${i}`}
+                backpackMouse={org}
+                clickClose={this.clickClose("mother")}
+                hideCloseButton={true}
+                placeable={false}
+              />
+            )
+          }
+        </div>
       </div>
     );
+  }
+
+  private breedLitter = () => {
+    this.stores.breeding.breedLitter();
   }
 
   private clickClose(parent: "mother" | "father") {
