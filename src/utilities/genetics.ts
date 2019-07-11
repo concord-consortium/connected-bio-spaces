@@ -6,18 +6,36 @@ export interface Organism {
   genotype: "RR" | "RC" | "CR" | "CC";
 }
 
-export function breed(mother: Organism, father: Organism): Organism {
-  const motherAlleles = mother.genotype.split("");
-  const fatherAlleles = father.genotype.split("");
+export interface Gamete {
+  allele: "R" | "C";
+  sexChromosome: "X" | "Y";
+}
 
-  const motherGamete = motherAlleles[Math.round(Math.random())];
-  const fatherGamete = fatherAlleles[Math.round(Math.random())];
+export function createGamete(org: Organism): Gamete {
+  const alleles = org.genotype.split("");
+  const allele = alleles[Math.round(Math.random())] as "R" | "C";
+  const sexChromosome = org.sex === "female"
+    ? "X"
+    : Math.random() < 0.5 ? "X" : "Y";
+  return {
+    allele,
+    sexChromosome
+  };
+}
 
-  const sex = Math.random() < 0.5 ? "female" : "male";
-  const genotype = `${motherGamete}${fatherGamete}` as "RR" | "RC" | "CR" | "CC";
+export function fertilize(motherGamete: Gamete, fatherGamete: Gamete): Organism {
+  const genotype = `${motherGamete.allele}${fatherGamete.allele}` as "RR" | "RC" | "CR" | "CC";
+  const sex = fatherGamete.sexChromosome === "X" ? "female" : "male";
 
   return {
     sex,
     genotype
   };
+}
+
+export function breed(mother: Organism, father: Organism): Organism {
+  const motherGamete = createGamete(mother);
+  const fatherGamete = createGamete(father);
+
+  return fertilize(motherGamete, fatherGamete);
 }

@@ -4,7 +4,7 @@
   width: 100%
   display: grid
   grid-template-columns: [mother] 30% [center] 1fr [father] 30%
-  grid-template-rows: [top] auto [bottom] 1fr
+  grid-template-rows: [top] 440px [bottom] 1fr
 
   div
     display: flex
@@ -29,6 +29,10 @@
     grid-column-start: center
     grid-row-start: top
 
+    &.gametes
+      padding-top: 10px
+      justify-content: start
+
   .litter
     grid-column-start: mother
     grid-column-end: span 3
@@ -39,6 +43,23 @@
     border-radius: 10px
     flex-direction: row
     overflow: hidden
+
+  .gamete-container
+    grid-column-start: center
+    grid-row-start: top
+    display: flex
+    flex-direction: row
+    justify-content: space-between
+    align-items: start
+    padding-top: 165px
+    padding-left: 20px
+    padding-right: 20px
+
+
+  .offspring
+    grid-column-start: center
+    grid-row-start: top
+    padding-top: 42px
 
 
   .button-holder

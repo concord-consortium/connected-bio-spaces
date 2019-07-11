@@ -1,9 +1,8 @@
 import { types, Instance } from "mobx-state-tree";
 import { RightPanelTypeEnum } from "../../ui";
 import { BackpackMouse, BackpackMouseType } from "../../backpack-mouse";
-import { breed } from "../../../utilities/genetics";
+import { breed, createGamete, fertilize } from "../../../utilities/genetics";
 
-type Parent = "mother" | "father";
 export const BreedingTypeEnum = types.enumeration("type", ["litter", "singleGamete"]);
 export type BreedingType = typeof BreedingTypeEnum.Type;
 
@@ -15,6 +14,8 @@ export const BreedingModel = types
     offspring: types.maybe(BackpackMouse),
     litter: types.array(BackpackMouse),
     litterSize: 8,
+    motherGamete: types.maybe(types.string),
+    fatherGamete: types.maybe(types.string),
     rightPanel: types.optional(RightPanelTypeEnum, "instructions"),
     instructions: ""
   })
@@ -29,11 +30,13 @@ export const BreedingModel = types
       }
     },
 
-    removeParent(parent: Parent) {
-      if (parent === "mother") {
+    removeOrganism(org: "mother" | "father" | "offspring") {
+      if (org === "mother") {
         self.mother = undefined;
-      } else {
+      } else if (org === "father") {
         self.father = undefined;
+      } else if (org === "offspring") {
+        self.offspring = undefined;
       }
       self.litter.clear();
     },
@@ -47,6 +50,27 @@ export const BreedingModel = types
         const child = breed(self.mother!, self.father!);
         self.litter.push(BackpackMouse.create(child));
       }
+    },
+
+    createGametes() {
+      if (!self.mother && self.father) {
+        return;
+      }
+      self.motherGamete = JSON.stringify(createGamete(self.mother!));
+      self.fatherGamete = JSON.stringify(createGamete(self.father!));
+
+      self.offspring = undefined;
+    },
+
+    fertilize() {
+      if (!self.motherGamete && self.fatherGamete) {
+        return;
+      }
+      const child = fertilize(JSON.parse(self.motherGamete!), JSON.parse(self.fatherGamete!));
+      self.offspring = BackpackMouse.create(child);
+
+      self.motherGamete = undefined;
+      self.fatherGamete = undefined;
     }
   }));
 
