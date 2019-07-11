@@ -161,3 +161,51 @@
   .collect-button-outline
     position: relative
     top: -7px
+
+$breeding-scale: 1.4
+
+.breeding
+  .collect-button-holder
+    height: $collect-button-holder-width * $breeding-scale
+    width: $collect-button-holder-height * $breeding-scale
+    margin-bottom: $triple-component-margin * $breeding-scale
+
+    .x-close
+      top: 1px * $breeding-scale
+      left: 76px * $breeding-scale
+      width: 24px * $breeding-scale
+      height: 21px * $breeding-scale
+      border-top-left-radius: 12px * $breeding-scale
+      border-top-right-radius: 12px * $breeding-scale
+
+      .icon
+        top: 5px * $breeding-scale
+        left: 6px * $breeding-scale
+        width: 12px * $breeding-scale
+        height: 12px * $breeding-scale
+
+    .index
+      padding: 1px * $breeding-scale
+
+    .collect-button-outline
+      width: $collect-button-outline-width * $breeding-scale
+      height: $collect-button-outline-height * $breeding-scale
+      border-radius: $collect-button-radius * $breeding-scale
+
+    .collect-button
+      width: $collect-button-width * $breeding-scale
+      height: $collect-button-height * $breeding-scale
+      border-width: $collect-button-border-width * $breeding-scale
+      border-radius: $collect-button-radius * $breeding-scale
+
+      .inner-outline
+        width: $collect-button-inner-border-width * $breeding-scale
+        height: $collect-button-inner-border-height * $breeding-scale
+
+        .icon
+          height: $collect-button-icon-height * $breeding-scale
+          width: $collect-button-icon-width * $breeding-scale
+
+        &.heterozygote
+          border-radius: $collect-button-inner-border-radius * $breeding-scale
+          border-width: $collect-button-border-width * $breeding-scale

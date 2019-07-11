@@ -5,6 +5,7 @@ import { BaseComponent, IBaseProps } from "../../base";
 
 import "./breeding-container.sass";
 import { CollectButtonComponent } from "../../collect-button";
+import { Chromosomes } from "./chromosomes";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -15,19 +16,32 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
 
   public render() {
     const { breeding } = this.stores;
+    const { mother, father } = breeding;
+
     return (
       <div className="breeding-container">
-        <CollectButtonComponent
-          backpackMouse={breeding.mother}
-          clickClose={this.clickClose("mother")}
-          placeable={false}
-        />
-
-        <CollectButtonComponent
-          backpackMouse={breeding.father}
-          clickClose={this.clickClose("father")}
-          placeable={false}
-        />
+        <div className="parent mother">
+          Mother
+          <CollectButtonComponent
+            backpackMouse={mother}
+            clickClose={this.clickClose("mother")}
+            placeable={false}
+          />
+          <Chromosomes
+            organism={mother}
+          />
+        </div>
+        <div className="parent father">
+          Father
+          <CollectButtonComponent
+            backpackMouse={father}
+            clickClose={this.clickClose("father")}
+            placeable={false}
+          />
+          <Chromosomes
+            organism={father}
+          />
+        </div>
       </div>
     );
   }
