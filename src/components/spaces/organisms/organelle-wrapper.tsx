@@ -231,7 +231,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
 
     const row = organisms.rows[this.props.rowIndex];
     if (mode === "target-zoom") {
-      this.showZoomTargets(["receptor", "nucleus"]);
+      this.showZoomTargets(["receptor", "nucleus"], row.hoveredZoomTarget);
     } else {
       this.showZoomTargets([]);
     }
@@ -417,6 +417,19 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
       const {organisms} = this.stores;
       const hoveredOrganelle = this.getOrganelleFromMouseEvent(evt);
       organisms.rows[this.props.rowIndex].setHoveredOrganelle(hoveredOrganelle);
+
+      if (evt.target._organelle.matches({selector: ".zoom-receptor-target"})) {
+        organisms.rows[this.props.rowIndex].setHoveredZoomTarget("receptor");
+      } else if (evt.target._organelle.matches({selector: ".zoom-nucleus-target"})) {
+        organisms.rows[this.props.rowIndex].setHoveredZoomTarget("nucleus");
+      }
+    });
+
+    model.on("view.hover.exit", (evt: any) => {
+      const {organisms} = this.stores;
+      if (evt.target._organelle.matches({selector: ".zoom"})) {
+        organisms.rows[this.props.rowIndex].setHoveredZoomTarget();
+      }
     });
 
     model.on("view.click", (evt: any) => {
@@ -491,13 +504,17 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     model.view.show(`#receptor-${state}-${receptor}`, true);
   }
 
-  private showZoomTargets(targetsToShow: string[]) {
+  private showZoomTargets(targetsToShow: string[], hoveredTarget?: string) {
     const model = this.getModel();
+    if (!model) return;
     ["receptor", "nucleus"].forEach(target => {
+      model.view.hide(`#zoom-${target}-target`, true);
+      model.view.hide(`#zoom-${target}-target-hover`, true);
+      model.view.hide(`#zoom-${target}-target-active`, true);
+
+      const hoverClass = target === hoveredTarget ? "-hover" : "";
       if (targetsToShow.indexOf(target) > -1) {
-        model.view.show(`#zoom-${target}-target`, true);
-      } else {
-        model.view.hide(`#zoom-${target}-target`, true);
+        model.view.show(`#zoom-${target}-target${hoverClass}`, true);
       }
     });
   }

@@ -12,6 +12,9 @@ export type ModeType = typeof Mode.Type;
 export const ZoomLevel = types.enumeration("type", ["organism", "cell", "protein", "nucleus"]);
 export type ZoomLevelType = typeof ZoomLevel.Type;
 
+export const ZoomTarget = types.enumeration("type", ["receptor", "nucleus"]);
+export type ZoomTargetType = typeof ZoomTarget.Type;
+
 export const OrganismsRowModel = types
   .model("OrganismsRow", {
     organismsMouse: types.maybe(types.reference(OrganismsMouseModel)),
@@ -20,6 +23,7 @@ export const OrganismsRowModel = types
     mode: types.optional(Mode, "normal"),
     assayedOrganelles: types.array(Organelle),
     zoomLevel: types.optional(ZoomLevel, "organism"),
+    hoveredZoomTarget: types.maybe(ZoomTarget),
     showProteinDNA: false,
     showProteinAminoAcidsOnProtein: true,
     rightPanel: types.optional(RightPanelTypeEnum, "instructions"),
@@ -89,6 +93,9 @@ export const OrganismsRowModel = types
         if (zoomLevel !== "protein") {
           self.selectedOrganelle = undefined;
         }
+      },
+      setHoveredZoomTarget(target?: ZoomTargetType) {
+        self.hoveredZoomTarget = target;
       },
       setMode(mode: ModeType) {
         self.mode = mode;
