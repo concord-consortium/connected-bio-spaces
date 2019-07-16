@@ -125,7 +125,6 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
         }
       }
     }
-
   }
 
   public componentWillUnmount() {
@@ -229,8 +228,14 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     const {organisms} = this.stores;
     const {mode, zoomLevel} = this.props;
     const {getOrganelleLabel} = organisms;
-    // const hoverLabel = appStore.mysteryLabels ?
-    //   mysteryOrganelleNames[this.state.hoveredOrganelle] : this.state.hoveredOrganelle;
+
+    const row = organisms.rows[this.props.rowIndex];
+    if (mode === "target-zoom") {
+      this.showZoomTargets(["receptor", "nucleus"]);
+    } else {
+      this.showZoomTargets([]);
+    }
+
     const hoveredOrganelle = organisms.rows[this.props.rowIndex].hoveredOrganelle;
     const hoverLabel = hoveredOrganelle ? getOrganelleLabel(hoveredOrganelle) : undefined;
     const hoverDiv = hoverLabel
@@ -484,6 +489,17 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     model.view.hide(`#receptor-bound-${receptor}`, true);
     model.view.hide(`#receptor-broken-${receptor}`, true);
     model.view.show(`#receptor-${state}-${receptor}`, true);
+  }
+
+  private showZoomTargets(targetsToShow: string[]) {
+    const model = this.getModel();
+    ["receptor", "nucleus"].forEach(target => {
+      if (targetsToShow.indexOf(target) > -1) {
+        model.view.show(`#zoom-${target}-target`, true);
+      } else {
+        model.view.hide(`#zoom-${target}-target`, true);
+      }
+    });
   }
 
   private getOrganelleFromMouseEvent(evt: any): OrganelleType | undefined {
