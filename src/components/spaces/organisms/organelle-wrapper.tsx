@@ -247,12 +247,18 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
 
     let cursorClass: string = mode;
     const substance = organisms.rows[this.props.rowIndex].selectedSubstance;
-    cursorClass = cursorClass + (mode === "add" ? "-" + substance : "");
-    if (zoomLevel !== "protein" && cursorClass === "inspect") {
-      cursorClass = "";
-    }
-    if (!hoveredOrganelle || (mode === "inspect" && !hoveredOrganelle.includes("receptor"))) {
-      cursorClass += "-disabled";
+    if (mode === "target-zoom") {
+      if (!row.hoveredZoomTarget) {
+        cursorClass += "-disabled";
+      }
+    } else {
+      cursorClass = cursorClass + (mode === "add" ? "-" + substance : "");
+      if (zoomLevel !== "protein" && cursorClass === "inspect") {
+        cursorClass = "";
+      }
+      if (!hoveredOrganelle || (mode === "inspect" && !hoveredOrganelle.includes("receptor"))) {
+        cursorClass += "-disabled";
+      }
     }
 
     const droppers: any = this.state.dropperCoords.map((dropperCoord: any, i: number) => (
