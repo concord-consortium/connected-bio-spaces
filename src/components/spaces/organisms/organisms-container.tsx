@@ -35,7 +35,8 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
     const { rowIndex } = this.props;
     const { organisms } = this.stores;
     const organismsRow = organisms.rows[rowIndex];
-    const { organismsMouse, zoomLevel, mode } = organismsRow;
+    const { zoomLevel, mode } = organismsRow;
+    const showTargetZoom = zoomLevel === "cell";
 
     return (
       <div className="organisms-container" data-test="organism-view-container">
@@ -45,7 +46,7 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
           }}
         </SizeMe>
         <div className="organism-controls">
-          <ZoomControl handleZoom={this.zoomChange} rowIndex={rowIndex} />
+          <ZoomControl handleZoom={this.zoomChange} rowIndex={rowIndex} showTargetZoom={showTargetZoom} />
           <ManipulationControls rowIndex={rowIndex} />
         </div>
       </div>

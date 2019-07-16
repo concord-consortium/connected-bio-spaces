@@ -4,12 +4,12 @@ import { RightPanelTypeEnum, RightPanelType } from "../../ui";
 import { DataPoint, ChartDataSetModel, DataPointType, ChartDataSetModelType } from "../charts/chart-data-set";
 import { OrganismsMouseModel, Organelle, Substance, kSubstanceNames,
   OrganelleType, SubstanceType } from "./organisms-mouse";
-import { kSubstanceInfo, OrganismsSpaceModel, OrganismsSpaceModelType, kOrganelleInfo } from "./organisms-space";
+import { kSubstanceInfo, OrganismsSpaceModel } from "./organisms-space";
 
-export const Mode = types.enumeration("type", ["add", "subtract", "assay", "inspect", "normal"]);
+export const Mode = types.enumeration("type", ["add", "subtract", "assay", "inspect", "target-zoom", "normal"]);
 export type ModeType = typeof Mode.Type;
 
-export const ZoomLevel = types.enumeration("type", ["organism", "cell", "protein"]);
+export const ZoomLevel = types.enumeration("type", ["organism", "cell", "protein", "nucleus"]);
 export type ZoomLevelType = typeof ZoomLevel.Type;
 
 export const OrganismsRowModel = types
@@ -93,7 +93,7 @@ export const OrganismsRowModel = types
       setMode(mode: ModeType) {
         self.mode = mode;
         if (self.organismsMouse) {
-          if (mode === "normal") {
+          if (mode === "normal" || mode === "target-zoom") {
             self.organismsMouse.setPaused(false);
           } else {
             self.organismsMouse.setPaused(true);

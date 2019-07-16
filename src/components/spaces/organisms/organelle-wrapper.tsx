@@ -118,7 +118,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
 
       if (mode !== this.model.mode) {
         this.model.mode = mode;
-        if (mode === "normal") {
+        if (mode === "normal" || mode === "target-zoom") {
           this.model.run();
         } else {
           this.model.stop();
