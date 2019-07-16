@@ -681,6 +681,18 @@
             <rect id="svg_426" height="32" width="105" y="158.5" x="614.5" fill="none"/>
         </g>
     </g>
+    <!-- zoom targets -->
+    <g class="zoom zoom-receptor-target">
+        <rect id="zoom-receptor-target" x="491" y="176.967" width="258" height="123.106" style="visibility: hidden;fill: rgb(235, 128, 62); fill-opacity: 0.25; stroke: rgb(235, 129, 62); stroke-width: 5px; stroke-dasharray: 10px;" />
+        <rect id="zoom-receptor-target-hover" x="491" y="176.967" width="258" height="123.106" style="visibility: hidden;fill: rgb(235, 128, 62); fill-opacity: 0.5; stroke: rgb(235, 129, 62); stroke-width: 5px; stroke-dasharray: 10px;" />
+        <rect id="zoom-receptor-target-active" x="491" y="176.967" width="258" height="123.106" style="visibility: hidden;fill: rgb(235, 128, 62); fill-opacity: 0.5; stroke: rgb(255, 255, 255); stroke-width: 5px; stroke-dasharray: 10px;" />
+    </g>
+    <g class="zoom zoom-nucleus-target">
+        <rect id="zoom-nucleus-target" x="506.307" y="610.254" width="190" height="90.662" style="visibility: hidden;fill: rgb(235, 128, 62); fill-opacity: 0.25; stroke: rgb(235, 129, 62); stroke-width: 5px; stroke-dasharray: 10px;" />
+        <rect id="zoom-nucleus-target-hover" x="506.307" y="610.254" width="190" height="90.662" style="visibility: hidden;fill: rgb(235, 128, 62); fill-opacity: 0.5; stroke: rgb(235, 129, 62); stroke-width: 5px; stroke-dasharray: 10px;" />
+        <rect id="zoom-nucleus-target-active" x="506.307" y="610.254" width="190" height="90.662" style="visibility: hidden;fill: rgb(235, 128, 62); fill-opacity: 0.5; stroke: rgb(255, 255, 255); stroke-width: 5px; stroke-dasharray: 10px;" />
+    </g>
+    <!-- /zoom targets -->
     <defs>
       <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
           <feColorMatrix type="matrix" values=
