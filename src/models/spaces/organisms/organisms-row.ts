@@ -89,10 +89,18 @@ export const OrganismsRowModel = types
         self.selectedOrganelle = organelle;
       },
       setZoomLevel(zoomLevel: ZoomLevelType) {
+        if (zoomLevel === "nucleus") {
+          // not implemented yet
+          return;
+        }
         self.zoomLevel = zoomLevel;
+
+        // reset stuff between levels
         if (zoomLevel !== "receptor") {
           self.selectedOrganelle = undefined;
         }
+        self.mode = "normal";
+        self.hoveredZoomTarget = undefined;
       },
       setHoveredZoomTarget(target?: ZoomTargetType) {
         self.hoveredZoomTarget = target;

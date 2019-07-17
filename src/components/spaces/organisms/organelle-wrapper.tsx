@@ -15,6 +15,7 @@ interface OrganelleWrapperProps {
   rowIndex: number;
   width: number;
   mode: ModeType;
+  handleZoomToLevel: (zoomLevel: ZoomLevelType) => void;
 }
 
 interface OrganelleWrapperState {
@@ -425,10 +426,9 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
       const hoveredOrganelle = this.getOrganelleFromMouseEvent(evt);
       organisms.rows[this.props.rowIndex].setHoveredOrganelle(hoveredOrganelle);
 
-      if (evt.target._organelle.matches({selector: ".zoom-receptor-target"})) {
-        organisms.rows[this.props.rowIndex].setHoveredZoomTarget("receptor");
-      } else if (evt.target._organelle.matches({selector: ".zoom-nucleus-target"})) {
-        organisms.rows[this.props.rowIndex].setHoveredZoomTarget("nucleus");
+      const target = this.getZoomTargetFromMouseEvent(evt);
+      if (target) {
+        organisms.rows[this.props.rowIndex].setHoveredZoomTarget(target);
       }
     });
 
@@ -440,24 +440,31 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     });
 
     model.on("view.click", (evt: any) => {
-      const clickTarget = this.getOrganelleFromMouseEvent(evt);
-      if (clickTarget) {
-        // Keep the dropper displayed for substance additions
-        const { mode } = this.props;
-        if (mode === "add") {
-          const newCoords = this.state.dropperCoords.slice(0);
-          newCoords.push({x: evt.e.layerX, y: evt.e.layerY});
-          this.setState({dropperCoords: newCoords});
-          model.setTimeout(() => {
-            const splicedCoords = this.state.dropperCoords.slice(0);
-            splicedCoords.splice(0, 1);
-            this.setState({dropperCoords: splicedCoords});
-          }, SUBSTANCE_ADDITION_MS);
+      const { mode } = this.props;
+      if (mode === "target-zoom") {
+        const target = this.getZoomTargetFromMouseEvent(evt);
+        if (target) {
+          this.props.handleZoomToLevel(target);
         }
+      } else {
+        const clickTarget = this.getOrganelleFromMouseEvent(evt);
+        if (clickTarget) {
+          // Keep the dropper displayed for substance additions
+          if (mode === "add") {
+            const newCoords = this.state.dropperCoords.slice(0);
+            newCoords.push({x: evt.e.layerX, y: evt.e.layerY});
+            this.setState({dropperCoords: newCoords});
+            model.setTimeout(() => {
+              const splicedCoords = this.state.dropperCoords.slice(0);
+              splicedCoords.splice(0, 1);
+              this.setState({dropperCoords: splicedCoords});
+            }, SUBSTANCE_ADDITION_MS);
+          }
 
-        // Handle the click in the Organelle model
-        const location = model.view.transformToWorldCoordinates({x: evt.e.offsetX, y: evt.e.offsetY});
-        this.organelleClick(clickTarget, location);
+          // Handle the click in the Organelle model
+          const location = model.view.transformToWorldCoordinates({x: evt.e.offsetX, y: evt.e.offsetY});
+          this.organelleClick(clickTarget, location);
+        }
       }
     });
   }
@@ -513,7 +520,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
 
   private showZoomTargets(targetsToShow: string[], hoveredTarget?: string) {
     const model = this.getModel();
-    if (!model) return;
+    if (!model || !model.view) return;
     ["receptor", "nucleus"].forEach(target => {
       model.view.hide(`#zoom-${target}-target`, true);
       model.view.hide(`#zoom-${target}-target-hover`, true);
@@ -528,6 +535,14 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
 
   private getZoomTargetLabel(target: ZoomTargetType) {
     return "Zoom to " + target.charAt(0).toUpperCase() + target.slice(1);
+  }
+
+  private getZoomTargetFromMouseEvent(evt: any): ZoomTargetType | undefined {
+    for (const target of ["receptor", "nucleus"] as ZoomTargetType[]) {
+      if (evt.target._organelle.matches({selector: `.zoom-${target}-target`})) {
+        return target;
+      }
+    }
   }
 
   private getOrganelleFromMouseEvent(evt: any): OrganelleType | undefined {
