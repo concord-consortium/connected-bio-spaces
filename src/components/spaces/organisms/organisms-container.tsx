@@ -58,7 +58,7 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
     const { rowIndex } = this.props;
     const organismsRow = organisms.rows[rowIndex];
 
-    const availableZoomLevels: ZoomLevelType[] = ["organism", "cell", "protein"];
+    const availableZoomLevels: ZoomLevelType[] = ["organism", "cell", "receptor"];
     const maxZoom = availableZoomLevels.length - 1;
 
     const current = availableZoomLevels.indexOf(organismsRow.zoomLevel);
@@ -79,7 +79,7 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
       case "organism":
         return <OrganismView backpackMouse={organismsMouse && organismsMouse.backpackMouse} width={width}/>;
       case "cell":
-      case "protein":
+      case "receptor":
         return (
           <div className="cell-zoom-panel" data-test="cell-zoon-panel">
             {

@@ -9,7 +9,7 @@ import { kSubstanceInfo, OrganismsSpaceModel } from "./organisms-space";
 export const Mode = types.enumeration("type", ["add", "subtract", "assay", "inspect", "target-zoom", "normal"]);
 export type ModeType = typeof Mode.Type;
 
-export const ZoomLevel = types.enumeration("type", ["organism", "cell", "protein", "nucleus"]);
+export const ZoomLevel = types.enumeration("type", ["organism", "cell", "receptor", "nucleus"]);
 export type ZoomLevelType = typeof ZoomLevel.Type;
 
 export const ZoomTarget = types.enumeration("type", ["receptor", "nucleus"]);
@@ -90,7 +90,7 @@ export const OrganismsRowModel = types
       },
       setZoomLevel(zoomLevel: ZoomLevelType) {
         self.zoomLevel = zoomLevel;
-        if (zoomLevel !== "protein") {
+        if (zoomLevel !== "receptor") {
           self.selectedOrganelle = undefined;
         }
       },

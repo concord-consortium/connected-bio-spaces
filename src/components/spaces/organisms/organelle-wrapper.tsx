@@ -1,16 +1,10 @@
 import * as React from "react";
 import { IReactionDisposer, observable } from "mobx";
 import { observer, inject } from "mobx-react";
-// import { IOrganism, OrganelleRef } from "../models/Organism";
-// import { OrganelleType, mysteryOrganelleNames } from "../models/Organelle";
-// import { View, appStore } from "../stores/AppStore";
-// import { rootStore, Mode } from "../stores/RootStore";
 import { createModel } from "organelle";
 import * as Cell from "./cell-models/cell.json";
 import * as Receptor from "./cell-models/receptor.json";
-import { kOrganelleInfo } from "../../../models/spaces/organisms/organisms-space";
 import { BaseComponent } from "../../base";
-// import { SubstanceType } from "../models/Substance";
 import "./organelle-wrapper.sass";
 import { ModeType, ZoomLevelType, ZoomTargetType } from "../../../models/spaces/organisms/organisms-row.js";
 import { OrganelleType } from "../../../models/spaces/organisms/organisms-mouse.js";
@@ -216,7 +210,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
   public addSignalProtein(organelleType: OrganelleType, location: {x: number, y: number}) {
     const { rowIndex } = this.props;
     const { organisms } = this.stores;
-    if (organisms.rows[rowIndex].zoomLevel === "protein") {
+    if (organisms.rows[rowIndex].zoomLevel === "receptor") {
       const inIntercell = organelleType === "extracellular";
       const species = "gProteinPart";
       const state = inIntercell ? "find_flowing_path" : "in_cell_from_click";
@@ -260,7 +254,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
       }
     } else {
       cursorClass = cursorClass + (mode === "add" ? "-" + substance : "");
-      if (zoomLevel !== "protein" && cursorClass === "inspect") {
+      if (zoomLevel !== "receptor" && cursorClass === "inspect") {
         cursorClass = "";
       }
       if (!hoveredOrganelle || (mode === "inspect" && !hoveredOrganelle.includes("receptor"))) {
@@ -341,7 +335,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
       this.updateReceptorImage();
     });
 
-    if (this.props.zoomLevel === "protein") {
+    if (this.props.zoomLevel === "receptor") {
       model.setTimeout(
         () => {
           for (let i = 0; i < 3; i++) {
