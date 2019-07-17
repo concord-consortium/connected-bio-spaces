@@ -12,7 +12,7 @@ import { kOrganelleInfo } from "../../../models/spaces/organisms/organisms-space
 import { BaseComponent } from "../../base";
 // import { SubstanceType } from "../models/Substance";
 import "./organelle-wrapper.sass";
-import { ModeType, ZoomLevelType } from "../../../models/spaces/organisms/organisms-row.js";
+import { ModeType, ZoomLevelType, ZoomTargetType } from "../../../models/spaces/organisms/organisms-row.js";
 import { OrganelleType } from "../../../models/spaces/organisms/organisms-mouse.js";
 
 interface OrganelleWrapperProps {
@@ -227,7 +227,8 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
   public render() {
     const {organisms} = this.stores;
     const {mode, zoomLevel} = this.props;
-    const {getOrganelleLabel} = organisms;
+    const { getOrganelleLabel } = organisms;
+    const hoveredOrganelle = organisms.rows[this.props.rowIndex].hoveredOrganelle;
 
     const row = organisms.rows[this.props.rowIndex];
     if (mode === "target-zoom") {
@@ -236,8 +237,14 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
       this.showZoomTargets([]);
     }
 
-    const hoveredOrganelle = organisms.rows[this.props.rowIndex].hoveredOrganelle;
-    const hoverLabel = hoveredOrganelle ? getOrganelleLabel(hoveredOrganelle) : undefined;
+    let hoverLabel: string | undefined;
+
+    if (mode === "target-zoom") {
+      hoverLabel = row.hoveredZoomTarget ? this.getZoomTargetLabel(row.hoveredZoomTarget) : undefined;
+    } else {
+      hoverLabel = hoveredOrganelle ? getOrganelleLabel(hoveredOrganelle) : undefined;
+    }
+
     const hoverDiv = hoverLabel
       ? (
         <div className="hover-location" data-test="hover-label">
@@ -523,6 +530,10 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
         model.view.show(`#zoom-${target}-target${hoverClass}`, true);
       }
     });
+  }
+
+  private getZoomTargetLabel(target: ZoomTargetType) {
+    return "Zoom to " + target.charAt(0).toUpperCase() + target.slice(1);
   }
 
   private getOrganelleFromMouseEvent(evt: any): OrganelleType | undefined {
