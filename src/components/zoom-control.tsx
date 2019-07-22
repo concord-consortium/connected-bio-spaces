@@ -24,7 +24,7 @@ export class ZoomControl extends BaseComponent<IProps, IState> {
     const activeClass = row.mode === "target-zoom" ? " active" : "";
 
     const zoomInClass = "zoom-in" + this.getZoomClass(["organism", "cell"]) + targetClass + activeClass;
-    const zoomOutClass = "zoom-out" + this.getZoomClass(["cell", "receptor"]);
+    const zoomOutClass = "zoom-out" + this.getZoomClass(["cell", "receptor", "nucleus"]);
     const zoomInIcon = "#icon-zoomin" + (showTargetZoom ? "-target" : "");
     return (
       <div className="zoom-container" data-test="zoom-container">
