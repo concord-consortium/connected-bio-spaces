@@ -91,10 +91,6 @@ export const OrganismsRowModel = types
         self.selectedOrganelle = organelle;
       },
       setZoomLevel(zoomLevel: ZoomLevelType) {
-        if (zoomLevel === "nucleus") {
-          // not implemented yet
-          return;
-        }
         self.zoomLevel = zoomLevel;
 
         // reset stuff between levels

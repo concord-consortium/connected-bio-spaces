@@ -10,6 +10,7 @@ import "./organisms-container.sass";
 import { ZoomLevelType, OrganismsRowModelType, ModeType } from "../../../models/spaces/organisms/organisms-row";
 import { OrganelleWrapper } from "./organelle-wrapper";
 import { ManipulationControls } from "./manipulation-controls";
+import { StaticNucleusView } from "./static-nucleus-view";
 
 interface SizeMeProps {
   size?: {
@@ -100,6 +101,12 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
                 <OrganelleWrapper zoomLevel={zoomLevel} elementName={`organelle-wrapper-${rowIndex}`}
                   rowIndex={rowIndex} width={width} mode={mode} handleZoomToLevel={this.zoomToLevel}/>
             }
+          </div>
+        );
+      case "nucleus":
+        return (
+          <div className="cell-zoom-panel" key={zoomLevel} data-test="cell-zoon-panel">
+            <StaticNucleusView rowIndex={rowIndex} width={width}/>
           </div>
         );
       default:
