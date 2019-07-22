@@ -18,12 +18,12 @@ interface IState {
 
 const nucleusImages = {
   decolored: {
-    expanded: "../../assets/static-nucleus/dna-decolor.png",
-    condensed: "../../assets/static-nucleus/dna-condensed-decolor.png"
+    expanded: "assets/static-nucleus/dna-decolor.png",
+    condensed: "assets/static-nucleus/dna-condensed-decolor.png"
   },
   colored: {
-    expanded: "../../assets/static-nucleus/dna-color.png",
-    condensed: "../../assets/static-nucleus/dna-condensed-color.png"
+    expanded: "assets/static-nucleus/dna-color.png",
+    condensed: "assets/static-nucleus/dna-condensed-color.png"
   }
 };
 
