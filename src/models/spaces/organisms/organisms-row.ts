@@ -27,7 +27,9 @@ export const OrganismsRowModel = types
     showProteinDNA: false,
     showProteinAminoAcidsOnProtein: true,
     rightPanel: types.optional(RightPanelTypeEnum, "instructions"),
-    selectedSubstance: types.optional(Substance, "hormone")
+    selectedSubstance: types.optional(Substance, "hormone"),
+    nucleusColored: false,
+    nucleusCondensed: false
   })
   .views(self => ({
     get currentData(): ChartDataModelType {
@@ -126,6 +128,12 @@ export const OrganismsRowModel = types
       },
       setSelectedSubstance(substance: SubstanceType) {
         self.selectedSubstance = substance;
+      },
+      toggleNucleusColor() {
+        self.nucleusColored = !self.nucleusColored;
+      },
+      toggleNucleusCondense() {
+        self.nucleusCondensed = !self.nucleusCondensed;
       }
     };
   })
