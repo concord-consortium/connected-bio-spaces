@@ -1,18 +1,12 @@
 import * as React from "react";
 import { IReactionDisposer, observable } from "mobx";
 import { observer, inject } from "mobx-react";
-// import { IOrganism, OrganelleRef } from "../models/Organism";
-// import { OrganelleType, mysteryOrganelleNames } from "../models/Organelle";
-// import { View, appStore } from "../stores/AppStore";
-// import { rootStore, Mode } from "../stores/RootStore";
 import { createModel } from "organelle";
 import * as Cell from "./cell-models/cell.json";
 import * as Receptor from "./cell-models/receptor.json";
-import { kOrganelleInfo } from "../../../models/spaces/organisms/organisms-space";
 import { BaseComponent } from "../../base";
-// import { SubstanceType } from "../models/Substance";
 import "./organelle-wrapper.sass";
-import { ModeType, ZoomLevelType } from "../../../models/spaces/organisms/organisms-row.js";
+import { ModeType, ZoomLevelType, ZoomTargetType } from "../../../models/spaces/organisms/organisms-row.js";
 import { OrganelleType } from "../../../models/spaces/organisms/organisms-mouse.js";
 
 interface OrganelleWrapperProps {
@@ -21,6 +15,7 @@ interface OrganelleWrapperProps {
   rowIndex: number;
   width: number;
   mode: ModeType;
+  handleZoomToLevel: (zoomLevel: ZoomLevelType) => void;
 }
 
 interface OrganelleWrapperState {
@@ -118,14 +113,13 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
 
       if (mode !== this.model.mode) {
         this.model.mode = mode;
-        if (mode === "normal") {
+        if (mode === "normal" || mode === "target-zoom") {
           this.model.run();
         } else {
           this.model.stop();
         }
       }
     }
-
   }
 
   public componentWillUnmount() {
@@ -217,7 +211,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
   public addSignalProtein(organelleType: OrganelleType, location: {x: number, y: number}) {
     const { rowIndex } = this.props;
     const { organisms } = this.stores;
-    if (organisms.rows[rowIndex].zoomLevel === "protein") {
+    if (organisms.rows[rowIndex].zoomLevel === "receptor") {
       const inIntercell = organelleType === "extracellular";
       const species = "gProteinPart";
       const state = inIntercell ? "find_flowing_path" : "in_cell_from_click";
@@ -228,11 +222,24 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
   public render() {
     const {organisms} = this.stores;
     const {mode, zoomLevel} = this.props;
-    const {getOrganelleLabel} = organisms;
-    // const hoverLabel = appStore.mysteryLabels ?
-    //   mysteryOrganelleNames[this.state.hoveredOrganelle] : this.state.hoveredOrganelle;
+    const { getOrganelleLabel } = organisms;
     const hoveredOrganelle = organisms.rows[this.props.rowIndex].hoveredOrganelle;
-    const hoverLabel = hoveredOrganelle ? getOrganelleLabel(hoveredOrganelle) : undefined;
+
+    const row = organisms.rows[this.props.rowIndex];
+    if (mode === "target-zoom") {
+      this.showZoomTargets(["receptor", "nucleus"], row.hoveredZoomTarget);
+    } else {
+      this.showZoomTargets([]);
+    }
+
+    let hoverLabel: string | undefined;
+
+    if (mode === "target-zoom") {
+      hoverLabel = row.hoveredZoomTarget ? this.getZoomTargetLabel(row.hoveredZoomTarget) : undefined;
+    } else {
+      hoverLabel = hoveredOrganelle ? getOrganelleLabel(hoveredOrganelle) : undefined;
+    }
+
     const hoverDiv = hoverLabel
       ? (
         <div className="hover-location" data-test="hover-label">
@@ -242,12 +249,18 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
 
     let cursorClass: string = mode;
     const substance = organisms.rows[this.props.rowIndex].selectedSubstance;
-    cursorClass = cursorClass + (mode === "add" ? "-" + substance : "");
-    if (zoomLevel !== "protein" && cursorClass === "inspect") {
-      cursorClass = "";
-    }
-    if (!hoveredOrganelle || (mode === "inspect" && !hoveredOrganelle.includes("receptor"))) {
-      cursorClass += "-disabled";
+    if (mode === "target-zoom") {
+      if (!row.hoveredZoomTarget) {
+        cursorClass += "-disabled";
+      }
+    } else {
+      cursorClass = cursorClass + (mode === "add" ? "-" + substance : "");
+      if (zoomLevel !== "receptor" && cursorClass === "inspect") {
+        cursorClass = "";
+      }
+      if (!hoveredOrganelle || (mode === "inspect" && !hoveredOrganelle.includes("receptor"))) {
+        cursorClass += "-disabled";
+      }
     }
 
     const droppers: any = this.state.dropperCoords.map((dropperCoord: any, i: number) => (
@@ -323,7 +336,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
       this.updateReceptorImage();
     });
 
-    if (this.props.zoomLevel === "protein") {
+    if (this.props.zoomLevel === "receptor") {
       model.setTimeout(
         () => {
           for (let i = 0; i < 3; i++) {
@@ -412,27 +425,46 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
       const {organisms} = this.stores;
       const hoveredOrganelle = this.getOrganelleFromMouseEvent(evt);
       organisms.rows[this.props.rowIndex].setHoveredOrganelle(hoveredOrganelle);
+
+      const target = this.getZoomTargetFromMouseEvent(evt);
+      if (target) {
+        organisms.rows[this.props.rowIndex].setHoveredZoomTarget(target);
+      }
+    });
+
+    model.on("view.hover.exit", (evt: any) => {
+      const {organisms} = this.stores;
+      if (evt.target._organelle.matches({selector: ".zoom"})) {
+        organisms.rows[this.props.rowIndex].setHoveredZoomTarget();
+      }
     });
 
     model.on("view.click", (evt: any) => {
-      const clickTarget = this.getOrganelleFromMouseEvent(evt);
-      if (clickTarget) {
-        // Keep the dropper displayed for substance additions
-        const { mode } = this.props;
-        if (mode === "add") {
-          const newCoords = this.state.dropperCoords.slice(0);
-          newCoords.push({x: evt.e.layerX, y: evt.e.layerY});
-          this.setState({dropperCoords: newCoords});
-          model.setTimeout(() => {
-            const splicedCoords = this.state.dropperCoords.slice(0);
-            splicedCoords.splice(0, 1);
-            this.setState({dropperCoords: splicedCoords});
-          }, SUBSTANCE_ADDITION_MS);
+      const { mode } = this.props;
+      if (mode === "target-zoom") {
+        const target = this.getZoomTargetFromMouseEvent(evt);
+        if (target) {
+          this.props.handleZoomToLevel(target);
         }
+      } else {
+        const clickTarget = this.getOrganelleFromMouseEvent(evt);
+        if (clickTarget) {
+          // Keep the dropper displayed for substance additions
+          if (mode === "add") {
+            const newCoords = this.state.dropperCoords.slice(0);
+            newCoords.push({x: evt.e.layerX, y: evt.e.layerY});
+            this.setState({dropperCoords: newCoords});
+            model.setTimeout(() => {
+              const splicedCoords = this.state.dropperCoords.slice(0);
+              splicedCoords.splice(0, 1);
+              this.setState({dropperCoords: splicedCoords});
+            }, SUBSTANCE_ADDITION_MS);
+          }
 
-        // Handle the click in the Organelle model
-        const location = model.view.transformToWorldCoordinates({x: evt.e.offsetX, y: evt.e.offsetY});
-        this.organelleClick(clickTarget, location);
+          // Handle the click in the Organelle model
+          const location = model.view.transformToWorldCoordinates({x: evt.e.offsetX, y: evt.e.offsetY});
+          this.organelleClick(clickTarget, location);
+        }
       }
     });
   }
@@ -484,6 +516,33 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     model.view.hide(`#receptor-bound-${receptor}`, true);
     model.view.hide(`#receptor-broken-${receptor}`, true);
     model.view.show(`#receptor-${state}-${receptor}`, true);
+  }
+
+  private showZoomTargets(targetsToShow: string[], hoveredTarget?: string) {
+    const model = this.getModel();
+    if (!model || !model.view) return;
+    ["receptor", "nucleus"].forEach(target => {
+      model.view.hide(`#zoom-${target}-target`, true);
+      model.view.hide(`#zoom-${target}-target-hover`, true);
+      model.view.hide(`#zoom-${target}-target-active`, true);
+
+      const hoverClass = target === hoveredTarget ? "-hover" : "";
+      if (targetsToShow.indexOf(target) > -1) {
+        model.view.show(`#zoom-${target}-target${hoverClass}`, true);
+      }
+    });
+  }
+
+  private getZoomTargetLabel(target: ZoomTargetType) {
+    return "Zoom to " + target.charAt(0).toUpperCase() + target.slice(1);
+  }
+
+  private getZoomTargetFromMouseEvent(evt: any): ZoomTargetType | undefined {
+    for (const target of ["receptor", "nucleus"] as ZoomTargetType[]) {
+      if (evt.target._organelle.matches({selector: `.zoom-${target}-target`})) {
+        return target;
+      }
+    }
   }
 
   private getOrganelleFromMouseEvent(evt: any): OrganelleType | undefined {
