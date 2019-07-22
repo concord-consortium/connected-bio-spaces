@@ -683,13 +683,13 @@
     </g>
     <!-- zoom targets -->
     <g class="zoom zoom-receptor-target">
-        <rect id="zoom-receptor-target" x="491" y="176.967" width="258" height="123.106" style="visibility: hidden;fill: rgb(235, 128, 62); fill-opacity: 0.25; stroke: rgb(235, 129, 62); stroke-width: 5px; stroke-dasharray: 10px;" />
-        <rect id="zoom-receptor-target-hover" x="491" y="176.967" width="258" height="123.106" style="visibility: hidden;fill: rgb(235, 128, 62); fill-opacity: 0.5; stroke: rgb(235, 129, 62); stroke-width: 5px; stroke-dasharray: 10px;" />
+        <rect id="zoom-receptor-target" x="491" y="176.967" width="258" height="123.106" style="visibility: hidden;fill: rgb(235, 128, 62); fill-opacity: 0.25; stroke: #D45200; stroke-width: 6px; stroke-dasharray: 10px;" />
+        <rect id="zoom-receptor-target-hover" x="491" y="176.967" width="258" height="123.106" style="visibility: hidden;fill: rgb(235, 128, 62); fill-opacity: 0.5; stroke: #D45200; stroke-width: 6px; stroke-dasharray: 10px;" />
         <rect id="zoom-receptor-target-active" x="491" y="176.967" width="258" height="123.106" style="visibility: hidden;fill: rgb(235, 128, 62); fill-opacity: 0.5; stroke: rgb(255, 255, 255); stroke-width: 5px; stroke-dasharray: 10px;" />
     </g>
     <g class="zoom zoom-nucleus-target">
-        <rect id="zoom-nucleus-target" x="506.307" y="610.254" width="190" height="90.662" style="visibility: hidden;fill: rgb(235, 128, 62); fill-opacity: 0.25; stroke: rgb(235, 129, 62); stroke-width: 5px; stroke-dasharray: 10px;" />
-        <rect id="zoom-nucleus-target-hover" x="506.307" y="610.254" width="190" height="90.662" style="visibility: hidden;fill: rgb(235, 128, 62); fill-opacity: 0.5; stroke: rgb(235, 129, 62); stroke-width: 5px; stroke-dasharray: 10px;" />
+        <rect id="zoom-nucleus-target" x="506.307" y="610.254" width="190" height="90.662" style="visibility: hidden;fill: rgb(235, 128, 62); fill-opacity: 0.25; stroke: #D45200; stroke-width: 6px; stroke-dasharray: 10px;" />
+        <rect id="zoom-nucleus-target-hover" x="506.307" y="610.254" width="190" height="90.662" style="visibility: hidden;fill: rgb(235, 128, 62); fill-opacity: 0.5; stroke: #D45200; stroke-width: 6px; stroke-dasharray: 10px;" />
         <rect id="zoom-nucleus-target-active" x="506.307" y="610.254" width="190" height="90.662" style="visibility: hidden;fill: rgb(235, 128, 62); fill-opacity: 0.5; stroke: rgb(255, 255, 255); stroke-width: 5px; stroke-dasharray: 10px;" />
     </g>
     <!-- /zoom targets -->
