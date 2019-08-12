@@ -12,6 +12,7 @@ interface IProps extends IBaseProps {
   clickClose?: () => void;
   placeable?: boolean;
   index?: number;
+  hideCloseButton?: boolean;
 }
 interface IState {}
 
@@ -31,7 +32,7 @@ export class CollectButtonComponent extends BaseComponent<IProps, IState> {
   }
   private renderFull(mouse: BackpackMouseType) {
     const { backpack } = this.stores;
-    const { backpackMouse, clickMouse, clickClose } = this.props;
+    const { backpackMouse, clickMouse, clickClose, hideCloseButton } = this.props;
     const backpackMouseIndex = backpack.getMouseIndex(backpackMouse);
     const handleMouse = clickMouse ? clickMouse : this.handleClickMouse;
     const handleClose = clickClose ? clickClose : this.handleClickRemove;
@@ -41,11 +42,14 @@ export class CollectButtonComponent extends BaseComponent<IProps, IState> {
     const innerOutlineClass: string = mouse.isHeterozygote ? "inner-outline heterozygote" : "inner-outline";
     return (
       <div>
-        <div className="x-close shown" onClick={handleClose} data-test="x-close-backpack">
-          <svg className="icon">
-            <use xlinkHref="#icon-close" />
-          </svg>
-        </div>
+        {
+          !hideCloseButton &&
+          <div className="x-close shown" onClick={handleClose} data-test="x-close-backpack">
+            <svg className="icon">
+              <use xlinkHref="#icon-close" />
+            </svg>
+          </div>
+        }
         <div className="collect-button-outline">
           <div className={buttonClass} onMouseDown={handleMouse} data-test="stored-mouse-class">
             <div className={innerOutlineClass} data-test="inner-outline">

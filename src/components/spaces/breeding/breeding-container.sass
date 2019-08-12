@@ -1,0 +1,77 @@
+@import "../../vars"
+
+.breeding-container
+  width: 100%
+  display: grid
+  grid-template-columns: [mother] 30% [center] 1fr [father] 30%
+  grid-template-rows: [top] 440px [bottom] 1fr
+
+  div
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+
+  .parent
+    margin: 3px
+    background-color: $color-simdata-brick-light3
+    border: 2px solid $color-simdata-brick-light1
+    border-radius: 10px
+    grid-row-start: top
+
+  .mother
+    grid-column-start: mother
+
+  .father
+    grid-column-start: father
+
+  .breed-button
+    grid-column-start: center
+    grid-row-start: top
+
+    &.gametes
+      padding-top: 10px
+      justify-content: start
+
+  .litter
+    grid-column-start: mother
+    grid-column-end: span 3
+    grid-row-start: bottom
+    height: 85px
+    margin: 3px
+    border: 2px solid black
+    border-radius: 10px
+    flex-direction: row
+    overflow: hidden
+
+  .gamete-container
+    grid-column-start: center
+    grid-row-start: top
+    display: flex
+    flex-direction: row
+    justify-content: space-between
+    align-items: start
+    padding-top: 165px
+    padding-left: 20px
+    padding-right: 20px
+
+
+  .offspring
+    grid-column-start: center
+    grid-row-start: top
+    padding-top: 42px
+
+
+  .button-holder
+    width: 120px
+    margin: 0 2px
+    border-radius: 13px
+    background-color: $color-simdata-brick-light1
+    color: $color-white
+    font-size: 15px
+    &:hover:not(.disabled):not(.active)
+      background-color: $color-simdata-brick
+    &:active:not(.disabled), &.active
+      background-color: $color-simdata-brick-dark1
+      &:hover
+        background-color: $color-simdata-brick-dark2
