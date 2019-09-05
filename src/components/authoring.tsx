@@ -48,6 +48,10 @@ export const defaultAuthoring: ConnectedBioAuthoring = {
         tan: 33.33
       }
     },
+    deadMice: {
+      chanceOfShowingBody: 50,
+      timeToShowBody: 50
+    },
     enableColorChart: true,
     enableGenotypeChart: true,
     enableAllelesChart: true

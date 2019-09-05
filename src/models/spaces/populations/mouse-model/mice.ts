@@ -53,7 +53,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
     public step() {
       // don't step if we're a dead body
       if (this.get("is dead body")){
-        if ((this as any).environment.date > this.get("date of death") + 50) {
+        if ((this as any).environment.date > this.get("date of death") + model["deadMice.timeToShowBody"]) {
           // remove body
           this.die();
         }
@@ -165,7 +165,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
 
     // there is a chance mouse leaves behind a body. If so, don't actually kill it, just set some props
     private dieOfOldAge() {
-      if (Math.random() < 0.5) {
+      if (Math.random() < model.chanceOfShowingBody) {
         this.set("is dead body", true);
         this.set("date of death", (this as any).environment.date);
         // hack to extract oursaelves from animation

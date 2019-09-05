@@ -188,7 +188,9 @@ export const MousePopulationsModel = types
     "showMaxPoints": false,
     "enableColorChart": true,
     "enableGenotypeChart": true,
-    "enableAllelesChart": true
+    "enableAllelesChart": true,
+    "deadMice.chanceOfShowingBody": types.number,
+    "deadMice.timeToShowBody": types.number
   })
   .volatile(self => ({
     hawksAdded: false,
@@ -330,6 +332,10 @@ export const MousePopulationsModel = types
 
         get modelDate() {
           return getModelDate();
+        },
+
+        get chanceOfShowingBody() {
+          return self["deadMice.chanceOfShowingBody"] / 100;
         }
       },
       actions: {
