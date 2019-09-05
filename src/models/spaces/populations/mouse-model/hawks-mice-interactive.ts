@@ -270,7 +270,7 @@ export function createInteractive(model: MousePopulationsModelType) {
   Events.addEventListener(Environment.EVENTS.STEP, () => {
     const allMice: Agent[] = [];
     for (const agent of env.agents) {
-      if (agent.species === mouseSpecies) {
+      if (agent.species === mouseSpecies && !agent.get("is dead body")) {
         allMice.push(agent);
       }
     }
