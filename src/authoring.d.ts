@@ -29,6 +29,8 @@ export type EnableStudentInheritanceControl = boolean;
 export type BreedWithInheritance = boolean;
 export type White1 = number;
 export type Tan1 = number;
+export type ProbabilityOfShowingBody = number;
+export type TimeToShowBodySteps = number;
 export type EnableColorChart = boolean;
 export type EnableGenotypeChart = boolean;
 export type EnableAllelesChart = boolean;
@@ -72,6 +74,7 @@ export interface PopulationsModel {
   initialPopulation?: InitialMousePopulation;
   numHawks?: NumberOfHawks;
   inheritance?: Inheritance;
+  deadMice?: DeadMice;
   enableColorChart?: EnableColorChart;
   enableGenotypeChart?: EnableGenotypeChart;
   enableAllelesChart?: EnableAllelesChart;
@@ -94,6 +97,11 @@ export interface Inheritance {
 export interface ProportionsOfRandomOffspringWhenBreedingWithoutInheritance {
   white?: White1;
   tan?: Tan1;
+  [k: string]: any;
+}
+export interface DeadMice {
+  chanceOfShowingBody?: ProbabilityOfShowingBody;
+  timeToShowBody?: TimeToShowBodySteps;
   [k: string]: any;
 }
 export interface OrganismModel {

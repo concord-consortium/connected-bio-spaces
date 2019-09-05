@@ -193,6 +193,20 @@
             }
           }
         },
+        "deadMice": {
+          "title": "Dead mice",
+          "type": "object",
+          "properties": {
+            "chanceOfShowingBody": {
+              "title": "Probability of showing body (%)",
+              "type": "number"
+            },
+            "timeToShowBody": {
+              "title": "Time to show body (steps)",
+              "type": "number"
+            }
+          }
+        },
         "enableColorChart": {
           "title": "Enable color chart",
           "type": "boolean"
