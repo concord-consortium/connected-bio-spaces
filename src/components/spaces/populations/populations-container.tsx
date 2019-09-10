@@ -1,7 +1,6 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { PopulationsView } from "populations-react";
-import { SizeMe } from "react-sizeme";
 import { BaseComponent, IBaseProps } from "../../base";
 
 import "./populations-container.sass";
@@ -11,13 +10,7 @@ import { BackpackMouse } from "../../../models/backpack-mouse";
 
 import { EnvironmentColorType,
   EnvironmentColorNames } from "../../../models/spaces/populations/mouse-model/mouse-populations-model";
-
-interface SizeMeProps {
-  size?: {
-    width: number | null;
-    height: number | null;
-  };
-}
+import { DEFAULT_MODEL_WIDTH } from "../../..";
 
 interface IProps extends IBaseProps {}
 interface IState {
@@ -95,23 +88,13 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
       containerClass = containerClass + (populations.interactionMode === "select" ? "select" : "");
       return (
         <div>
-          <SizeMe monitorHeight={true}>
-            {({ size }: SizeMeProps) => {
-              return (
-                <div className={containerClass}>
-                  {
-                    (size && size.width)
-                    ? <PopulationsView
-                        interactive={populations.interactive}
-                        width={size.width}
-                        agentClickDistance={20}
-                        onAgentMouseEvent={this.handleAgentMouseEvent} />
-                    : null
-                  }
-                </div>
-              );
-            }}
-          </SizeMe>
+          <div className={containerClass}>
+            <PopulationsView
+              interactive={populations.interactive}
+              width={DEFAULT_MODEL_WIDTH}
+              agentClickDistance={20}
+              onAgentMouseEvent={this.handleAgentMouseEvent} />
+          </div>
           <div className="populations-toolbar" data-test="pop-toolbar">
             <div className="toolbar-row">
               <button className={"population-button " + runButtonClass}

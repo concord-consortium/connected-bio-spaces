@@ -22,6 +22,7 @@ const ASPECT_RATIO_TOP_BAR = 1.6;
 const DEFAULT_WIDTH = 1000;     // scale = 1.0. All font sizes etc. will be respective to this, so
                                 // the larger the width, the smaller the font and title/side-bars
 const MINIMUM_WIDTH = 300;
+export const DEFAULT_MODEL_WIDTH = DEFAULT_WIDTH * 0.414;
 
 function initializeModel(studentData: UserSaveDataType) {
   if (modelInitialized) return;
