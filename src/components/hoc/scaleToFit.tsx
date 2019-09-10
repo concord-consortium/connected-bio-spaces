@@ -92,6 +92,7 @@ export default function scaleToFit(outerWrapperStyle: StyleOptions, center: bool
         }
 
         (otherProps as any).style = style;
+        (otherProps as any).scale = scale;
 
         return (
           <WrappedComponent {...otherProps} />

@@ -11,6 +11,7 @@ import { MainContentComponent } from "./main-content";
 interface IProps extends IBaseProps {
   showTopBar?: boolean;
   style?: any;
+  scale?: number;
 }
 interface IState {}
 
@@ -19,8 +20,12 @@ interface IState {}
 export class AppComponent extends BaseComponent<IProps, IState> {
 
   public render() {
+    let className = "app-container";
+    if (this.props.scale && this.props.scale < 0.65) {
+      className += " small-app";
+    }
     return (
-      <div className="app-container" style={this.props.style}>
+      <div className={className} style={this.props.style}>
         {this.props.showTopBar && <TopBarComponent />}
         <div className="nav-and-content-container">
           <LeftNavPanelComponent />
