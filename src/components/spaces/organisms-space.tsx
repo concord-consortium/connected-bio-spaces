@@ -105,7 +105,7 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
         default:
           if (selectedOrganelle && kOrganelleInfo[selectedOrganelle].protein) {
             return <ProteinViewer
-              protein={kOrganelleInfo[selectedOrganelle].protein}
+              protein={kOrganelleInfo[selectedOrganelle].protein!}
               selectionStartPercent={proteinSliderStartPercent}
               selectedAminoAcidIndex={proteinSliderSelectedAminoAcidIndex}
               selectedAminoAcidXLocation={proteinSliderSelectedAminoAcidXLocation}
