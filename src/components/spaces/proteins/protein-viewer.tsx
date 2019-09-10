@@ -1,7 +1,6 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { BaseComponent, IBaseProps } from "../../base";
-import { withSize } from "react-sizeme";
 import AminoAcidSlider, { kSliderHeight } from "./amino-acid-slider";
 import Protein from "./protein";
 import InfoBox from "./info-box";
@@ -9,6 +8,7 @@ import { extractCodons } from "./util/dna-utils";
 import { getAminoAcidsFromCodons } from "./util/amino-acid-utils";
 import "./protein-viewer.sass";
 import { PANEL_ASPECT_RATIO } from "../../four-up-display";
+import { DEFAULT_MODEL_WIDTH } from "../../..";
 
 export interface ProteinSpec {
   dna: string;
@@ -33,7 +33,6 @@ interface IProps extends IBaseProps {
   setSelectStartPercent: (percent: number) => void;
   setSelectedAminoAcidIndex: (selectedAminoAcidIndex: number, selectedAminoAcidXLocation: number) => void;
   toggleShowInfoBox: () => void;
-  size: {width: number};              // From SizeMe
 }
 
 interface DefaultProps {
@@ -59,7 +58,7 @@ interface IState {
 
 @inject("stores")
 @observer
-export class ProteinViewer extends BaseComponent<IProps, IState> {
+export default class ProteinViewer extends BaseComponent<IProps, IState> {
 
   public static defaultProps: DefaultProps = {
     selectionStartPercent: 0,
@@ -92,7 +91,7 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
       showInfoBox, infoBoxAlert
     } = this.props as PropsWithDefaults;
 
-    const { width } = this.props.size;
+    const width = DEFAULT_MODEL_WIDTH;
 
     const height = width / PANEL_ASPECT_RATIO;
 
@@ -297,5 +296,3 @@ export class ProteinViewer extends BaseComponent<IProps, IState> {
     this.props.toggleShowInfoBox();
   }
 }
-
-export default withSize()(ProteinViewer);

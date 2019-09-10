@@ -1,4 +1,3 @@
-declare module "react-sizeme";
 declare module "react-dimensions";
 declare module "markdown-to-jsx";
 declare module "svg-path-properties";
