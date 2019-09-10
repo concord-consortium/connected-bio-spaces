@@ -43,7 +43,7 @@ export class StaticNucleusView extends BaseComponent<IProps, IState> {
       backgroundImage: `url(${nucleusImage})`,
       backgroundRepeat: "no-repeat",
       backgroundSize: "cover",
-      backgroundPosition: "center"
+      backgroundPosition: "center -110px"
     };
     if (width) {
       mouseStyle.width = `${width}px`;
