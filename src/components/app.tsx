@@ -10,6 +10,7 @@ import { MainContentComponent } from "./main-content";
 
 interface IProps extends IBaseProps {
   showTopBar?: boolean;
+  style?: any;
 }
 interface IState {}
 
@@ -19,7 +20,7 @@ export class AppComponent extends BaseComponent<IProps, IState> {
 
   public render() {
     return (
-      <div className="app-container">
+      <div className="app-container" style={this.props.style}>
         {this.props.showTopBar && <TopBarComponent />}
         <div className="nav-and-content-container">
           <LeftNavPanelComponent />
