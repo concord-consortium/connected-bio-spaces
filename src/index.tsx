@@ -13,8 +13,15 @@ import { AuthoringComponent } from "./components/authoring";
 
 import "./index.sass";
 import { onSnapshot } from "mobx-state-tree";
+import scaleToFit from "./components/hoc/scaleToFit";
 
 let modelInitialized = false;
+
+const ASPECT_RATIO = 1.66;
+const ASPECT_RATIO_TOP_BAR = 1.6;
+const DEFAULT_WIDTH = 1000;     // scale = 1.0. All font sizes etc. will be respective to this, so
+                                // the larger the width, the smaller the font and title/side-bars
+const MINIMUM_WIDTH = 300;
 
 function initializeModel(studentData: UserSaveDataType) {
   if (modelInitialized) return;
@@ -41,9 +48,15 @@ function initializeModel(studentData: UserSaveDataType) {
     onSnapshot(stores.ui, saveUserData);
     onSnapshot(stores.organisms, saveUserData);
 
+    const outerWrapperStyle = { className: "outer-scale-wrapper" };
+    const aspectRatio = initialStore.topBar ? ASPECT_RATIO_TOP_BAR : ASPECT_RATIO;
+    const contentFn = () => { return { width: DEFAULT_WIDTH, height: DEFAULT_WIDTH / aspectRatio,
+                                        minWidth: MINIMUM_WIDTH, minHeight: MINIMUM_WIDTH / aspectRatio }; };
+    const ScaledAppContainer = scaleToFit(outerWrapperStyle, true, contentFn)(AppComponent);
+
     ReactDOM.render(
       <Provider stores={stores}>
-        <AppComponent showTopBar={initialStore.topBar} />
+        <ScaledAppContainer showTopBar={initialStore.topBar} />
       </Provider>,
       appRoot
     );
