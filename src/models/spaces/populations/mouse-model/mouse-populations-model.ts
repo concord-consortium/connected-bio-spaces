@@ -488,7 +488,7 @@ export const MousePopulationsModel = types
           });
 
           buttons.push({
-            title: "Graph Fur Colors",
+            title: "Fur Colors",
             value: self.chartType === "color",
             action: (val: boolean) => {
               self.setChartType("color");
@@ -497,7 +497,7 @@ export const MousePopulationsModel = types
             disabled: !self.enableColorChart
           });
           buttons.push({
-            title: "Graph Genotypes",
+            title: "Genotypes",
             value: self.chartType === "genotype",
             action: (val: boolean) => {
               self.setChartType("genotype");
@@ -506,7 +506,7 @@ export const MousePopulationsModel = types
             disabled: !self.enableGenotypeChart
           });
           buttons.push({
-            title: "Graph Alleles",
+            title: "Alleles",
             value: self.chartType === "alleles",
             action: (val: boolean) => {
               self.setChartType("alleles");
