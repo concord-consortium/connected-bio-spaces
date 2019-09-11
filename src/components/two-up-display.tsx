@@ -23,6 +23,7 @@ interface IProps extends IBaseProps {
   rightPanel: React.ReactNode;
   spaceClass: string;
   rowNumber?: number;
+  rightPanelFooterHeading?: string;
   rightPanelButtons?: ToolbarButton[];
 }
 interface IState {}
@@ -102,27 +103,32 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
     const footerClass = "footer " + this.props.spaceClass + " " + this.props.selectedRightPanel;
 
     let buttons = null;
+
     if (this.props.rightPanelButtons) {
-      buttons = this.props.rightPanelButtons.map( (button: any) => {
-        const type = button.type || "button";
-        if (type === "button" && this.props.selectedRightPanel === button.section) {
-          let className = "button-holder" + (button.value ? " active" : "");
-          let action = button.action;
-          if (button.disabled) {
-            className += " disabled";
-            action = null;
-          }
-          return (
-            <div key={button.title} className={className} onClick={action}>
-              {button.title}
-            </div>
-          );
+      buttons = this.props.rightPanelButtons.filter( (button: any) => {
+        return (!button.type || button.type === "button")
+          && this.props.selectedRightPanel === button.section;
+      }).map( (button: any) => {
+        let className = "button-holder" + (button.value ? " active" : "");
+        let action = button.action;
+        if (button.disabled) {
+          className += " disabled";
+          action = null;
         }
+        return (
+          <div key={button.title} className={className} onClick={action}>
+            {button.title}
+          </div>
+        );
       });
     }
+
     return (
       <div className={footerClass} data-test="right-footer">
-        { buttons ? buttons : null }
+        { buttons && buttons.length ? [
+            this.props.rightPanelFooterHeading,
+            buttons
+          ] : null }
       </div>
     );
   }
