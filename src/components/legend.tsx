@@ -1,15 +1,8 @@
-import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { BaseComponent, IBaseProps } from "./base";
 
 import "./legend.sass";
 
-interface IProps extends IBaseProps {}
-interface IState {}
-
-@inject("stores")
-@observer
-export class LegendComponent extends BaseComponent<IProps, IState> {
+export class LegendComponent extends React.Component {
 
   public render() {
     return (
