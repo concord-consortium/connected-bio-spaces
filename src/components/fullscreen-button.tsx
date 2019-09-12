@@ -5,6 +5,7 @@ import "./fullscreen-button.sass";
 
 interface IProps {
   className?: string;
+  onFullscreenChange?: (isFullscreen: boolean) => void;
 }
 
 interface IState {
@@ -19,7 +20,13 @@ export class FullScreenButton extends React.Component<IProps, IState> {
 
   public componentDidMount() {
     if (screenfull.isEnabled) {
-      screenfull.on("change", () => this.setState({isFullscreen: (screenfull as any).isFullscreen}));
+      screenfull.on("change", () => {
+        const isFullscreen = (screenfull as any).isFullscreen;
+        this.setState({ isFullscreen });
+        if (this.props.onFullscreenChange) {
+          this.props.onFullscreenChange(isFullscreen);
+        }
+      });
     }
   }
 
