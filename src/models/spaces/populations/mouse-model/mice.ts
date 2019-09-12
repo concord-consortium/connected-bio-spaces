@@ -47,6 +47,11 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
     }
 
     public getMovement() {
+      const newborn = this.get("age") < 10;
+      const newMother = this.get("age of motherhood") && (this.get("age") < this.get("age of motherhood") + 15);
+      if (newborn || newMother) {
+        return "stop";
+      }
       return "walk";
     }
 
@@ -58,6 +63,18 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
           this.die();
         }
         return;
+      }
+
+      const newborn = this.get("age") < 10;
+      const young = this.get("age") < this.species.defs.MATURITY_AGE;
+      const newMother = this.get("age of motherhood") && (this.get("age") < this.get("age of motherhood") + 15);
+
+      if (newborn || newMother) {
+        this.set("default speed", 0);
+      } else if (young) {
+        this.set("default speed", 2);
+      } else {
+        this.set("default speed", 6);
       }
 
       this._closestAgents = null;
@@ -114,6 +131,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
       this.set("direction", newDir);
 
       this.set("age", 1);
+      this.set("age of motherhood", 0);
 
       if (this.organism) {
         if (model["inheritance.breedWithInheritance"]) {
@@ -144,6 +162,14 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
         }
       } else {
         return this.wander(this.get("default speed") * 0.75);
+      }
+    }
+
+    public reproduce(mate: Agent) {
+      super.reproduce(mate);
+
+      if (this.get("sex") === "female") {
+        this.set("age of motherhood", this.get("age"));
       }
     }
 
@@ -223,12 +249,16 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
     defs: {
       MAX_AGE: 20000,
       MAX_HEALTH: 1,
-      MATURITY_AGE: 9,
+      MATURITY_AGE: 50,
       CHANCE_OF_MUTATION: 0,
       INFO_VIEW_SCALE: 2,
       INFO_VIEW_PROPERTIES: {
         "Type:": "type",
-        "Sex:": "sex"
+        "Sex:": "sex",
+        "Age:": "age",
+        "mother": "age of motherhood",
+        "speed": "speed",
+        "default speed": "default speed"
       }
     },
     traits: [
@@ -245,11 +275,14 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
           new Trait({ name: "mating distance", default: 50 }),
           new Trait({ name: "max offspring", default: 3 }),
           new Trait({ name: "min offspring", default: 2 }),
+          new Trait({name: "min offspring distance", default: 1 }),
+          new Trait({name: "max offspring distance", default: 3 }),
           new Trait({ name: "metabolism", default: 0 }),
           new Trait({ name: "mating chance", default: 0 }),
           new Trait({ name: "hover", default: "" }),
           new Trait({ name: "is dead body", possibleValues: [true, false], default: false }),
-          new Trait({ name: "date of death", default: 0 })
+          new Trait({ name: "date of death", default: 0 }),
+          new Trait({ name: "age of motherhood", default: 0 }),
     ],
     imageProperties: {
       initialFlipDirection: "right"
