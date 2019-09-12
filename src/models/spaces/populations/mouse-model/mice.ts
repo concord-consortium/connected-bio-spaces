@@ -169,7 +169,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
         this.set("is dead body", true);
         this.set("date of death", (this as any).environment.date);
         // hack to extract oursaelves from animation
-        (this as any)._view._container.removeChildren();
+        (this as any)._view._container && (this as any)._view._container.removeChildren();
         (this as any)._view._sprites = [];
       } else {
         this.die();
