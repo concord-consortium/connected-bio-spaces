@@ -46,7 +46,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
         visibleModes: ["normal"]
       },
       cytoplasm: {
-        selector: `#cytoplasm`,
+        selector: `#cytoplasm, #receptor-cytoplasm`,
         opaqueSelector: "#cellshape_0_Layer0_0_FILL, #intercell_zoom_bounds"
       },
       golgi: {
