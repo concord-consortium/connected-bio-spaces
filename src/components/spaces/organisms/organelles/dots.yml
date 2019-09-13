@@ -10,11 +10,11 @@ spawn:
   'on':
     selector: "#intercellular-paths path"
     which: random
-  every: 35
+  every: 50
   # never: true
 dieWhenExitingWorld: false
 properties:
-  speed: 1.2
+  speed: 1.4
   size: 1
 initialState: flowing
 rules:
