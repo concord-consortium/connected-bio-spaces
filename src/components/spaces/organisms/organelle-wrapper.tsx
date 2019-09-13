@@ -457,7 +457,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
           // Keep the dropper displayed for substance additions
           if (mode === "add") {
             const newCoords = this.state.dropperCoords.slice(0);
-            newCoords.push({x: evt.e.layerX, y: evt.e.layerY});
+            newCoords.push({x: evt.e.offsetX, y: evt.e.offsetY});
             this.setState({dropperCoords: newCoords});
             model.setTimeout(() => {
               const splicedCoords = this.state.dropperCoords.slice(0);
