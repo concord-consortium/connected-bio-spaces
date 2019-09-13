@@ -211,6 +211,11 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
   public addSignalProtein(organelleType: OrganelleType, location: {x: number, y: number}) {
     const { rowIndex } = this.props;
     const { organisms } = this.stores;
+
+    // shift location slightly to make it seem to come out of the dropper more
+    location.x -= 17;
+    location.y += 3;
+
     if (organisms.rows[rowIndex].zoomLevel === "receptor") {
       const inIntercell = organelleType === "extracellular";
       const species = "gProteinPart";
