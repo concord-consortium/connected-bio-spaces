@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.0.3 - released Sept 17, 2019
+
+- New zooming behavior; static nucleus; population births and deaths
+
 ## Version 1.0.2 - released May 6, 2019
 
 - Population graph button states update correctly

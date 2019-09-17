@@ -1,6 +1,6 @@
 {
   "name": "connected-bio-spaces",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Concord Consortium Connected Bio Spaces",
   "main": "index.js",
   "jest": {
