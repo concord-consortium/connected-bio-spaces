@@ -52,14 +52,15 @@ export class AppComponent extends BaseComponent<IProps, IState> {
   }
 
   private handleFullscreenChange = (isFullscreen: boolean) => {
-    if (isFullscreen) {
-      this.setState({
-        showingTopBar: true
-      });
-    } else {
-      this.setState({
-        showingTopBar: this.props.showTopBar
-      });
-    }
+    // Removing this for now, but we may want it back in the future
+    // if (isFullscreen) {
+    //   this.setState({
+    //     showingTopBar: true
+    //   });
+    // } else {
+    //   this.setState({
+    //     showingTopBar: this.props.showTopBar
+    //   });
+    // }
   }
 }
