@@ -151,8 +151,7 @@ export function createInteractive(model: MousePopulationsModelType) {
       agent.set(prop[0], prop[1]);
     }
 
-    agent.set("age", Math.round(Math.random() * 20));
-
+    agent.set("age", Math.round(Math.random() * 60) + 70);
     env.addAgent(agent);
   }
 
@@ -270,7 +269,7 @@ export function createInteractive(model: MousePopulationsModelType) {
   Events.addEventListener(Environment.EVENTS.STEP, () => {
     const allMice: Agent[] = [];
     for (const agent of env.agents) {
-      if (agent.species === mouseSpecies) {
+      if (agent.species === mouseSpecies && !agent.get("is dead body")) {
         allMice.push(agent);
       }
     }
