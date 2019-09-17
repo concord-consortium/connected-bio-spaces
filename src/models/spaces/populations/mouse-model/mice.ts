@@ -47,10 +47,36 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
     }
 
     public getMovement() {
+      const newborn = this.get("age") < 10;
+      const newMother = this.get("age of motherhood") && (this.get("age") < this.get("age of motherhood") + 15);
+      if (newborn || newMother) {
+        return "stop";
+      }
       return "walk";
     }
 
     public step() {
+      // don't step if we're a dead body
+      if (this.get("is dead body")){
+        if ((this as any).environment.date > this.get("date of death") + model["deadMice.timeToShowBody"]) {
+          // remove body
+          this.die();
+        }
+        return;
+      }
+
+      const newborn = this.get("age") < 10;
+      const young = this.get("age") < this.species.defs.MATURITY_AGE;
+      const newMother = this.get("age of motherhood") && (this.get("age") < this.get("age of motherhood") + 15);
+
+      if (newborn || newMother) {
+        this.set("default speed", 0);
+      } else if (young) {
+        this.set("default speed", 2);
+      } else {
+        this.set("default speed", 6);
+      }
+
       this._closestAgents = null;
       this._setSpeedAppropriateForAge();
       this._depleteEnergy();
@@ -105,6 +131,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
       this.set("direction", newDir);
 
       this.set("age", 1);
+      this.set("age of motherhood", 0);
 
       if (this.organism) {
         if (model["inheritance.breedWithInheritance"]) {
@@ -138,6 +165,20 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
       }
     }
 
+    public reproduce(mate: Agent) {
+      super.reproduce(mate);
+
+      if (this.get("sex") === "female") {
+        this.set("age of motherhood", this.get("age"));
+      }
+    }
+
+    // overwrite this function to direct us to dieOfOldAge()
+    public _checkSurvival() {
+      const chance = this.hasProp("chance of survival") ? this.get("chance of survival") : this._getSurvivalChances();
+      if (Math.random() > chance) { return this.dieOfOldAge(); }
+    }
+
     public resetGeneticTraits() {
       super.resetGeneticTraits();       // FIXME populations type def
       return this.set("genome", this._genomeButtonsString());
@@ -146,6 +187,19 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
     public _genomeButtonsString() {
       const alleles = this.organism.getAlleleString().replace(/a:/g, "").replace(/b:/g, "").replace(/,/g, "");
       return alleles;
+    }
+
+    // there is a chance mouse leaves behind a body. If so, don't actually kill it, just set some props
+    private dieOfOldAge() {
+      if (Math.random() < model.chanceOfShowingBody) {
+        this.set("is dead body", true);
+        this.set("date of death", (this as any).environment.date);
+        // hack to extract oursaelves from animation
+        (this as any)._view._container && (this as any)._view._container.removeChildren();
+        (this as any)._view._sprites = [];
+      } else {
+        this.die();
+      }
     }
 
     // FIXME this should eventually be added to populations.js
@@ -195,12 +249,16 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
     defs: {
       MAX_AGE: 20000,
       MAX_HEALTH: 1,
-      MATURITY_AGE: 9,
+      MATURITY_AGE: 50,
       CHANCE_OF_MUTATION: 0,
       INFO_VIEW_SCALE: 2,
       INFO_VIEW_PROPERTIES: {
         "Type:": "type",
-        "Sex:": "sex"
+        "Sex:": "sex",
+        "Age:": "age",
+        "mother": "age of motherhood",
+        "speed": "speed",
+        "default speed": "default speed"
       }
     },
     traits: [
@@ -217,9 +275,14 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
           new Trait({ name: "mating distance", default: 50 }),
           new Trait({ name: "max offspring", default: 3 }),
           new Trait({ name: "min offspring", default: 2 }),
+          new Trait({name: "min offspring distance", default: 1 }),
+          new Trait({name: "max offspring distance", default: 3 }),
           new Trait({ name: "metabolism", default: 0 }),
           new Trait({ name: "mating chance", default: 0 }),
-          new Trait({ name: "hover", default: "" })
+          new Trait({ name: "hover", default: "" }),
+          new Trait({ name: "is dead body", possibleValues: [true, false], default: false }),
+          new Trait({ name: "date of death", default: 0 }),
+          new Trait({ name: "age of motherhood", default: 0 }),
     ],
     imageProperties: {
       initialFlipDirection: "right"
@@ -251,7 +314,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
               }
             },
             useIf(agent: Agent) {
-              return agent.get("hover") === "select";
+              return !agent.get("is dead body") && agent.get("hover") === "select";
             }
           }
         ]
@@ -262,13 +325,52 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
         rules: [
           {
             image: {
+              path: "assets/curriculum/mouse/populations/sandrat-light-dead.png",
+              scale: 0.16,
+              anchor: {
+                x: 0.5,
+                y: 0.5
+              }
+            },
+            useIf(agent: Agent) {
+              return agent.get("is dead body") && agent.get("color") === "white";
+            }
+          },
+          {
+            image: {
+              path: "assets/curriculum/mouse/populations/sandrat-tan-dead.png",
+              scale: 0.16,
+              anchor: {
+                x: 0.5,
+                y: 0.5
+              }
+            },
+            useIf(agent: Agent) {
+              return agent.get("is dead body") && agent.get("color") === "tan";
+            }
+          },
+          {
+            image: {
+              path: "assets/curriculum/mouse/populations/sandrat-dark-dead.png",
+              scale: 0.16,
+              anchor: {
+                x: 0.5,
+                y: 0.5
+              }
+            },
+            useIf(agent: Agent) {
+              return agent.get("is dead body") && agent.get("color") === "brown";
+            }
+          },
+          {
+            image: {
               animations: [
                 {
                   path: "assets/curriculum/mouse/populations/sandrat-light-sprite.json",
                   movement: "stop",
                   animationName: "stop-light",
                   length: 1,
-                  loop: true,
+                  loop: false,
                   frameRate: 10
                 },
                 {
@@ -287,7 +389,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
               }
             },
             useIf(agent: Agent) {
-              return agent.get("color") === "white";
+              return !agent.get("is dead body") && agent.get("color") === "white";
             }
           }, {
             image: {
@@ -297,7 +399,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
                   movement: "stop",
                   animationName: "stop-tan",
                   length: 1,
-                  loop: true,
+                  loop: false,
                   frameRate: 10
                 },
                 {
@@ -316,7 +418,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
               }
             },
             useIf(agent: Agent) {
-              return agent.get("color") === "tan";
+              return !agent.get("is dead body") && agent.get("color") === "tan";
             }
           }, {
             image: {
@@ -326,7 +428,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
                   movement: "stop",
                   animationName: "stop-dark",
                   length: 1,
-                  loop: true,
+                  loop: false,
                   frameRate: 10
                 },
                 {
@@ -345,7 +447,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
               }
             },
             useIf(agent: Agent) {
-              return agent.get("color") === "brown";
+              return !agent.get("is dead body") && agent.get("color") === "brown";
             }
           }
         ]
@@ -363,7 +465,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
               }
             },
             useIf(agent: Agent) {
-              return model.showSexStack && agent.get("sex") === "male";
+              return model.showSexStack && !agent.get("is dead body") && agent.get("sex") === "male";
             }
           }, {
             image: {
@@ -375,7 +477,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
               }
             },
             useIf(agent: Agent) {
-              return model.showSexStack && agent.get("sex") === "female";
+              return model.showSexStack && !agent.get("is dead body") && agent.get("sex") === "female";
             }
           }
         ]
@@ -393,7 +495,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
               }
             },
             useIf(agent: Agent) {
-              return model.showHeteroStack && agent.get("color") === "tan";
+              return model.showHeteroStack && !agent.get("is dead body") && agent.get("color") === "tan";
             }
           }
         ]
@@ -401,6 +503,45 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
         name: "mouse info tool",
         contexts: ["info-tool"],
         rules: [
+          {
+            image: {
+              path: "assets/curriculum/mouse/populations/sandrat-light-dead.png",
+              scale: 0.16,
+              anchor: {
+                x: 0.5,
+                y: 0.5
+              }
+            },
+            useIf(agent: Agent) {
+              return agent.get("is dead body") && agent.get("color") === "white";
+            }
+          },
+          {
+            image: {
+              path: "assets/curriculum/mouse/populations/sandrat-tan-dead.png",
+              scale: 0.16,
+              anchor: {
+                x: 0.5,
+                y: 0.5
+              }
+            },
+            useIf(agent: Agent) {
+              return agent.get("is dead body") && agent.get("color") === "tan";
+            }
+          },
+          {
+            image: {
+              path: "assets/curriculum/mouse/populations/sandrat-dark-dead.png",
+              scale: 0.16,
+              anchor: {
+                x: 0.5,
+                y: 0.5
+              }
+            },
+            useIf(agent: Agent) {
+              return agent.get("is dead body") && agent.get("color") === "brown";
+            }
+          },
           {
             image: {
               path: "assets/curriculum/mouse/populations/sandrat-light.png",

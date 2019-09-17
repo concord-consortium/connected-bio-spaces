@@ -48,6 +48,10 @@ export const defaultAuthoring: ConnectedBioAuthoring = {
         tan: 33.33
       }
     },
+    deadMice: {
+      chanceOfShowingBody: 50,
+      timeToShowBody: 50
+    },
     enableColorChart: true,
     enableGenotypeChart: true,
     enableAllelesChart: true
@@ -56,6 +60,10 @@ export const defaultAuthoring: ConnectedBioAuthoring = {
     instructions: "",
     useMysteryOrganelles: false,
     useMysterySubstances: false
+  },
+  breeding: {
+    instructions: "",
+    breedingType: "litter"
   }
 
 };
@@ -100,6 +108,11 @@ const uiSchema = {
     }
   },
   organisms: {
+    instructions: {
+      "ui:widget": "textarea"
+    }
+  },
+  breeding: {
     instructions: {
       "ui:widget": "textarea"
     }

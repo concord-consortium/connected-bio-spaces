@@ -29,12 +29,16 @@ export type EnableStudentInheritanceControl = boolean;
 export type BreedWithInheritance = boolean;
 export type White1 = number;
 export type Tan1 = number;
+export type ProbabilityOfShowingBody = number;
+export type TimeToShowBodySteps = number;
 export type EnableColorChart = boolean;
 export type EnableGenotypeChart = boolean;
 export type EnableAllelesChart = boolean;
 export type InstructionsAsMarkdown1 = string;
 export type ShowMysteryLocationLabels = boolean;
 export type ShowMysterySubstanceLabels = boolean;
+export type InstructionsAsMarkdown2 = string;
+export type BreedingType = "litter" | "singleGamete";
 
 export interface ConnectedBioAuthoring {
   curriculum?: Unit;
@@ -43,6 +47,7 @@ export interface ConnectedBioAuthoring {
   backpack?: InitialBackpack;
   populations?: PopulationsModel;
   organisms?: OrganismModel;
+  breeding?: BreedingModel;
   [k: string]: any;
 }
 export interface InvestigationSpaces {
@@ -69,6 +74,7 @@ export interface PopulationsModel {
   initialPopulation?: InitialMousePopulation;
   numHawks?: NumberOfHawks;
   inheritance?: Inheritance;
+  deadMice?: DeadMice;
   enableColorChart?: EnableColorChart;
   enableGenotypeChart?: EnableGenotypeChart;
   enableAllelesChart?: EnableAllelesChart;
@@ -93,9 +99,19 @@ export interface ProportionsOfRandomOffspringWhenBreedingWithoutInheritance {
   tan?: Tan1;
   [k: string]: any;
 }
+export interface DeadMice {
+  chanceOfShowingBody?: ProbabilityOfShowingBody;
+  timeToShowBody?: TimeToShowBodySteps;
+  [k: string]: any;
+}
 export interface OrganismModel {
   instructions?: InstructionsAsMarkdown1;
   useMysteryOrganelles?: ShowMysteryLocationLabels;
   useMysterySubstances?: ShowMysterySubstanceLabels;
+  [k: string]: any;
+}
+export interface BreedingModel {
+  instructions?: InstructionsAsMarkdown2;
+  breedingType?: BreedingType;
   [k: string]: any;
 }

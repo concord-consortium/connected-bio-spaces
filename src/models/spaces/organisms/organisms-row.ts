@@ -4,13 +4,16 @@ import { RightPanelTypeEnum, RightPanelType } from "../../ui";
 import { DataPoint, ChartDataSetModel, DataPointType, ChartDataSetModelType } from "../charts/chart-data-set";
 import { OrganismsMouseModel, Organelle, Substance, kSubstanceNames,
   OrganelleType, SubstanceType } from "./organisms-mouse";
-import { kSubstanceInfo, OrganismsSpaceModel, OrganismsSpaceModelType, kOrganelleInfo } from "./organisms-space";
+import { kSubstanceInfo, OrganismsSpaceModel } from "./organisms-space";
 
-export const Mode = types.enumeration("type", ["add", "subtract", "assay", "inspect", "normal"]);
+export const Mode = types.enumeration("type", ["add", "subtract", "assay", "inspect", "target-zoom", "normal"]);
 export type ModeType = typeof Mode.Type;
 
-export const ZoomLevel = types.enumeration("type", ["organism", "cell", "protein"]);
+export const ZoomLevel = types.enumeration("type", ["organism", "cell", "receptor", "nucleus"]);
 export type ZoomLevelType = typeof ZoomLevel.Type;
+
+export const ZoomTarget = types.enumeration("type", ["receptor", "nucleus"]);
+export type ZoomTargetType = typeof ZoomTarget.Type;
 
 export const OrganismsRowModel = types
   .model("OrganismsRow", {
@@ -20,10 +23,13 @@ export const OrganismsRowModel = types
     mode: types.optional(Mode, "normal"),
     assayedOrganelles: types.array(Organelle),
     zoomLevel: types.optional(ZoomLevel, "organism"),
+    hoveredZoomTarget: types.maybe(ZoomTarget),
     showProteinDNA: false,
     showProteinAminoAcidsOnProtein: true,
     rightPanel: types.optional(RightPanelTypeEnum, "instructions"),
-    selectedSubstance: types.optional(Substance, "hormone")
+    selectedSubstance: types.optional(Substance, "hormone"),
+    nucleusColored: false,
+    nucleusCondensed: false
   })
   .views(self => ({
     get currentData(): ChartDataModelType {
@@ -86,14 +92,21 @@ export const OrganismsRowModel = types
       },
       setZoomLevel(zoomLevel: ZoomLevelType) {
         self.zoomLevel = zoomLevel;
-        if (zoomLevel !== "protein") {
+
+        // reset stuff between levels
+        if (zoomLevel !== "receptor") {
           self.selectedOrganelle = undefined;
         }
+        self.mode = "normal";
+        self.hoveredZoomTarget = undefined;
+      },
+      setHoveredZoomTarget(target?: ZoomTargetType) {
+        self.hoveredZoomTarget = target;
       },
       setMode(mode: ModeType) {
         self.mode = mode;
         if (self.organismsMouse) {
-          if (mode === "normal") {
+          if (mode === "normal" || mode === "target-zoom") {
             self.organismsMouse.setPaused(false);
           } else {
             self.organismsMouse.setPaused(true);
@@ -111,6 +124,12 @@ export const OrganismsRowModel = types
       },
       setSelectedSubstance(substance: SubstanceType) {
         self.selectedSubstance = substance;
+      },
+      toggleNucleusColor() {
+        self.nucleusColored = !self.nucleusColored;
+      },
+      toggleNucleusCondense() {
+        self.nucleusCondensed = !self.nucleusCondensed;
       }
     };
   })

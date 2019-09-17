@@ -193,6 +193,20 @@
             }
           }
         },
+        "deadMice": {
+          "title": "Dead mice",
+          "type": "object",
+          "properties": {
+            "chanceOfShowingBody": {
+              "title": "Probability of showing body (%)",
+              "type": "number"
+            },
+            "timeToShowBody": {
+              "title": "Time to show body (steps)",
+              "type": "number"
+            }
+          }
+        },
         "enableColorChart": {
           "title": "Enable color chart",
           "type": "boolean"
@@ -222,6 +236,28 @@
         "useMysterySubstances": {
           "title": "Show mystery substance labels",
           "type": "boolean"
+        }
+      }
+    },
+    "breeding": {
+      "title": "Breeding Model",
+      "type": "object",
+      "properties": {
+        "instructions": {
+          "title": "Instructions (as markdown)",
+          "type": "string"
+        },
+        "breedingType": {
+          "title": "Breeding Type",
+          "type": "string",
+          "enum": [
+            "litter",
+            "singleGamete"
+          ],
+          "enumNames": [
+            "Litter",
+            "Single Gamete"
+          ]
         }
       }
     }

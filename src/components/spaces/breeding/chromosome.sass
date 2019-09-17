@@ -1,0 +1,70 @@
+@import "../../vars"
+
+$width: 22px
+$height: 80px
+$male-height: 37px
+$border-width: 3px
+
+.chromosomes
+  .chromosome-pair
+    display: flex
+    flex-direction: row
+    justify-content: center
+    align-items: start
+
+    .chromosome
+      margin: 3px
+      box-sizing: border-box
+      width: $width
+      height: $height
+      border-radius: $width
+      border: solid
+      border-width: $border-width
+
+      .allele
+        position: relative
+        top: 20px
+        border-color: inherit
+
+        .label
+          position: absolute
+          left: -18px
+          top: -8px
+
+        .line
+          margin-left: $border-width * -2
+          width: $width + $border-width
+          border: 1px solid
+          border-color: inherit
+
+    .chromosome:nth-of-type(2),.chromosome.right
+      .allele
+        .line
+          margin-left: 5px
+
+        .label
+          left: $width + 10
+
+    .chromosome.male
+      height: $male-height
+
+    &:nth-of-type(1)
+      .chromosome
+        border-color: blue
+        background-color: lightblue
+    &:nth-of-type(2)
+      .chromosome
+        border-color: green
+        background-color: lightgreen
+    &:nth-of-type(3)
+      .chromosome
+        border-color: red
+        background-color: pink
+
+
+.chromosomes.empty .chromosome-pair
+  .chromosome
+    border-width: 1px
+    border-style: dashed
+    border-color: $color-nav-cinder-light1
+    background-color: $color-nav-cerulean-light3

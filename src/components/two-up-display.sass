@@ -47,6 +47,8 @@
       background-color: $color-simdata-amber
     &.organism
       background-color: $color-simdata-carrot
+    &.breeding
+      background-color: $color-simdata-brick
 
     .title
       flex-grow: 1
@@ -72,6 +74,16 @@
           .button
             fill: $two-up-button-icon-color-active
 
+    &.breeding
+      .button-holder
+        &:hover:not(.disabled)
+          background-color: $color-simdata-brick-dark1
+        .button
+          fill: $color-simdata-brick-light1
+        &.active
+          .button
+            fill: $two-up-button-icon-color-active
+
   .content
     flex-grow: 1
     overflow: hidden
@@ -82,6 +94,9 @@
 
     &.organism
       background-color: $color-simdata-carrot-light2
+
+    &.breeding
+      background-color: $color-simdata-brick-light2
 
   .resizetofit
     display: flex
@@ -107,6 +122,8 @@
         height: 45px
     &.organism
       background-color: $color-simdata-carrot
+    &.breeding
+      background-color: $color-simdata-brick
 
     .button-holder
       width: 120px

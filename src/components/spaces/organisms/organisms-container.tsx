@@ -4,12 +4,12 @@ import { SizeMe } from "react-sizeme";
 import { BaseComponent, IBaseProps } from "../../base";
 import { ZoomControl } from "../../zoom-control";
 import { OrganismView } from "./organism-view";
-import { CollectButtonComponent } from "../../collect-button";
 
 import "./organisms-container.sass";
 import { ZoomLevelType, OrganismsRowModelType, ModeType } from "../../../models/spaces/organisms/organisms-row";
 import { OrganelleWrapper } from "./organelle-wrapper";
 import { ManipulationControls } from "./manipulation-controls";
+import { StaticNucleusView } from "./static-nucleus-view";
 
 interface SizeMeProps {
   size?: {
@@ -35,7 +35,8 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
     const { rowIndex } = this.props;
     const { organisms } = this.stores;
     const organismsRow = organisms.rows[rowIndex];
-    const { organismsMouse, zoomLevel, mode } = organismsRow;
+    const { zoomLevel, mode } = organismsRow;
+    const showTargetZoom = zoomLevel === "cell";
 
     return (
       <div className="organisms-container" data-test="organism-view-container">
@@ -45,7 +46,7 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
           }}
         </SizeMe>
         <div className="organism-controls">
-          <ZoomControl handleZoom={this.zoomChange} rowIndex={rowIndex} />
+          <ZoomControl handleZoom={this.zoomChange} rowIndex={rowIndex} showTargetZoom={showTargetZoom} />
           <ManipulationControls rowIndex={rowIndex} />
         </div>
       </div>
@@ -57,14 +58,27 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
     const { rowIndex } = this.props;
     const organismsRow = organisms.rows[rowIndex];
 
-    const availableZoomLevels: ZoomLevelType[] = ["organism", "cell", "protein"];
-    const maxZoom = availableZoomLevels.length - 1;
+    const availableZoomLevels: {[key in ZoomLevelType]: number} = {
+      organism: 0,
+      cell: 1,
+      receptor: 2,
+      nucleus: 2
+    };
+    const maxZoom = 2;
+    const defaultZoomLevelByIndex: ZoomLevelType[] = ["organism", "cell", "receptor"];
 
-    const current = availableZoomLevels.indexOf(organismsRow.zoomLevel);
+    const current = availableZoomLevels[organismsRow.zoomLevel];
     const newZoom = current + zoomChange;
     const nextIdx = newZoom > maxZoom ? maxZoom : newZoom < 0 ? 0 : newZoom;
 
-    organismsRow.setZoomLevel(availableZoomLevels[nextIdx]);
+    organismsRow.setZoomLevel(defaultZoomLevelByIndex[nextIdx]);
+  }
+
+  private zoomToLevel = (level: ZoomLevelType) => {
+    const { organisms } = this.stores;
+    const { rowIndex } = this.props;
+    const organismsRow = organisms.rows[rowIndex];
+    organismsRow.setZoomLevel(level);
   }
 
   // We explicitly pass down organismsRow and zoomLevel separately, or MST won't correctly attach the observers
@@ -78,14 +92,20 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
       case "organism":
         return <OrganismView backpackMouse={organismsMouse && organismsMouse.backpackMouse} width={width}/>;
       case "cell":
-      case "protein":
+      case "receptor":
         return (
-          <div className="cell-zoom-panel" data-test="cell-zoon-panel">
+          <div className="cell-zoom-panel" key={zoomLevel} data-test="cell-zoon-panel">
             {
               organismsMouse != null &&
                 <OrganelleWrapper zoomLevel={zoomLevel} elementName={`organelle-wrapper-${rowIndex}`}
-                  rowIndex={rowIndex} width={width} mode={mode}/>
+                  rowIndex={rowIndex} width={width} mode={mode} handleZoomToLevel={this.zoomToLevel}/>
             }
+          </div>
+        );
+      case "nucleus":
+        return (
+          <div className="cell-zoom-panel" key={zoomLevel} data-test="cell-zoon-panel">
+            <StaticNucleusView rowIndex={rowIndex} width={width}/>
           </div>
         );
       default:
