@@ -211,6 +211,11 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
   public addSignalProtein(organelleType: OrganelleType, location: {x: number, y: number}) {
     const { rowIndex } = this.props;
     const { organisms } = this.stores;
+
+    // shift location slightly to make it seem to come out of the dropper more
+    location.x -= 17;
+    location.y += 3;
+
     if (organisms.rows[rowIndex].zoomLevel === "receptor") {
       const inIntercell = organelleType === "extracellular";
       const species = "gProteinPart";
@@ -452,7 +457,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
           // Keep the dropper displayed for substance additions
           if (mode === "add") {
             const newCoords = this.state.dropperCoords.slice(0);
-            newCoords.push({x: evt.e.layerX, y: evt.e.layerY});
+            newCoords.push({x: evt.e.offsetX, y: evt.e.offsetY});
             this.setState({dropperCoords: newCoords});
             model.setTimeout(() => {
               const splicedCoords = this.state.dropperCoords.slice(0);

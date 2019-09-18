@@ -116,6 +116,9 @@
     border-bottom-right-radius: $component-border-radius
     transition-property: height
     transition-duration: $fade-time
+    color: $color-white
+    font-size: 11px
+
     &.populations
       background-color: $color-simdata-amber
       &.data
@@ -126,8 +129,8 @@
       background-color: $color-simdata-brick
 
     .button-holder
-      width: 120px
-      margin: 0 2px
+      width: 92px
+      margin: 0 5px 0 7px
       border-radius: 13px
       background-color: $color-simdata-amber-light2
       &:hover:not(.disabled):not(.active)
@@ -145,6 +148,7 @@
       height: 29px
       border-radius: 5px
       background-color: $color-simdata-amber-light2
+      transform: translate3d(0px, 0px, 0px)  // needed to keep visibility after scaling
       &.upper-right
         top: 111px
         right: 17px
@@ -165,3 +169,8 @@
 
 .bottom-abutment
   margin-bottom: $two-up-margin
+
+.small-app
+  .two-up-display
+    .header
+      font-size: $small-app-font-size-header

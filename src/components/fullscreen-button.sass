@@ -1,0 +1,120 @@
+@import vars
+
+.fullscreen-button-container
+  position: absolute
+  right: 0
+  bottom: 0
+  width: 45px
+  height: 45px
+
+  .fullscreen-button-border
+    background-color: white
+    position: absolute
+    top: 0
+    left: 0
+    width: 35px
+    height: 35px
+    border-radius: 7px 0 0 0
+
+  .fullscreen-button
+    position: absolute
+    top: 3px
+    left: 3px
+    width: 42px
+    height: 42px
+    display: flex
+    align-items: center
+    justify-content: center
+    background-color: white
+    border: 3px solid
+    border-radius: 5px 0 0 0
+    box-sizing: border-box
+
+    .image
+      width: 28px
+      height: 28px
+
+  &.populations
+    .fullscreen-button
+      border-color: $color-simdata-amber-dark1
+      svg
+        fill: $color-simdata-amber
+      &:hover
+        background-color: $color-simdata-amber-light1
+      &:active
+        background-color: $color-simdata-amber-dark1
+        svg
+          fill: white
+
+  &.organism
+    .fullscreen-button
+      border-color: $color-simdata-carrot-dark1
+      svg
+        fill: $color-simdata-carrot
+      &:hover
+        background-color: $color-simdata-carrot-light1
+      &:active
+        background-color: $color-simdata-carrot-dark1
+        svg
+          fill: white
+
+  &.breeding
+    .fullscreen-button
+      border-color: $color-simdata-brick-dark1
+      svg
+        fill: $color-simdata-brick
+      &:hover
+        background-color: $color-simdata-brick-light1
+      &:active
+        background-color: $color-simdata-brick-dark1
+        svg
+          fill: white
+
+  &.none
+    .fullscreen-button-border
+      background-color: $color-nav-cinder-light2
+    .fullscreen-button
+      border-color: $color-nav-cinder-dark2
+      svg
+        fill: $color-nav-cinder-dark2
+
+  &.fullscreen
+    &.populations
+      .fullscreen-button
+        border-color: $color-simdata-amber-dark1
+        background-color: $color-simdata-amber-dark1
+        svg
+          fill: white
+        &:hover
+          background-color: $color-simdata-amber-light1
+        &:active
+          background-color: $color-simdata-amber-dark1
+          svg
+            fill: $color-simdata-amber
+
+    &.organism
+      .fullscreen-button
+        border-color: $color-simdata-carrot-dark1
+        background-color: $color-simdata-carrot-dark1
+        svg
+          fill: white
+        &:hover
+          background-color: $color-simdata-carrot-light1
+        &:active
+          background-color: $color-simdata-carrot-dark1
+          svg
+            fill: $color-simdata-carrot
+
+    &.breeding
+      .fullscreen-button
+        border-color: $color-simdata-brick-dark1
+        background-color: $color-simdata-brick-dark1
+        svg
+          fill: white
+        &:hover
+          background-color: $color-simdata-brick-light1
+        &:active
+          background-color: $color-simdata-brick-dark1
+          svg
+            fill: $color-simdata-brick
+

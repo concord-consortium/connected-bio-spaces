@@ -1,6 +1,5 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-import { SizeMe } from "react-sizeme";
 import { BaseComponent, IBaseProps } from "../../base";
 import { ZoomControl } from "../../zoom-control";
 import { OrganismView } from "./organism-view";
@@ -10,13 +9,7 @@ import { ZoomLevelType, OrganismsRowModelType, ModeType } from "../../../models/
 import { OrganelleWrapper } from "./organelle-wrapper";
 import { ManipulationControls } from "./manipulation-controls";
 import { StaticNucleusView } from "./static-nucleus-view";
-
-interface SizeMeProps {
-  size?: {
-    width: number | null;
-    height: number | null;
-  };
-}
+import { DEFAULT_MODEL_WIDTH } from "../../..";
 
 interface IProps extends IBaseProps {
   rowIndex: number;
@@ -40,11 +33,9 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
 
     return (
       <div className="organisms-container" data-test="organism-view-container">
-        <SizeMe monitorHeight={true}>
-          {(sizeProps: SizeMeProps) => {
-            return  this.organismZoomedView(organismsRow, zoomLevel, rowIndex, mode, sizeProps);
-          }}
-        </SizeMe>
+        {
+          this.organismZoomedView(organismsRow, zoomLevel, rowIndex, mode)
+        }
         <div className="organism-controls">
           <ZoomControl handleZoom={this.zoomChange} rowIndex={rowIndex} showTargetZoom={showTargetZoom} />
           <ManipulationControls rowIndex={rowIndex} />
@@ -81,12 +72,11 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
     organismsRow.setZoomLevel(level);
   }
 
-  // We explicitly pass down organismsRow and zoomLevel separately, or MST won't correctly attach the observers
-  // due to this function being nested inside the SizeMe component.
+  // We explicitly pass down organismsRow and zoomLevel separately
   private organismZoomedView = (organismsRow: OrganismsRowModelType, zoomLevel: ZoomLevelType, rowIndex: number,
-                                mode: ModeType, { size }: SizeMeProps) => {
+                                mode: ModeType) => {
     const { organismsMouse } = organismsRow;
-    const width = size && size.width ? size.width : 0;
+    const width = DEFAULT_MODEL_WIDTH;
 
     switch (zoomLevel) {
       case "organism":
