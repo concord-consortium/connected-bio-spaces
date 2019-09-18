@@ -1,4 +1,7 @@
 # Changelog
+## Version 1.0.5 - released Sept 17, 2019
+
+- Fix dropper
 
 ## Version 1.0.4 - released Sept 17, 2019
 
