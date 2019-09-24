@@ -254,11 +254,7 @@ export function getMouseSpecies(model: MousePopulationsModelType) {
       INFO_VIEW_SCALE: 2,
       INFO_VIEW_PROPERTIES: {
         "Type:": "type",
-        "Sex:": "sex",
-        "Age:": "age",
-        "mother": "age of motherhood",
-        "speed": "speed",
-        "default speed": "default speed"
+        "Sex:": "sex"
       }
     },
     traits: [
