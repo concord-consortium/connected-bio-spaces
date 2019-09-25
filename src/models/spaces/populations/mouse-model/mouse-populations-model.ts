@@ -304,6 +304,9 @@ export const MousePopulationsModel = types
       self.chartData.dataSets.forEach(d => d.clearDataPoints());
       self.chartData.clearAnnotations();
       addEnvironmentAnnotation(0, self.environment);
+      if (interactive) {
+        addData(getModelDate(), interactive.getData());
+      }
     }
 
     setupGraph();

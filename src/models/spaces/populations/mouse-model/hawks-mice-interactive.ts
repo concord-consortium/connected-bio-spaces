@@ -105,6 +105,46 @@ export function createInteractive(model: MousePopulationsModelType) {
     numR = 0;
   }
 
+  function countMice(allMice: Agent[]) {
+    numWhite = 0;
+    numTan = 0;
+    numBrown = 0;
+    numCC = 0;
+    numCR = 0;
+    numRC = 0;
+    numRR = 0;
+    numC = 0;
+    numR = 0;
+    allMice.forEach((mouse) => {
+      if (mouse.get("color") === "white") {
+        numWhite++;
+        numCC++;
+        numC += 2;
+      } else if (mouse.get("color") === "tan") {
+        numTan++;
+        if (mouse.alleles.color === "a:C,b:R") {
+          numCR++;
+        } else {
+          numRC++;
+        }
+        numC++;
+        numR++;
+      } else if (mouse.get("color") === "brown") {
+        numBrown++;
+        numRR++;
+        numR += 2;
+      }
+    });
+    numCC = (numCC / allMice.length) * 100;
+    numCR = (numCR / allMice.length) * 100;
+    numRC = (numRC / allMice.length) * 100;
+    numRR = (numRR / allMice.length) * 100;
+
+    const totalAlleles = numC + numR;
+    numC = (numC / totalAlleles) * 100;
+    numR = (numR / totalAlleles) * 100;
+  }
+
   function addInitialMicePopulation(num: number) {
     for (let i = 0; i < num; i++) {
       let colorTrait;
@@ -126,6 +166,8 @@ export function createInteractive(model: MousePopulationsModelType) {
         colorTrait
       ]);
     }
+    const allMice = env.agents.filter(a => a.species === mouseSpecies && !a.get("is dead body"));
+    countMice(allMice);
   }
 
   interactive.setup = () => {
@@ -267,55 +309,15 @@ export function createInteractive(model: MousePopulationsModelType) {
   }
 
   Events.addEventListener(Environment.EVENTS.STEP, () => {
-    const allMice: Agent[] = [];
-    for (const agent of env.agents) {
-      if (agent.species === mouseSpecies && !agent.get("is dead body")) {
-        allMice.push(agent);
-      }
-    }
+    const allMice = env.agents.filter(a => a.species === mouseSpecies && !a.get("is dead body"));
+
     const numMice = allMice.length;
     if (numMice < 5) {
       for (let i = 0; i < 4; i++) {
         addAgent(mouseSpecies, [], [copyColorTraitOfRandomMouse(allMice)]);
       }
     }
-    numWhite = 0;
-    numTan = 0;
-    numBrown = 0;
-    numCC = 0;
-    numCR = 0;
-    numRC = 0;
-    numRR = 0;
-    numC = 0;
-    numR = 0;
-    allMice.forEach((mouse) => {
-      if (mouse.get("color") === "white") {
-        numWhite++;
-        numCC++;
-        numC += 2;
-      } else if (mouse.get("color") === "tan") {
-        numTan++;
-        if (mouse.alleles.color === "a:C,b:R") {
-          numCR++;
-        } else {
-          numRC++;
-        }
-        numC++;
-        numR++;
-      } else if (mouse.get("color") === "brown") {
-        numBrown++;
-        numRR++;
-        numR += 2;
-      }
-    });
-    numCC = (numCC / allMice.length) * 100;
-    numCR = (numCR / allMice.length) * 100;
-    numRC = (numRC / allMice.length) * 100;
-    numRR = (numRR / allMice.length) * 100;
-
-    const totalAlleles = numC + numR;
-    numC = (numC / totalAlleles) * 100;
-    numR = (numR / totalAlleles) * 100;
+    countMice(allMice);
 
     // If there are no specific selective pressures (ie there are no hawks, or the hawks eat
     // everything with equal probability), the population should be 'stabilized', so that no
