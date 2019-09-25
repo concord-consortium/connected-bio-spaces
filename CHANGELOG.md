@@ -1,4 +1,8 @@
 # Changelog
+## Version 1.0.6 - released Sept 25, 2019
+
+- Fix populations step-zero bug
+
 ## Version 1.0.5 - released Sept 17, 2019
 
 - Fix dropper

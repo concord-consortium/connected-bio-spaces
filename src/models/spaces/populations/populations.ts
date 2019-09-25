@@ -91,7 +91,11 @@ export const PopulationsModel = types
           self.model.interactive.stop();
         },
         reset() {
-          self.model.reset();
+          // unfortunately self.model.reset() alone will cause one extra step
+          // if called while model is running, as run loop won't notice the model
+          // has reset.
+          self.model.interactive.stop();
+          setTimeout(self.model.reset, 100);
         },
         removeAgent(agent: Agent) {
           self.model.interactive.removeAgent(agent);
