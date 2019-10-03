@@ -76,7 +76,7 @@ export const OrganismsMouseModel = types
       const delta = getSubstanceDelta(organelle, substance);
 
       if (delta) {
-        return baseValue + delta.amount;
+        return Math.max(0, baseValue + delta.amount);
       } else {
         return baseValue;
       }

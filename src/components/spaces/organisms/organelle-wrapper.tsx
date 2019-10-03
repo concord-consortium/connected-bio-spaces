@@ -143,6 +143,14 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     } else if (row.mode === "add" && row.organismsMouse) {
       const substance = row.selectedSubstance;
       row.organismsMouse.addSubstance(organelleType, substance, 100);
+
+      // hard-code see-saw effect of eumelanin and peomelanin
+      if (organelleType === "melanosome" && substance === "eumelanin") {
+        row.organismsMouse.addSubstance(organelleType, "pheomelanin", -100);
+      } else if (organelleType === "melanosome" && substance === "pheomelanin") {
+        row.organismsMouse.addSubstance(organelleType, "eumelanin", -100);
+      }
+
       row.setMode("normal");
 
       if (substance === "hormone") {
