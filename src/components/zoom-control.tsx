@@ -53,6 +53,9 @@ export class ZoomControl extends BaseComponent<IProps, IState> {
     const { organisms } = this.stores;
     const { rowIndex } = this.props;
     const row = organisms.rows[rowIndex];
+    if (row.zoomLevel === "cell" && !organisms.showZoomToNucleus && !organisms.showZoomToReceptor) {
+      return " disabled";
+    }
     const disabledClass = !row.organismsMouse || enabledZooms.indexOf(row.zoomLevel) === -1 ? " disabled" : "";
     return disabledClass;
   }

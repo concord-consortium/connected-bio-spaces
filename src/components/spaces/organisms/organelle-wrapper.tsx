@@ -232,7 +232,14 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
 
     const row = organisms.rows[this.props.rowIndex];
     if (mode === "target-zoom") {
-      this.showZoomTargets(["receptor", "nucleus"], row.hoveredZoomTarget);
+      const zoomTargets = [];
+      if (organisms.showZoomToReceptor) {
+        zoomTargets.push("receptor");
+      }
+      if (organisms.showZoomToNucleus) {
+        zoomTargets.push("nucleus");
+      }
+      this.showZoomTargets(zoomTargets, row.hoveredZoomTarget);
     } else {
       this.showZoomTargets([]);
     }

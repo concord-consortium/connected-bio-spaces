@@ -154,6 +154,8 @@ export const OrganismsSpaceModel = types
     useMysteryOrganelles: false,
     useMysterySubstances: false,
     instructions: "",
+    showZoomToReceptor: true,
+    showZoomToNucleus: true,
     showProteinInfoBox: false
   })
   .volatile(self => ({

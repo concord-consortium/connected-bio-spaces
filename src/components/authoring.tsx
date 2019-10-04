@@ -59,7 +59,9 @@ export const defaultAuthoring: ConnectedBioAuthoring = {
   organisms: {
     instructions: "",
     useMysteryOrganelles: false,
-    useMysterySubstances: false
+    useMysterySubstances: false,
+    showZoomToReceptor: true,
+    showZoomToNucleus: true
   },
   breeding: {
     instructions: "",
