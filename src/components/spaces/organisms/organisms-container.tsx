@@ -14,14 +14,22 @@ import { DEFAULT_MODEL_WIDTH } from "../../..";
 interface IProps extends IBaseProps {
   rowIndex: number;
 }
-interface IState { }
+interface IState {
+  zoomLevel: number;
+  isZoomingIntoOrg: boolean;
+  cellModelLoaded: boolean;
+}
 
 @inject("stores")
 @observer
 export class OrganismsContainer extends BaseComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
-    this.state = { zoomLevel: 1 };
+    this.state = {
+      zoomLevel: 1,
+      isZoomingIntoOrg: false,
+      cellModelLoaded: false
+    };
   }
 
   public render() {
@@ -58,10 +66,20 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
     const maxZoom = 2;
     const defaultZoomLevelByIndex: ZoomLevelType[] = ["organism", "cell", "receptor"];
 
-    const current = availableZoomLevels[organismsRow.zoomLevel];
+    const current: number = availableZoomLevels[organismsRow.zoomLevel];
     const newZoom = current + zoomChange;
     const nextIdx = newZoom > maxZoom ? maxZoom : newZoom < 0 ? 0 : newZoom;
 
+    const zoomLevel = defaultZoomLevelByIndex[nextIdx];
+
+    if (zoomLevel !== "cell") {
+      this.setState({
+        isZoomingIntoOrg: false,
+        cellModelLoaded: false
+      });
+    } else if (zoomLevel === "cell" && current === 0) {
+      this.setState({isZoomingIntoOrg: true});
+    }
     organismsRow.setZoomLevel(defaultZoomLevelByIndex[nextIdx]);
   }
 
@@ -77,30 +95,44 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
                                 mode: ModeType) => {
     const { organismsMouse } = organismsRow;
     const width = DEFAULT_MODEL_WIDTH;
+    const { isZoomingIntoOrg, cellModelLoaded } = this.state;
+    const cellClassName = `cell-zoom-panel`;
 
-    switch (zoomLevel) {
-      case "organism":
-        return <OrganismView backpackMouse={organismsMouse && organismsMouse.backpackMouse} width={width}/>;
-      case "cell":
-      case "receptor":
-        return (
-          <div className="cell-zoom-panel" key={zoomLevel} data-test="cell-zoon-panel">
+    return (
+      <div className="organism-stacker">
+        {
+          (zoomLevel === "organism" || isZoomingIntoOrg || !cellModelLoaded) &&
+          <OrganismView
+            backpackMouse={organismsMouse && organismsMouse.backpackMouse}
+            zoomIn={isZoomingIntoOrg}
+            onZoomInComplete={this.handleOrgZoomInComplete}/>
+        }
+        {
+          (!isZoomingIntoOrg && (zoomLevel === "cell" || zoomLevel === "receptor")) &&
+          <div className={cellClassName} key={zoomLevel} data-test="cell-zoon-panel">
             {
               organismsMouse != null &&
                 <OrganelleWrapper zoomLevel={zoomLevel} elementName={`organelle-wrapper-${rowIndex}`}
-                  rowIndex={rowIndex} width={width} mode={mode} handleZoomToLevel={this.zoomToLevel}/>
+                  rowIndex={rowIndex} width={width} mode={mode} handleZoomToLevel={this.zoomToLevel}
+                  onModelLoaded={this.cellModelLoaded}/>
             }
           </div>
-        );
-      case "nucleus":
-        return (
+        }
+        {
+          (zoomLevel === "nucleus") &&
           <div className="cell-zoom-panel" key={zoomLevel} data-test="cell-zoon-panel">
             <StaticNucleusView rowIndex={rowIndex} width={width}/>
           </div>
-        );
-      default:
-        break;
-    }
+        }
+      </div>
+    );
   }
 
+  private handleOrgZoomInComplete = () => {
+    this.setState({isZoomingIntoOrg: false});
+  }
+
+  private cellModelLoaded = () => {
+    this.setState({cellModelLoaded: true});
+  }
 }
