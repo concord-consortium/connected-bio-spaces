@@ -3,12 +3,15 @@ import * as React from "react";
 import { BaseComponent, IBaseProps } from "../../base";
 import "./organism-view.sass";
 import { BackpackMouseType } from "../../../models/backpack-mouse";
+require("gifler");
+const gifler = (window as any).gifler;
 
 const kDefaultMouseImage = "../../assets/mouse_collect.png";
 
 interface IProps extends IBaseProps {
   backpackMouse?: BackpackMouseType;
-  width: number;
+  zoomIn: boolean;
+  onZoomInComplete?: () => void;
 }
 interface IState {
 }
@@ -17,28 +20,62 @@ interface IState {
 @observer
 export class OrganismView extends BaseComponent<IProps, IState> {
 
+  private canvasElRef: React.RefObject<{}>|null = null;
+  private animator: any;
+
   public render() {
-    const { backpackMouse, width } = this.props;
-    const mouseImage = backpackMouse ? backpackMouse.baseImage : kDefaultMouseImage;
-
-    const mouseStyle: React.CSSProperties = {
-      backgroundImage: `url(${mouseImage})`,
-      backgroundRepeat: "no-repeat",
-      backgroundSize: "contain",
-      backgroundPositionX: "center"
-    };
-    if (width) {
-      mouseStyle.width = `${width}px`;
-    }
-
-    const mouseDescription = backpackMouse ? `Mouse: ${backpackMouse.baseColor}` : "";
-
     return (
       <div className="organism-view-container">
-        {backpackMouse &&
-          <div className="organism-view" style={mouseStyle} data-test="organism-view" />
-        }
+        <canvas style={{width: "100%"}} ref={this.setCanvasElRef} />
       </div>
     );
   }
+
+  public componentDidMount() {
+    this.initializeImage();
+  }
+
+  public componentDidUpdate(prevProps: IProps) {
+    if (this.props.backpackMouse && this.props.backpackMouse !== prevProps.backpackMouse) {
+      this.initializeImage();
+    }
+    if (this.props.zoomIn && !prevProps.zoomIn) {
+      this.startZoom();
+    }
+  }
+
+  private initializeImage() {
+    const { backpackMouse } = this.props;
+    const mouseImage = backpackMouse && backpackMouse.zoomImage;
+    if (mouseImage) {
+      gifler(mouseImage)
+        .get((animator: any) => {
+          this.animator = animator;
+          animator.animateInCanvas(this.canvasElRef);
+          animator.stop();
+          const firstFrame = animator._frames[0];
+          animator.onFrame(firstFrame);
+
+          animator.onDrawFrame = (ctx: any, frame: any, i: number) => {
+            ctx.drawImage(frame.buffer, frame.x, frame.y);
+            if (i === animator._frames.length - 1) {
+              this.handleAnimationFinished();
+            }
+          };
+        });
+    }
+  }
+
+  private startZoom() {
+    if (!this.animator) return;
+    this.animator._loopCount = 1;
+    this.animator._loops = 1;
+    this.animator.start();
+  }
+
+  private handleAnimationFinished() {
+    this.props.onZoomInComplete && this.props.onZoomInComplete();
+  }
+
+  private setCanvasElRef = (element: any) => this.canvasElRef = element;
 }

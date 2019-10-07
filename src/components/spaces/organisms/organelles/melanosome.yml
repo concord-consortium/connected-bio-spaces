@@ -5,11 +5,11 @@ spawn:
   'on':
     selector: "#golgi_x5F_apparatus path"
     at: random
-  every: 12
+  every: 28
 dieWhenExitingWorld: false
 properties:
   size: 0.9
-  speed: 1.6
+  speed: 1.1
   image_selector: melanosome_2
   eumelanin_to_turn_dark: [1, 100]
   isDark: false
@@ -69,10 +69,9 @@ rules:
         - fact: world.eumelanin
           lessThan: eumelanin_to_turn_dark
     then:
-      wait:
-        for: [100, 400]
-        finally:
-          switch_state: dying
+      - set:
+          isDark: false
+      - set_image_selector: melanosome_2
   - if:
       all:
         - fact:
@@ -80,7 +79,6 @@ rules:
         - fact: world.eumelanin
           greaterThan: eumelanin_to_turn_dark
     then:
-      wait:
-        for: [100, 400]
-        finally:
-          switch_state: dying
+      - set:
+          isDark: true
+      - set_image_selector: melanosome_4

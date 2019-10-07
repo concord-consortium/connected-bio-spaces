@@ -4,8 +4,19 @@
   height: 196px
   overflow: hidden
 
-  .cell-zoom-panel .model-wrapper
+  .organism-stacker
+    display: grid
+    &>div
+      grid-area: 1 / 1 / 1 / 1
+
+  .cell-zoom-panel
     top: -40px
+    opacity: 1
+    -webkit-animation: fade 1s
+    animation: fade 1s
+
+    .model-wrapper
+      top: -40px
 
   .collect-button-holder
     position: absolute
@@ -111,3 +122,11 @@
       .icon
         fill: $color-white
 
+/* -fail- */
+@-webkit-keyframes fade
+  from {opacity: 0}
+  to {opacity: 1}
+
+@keyframes fade
+  from {opacity: 0}
+  to {opacity: 1}

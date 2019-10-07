@@ -236,7 +236,16 @@
         "useMysterySubstances": {
           "title": "Show mystery substance labels",
           "type": "boolean"
+        },
+        "showZoomToReceptor": {
+          "title": "Allow zooming to receptor",
+          "type": "boolean"
+        },
+        "showZoomToNucleus": {
+          "title": "Allow zooming to nucleus",
+          "type": "boolean"
         }
+
       }
     },
     "breeding": {

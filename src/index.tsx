@@ -85,7 +85,8 @@ phone.initialize();
 phone.post("supportedFeatures", {
   apiVersion: 1,
   features: {
-    interactiveState: true
+    interactiveState: true,
+    aspectRatio: ASPECT_RATIO
   }
 });
 

@@ -37,6 +37,8 @@ export type EnableAllelesChart = boolean;
 export type InstructionsAsMarkdown1 = string;
 export type ShowMysteryLocationLabels = boolean;
 export type ShowMysterySubstanceLabels = boolean;
+export type AllowZoomingToReceptor = boolean;
+export type AllowZoomingToNucleus = boolean;
 export type InstructionsAsMarkdown2 = string;
 export type BreedingType = "litter" | "singleGamete";
 
@@ -108,6 +110,8 @@ export interface OrganismModel {
   instructions?: InstructionsAsMarkdown1;
   useMysteryOrganelles?: ShowMysteryLocationLabels;
   useMysterySubstances?: ShowMysterySubstanceLabels;
+  showZoomToReceptor?: AllowZoomingToReceptor;
+  showZoomToNucleus?: AllowZoomingToNucleus;
   [k: string]: any;
 }
 export interface BreedingModel {

@@ -16,6 +16,7 @@ interface OrganelleWrapperProps {
   width: number;
   mode: ModeType;
   handleZoomToLevel: (zoomLevel: ZoomLevelType) => void;
+  onModelLoaded?: () => void;
 }
 
 interface OrganelleWrapperState {
@@ -143,6 +144,14 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     } else if (row.mode === "add" && row.organismsMouse) {
       const substance = row.selectedSubstance;
       row.organismsMouse.addSubstance(organelleType, substance, 100);
+
+      // hard-code see-saw effect of eumelanin and peomelanin
+      if (organelleType === "melanosome" && substance === "eumelanin") {
+        row.organismsMouse.addSubstance(organelleType, "pheomelanin", -100);
+      } else if (organelleType === "melanosome" && substance === "pheomelanin") {
+        row.organismsMouse.addSubstance(organelleType, "eumelanin", -100);
+      }
+
       row.setMode("normal");
 
       if (substance === "hormone") {
@@ -232,7 +241,14 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
 
     const row = organisms.rows[this.props.rowIndex];
     if (mode === "target-zoom") {
-      this.showZoomTargets(["receptor", "nucleus"], row.hoveredZoomTarget);
+      const zoomTargets = [];
+      if (organisms.showZoomToReceptor) {
+        zoomTargets.push("receptor");
+      }
+      if (organisms.showZoomToNucleus) {
+        zoomTargets.push("nucleus");
+      }
+      this.showZoomTargets(zoomTargets, row.hoveredZoomTarget);
     } else {
       this.showZoomTargets([]);
     }
@@ -339,6 +355,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     const model = this.getModel();
     model.on("view.loaded", () => {
       this.updateReceptorImage();
+      this.props.onModelLoaded && this.props.onModelLoaded();
     });
 
     if (this.props.zoomLevel === "receptor") {
