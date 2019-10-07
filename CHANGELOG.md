@@ -1,4 +1,14 @@
 # Changelog
+## Version 1.0.7 - released Sept 25, 2019
+
+- Zoom in on mouse organism
+- Adding pheomelanin lightens mouse
+- Melanosomes change instantly when adding melanin
+- Fewer melanosomes
+- Authoring for zoom targets
+- Notify LARA of aspect ratio
+
+
 ## Version 1.0.6 - released Sept 25, 2019
 
 - Fix populations step-zero bug
