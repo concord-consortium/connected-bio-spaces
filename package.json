@@ -114,6 +114,7 @@
     "chart.js": "^2.7.3",
     "chartjs-plugin-annotation": "git+https://github.com/chartjs/chartjs-plugin-annotation.git#b22a69b6",
     "flat": "^4.1.0",
+    "gifler": "^0.1.0",
     "iframe-phone": "^1.2.0",
     "immutable": "^3.8.2",
     "lodash": "^4.17.15",
