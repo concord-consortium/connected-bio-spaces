@@ -40,6 +40,16 @@ export const BackpackMouse = types
           return "assets/mouse_tan.png";
       }
     },
+    get zoomImage(): string {
+      switch (self.genotype) {
+        case "RR":
+          return "assets/curriculum/mouse/zoom/mouse_field.gif";
+        case "CC":
+          return "assets/curriculum/mouse/zoom/mouse_beach.gif";
+        default:
+          return "assets/curriculum/mouse/zoom/mouse_tan.gif";
+      }
+    },
     get isHeterozygote(): boolean {
       return (self.genotype === "RC" || self.genotype === "CR");
     },

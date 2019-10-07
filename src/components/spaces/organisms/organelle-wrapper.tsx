@@ -16,6 +16,7 @@ interface OrganelleWrapperProps {
   width: number;
   mode: ModeType;
   handleZoomToLevel: (zoomLevel: ZoomLevelType) => void;
+  onModelLoaded?: () => void;
 }
 
 interface OrganelleWrapperState {
@@ -354,6 +355,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     const model = this.getModel();
     model.on("view.loaded", () => {
       this.updateReceptorImage();
+      this.props.onModelLoaded && this.props.onModelLoaded();
     });
 
     if (this.props.zoomLevel === "receptor") {
