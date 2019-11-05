@@ -43,7 +43,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     private model: any;
     private organelleSelectorInfo: SelectorInfo = {
       nucleus: {
-        selector: "#nucleus",
+        selector: "#new-nucleus",
         visibleModes: ["normal"]
       },
       cytoplasm: {
