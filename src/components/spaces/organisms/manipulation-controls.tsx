@@ -46,21 +46,6 @@ export class ManipulationControls extends BaseComponent<IProps, IState> {
             </button>
             <div className={"substance-type-container" + this.getButtonClass("add", ["cell", "receptor"])}>
               <div className="button-row top">
-                <div className={"radio-button " + hormoneClass} onClick={this.handleSubstanceChange("hormone")}>
-                  <div className="radio-outer-circle">
-                    <div className={"radio-circle " + hormoneClass + " " + addDisabledClass} />
-                  </div>
-                  <div className={"label " + addDisabledClass}>{organisms.getSubstanceLabel("hormone")}</div>
-                </div>
-                <div className={"radio-button " + signalProteinClass}
-                    onClick={this.handleSubstanceChange("signalProtein")}>
-                  <div className="radio-outer-circle">
-                    <div className={"radio-circle " + signalProteinClass + " " + addDisabledClass} />
-                  </div>
-                  <div className={"label " + addDisabledClass}>{organisms.getSubstanceLabel("signalProtein")}</div>
-                </div>
-              </div>
-              <div className="button-row bottom">
                 <div className={"radio-button " + pheomelaninClass} onClick={this.handleSubstanceChange("pheomelanin")}>
                   <div className="radio-outer-circle">
                     <div className={"radio-circle " + pheomelaninClass + " " + addDisabledClass} />
@@ -72,6 +57,21 @@ export class ManipulationControls extends BaseComponent<IProps, IState> {
                     <div className={"radio-circle " + eumelaninClass + " " + addDisabledClass} />
                   </div>
                   <div className={"label " + addDisabledClass}>{organisms.getSubstanceLabel("eumelanin")}</div>
+                </div>
+              </div>
+              <div className="button-row bottom">
+                <div className={"radio-button " + signalProteinClass}
+                    onClick={this.handleSubstanceChange("signalProtein")}>
+                  <div className="radio-outer-circle">
+                    <div className={"radio-circle " + signalProteinClass + " " + addDisabledClass} />
+                  </div>
+                  <div className={"label " + addDisabledClass}>{organisms.getSubstanceLabel("signalProtein")}</div>
+                </div>
+                <div className={"radio-button " + hormoneClass} onClick={this.handleSubstanceChange("hormone")}>
+                  <div className="radio-outer-circle">
+                    <div className={"radio-circle " + hormoneClass + " " + addDisabledClass} />
+                  </div>
+                  <div className={"label " + addDisabledClass}>{organisms.getSubstanceLabel("hormone")}</div>
                 </div>
               </div>
             </div>
