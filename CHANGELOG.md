@@ -1,4 +1,9 @@
 # Changelog
+## Version 1.0.8 - released November 13, 2019
+
+- Fix bug caused by Chrome no longer performing calculations on hidden SVGs
+- Fixed various small issues related to cell rollovers and tools
+
 ## Version 1.0.7 - released Sept 25, 2019
 
 - Zoom in on mouse organism

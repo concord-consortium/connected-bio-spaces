@@ -43,7 +43,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     private model: any;
     private organelleSelectorInfo: SelectorInfo = {
       nucleus: {
-        selector: "#nucleus",
+        selector: "#new-nucleus",
         visibleModes: ["normal"]
       },
       cytoplasm: {
@@ -556,7 +556,11 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
   }
 
   private getZoomTargetLabel(target: ZoomTargetType) {
-    return "Zoom to " + target.charAt(0).toUpperCase() + target.slice(1);
+    const targetString = {
+      nucleus: "Nucleus",
+      receptor: "Cell Membrane"
+    };
+    return "Zoom to " + targetString[target];
   }
 
   private getZoomTargetFromMouseEvent(evt: any): ZoomTargetType | undefined {

@@ -1,6 +1,6 @@
 dist: trusty
 language: node_js
-node_js: lts/*
+node_js: 10.17.0
 cache:
   bundler: true
   pip: true
