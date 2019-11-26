@@ -119,6 +119,25 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
       }
     })();
 
+    const buttons = [];
+    if (selectedOrganelle && kOrganelleInfo[selectedOrganelle].protein) {
+      buttons.push({
+        title: "DNA",
+        type: "checkbox",
+        value: row.showProteinDNA,
+        action: (val: boolean) => row.setShowProteinDNA(val),
+        section: "information"
+      });
+
+      buttons.push({
+        title: "Amino Acids on Protein",
+        type: "checkbox",
+        value: row.showProteinAminoAcidsOnProtein,
+        action: (val: boolean) => row.setShowProteinAminoAcidsOnProtein(val),
+        section: "information"
+      });
+    }
+
     return (
       <div className="fullwidth">
         <CollectButtonComponent
@@ -137,6 +156,7 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
           onClickRightIcon={this.setRightPanel(rowIndex)}
           spaceClass="organism"
           rowNumber={rowIndex}
+          rightPanelButtons={buttons}
         />
       </div>
     );
