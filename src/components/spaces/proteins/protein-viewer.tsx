@@ -1,14 +1,14 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { BaseComponent, IBaseProps } from "../../base";
-import AminoAcidSlider, { kSliderHeight } from "./amino-acid-slider";
+import AminoAcidSlider from "./amino-acid-slider";
 import Protein from "./protein";
 import InfoBox from "./info-box";
 import { extractCodons } from "./util/dna-utils";
 import { getAminoAcidsFromCodons } from "./util/amino-acid-utils";
 import "./protein-viewer.sass";
-import { PANEL_ASPECT_RATIO } from "../../four-up-display";
 import { DEFAULT_MODEL_WIDTH } from "../../..";
+import Slider from "rc-slider";
 
 export interface ProteinSpec {
   dna: string;
@@ -17,42 +17,34 @@ export interface ProteinSpec {
 
 interface IProps extends IBaseProps {
   protein: ProteinSpec;
-  secondProtein?: ProteinSpec;
-  selectionStartPercent?: number;
   selectedAminoAcidIndex: number;
-  selectedAminoAcidXLocation: number;
   showInfoBox: boolean;
-  infoBoxAlert: boolean;
   aminoAcidWidth?: number;            // Width of one amino acid in the slider elements, in pixels
   codonWidth?: number;                // Width of one codon in the slider elements, in pixels
   showDNA?: boolean;
   showAminoAcidsOnProtein?: boolean;
-  dnaSwitchable?: boolean;
   toggleShowDNA: () => void;
   toggleShowingAminoAcidsOnProtein: () => void;
-  setSelectStartPercent: (percent: number) => void;
-  setSelectedAminoAcidIndex: (selectedAminoAcidIndex: number, selectedAminoAcidXLocation: number) => void;
+  setSelectedAminoAcidIndex: (selectedAminoAcidIndex: number) => void;
   toggleShowInfoBox: () => void;
 }
 
 interface DefaultProps {
-  selectionStartPercent: number;
   selectedAminoAcidIndex: number;
-  selectedAminoAcidXLocation: number;
   showInfoBox: boolean;
-  infoBoxAlert: boolean;
   aminoAcidWidth: number;
   codonWidth: number;
   showDNA: boolean;
   showAminoAcidsOnProtein: boolean;
-  dnaSwitchable: boolean;
 }
 
 type PropsWithDefaults = IProps & DefaultProps;
 
 interface IState {
+  hoveringOverInfoBox: boolean;
+  hoveringOverMarkable: boolean;
   animating: boolean;
-  selectionStartPercentTarget: number;
+  selectedAminoAcidIndexTarget: number;
   marks: number[];
 }
 
@@ -61,24 +53,22 @@ interface IState {
 export default class ProteinViewer extends BaseComponent<IProps, IState> {
 
   public static defaultProps: DefaultProps = {
-    selectionStartPercent: 0,
     selectedAminoAcidIndex: 0,
-    selectedAminoAcidXLocation: 0,
     showInfoBox: false,
-    infoBoxAlert: false,
-    aminoAcidWidth: 14,
+    aminoAcidWidth: 20,
     codonWidth: 29,
     showDNA: false,
-    showAminoAcidsOnProtein: false,
-    dnaSwitchable: true
+    showAminoAcidsOnProtein: false
   };
 
   constructor(props: IProps) {
     super(props);
 
     this.state = {
+      hoveringOverInfoBox: false,
+      hoveringOverMarkable: false,
       animating: false,
-      selectionStartPercentTarget: 0,
+      selectedAminoAcidIndexTarget: 0,
       marks: []
     };
   }
@@ -86,115 +76,78 @@ export default class ProteinViewer extends BaseComponent<IProps, IState> {
   public render() {
     const {
       protein, aminoAcidWidth,
-      secondProtein, showDNA, showAminoAcidsOnProtein, dnaSwitchable,
-      selectionStartPercent, selectedAminoAcidIndex, selectedAminoAcidXLocation,
-      showInfoBox, infoBoxAlert
+      showDNA, showAminoAcidsOnProtein,
+      selectedAminoAcidIndex
     } = this.props as PropsWithDefaults;
 
     const width = DEFAULT_MODEL_WIDTH;
 
-    const height = width / PANEL_ASPECT_RATIO;
-
     const codons = extractCodons(protein.dna);
     const aminoAcids = getAminoAcidsFromCodons(codons);
 
-    const halfWidth = width / 2;
-    const selectionWidth = halfWidth / 4;
+    const proteinWidth = width * 0.33;
+    const aaSliderMargins = 4;
+    const aaSliderWidth = width - (aaSliderMargins * 2);
 
-    const protein1SelectionPercent =  selectionWidth / (aminoAcids.length * aminoAcidWidth);
-    let codons2;
-    let aminoAcids2 = "";
-    let protein2SelectionPercent = 0;
-    if (secondProtein) {
-      codons2 = extractCodons(secondProtein.dna);
-      aminoAcids2 = getAminoAcidsFromCodons(codons2);
-      protein2SelectionPercent = selectionWidth / (aminoAcids2.length * aminoAcidWidth);
-    }
-
-    const infoOptionsClass = "info-and-options" + (infoBoxAlert ? " alert" : "");
-
+    const infoOptionsClass = "info-and-options";
     return (
       <div className="protein-viewer">
         <div className="proteins-and-sliders">
           <div className="proteins">
             <Protein
-              width={halfWidth}
-              height={height - kSliderHeight}
-              selectionStartPercent={selectionStartPercent}
-              updateSelectionStart={this.handleAnimateToSelectionStart}
-              selectionPercent={protein1SelectionPercent}
-              viewBox="0 0 254 222"
+              width={proteinWidth}
+              height={proteinWidth}
+              selectionCenterIndex={selectedAminoAcidIndex}
+              selectionWidthInAAs={14}
+              updateSelectionIndex={this.handleAnimateToSelectionIndex}
+              viewBox="0 30 254 150"
               svg={protein.svgImage}
-              marks={this.state.marks.map(loc => (loc + 0.5) / aminoAcids.length)}
+              marks={this.state.marks.map(loc => loc / aminoAcids.length)}
               aminoAcids={aminoAcids}
               showAminoAcids={showAminoAcidsOnProtein}
             />
-            { secondProtein
-                ? <Protein
-                    width={width / 2}
-                    height={height - kSliderHeight}
-                    selectionStartPercent={selectionStartPercent}
-                    updateSelectionStart={this.handleAnimateToSelectionStart}
-                    selectionPercent={protein2SelectionPercent}
-                    viewBox="0 0 222 206"
-                    highlightColor="4, 255, 0"
-                    svg={secondProtein.svgImage}
-                    marks={this.state.marks.map(loc => (loc + 0.5) / aminoAcids2.length)}
-                    aminoAcids={aminoAcids}
-                    showAminoAcids={showAminoAcidsOnProtein}
-                  />
-                : null
-            }
           </div>
           <div className="amino-acids">
+            {
+              this.state.hoveringOverMarkable &&
+              <div className="mark">
+                { this.state.marks.includes(selectedAminoAcidIndex)
+                  ? "Unmark"
+                  : "Mark"
+                }
+              </div>
+            }
             <AminoAcidSlider
               aminoAcids={aminoAcids}
               codons={codons}
-              width={halfWidth}
+              width={aaSliderWidth}
               aminoAcidWidth={aminoAcidWidth}
-              selectionWidth={selectionWidth}
-              selectionStartPercent={selectionStartPercent}
-              updateSelectionStart={this.handleUpdateSelectionStart}
-              animateToSelectionStart={this.handleAnimateToSelectionStart}
               selectedAminoAcidIndex={selectedAminoAcidIndex}
-              updateSelectedAminoAcidIndex={this.handleUpdateSelectedAminoAcidIndex}
+              animateToSelectionIndex={this.handleAnimateToSelectionIndex}
               showDNA={showDNA}
-              dimUnselected={showInfoBox}
+              marks={this.state.marks}
+              showMark={this.state.hoveringOverMarkable}
+              onSelectedHoverEnter={this.setHoveringOverMarkable}
+              onSelectedHoverExit={this.unsetHoveringOverMarkable}
+              onMarkLocation={this.handleMark}
             />
-            {
-              aminoAcids2 &&
-              <AminoAcidSlider
-                aminoAcids={aminoAcids2}
-                codons={codons2}
-                width={halfWidth}
-                aminoAcidWidth={aminoAcidWidth}
-                selectionWidth={selectionWidth}
-                selectionStartPercent={selectionStartPercent}
-                updateSelectionStart={this.handleUpdateSelectionStart}
-                animateToSelectionStart={this.handleAnimateToSelectionStart}
-                selectedAminoAcidIndex={selectedAminoAcidIndex}
-                updateSelectedAminoAcidIndex={this.handleUpdateSelectedAminoAcidIndex}
-                marks={this.state.marks}
-                dimUnselected={showInfoBox}
-                showDNA={showDNA}
-                highlightColor="4, 255, 0"
-              />
-            }
+          </div>
+          <div className="amino-acids-scrubber">
+            { this.renderAAScrubber(aminoAcids.length) }
           </div>
         </div>
         <div className={infoOptionsClass}>
-          {showInfoBox &&
-            <InfoBox
-              aminoAcids={aminoAcids}
-              secondAminoAcids={aminoAcids2}
-              selection={selectedAminoAcidIndex}
-              selectedAminoAcidXLocation={selectedAminoAcidXLocation}
-              marks={this.state.marks}
-              onMarkLocation={this.handleMark}
-              width={width - 26}
-            />
-          }
-          <div className="options">
+          <InfoBox
+            aminoAcids={aminoAcids}
+            selection={selectedAminoAcidIndex}
+            marks={this.state.marks}
+            width={width - 26}
+            hovered={this.state.hoveringOverInfoBox}
+            onHoverEnter={this.setHoveringOverInfoBox}
+            onHoverExit={this.unsetHoveringOverInfoBox}
+            onMarkLocation={this.handleMark}
+          />
+          {/* <div className="options">
             <label>
               <input
                 name="showInfoBox"
@@ -222,59 +175,79 @@ export default class ProteinViewer extends BaseComponent<IProps, IState> {
                 onChange={this.handleAminoAcidsToggle} />
               Show Amino Acids on Protein
             </label>
-          </div>
+          </div> */}
         </div>
       </div>
     );
   }
 
-  private handleUpdateSelectionStart = (selectionStartPercent: number) => {
-    this.setState({
-      animating: false
-    });
-    this.props.setSelectStartPercent(selectionStartPercent);
+  private renderAAScrubber(aaLength: number) {
+    const { selectedAminoAcidIndex } = this.props;
+
+    const trackStyle = { backgroundColor: "#ffa56d", height: 10 };
+    const handleStyle = {
+      borderColor: "white",
+      backgroundColor: "#ffd9c0",
+      height: 20,
+      width: 20
+    };
+    const railStyle = { backgroundColor: "#eb813e", height: 10 };
+
+    return (
+      <div className="line-chart-controls" id="line-chart-controls">
+        <Slider className="scrubber"
+          trackStyle={trackStyle}
+          handleStyle={handleStyle}
+          railStyle={railStyle}
+          onChange={this.handleUpdateSelectedAminoAcidIndex}
+          min={0}
+          max={aaLength - 2}
+          value={Math.min(selectedAminoAcidIndex, aaLength - 2)}
+        />
+      </div>
+    );
   }
 
-  private handleAnimateToSelectionStart = (selectionStartPercentTarget: number) => {
+  private handleAnimateToSelectionIndex = (selectedAminoAcidIndexTarget: number) => {
     this.setState({
       animating: true,
-      selectionStartPercentTarget
+      selectedAminoAcidIndexTarget: Math.round(selectedAminoAcidIndexTarget)
     }, this.animate);
   }
 
   private animate = (fast?: boolean) => {
-    const { selectionStartPercent } = this.props as PropsWithDefaults;
-    const { selectionStartPercentTarget, animating } = this.state;
+    const { selectedAminoAcidIndex } = this.props as PropsWithDefaults;
+    const { selectedAminoAcidIndexTarget, animating } = this.state;
     if (!animating) return;
 
     let speed;
 
     // if the initial request is far away, keep fast for all frames. Otherwise go slow.
     if (!fast) {
-      if (Math.abs(selectionStartPercentTarget - selectionStartPercent) > 0.035) {
+      if (Math.abs(selectedAminoAcidIndexTarget - selectedAminoAcidIndex) > 10) {
         fast = true;
       }
     }
 
-    const maxSpeed = fast ? 0.02 : 0.001;
-    if (selectionStartPercent > selectionStartPercentTarget) {
-      speed = Math.max(-maxSpeed, selectionStartPercentTarget - selectionStartPercent);
+    const maxSpeed = fast ? 4 : 1;
+    if (selectedAminoAcidIndex > selectedAminoAcidIndexTarget) {
+      speed = Math.max(-maxSpeed, selectedAminoAcidIndexTarget - selectedAminoAcidIndex);
     } else {
-      speed = Math.min(maxSpeed, selectionStartPercentTarget - selectionStartPercent);
+      speed = Math.min(maxSpeed, selectedAminoAcidIndexTarget - selectedAminoAcidIndex);
     }
-    this.props.setSelectStartPercent(selectionStartPercent + speed);
-    if (selectionStartPercentTarget - selectionStartPercent !== 0) {
+    this.props.setSelectedAminoAcidIndex(selectedAminoAcidIndex + speed);
+    if (selectedAminoAcidIndexTarget - selectedAminoAcidIndex !== 0) {
       window.requestAnimationFrame(() => this.animate(fast));
     }
   }
 
-  private handleUpdateSelectedAminoAcidIndex = (selectedAminoAcidIndex: number, selectedAminoAcidXLocation: number) => {
-    this.props.setSelectedAminoAcidIndex(selectedAminoAcidIndex, selectedAminoAcidXLocation);
+  private handleUpdateSelectedAminoAcidIndex = (selectedAminoAcidIndex: number) => {
+    this.props.setSelectedAminoAcidIndex(Math.round(selectedAminoAcidIndex));
   }
 
   private handleMark = (location: number) => {
     const existingMarks = this.state.marks;
-    if (existingMarks.indexOf(location) > -1) {
+    if (existingMarks.includes(location)) {
       existingMarks.splice(existingMarks.indexOf(location), 1);
     } else {
       existingMarks.push(location);
@@ -294,5 +267,21 @@ export default class ProteinViewer extends BaseComponent<IProps, IState> {
 
   private handleShowInfoBoxToggle = () => {
     this.props.toggleShowInfoBox();
+  }
+
+  private setHoveringOverInfoBox = () => {
+    this.setState({hoveringOverInfoBox: true, hoveringOverMarkable: true});
+  }
+
+  private unsetHoveringOverInfoBox = () => {
+    this.setState({hoveringOverInfoBox: false, hoveringOverMarkable: false});
+  }
+
+  private setHoveringOverMarkable = () => {
+    this.setState({hoveringOverMarkable: true});
+  }
+
+  private unsetHoveringOverMarkable = () => {
+    this.setState({hoveringOverMarkable: false});
   }
 }
