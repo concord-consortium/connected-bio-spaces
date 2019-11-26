@@ -106,20 +106,45 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
 
     if (this.props.rightPanelButtons) {
       buttons = this.props.rightPanelButtons.filter( (button: any) => {
-        return (!button.type || button.type === "button")
+        return (!button.type || button.type === "button" || button.type === "checkbox")
           && this.props.selectedRightPanel === button.section;
       }).map( (button: any) => {
-        let className = "button-holder" + (button.value ? " active" : "");
-        let action = button.action;
-        if (button.disabled) {
-          className += " disabled";
-          action = null;
+        if (!button.type || button.type === "button") {
+          let className = "button-holder" + (button.value ? " active" : "");
+          let action = button.action;
+          if (button.disabled) {
+            className += " disabled";
+            action = null;
+          }
+          return (
+            <div key={button.title} className={className} onClick={action}>
+              {button.title}
+            </div>
+          );
+        } else if (button.type === "checkbox") {
+          const checkClass = button.enabled === false ? "check-container disabled" : "check-container";
+          const checkboxAction = (evt: React.ChangeEvent<HTMLInputElement>) => {
+            const oldValue = evt.target.value === "true";
+            button.action(!oldValue);
+          };
+          return (
+            <label key={button.title} className={checkClass}>
+              <input
+                key={button.title}
+                className="population-checkbox"
+                type="checkbox"
+                value={button.value}
+                checked={button.value}
+                onChange={checkboxAction} />
+              <span className="checkmark"/>
+              <div className="label-holder">
+                <div className="label">
+                  <div>{ button.title }</div>
+                </div>
+              </div>
+            </label>
+          );
         }
-        return (
-          <div key={button.title} className={className} onClick={action}>
-            {button.title}
-          </div>
-        );
       });
     }
 
