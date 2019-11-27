@@ -122,7 +122,8 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
             </div>
           );
         } else if (button.type === "checkbox") {
-          const checkClass = button.enabled === false ? "check-container disabled" : "check-container";
+          let checkClass = button.enabled === false ? "check-container disabled" : "check-container";
+          checkClass += button.value ? " checked" : "";
           const checkboxAction = (evt: React.ChangeEvent<HTMLInputElement>) => {
             const oldValue = evt.target.value === "true";
             button.action(!oldValue);
