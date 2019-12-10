@@ -32,6 +32,7 @@ const Chromosomes = {
 interface IProps extends IBaseProps {
   rowIndex: number;
   width: number;
+  onNucleusAnimating: (animating: boolean) => void;
 }
 interface IState {
   previousChromosomeState: ChromosomeState;
@@ -85,9 +86,13 @@ export class NucleusView extends BaseComponent<IProps, IState> {
     );
   }
 
+  // Setting the `previousChromosomeState` is what actually triggers an animation to occur
+  // The `onNucleusAnimating` call just disables the menu buttons
   private startAnimation = () => {
+    this.props.onNucleusAnimating(true);
     (window as any).setTimeout(() => {
       this.setState({previousChromosomeState: this.chromosomeState});
+      this.props.onNucleusAnimating(false);
     }, animationTime);
   }
 

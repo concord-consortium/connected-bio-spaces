@@ -18,6 +18,7 @@ interface IState {
   zoomLevel: number;
   isZoomingIntoOrg: boolean;
   cellModelLoaded: boolean;
+  nucleusAnimating: boolean;
 }
 
 @inject("stores")
@@ -28,7 +29,8 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
     this.state = {
       zoomLevel: 1,
       isZoomingIntoOrg: false,
-      cellModelLoaded: false
+      cellModelLoaded: false,
+      nucleusAnimating: false
     };
   }
 
@@ -46,7 +48,7 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
         }
         <div className="organism-controls">
           <ZoomControl handleZoom={this.zoomChange} rowIndex={rowIndex} showTargetZoom={showTargetZoom} />
-          <ManipulationControls rowIndex={rowIndex} />
+          <ManipulationControls rowIndex={rowIndex} disableNucleusControls={this.state.nucleusAnimating} />
         </div>
       </div>
     );
@@ -121,7 +123,7 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
         {
           (zoomLevel === "nucleus") &&
           <div className="cell-zoom-panel" key={zoomLevel} data-test="cell-zoon-panel">
-            <NucleusView rowIndex={rowIndex} width={width}/>
+            <NucleusView rowIndex={rowIndex} width={width} onNucleusAnimating={this.handleNucleusAnimating} />
           </div>
         }
       </div>
@@ -134,5 +136,9 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
 
   private cellModelLoaded = () => {
     this.setState({cellModelLoaded: true});
+  }
+
+  private handleNucleusAnimating = (animating: boolean) => {
+    this.setState({nucleusAnimating: animating});
   }
 }

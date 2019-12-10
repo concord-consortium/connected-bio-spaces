@@ -8,6 +8,7 @@ import { ModeType, ZoomLevelType } from "../../../models/spaces/organisms/organi
 
 interface IProps extends IBaseProps {
   rowIndex: number;
+  disableNucleusControls: boolean;
 }
 interface IState {}
 
@@ -16,7 +17,8 @@ interface IState {}
 export class ManipulationControls extends BaseComponent<IProps, IState> {
 
   public render() {
-    const {organisms} = this.stores;
+    const { disableNucleusControls } = this.props;
+    const { organisms } = this.stores;
     const row = this.getControlsRow();
     const hormoneClass = "hormone " + (row.selectedSubstance === "hormone" ? "active" : "");
     const signalProteinClass = "signal-protein " + (row.selectedSubstance === "signalProtein" ? "active" : "");
@@ -88,14 +90,14 @@ export class ManipulationControls extends BaseComponent<IProps, IState> {
         {
           showNucleusButtons &&
           <React.Fragment>
-            <button className={"organism-button sticky"}
+            <button className={"organism-button sticky" + (disableNucleusControls ? " disabled" : "")}
                     onClick={this.handleNucleusColorClick} data-test="color">
               <svg className={"icon"}>
                 <use xlinkHref={`#icon-${ row.nucleusColored ? "decolor" : "color" }`} />
               </svg>
               <div className="label">{ row.nucleusColored ? "Decolor" : "Color" }</div>
             </button>
-            <button className={"organism-button sticky"}
+            <button className={"organism-button sticky" + (disableNucleusControls ? " disabled" : "")}
                     onClick={this.handleNucleusCondenseClick} data-test="condense">
               <svg className={"icon"}>
                 <use xlinkHref={`#icon-${ row.nucleusCondensed ? "expand" : "condense" }`} />
@@ -170,11 +172,13 @@ export class ManipulationControls extends BaseComponent<IProps, IState> {
   }
 
   private handleNucleusColorClick = () => {
+    if (this.props.disableNucleusControls) return;
     const row = this.getControlsRow();
     row.toggleNucleusColor();
   }
 
   private handleNucleusCondenseClick = () => {
+    if (this.props.disableNucleusControls) return;
     const row = this.getControlsRow();
     row.toggleNucleusCondense();
   }
