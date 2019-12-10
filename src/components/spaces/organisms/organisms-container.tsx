@@ -8,7 +8,7 @@ import "./organisms-container.sass";
 import { ZoomLevelType, OrganismsRowModelType, ModeType } from "../../../models/spaces/organisms/organisms-row";
 import { OrganelleWrapper } from "./organelle-wrapper";
 import { ManipulationControls } from "./manipulation-controls";
-import { StaticNucleusView } from "./static-nucleus-view";
+import { NucleusView } from "./nucleus-view";
 import { DEFAULT_MODEL_WIDTH } from "../../..";
 
 interface IProps extends IBaseProps {
@@ -121,7 +121,7 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
         {
           (zoomLevel === "nucleus") &&
           <div className="cell-zoom-panel" key={zoomLevel} data-test="cell-zoon-panel">
-            <StaticNucleusView rowIndex={rowIndex} width={width}/>
+            <NucleusView rowIndex={rowIndex} width={width}/>
           </div>
         }
       </div>

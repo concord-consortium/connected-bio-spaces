@@ -41,7 +41,7 @@ const animationTime = 3000;
 
 @inject("stores")
 @observer
-export class StaticNucleusView extends BaseComponent<IProps, IState> {
+export class NucleusView extends BaseComponent<IProps, IState> {
 
   public state = {
     previousChromosomeState: "expanded" as ChromosomeState
