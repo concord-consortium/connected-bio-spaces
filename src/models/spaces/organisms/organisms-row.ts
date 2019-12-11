@@ -15,6 +15,9 @@ export type ZoomLevelType = typeof ZoomLevel.Type;
 export const ZoomTarget = types.enumeration("type", ["receptor", "nucleus"]);
 export type ZoomTargetType = typeof ZoomTarget.Type;
 
+export const NucleusState = types.enumeration("type", ["expanded", "condensed", "paired"]);
+export type NucleusStateType = typeof NucleusState.Type;
+
 export const OrganismsRowModel = types
   .model("OrganismsRow", {
     organismsMouse: types.maybe(types.reference(OrganismsMouseModel)),
@@ -29,7 +32,7 @@ export const OrganismsRowModel = types
     rightPanel: types.optional(RightPanelTypeEnum, "instructions"),
     selectedSubstance: types.optional(Substance, "hormone"),
     nucleusColored: false,
-    nucleusCondensed: false
+    nucleusState: types.optional(NucleusState, "expanded")
   })
   .views(self => ({
     get currentData(): ChartDataModelType {
@@ -129,7 +132,18 @@ export const OrganismsRowModel = types
         self.nucleusColored = !self.nucleusColored;
       },
       toggleNucleusCondense() {
-        self.nucleusCondensed = !self.nucleusCondensed;
+        if (self.nucleusState !== "expanded") {   // condensed || paired
+          self.nucleusState = "expanded";
+        } else {
+          self.nucleusState = "condensed";
+        }
+      },
+      toggleNucleusPair() {
+        if (self.nucleusState !== "paired") {   // condensed || expanded
+          self.nucleusState = "paired";
+        } else {
+          self.nucleusState = "condensed";
+        }
       }
     };
   })
