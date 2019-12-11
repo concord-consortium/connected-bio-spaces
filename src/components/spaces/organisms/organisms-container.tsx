@@ -122,7 +122,7 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
         }
         {
           (zoomLevel === "nucleus") &&
-          <div className="cell-zoom-panel" key={zoomLevel} data-test="cell-zoon-panel">
+          <div className={"cell-zoom-panel " + mode} key={zoomLevel} data-test="cell-zoom-panel">
             <NucleusView rowIndex={rowIndex} width={width} onNucleusAnimating={this.handleNucleusAnimating} />
           </div>
         }

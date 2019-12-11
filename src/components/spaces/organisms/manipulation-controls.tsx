@@ -99,7 +99,7 @@ export class ManipulationControls extends BaseComponent<IProps, IState> {
               <div className="label">{ nucleusCondensed ? "Expand" : "Condense" }</div>
             </button>
 
-            <button className={"organism-button sticky" + this.getNucleusButtonClass("pair")}
+            <button className={"organism-button sticky" + this.getNucleusButtonClass("condensed")}
                     onClick={this.handleNucleusPairClick} data-test="color">
               <svg className={"icon"}>
                 <use xlinkHref={`#icon-${ nucleusPaired ? "unpair" : "pair" }`} />
@@ -107,7 +107,8 @@ export class ManipulationControls extends BaseComponent<IProps, IState> {
               <div className="label">{ nucleusPaired ? "Unpair" : "Pair" }</div>
             </button>
 
-            <button className={"organism-button sticky disabled"} data-test="inspect-dna">
+            <button className={"organism-button sticky" + this.getNucleusButtonClass("condensed", "inspect")}
+                onClick={this.handleInspectClick}  data-test="inspect-dna">
               <svg className={"icon"}>
                 <use xlinkHref="#icon-inspect-dna" />
               </svg>
@@ -142,14 +143,18 @@ export class ManipulationControls extends BaseComponent<IProps, IState> {
     return disabledClass;
   }
 
-  private getNucleusButtonClass = (type?: string) => {
-    const nucleusCondensed = this.getControlsRow().nucleusState !== "expanded";
+  private getNucleusButtonClass = (state?: string, buttonMode?: ModeType) => {
+    const row = this.getControlsRow();
+    const nucleusCondensed = row.nucleusState !== "expanded";
     if (this.props.disableNucleusControls) {
       return " disabled";
-    } else if (type && type === "pair" && !nucleusCondensed) {
+    } else if (state && state === "condensed" && !nucleusCondensed) {
       return " disabled";
     }
-    return "";
+
+    const activeClass = row.mode === buttonMode ? " active" : "";
+
+    return activeClass;
   }
 
   private getControlsRow = () => {

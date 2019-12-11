@@ -18,6 +18,9 @@ export type ZoomTargetType = typeof ZoomTarget.Type;
 export const NucleusState = types.enumeration("type", ["expanded", "condensed", "paired"]);
 export type NucleusStateType = typeof NucleusState.Type;
 
+export const ChromosomeId = types.enumeration("type", ["c2a", "c2b", "c8a", "c8b", "x1", "x2", "y"]);
+export type ChromIdType = typeof ChromosomeId.Type;
+
 export const OrganismsRowModel = types
   .model("OrganismsRow", {
     organismsMouse: types.maybe(types.reference(OrganismsMouseModel)),
@@ -32,7 +35,8 @@ export const OrganismsRowModel = types
     rightPanel: types.optional(RightPanelTypeEnum, "instructions"),
     selectedSubstance: types.optional(Substance, "hormone"),
     nucleusColored: false,
-    nucleusState: types.optional(NucleusState, "expanded")
+    nucleusState: types.optional(NucleusState, "expanded"),
+    selectedChromosome: types.maybe(ChromosomeId)
   })
   .views(self => ({
     get currentData(): ChartDataModelType {
@@ -102,6 +106,10 @@ export const OrganismsRowModel = types
         }
         self.mode = "normal";
         self.hoveredZoomTarget = undefined;
+
+        self.nucleusState = "expanded";
+        self.nucleusColored = false;
+        self.selectedChromosome = undefined;
       },
       setHoveredZoomTarget(target?: ZoomTargetType) {
         self.hoveredZoomTarget = target;
@@ -115,6 +123,7 @@ export const OrganismsRowModel = types
             self.organismsMouse.setPaused(true);
           }
         }
+        self.selectedChromosome = undefined;
       },
       setShowProteinDNA(val: boolean) {
         self.showProteinDNA = val;
@@ -134,6 +143,7 @@ export const OrganismsRowModel = types
       toggleNucleusCondense() {
         if (self.nucleusState !== "expanded") {   // condensed || paired
           self.nucleusState = "expanded";
+          self.selectedChromosome = undefined;
         } else {
           self.nucleusState = "condensed";
         }
@@ -144,7 +154,10 @@ export const OrganismsRowModel = types
         } else {
           self.nucleusState = "condensed";
         }
-      }
+      },
+      setSelectedChromosome(chromosome: ChromIdType) {
+        self.selectedChromosome = chromosome;
+      },
     };
   })
   .postProcessSnapshot(snapshot => {
