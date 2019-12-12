@@ -1,15 +1,8 @@
 import * as React from "react";
+import SVG from "react-inlinesvg";
 import "./chromosome-viewer.sass";
 import { ChromIdType } from "../../../models/spaces/organisms/organisms-row";
 import { Genotype } from "../../../models/backpack-mouse";
-
-import Ch2a from "./chromosomes/chromosome-2a-inspect.inline.svg";
-import Ch2b from "./chromosomes/chromosome-2b-inspect.inline.svg";
-import Ch8a from "./chromosomes/chromosome-8a-inspect.inline.svg";
-import Ch8b from "./chromosomes/chromosome-8b-inspect.inline.svg";
-import ChX1 from "./chromosomes/chromosome-x1-inspect.inline.svg";
-import ChX2 from "./chromosomes/chromosome-x2-inspect.inline.svg";
-import ChY from "./chromosomes/chromosome-y-inspect.inline.svg";
 
 const chromoNames = {
   c2a: "2a",
@@ -19,16 +12,6 @@ const chromoNames = {
   x1: "X",
   x2: "X",
   y: "Y"
-};
-
-const chromoImages = {
-  c2a: Ch2a,
-  c2b: Ch2b,
-  c8a: Ch8a,
-  c8b: Ch8b,
-  x1: ChX1,
-  x2: ChX2,
-  y: ChY
 };
 
 interface GeneInfo {name: string; alleles: number; }
@@ -96,7 +79,6 @@ interface IProps {
 const ChromosomeViewer: React.StatelessComponent<IProps> = props => {
 
   const { genotype, chromosome, colored } = props;
-  const SvgImage = chromoImages[chromosome];
   const chromoNumber = chromosome.length > 1 ? chromosome.slice(0, -1) : chromosome;
   const genes = geneInfoList[chromoNumber];
   const chromosomeInfo = chomosomeInfoList[chromoNumber];
@@ -108,7 +90,8 @@ const ChromosomeViewer: React.StatelessComponent<IProps> = props => {
       </div>
       <div className="chromosome-details">
         <div className="chromosome-image">
-          <SvgImage className={ colored ? chromoNumber : "" }/>
+          <SVG src={`assets/curriculum/mouse/nucleus/chromosome-${chromosome}-inspect.svg`}
+            className={ colored ? chromoNumber : "" } />
           { chromosome !== "y" &&
           <img src={`assets/curriculum/mouse/nucleus/chromosome-${chromosome}-inspect-markers.svg`} />
           }
