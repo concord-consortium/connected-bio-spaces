@@ -62,8 +62,7 @@ const defaultOptions: ChartOptions = {
       }
     }]
   },
-  elements: { point: { radius: 0 } },
-  showLines: true
+  elements: { point: { radius: 0 } }
 };
 
 const lineDatasetDefaults: ChartData<any> = {
@@ -81,7 +80,8 @@ const lineDatasetDefaults: ChartData<any> = {
   borderColor: ChartColors.map(c => hexToRGBValue(c.hex, 1.0)),
   pointBorderColor: ChartColors.map(c => hexToRGBValue(c.hex, 1.0)),
   pointHoverBackgroundColor: ChartColors.map(c => hexToRGBValue(c.hex, 1.0)),
-  pointHoverBorderColor: ChartColors.map(c => hexToRGBValue(c.hex, 1.0))
+  pointHoverBorderColor: ChartColors.map(c => hexToRGBValue(c.hex, 1.0)),
+  showLine: true
 };
 
 const lineData = (chartData: ChartDataModelType) => {
