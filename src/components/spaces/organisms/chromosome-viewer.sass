@@ -1,0 +1,64 @@
+@import "../../vars"
+
+.chromosome-viewer
+  font-family: $instructions-font-stack
+  color: $color-nav-cinder-dark2
+
+  .title
+    text-align: center
+    margin-top: 10px
+    font-family: $font-stack
+    color: $color-simdata-carrot-dark3
+    font-size: 16px
+    font-weight: 500
+
+  .chromosome-details
+    display: flex
+
+    .chromosome-image
+      margin-left: 20px
+      svg
+        width: 63px
+        fill: #ffbf25
+        &.c2
+          fill: #19d119
+        &.c8
+          fill: #ba37e0
+        &.x, &.y
+          fill: #dbdb22
+      img
+        position: absolute
+        top: 28px
+        left: 20px
+        width: 63px
+
+    .label
+      font-family: $font-stack
+      font-weight: 500
+      color: $color-simdata-carrot-dark3
+
+    .chromosome-genes
+      width: 124px
+      padding: 0 20px 0 0px
+      text-align: center
+      .gene>div
+        margin 5px 0
+
+      &.c2
+        padding-top: 22px
+        .gene
+          margin-bottom: 13px
+      &.c8
+        padding-top: 27px
+        .gene
+          margin-bottom: 15px
+      &.x
+        padding-top: 49px
+
+    .chromosome-info
+      padding-top: 35px
+
+      > div
+        margin-bottom: 3px
+      > div:nth-child(3)
+        margin-top: 12px

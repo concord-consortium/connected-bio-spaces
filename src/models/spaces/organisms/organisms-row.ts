@@ -157,6 +157,7 @@ export const OrganismsRowModel = types
       },
       setSelectedChromosome(chromosome: ChromIdType) {
         self.selectedChromosome = chromosome;
+        self.rightPanel = "information";
       },
     };
   })
@@ -166,6 +167,8 @@ export const OrganismsRowModel = types
       hoveredOrganelle,
       selectedOrganelle,
       selectedSubstance,
+      selectedChromosome,
+      hoveredZoomTarget,
       ...remainder
     } = snapshot;
     return remainder;

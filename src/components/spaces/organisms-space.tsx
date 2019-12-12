@@ -13,6 +13,7 @@ import { kOrganelleInfo } from "../../models/spaces/organisms/organisms-space";
 import { extractCodons } from "./proteins/util/dna-utils";
 import { getAminoAcidsFromCodons } from "./proteins/util/amino-acid-utils";
 import { CollectButtonComponent } from "../collect-button";
+import ChromosomeViewer from "./organisms/chromosome-viewer";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -71,7 +72,7 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
     const { organismsMouse } = row;
     const { currentData, selectedOrganelle,
       showProteinAminoAcidsOnProtein, showProteinDNA,
-      rightPanel } = row;
+      rightPanel, selectedChromosome } = row;
 
     if (selectedOrganelle && kOrganelleInfo[selectedOrganelle].protein) {
       const otherRow = organisms.rows[rowIndex ? 0 : 1];
@@ -86,6 +87,8 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
       }
     }
 
+    const zoomLevel = row.zoomLevel;
+
     const rightPanelContent = (() => {
       switch (rightPanel) {
         case "instructions":
@@ -98,8 +101,9 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
             isPlaying={false} />;
         case "information":
         default:
-          if (selectedOrganelle && kOrganelleInfo[selectedOrganelle].protein) {
-            return <ProteinViewer
+          if (zoomLevel === "receptor") {
+            if (selectedOrganelle && kOrganelleInfo[selectedOrganelle].protein) {
+              return <ProteinViewer
               protein={kOrganelleInfo[selectedOrganelle].protein!}
               selectedAminoAcidIndex={proteinSliderSelectedAminoAcidIndex}
               showInfoBox={showProteinInfoBox}
@@ -110,11 +114,28 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
               setSelectedAminoAcidIndex={this.handleUpdateSelectedAminoAcidIndex}
               toggleShowInfoBox={this.toggleShowInfoBox}
             />;
+            } else {
+              return (
+                <div>
+                  Find and inspect a protein to view it here.
+                </div>);
+            }
+          } else if (zoomLevel === "nucleus") {
+            if (organismsMouse && selectedChromosome) {
+              return <ChromosomeViewer
+                genotype={organismsMouse.backpackMouse.genotype}
+                chromosome={selectedChromosome}
+                colored={row.nucleusColored}
+              />;
+            } else {
+              return (
+                <div>
+                  Find and inspect a chromosome to view it here.
+                </div>);
+            }
           } else {
             return (
-              <div>
-                Find and inspect a protein to view it here.
-              </div>);
+              <div>You'll need to zoom in deeper to find something to inspect</div>);
           }
       }
     })();
