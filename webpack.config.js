@@ -50,6 +50,10 @@ module.exports = (env, argv) => {
           ]
         },
         {
+          test: /\.inline\.svg$/,
+          loader: 'react-svg-loader'
+        },
+        {
           test: /^(?!.*\.inline\.svg$).*\.(png|woff|woff2|eot|ttf|svg)$/,
           loader: 'url-loader',
           options: {
@@ -60,10 +64,6 @@ module.exports = (env, argv) => {
               return devMode ? url : url.replace(/assets/, '.');
             }
           }
-        },
-        {
-          test: /\.inline\.svg$/,
-          loader: 'react-svg-loader'
         },
       ]
     },
