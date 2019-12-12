@@ -132,6 +132,7 @@ export default class AminoAcidSlider extends Component<AminoAcidSliderProps> {
     const focusT2X = (width / 2) + 5 - 4;
     const focusT3X = (width / 2) - 4;
     const focusT3Y = 8;
+    const chainY = (aminoAcidWidth / 2) + (showDNA ? -4 : 0);
     return (
       <div className={wrapperClass} style={frameStyle}>
         <div className="amino-acids">
@@ -155,7 +156,7 @@ export default class AminoAcidSlider extends Component<AminoAcidSliderProps> {
               d={`M${focusT1X},2L${focusT2X},2L${focusT3X},${focusT3Y}Z`} />
             <g transform={`translate(0, ${aaCenterHeight / 2})`}>
               <path id="chain"
-                d={`M${chainLineStart},${(aminoAcidWidth / 2)}L${chainLineEnd},${(aminoAcidWidth / 2)}`}
+                d={`M${chainLineStart},${chainY}L${chainLineEnd},${chainY}`}
                 style={{stroke: "#5e5e5e", strokeWidth: "5px"}} />
               { aminoAcidImages }
             </g>
