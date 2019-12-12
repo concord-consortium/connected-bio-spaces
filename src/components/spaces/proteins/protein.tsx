@@ -123,7 +123,7 @@ const Protein: React.StatelessComponent<ProteinProps> = props => {
 };
 
 Protein.defaultProps = {
-  highlightColor: "#ffa56dAA",
+  highlightColor: "#ffa56dF0",
   marks: []
 };
 
