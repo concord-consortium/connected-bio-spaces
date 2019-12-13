@@ -40,7 +40,7 @@ const geneInfoList: {[chNumber: string]: GeneInfo[]} = {
   x: [
     {
       name: "Atp7a",
-      alleles: 4
+      alleles: 40
     }
   ],
   y: []
