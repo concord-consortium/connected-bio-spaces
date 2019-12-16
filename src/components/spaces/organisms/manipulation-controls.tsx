@@ -121,7 +121,7 @@ export class ManipulationControls extends BaseComponent<IProps, IState> {
                       checked={row.nucleusColored}
                       onChange={this.handleNucleusColorClick} data-test="color"
               />
-              <span className="label">{ row.nucleusColored ? "Decolor" : "Color" }</span>
+              <span className="label">Color</span>
             </label>
           </React.Fragment>
         }
