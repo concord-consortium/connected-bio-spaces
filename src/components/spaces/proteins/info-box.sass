@@ -1,49 +1,55 @@
 .info-and-options
-	.info-box
-		background: #88b7d5aa
-		border: 4px solid #c2e1f5
-		padding: 4px 0
-		z-index: 2
-		top: -10px
 
-	.info-box:after, .info-box:before
-		bottom: 100%
-		left: 50%
-		border: solid transparent
-		content: " "
-		height: 0
-		width: 0
-		position: absolute
-		pointer-events: none
+	.heading
+		color: #6d2b00
+		font-size: 14px
+		font-weight: 700
+		font-style: normal
+		text-align: left
+		font-family: Ubuntu, sans-serif
 
 	.info-wrapper
 		display: flex
 
 	.info
-		width: 179px
+		width: 220px
 		display: flex
 		flex-direction: column
-		align-items: center
+		align-items: start
 		padding: 5px
+		color: #434e56
+		font-size: 14px
+		font-family: 'Arial'
+		font-weight: 400
+		font-style: normal
+
 		& > div
-			padding: 5px
+			padding: 2px 33px
 		p
 			margin: 3px
 			width: 100%
 		li
 			margin: 0
 
-	.mark
-		display: flex
-		flex-direction: column
-		justify-content: space-around
-		align-items: center
-		height: 45px
-		max-width: 270px
-		margin: 0 auto
+		.symbol
+			display: flex
+			align-items: center
+			justify-content: space-between
+			width: 88px
+			margin-left: 20px
 
-	&.alert
-		.info-box
-			position: absolute
-			background: #88b7d5
-			border: 4px solid #ff0000
+		.aa-counter
+			display: flex
+			align-items: center
+			justify-content: space-between
+			width: 152px
+
+			.aa-number
+				display: flex
+				justify-content: space-around
+				align-items: center
+				border: 2px solid #d4520088
+				border-radius: 5px
+				width: 31px
+				height: 23px
+				background-color: #d4520022

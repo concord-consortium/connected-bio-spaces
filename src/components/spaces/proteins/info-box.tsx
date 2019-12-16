@@ -7,11 +7,12 @@ import { getFullNameForAminoAcid, expandAminoAcidAbbreviation,
 interface InfoBoxProps {
   highlightColor?: string;
   aminoAcids: string;
-  secondAminoAcids: string;
   selection: number;
-  selectedAminoAcidXLocation: number;
   marks?: number[];
   width: number;
+  hovered: boolean;
+  onHoverEnter: () => void;
+  onHoverExit: () => void;
   onMarkLocation: (percent: number) => void;
 }
 
@@ -23,42 +24,42 @@ interface DefaultProps {
 type PropsWithDefaults = InfoBoxProps & DefaultProps;
 
 const InfoBox: React.StatelessComponent<InfoBoxProps> = props => {
-  const {selection, aminoAcids, secondAminoAcids, width, marks} = props as PropsWithDefaults;
+  const {selection, aminoAcids, marks, hovered} = props as PropsWithDefaults;
 
   const aminoAcid = aminoAcids.charAt(selection);
 
-  let secondAminoAcid;
-  if (secondAminoAcids) {
-    secondAminoAcid = secondAminoAcids.charAt(selection);
-    if (secondAminoAcid === aminoAcid) {
-      secondAminoAcid = null;
-    }
-  }
-
-  // const style = {
-  //   marginLeft: props.selectedAminoAcidXLocation - (width / 2),
-  // };
-
-  const length = aminoAcids.length;
+  const length = aminoAcids.length - 1;
   const marked = marks.includes(selection);
 
   function renderInfo(aminoAcidId: string) {
-    const name = `${getFullNameForAminoAcid(aminoAcidId)} (${expandAminoAcidAbbreviation(aminoAcidId)})`;
+    const name = getFullNameForAminoAcid(aminoAcidId);
+    const abbr = expandAminoAcidAbbreviation(aminoAcidId);
 
     const description = getAminoAcidDescription(aminoAcidId);
 
     return (
       <div className="info">
-        { aminoAcidId !== "0" &&
-          <svg viewBox="0 0 30 30" width="30px">
-            <AminoAcid type={aminoAcidId} width={30}/>
-          </svg>
-        }
+        <div className="symbol">
+          { aminoAcidId !== "0" &&
+            <svg viewBox="-5 -5 60 60" width="58px"
+                onMouseEnter={props.onHoverEnter}
+                onMouseLeave={props.onHoverExit}
+                onClick={handleMarkLocation}>
+              <AminoAcid type={aminoAcidId} width={50} marked={marked || hovered} />
+            </svg>
+          }
+          <span className="heading">{abbr}</span>
+        </div>
         <div className="name">
-          <b>Name:</b> {name}
+          <span className="heading">Name:</span> {name}
         </div>
         <div className="property">
-          <b>Property:</b> {description}
+          <span className="heading">Property:</span> {description}
+        </div>
+        <div className="aa-counter">
+          <div>Amino acid</div>
+          <div className="aa-number">{selection + 1}</div>
+          <div>of {length}</div>
         </div>
       </div>
     );
@@ -73,23 +74,7 @@ const InfoBox: React.StatelessComponent<InfoBoxProps> = props => {
       <div className="info-box">
         <div className="info-wrapper">
           { renderInfo(aminoAcid) }
-          { secondAminoAcid && renderInfo(secondAminoAcid) }
         </div>
-        { aminoAcid !== "0" &&
-          <div className="mark">
-            <div>
-              Amino acid {selection + 1} of {length}
-            </div>
-            <label>
-              <input
-                name="isGoing"
-                type="checkbox"
-                checked={marked}
-                onChange={handleMarkLocation} />
-                Mark this location
-            </label>
-          </div>
-        }
       </div>
     </div>
   );

@@ -8,13 +8,13 @@ interface ProteinProps {
   viewBox: string;
   width: number;
   height: number;
-  selectionStartPercent: number;
-  selectionPercent: number;
+  selectionCenterIndex: number;
+  selectionWidthInAAs: number;
   highlightColor?: string;
   marks?: number[];
   aminoAcids: string;
   showAminoAcids: boolean;
-  updateSelectionStart: (percent: number) => void;
+  updateSelectionIndex: (percent: number) => void;
 }
 
 interface DefaultProps {
@@ -26,15 +26,31 @@ type PropsWithDefaults = ProteinProps & DefaultProps;
 
 const Protein: React.StatelessComponent<ProteinProps> = props => {
 
-  const { svg, selectionPercent, highlightColor,
-    selectionStartPercent, marks, showAminoAcids, aminoAcids } = props as PropsWithDefaults;
+  const { svg, selectionCenterIndex, selectionWidthInAAs, highlightColor,
+    marks, showAminoAcids, aminoAcids } = props as PropsWithDefaults;
   const svgModel = parseSVG(svg);
 
   const highlightPath = svgModel.querySelector("#highlight-path").cloneNode();
   const highlightProps = svgPathProperties(highlightPath.getAttribute("d"));
   const highlightPathTotalLength = highlightProps.getTotalLength();
-  const selectionLength = highlightPathTotalLength * selectionPercent;
-  highlightPath.setAttribute("style", `fill:none;stroke:rgba(${highlightColor}, 0.6);stroke-width:22px;`);
+  const totalAAsLength = aminoAcids.length;
+  const halfSelectionLengthInAAs = (selectionWidthInAAs / 2);
+  let selectionStartInAAs;
+  let selectionLengthInAAs;
+  if (selectionCenterIndex < halfSelectionLengthInAAs) {
+    selectionStartInAAs = 0;
+    selectionLengthInAAs = halfSelectionLengthInAAs + selectionCenterIndex;
+  } else if (selectionCenterIndex > (totalAAsLength - halfSelectionLengthInAAs)) {
+    selectionStartInAAs = selectionCenterIndex - halfSelectionLengthInAAs;
+    selectionLengthInAAs = totalAAsLength - selectionStartInAAs;
+  } else {
+    selectionStartInAAs = selectionCenterIndex - halfSelectionLengthInAAs;
+    selectionLengthInAAs = selectionWidthInAAs;
+  }
+  const selectionStartPercent = selectionStartInAAs / totalAAsLength;
+  const selectionWidthPercent = (selectionLengthInAAs - 2) / totalAAsLength;    // - 2 because of the rounded linecap
+  const selectionLength = highlightPathTotalLength * selectionWidthPercent;
+  highlightPath.setAttribute("style", `fill:none;stroke:${highlightColor};stroke-width:12px;stroke-linecap:round`);
   highlightPath.setAttribute("stroke-dasharray", selectionLength + " " + highlightPathTotalLength);
 
   const selectionLeft = highlightPathTotalLength * selectionStartPercent;
@@ -43,20 +59,8 @@ const Protein: React.StatelessComponent<ProteinProps> = props => {
   const s = new XMLSerializer();
   const highlight = s.serializeToString(highlightPath);
 
-  const markPaths = marks.map(loc => {
-    const dist = loc * highlightPathTotalLength;
-    const point = highlightProps.getPointAtLength(dist);
-    const point1 = highlightProps.getPointAtLength(dist - 5);
-    const point2 = highlightProps.getPointAtLength(dist + 5);
-    const angle = Math.atan2(point2.y - point1.y, point2.x - point1.x);
-    const length = 10;
-    const d = `M ${Math.sin(angle) * length + point.x} ${-Math.cos(angle) * length + point.y},
-      L ${-Math.sin(angle) * length + point.x} ${Math.cos(angle) * length + point.y}`;
-
-    return <path key={loc} d={d} style={{stroke: "#33F", strokeWidth: 3}} />;
-  });
-
   let dots;
+  let backbone;
   if (showAminoAcids) {
     dots = aminoAcids.split("").map((aa, i) => {
       if (aa === "0") return null;
@@ -66,7 +70,18 @@ const Protein: React.StatelessComponent<ProteinProps> = props => {
 
       return <circle key={i} cx={point.x} cy={point.y} r={2} style={{fill: color, stroke: "#222", strokeWidth: 0.5}} />;
     });
+  } else {
+    const backbonePath = svgModel.querySelector("#highlight-path").cloneNode();
+    backbonePath.setAttribute("style", `fill:none;stroke:#231F2044;stroke-width:4px;stroke-linecap:round`);
+    backbonePath.setAttribute("id", "backbone-path");
+    backbone = s.serializeToString(backbonePath);
   }
+
+  const markPaths = marks.map((loc, i) => {
+    const dist = loc * highlightPathTotalLength;
+    const point = highlightProps.getPointAtLength(dist);
+    return <circle key={i} cx={point.x} cy={point.y} r={4} style={{fill: "none", stroke: "#FF0", strokeWidth: 3}} />;
+  });
 
   let svgElRef: React.RefObject<{}>|null = null;
   const setSvgElRef = (element: any) => svgElRef = element;
@@ -82,10 +97,9 @@ const Protein: React.StatelessComponent<ProteinProps> = props => {
       // too far
       return;
     }
-    let perc = closestPoint.length / highlightPathTotalLength;
-    perc = perc - (props.selectionPercent / 2);
-    perc = Math.max(0, Math.min(perc, 1 - props.selectionPercent));
-    props.updateSelectionStart(perc);
+    const perc = closestPoint.length / highlightPathTotalLength;
+    const indexSelected = props.aminoAcids.length * perc;
+    props.updateSelectionIndex(indexSelected);
   };
 
   const aspectRatio = props.width / props.height;
@@ -99,16 +113,17 @@ const Protein: React.StatelessComponent<ProteinProps> = props => {
       <svg ref={setSvgElRef} viewBox={props.viewBox} width={width} height={height}
           onClick={onClick}>
         <g dangerouslySetInnerHTML={{__html: props.svg}} />
+        { backbone && <g dangerouslySetInnerHTML={{__html: backbone}} /> }
         <g dangerouslySetInnerHTML={{__html: highlight}} />
-        { markPaths }
         { dots }
+        { markPaths }
       </svg>
     </div>
   );
 };
 
 Protein.defaultProps = {
-  highlightColor: "255, 255, 0",
+  highlightColor: "#ffa56dF0",
   marks: []
 };
 
