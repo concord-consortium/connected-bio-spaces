@@ -143,6 +143,7 @@ export const OrganismsRowModel = types
       toggleNucleusCondense() {
         if (self.nucleusState !== "expanded") {   // condensed || paired
           self.nucleusState = "expanded";
+          self.mode = "normal";
           self.selectedChromosome = undefined;
         } else {
           self.nucleusState = "condensed";
