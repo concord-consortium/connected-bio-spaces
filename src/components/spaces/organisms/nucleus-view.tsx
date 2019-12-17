@@ -102,7 +102,8 @@ export class NucleusView extends BaseComponent<IProps, IState> {
     return (
       <div className="organism-view-container">
         <div className="organism-view" style={nucleusStyle} data-test="nucleus-view">
-          <svg key={randKey} id="Chromatin_Paths" data-name="Chromatin Paths" viewBox="0 0 394 182" xmlns="http://www.w3.org/2000/svg">
+          <svg key={randKey} id="Chromatin_Paths" data-name="Chromatin Paths" viewBox="0 0 394 182"
+              xmlns="http://www.w3.org/2000/svg" onMouseLeave={this.unsetHoveredChromosome}>
             {
               hoveredChromosome &&
               this.getChromosomeOutline(hoveredChromosome, false)
@@ -137,6 +138,7 @@ export class NucleusView extends BaseComponent<IProps, IState> {
 
   private updatingModel = (action: ISerializedActionCall) => {
     const { rowIndex } = this.props;
+    this.unsetHoveredChromosome();
     if ((action.name === "toggleNucleusCondense" || action.name === "toggleNucleusPair")
         && action.path === `/rows/${rowIndex}`) {
       this.startAnimation();
