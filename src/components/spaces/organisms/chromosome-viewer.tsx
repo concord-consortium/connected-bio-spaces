@@ -118,13 +118,13 @@ const ChromosomeViewer: React.StatelessComponent<IProps> = props => {
             <span className="label">Inherited from:</span> {inheritedFromMother ? "Mother" : "Father"}
           </div>
           <div>
-            <span className="label">Genes:</span> {chromosomeInfo.genes}
+            <span className="label">Base pairs:</span> {chromosomeInfo.basePairs}
+          </div>
+          <div>
+            <span className="label">Total genes:</span> {chromosomeInfo.genes}
           </div>
           <div>
             <span className="label">Fur color genes:</span> {chromosomeInfo.furColor}
-          </div>
-          <div>
-            <span className="label">Base pairs:</span> {chromosomeInfo.basePairs}
           </div>
         </div>
       </div>
