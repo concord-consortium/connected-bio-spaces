@@ -8,7 +8,7 @@ import "./organisms-container.sass";
 import { ZoomLevelType, OrganismsRowModelType, ModeType } from "../../../models/spaces/organisms/organisms-row";
 import { OrganelleWrapper } from "./organelle-wrapper";
 import { ManipulationControls } from "./manipulation-controls";
-import { StaticNucleusView } from "./static-nucleus-view";
+import { NucleusView } from "./nucleus-view";
 import { DEFAULT_MODEL_WIDTH } from "../../..";
 
 interface IProps extends IBaseProps {
@@ -18,6 +18,7 @@ interface IState {
   zoomLevel: number;
   isZoomingIntoOrg: boolean;
   cellModelLoaded: boolean;
+  nucleusAnimating: boolean;
 }
 
 @inject("stores")
@@ -28,7 +29,8 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
     this.state = {
       zoomLevel: 1,
       isZoomingIntoOrg: false,
-      cellModelLoaded: false
+      cellModelLoaded: false,
+      nucleusAnimating: false
     };
   }
 
@@ -46,7 +48,7 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
         }
         <div className="organism-controls">
           <ZoomControl handleZoom={this.zoomChange} rowIndex={rowIndex} showTargetZoom={showTargetZoom} />
-          <ManipulationControls rowIndex={rowIndex} />
+          <ManipulationControls rowIndex={rowIndex} disableNucleusControls={this.state.nucleusAnimating} />
         </div>
       </div>
     );
@@ -120,8 +122,8 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
         }
         {
           (zoomLevel === "nucleus") &&
-          <div className="cell-zoom-panel" key={zoomLevel} data-test="cell-zoon-panel">
-            <StaticNucleusView rowIndex={rowIndex} width={width}/>
+          <div className={"cell-zoom-panel " + mode} key={zoomLevel} data-test="cell-zoom-panel">
+            <NucleusView rowIndex={rowIndex} width={width} onNucleusAnimating={this.handleNucleusAnimating} />
           </div>
         }
       </div>
@@ -134,5 +136,9 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
 
   private cellModelLoaded = () => {
     this.setState({cellModelLoaded: true});
+  }
+
+  private handleNucleusAnimating = (animating: boolean) => {
+    this.setState({nucleusAnimating: animating});
   }
 }
