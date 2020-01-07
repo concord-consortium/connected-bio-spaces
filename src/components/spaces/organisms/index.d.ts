@@ -4,3 +4,5 @@ declare module "organelle" {
 
   export function createModel(params: any): any;
 }
+
+declare module "chartjs-plugin-annotation";

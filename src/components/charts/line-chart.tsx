@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 import { merge } from "lodash";
 import { ChartDataModelType } from "../../models/spaces/charts/chart-data";
 import { ChartOptions } from "chart.js";
-import "chartjs-plugin-annotation";
+import * as ChartAnnotation from "chartjs-plugin-annotation";
 import { ChartColors } from "../../models/spaces/charts/chart-data-set";
 import { hexToRGBValue } from "../../utilities/color-utils";
 import { LineChartControls } from "./line-chart-controls";
@@ -20,12 +20,10 @@ interface ILineProps {
 interface ILineState { }
 
 const defaultOptions: ChartOptions = {
-  plugins: {
-    annotation: {
-      drawTime: "afterDraw",
-      events: ["click", "mouseenter", "mouseleave"],
-      annotations: []
-    }
+  annotation: {
+    drawTime: "afterDraw",
+    events: ["click", "mouseenter", "mouseleave"],
+    annotations: []
   },
   animation: {
     duration: 0
@@ -63,7 +61,7 @@ const defaultOptions: ChartOptions = {
     }]
   },
   elements: { point: { radius: 0 } }
-};
+} as ChartOptions;
 
 const lineDatasetDefaults: ChartData<any> = {
   label: "",
@@ -173,11 +171,9 @@ export class LineChart extends BaseComponent<ILineProps, ILineState> {
           }
         }]
       },
-      plugins: {
-        annotation: {
-          annotations: chartData.formattedAnnotations
-        }
-      },
+      annotation: {
+        annotations: chartData.formattedAnnotations
+      }
     });
     const w = width ? width : 400;
     const h = height ? height : 400;
@@ -189,6 +185,7 @@ export class LineChart extends BaseComponent<ILineProps, ILineState> {
         height={h}
         width={w}
         redraw={true}
+        plugins={[ChartAnnotation]}
       />
     );
 
