@@ -69,7 +69,7 @@ export const ChartAnnotationModel = types
           scaleID: "x-axis-0",
           value: self.value,
           label: {
-            position: "top"
+            position: "bottom"
           },
           ...formatted
         };
@@ -95,7 +95,7 @@ export const ChartAnnotationModel = types
           enabled: true,
           content,
           xAdjust,
-          yAdjust: self.labelYOffset,
+          yAdjust: 305 - self.labelYOffset,
           fontColor: self.labelColor,
           backgroundColor: self.labelBackgroundColor
         };
