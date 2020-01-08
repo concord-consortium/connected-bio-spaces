@@ -5,13 +5,7 @@ import "./amino-acid-slider.sass";
 import AminoAcid from "./amino-acid";
 import Codon from "./codon";
 
-let lastMouseDownTime = -1;
-const maxClickTime = 500;
-
-const chainMargin = 4;          // space at start and end of chain
-const aminoAcidMargin = 2;      // space between AAs when no codons are showing
-const codonMargin = 6;          // space between codons
-
+const aminoAcidMargin = 10;      // space between AAs when no codons are showing
 export const kSliderHeight = 50;
 
 interface AminoAcidSliderProps {
@@ -20,200 +14,74 @@ interface AminoAcidSliderProps {
   width?: number;
   aminoAcidWidth?: number;
   codonWidth?: number;
-  selectionStartPercent?: number;
-  selectionWidth?: number;
-  selectedAminoAcidIndex: number;
-  highlightColor?: string;
+  selectedAminoAcidIndex?: number;
   marks?: number[];
   showDNA?: boolean;
   dnaFontHeight?: number;
-  dimUnselected: boolean;
-  updateSelectionStart: (selectionStart: number) => void;
-  animateToSelectionStart: (selectionStart: number) => void;
-  updateSelectedAminoAcidIndex: (selectedAminoAcidIndex: number,
-                                 selectedAminoAcidXLocation: number) => void;
+  margins?: number;
+  showMark: boolean;
+  animateToSelectionIndex: (selectionIndex: number) => void;
+  onSelectedHoverEnter: () => void;
+  onSelectedHoverExit: () => void;
+  onMarkLocation: (percent: number) => void;
 }
 
-// annoying pattern because Typescript doesn't underdtand default props.
+// annoying pattern because Typescript doesn't understand default props.
 // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/11640
 interface DefaultProps {
   aminoAcids: string;
   codons: string[];
   width: number;
-  selectionWidth: number;
-  selectionStartPercent: number;
+  selectedAminoAcidIndex: number;
   aminoAcidWidth: number;
   codonWidth: number;
   showDNA: boolean;
   dnaFontHeight: number;
+  margins: number;
   marks: number[];
 }
 
 type PropsWithDefaults = AminoAcidSliderProps & DefaultProps;
 
-interface AminoAcidSliderState {
-  dragging: boolean;
-  draggingXStart: number;
-  draggingInitialStartPercent: number;
-}
-
-export default class AminoAcidSlider extends Component<AminoAcidSliderProps, AminoAcidSliderState> {
+export default class AminoAcidSlider extends Component<AminoAcidSliderProps> {
 
   public static defaultProps: DefaultProps = {
     aminoAcids: "",
     codons: [],
     width: 300,
-    selectionWidth: 70,
-    selectionStartPercent: 0,
-    aminoAcidWidth: 17,
+    selectedAminoAcidIndex: 0,
+    aminoAcidWidth: 20,
     codonWidth: 29,
     showDNA: false,
-    dnaFontHeight: 16,
+    dnaFontHeight: 11,
+    margins: 4,
     marks: []
   };
-
-  private wrapperRef: React.RefObject<{}>|null;
-  private selectionRef: React.RefObject<{}>|null;
-  private dnaStringRef: React.RefObject<{}>|null;
-  private setWrapperRef: (element: any) => void;
-  private setSelectionRef: (element: any) => void;
-  private setDnaStringRef: (element: any) => void;
-
-  constructor(props: AminoAcidSliderProps) {
-    super(props);
-    this.state = {
-      dragging: false,
-      draggingXStart: 0,
-      draggingInitialStartPercent: 0
-    };
-
-    this.wrapperRef = null;
-    this.selectionRef = null;
-    this.dnaStringRef = null;
-    this.setWrapperRef = (element) => this.wrapperRef = element;
-    this.setSelectionRef = (element) => this.selectionRef = element;
-    this.setDnaStringRef = (element) => this.dnaStringRef = element;
-  }
-
-  public componentDidUpdate(props: AminoAcidSliderProps, state: AminoAcidSliderState) {
-    if (this.state.dragging && !state.dragging) {
-      document.addEventListener("mousemove", this.onMouseMove);
-      document.addEventListener("mouseup", this.onMouseUp);
-    } else if (!this.state.dragging && state.dragging) {
-      document.removeEventListener("mousemove", this.onMouseMove);
-      document.removeEventListener("mouseup", this.onMouseUp);
-    }
-    if (this.currentlySelectedAminoAcidIndex !== this.props.selectedAminoAcidIndex) {
-      this.props.updateSelectedAminoAcidIndex(this.currentlySelectedAminoAcidIndex,
-        this.getXLocationOfAminoAcid(this.currentlySelectedAminoAcidIndex));
-    }
-  }
-
-  /** distance between amino acids */
-  get aminoAcidSpacing() {
-    const { codonWidth, aminoAcidWidth } = this.props as PropsWithDefaults;
-    if (this.props.showDNA) {
-      return codonWidth + codonMargin;
-    } else {
-      return aminoAcidWidth + aminoAcidMargin;
-    }
-  }
-
-  /** length amino acid chain would be in fuly drawn, in pixels */
-  get aminoAcidChainLength() {
-    const { aminoAcids } = this.props as PropsWithDefaults;
-    return aminoAcids.length * (this.aminoAcidSpacing) + (chainMargin * 2);
-  }
-
-  /** width of selection box in pixels, which depends on whether DNA is visible */
-  get actualSelectionWidth() {
-    const { showDNA, aminoAcids, aminoAcidWidth, selectionWidth } = this.props as PropsWithDefaults;
-    if (showDNA) {
-      const noDNAChainLength = aminoAcids.length *
-        (aminoAcidWidth + aminoAcidMargin) + (chainMargin * 2);
-      return selectionWidth * (this.aminoAcidChainLength / noDNAChainLength);
-    } else {
-      return selectionWidth;
-    }
-  }
-
-  /** width of selection box, as a % of total amino acid chain */
-  get aminoAcidSelectionWidthPercent() {
-    return this.actualSelectionWidth / this.aminoAcidChainLength;
-  }
-
-  /** distance along track user has dragged selection box. From 0 to 1.
-   * cf `selectionStartPercent`, which is the left side of the selection box, and always < 1
-   */
-  get travelPercent() {
-    const { selectionStartPercent } = this.props as PropsWithDefaults;
-    // value of `selectionStartPercent` when we're at far-right of window
-    const maxSelectionStartPercent = 1 - this.aminoAcidSelectionWidthPercent;
-    // percent selection box has been dragged across window, where far-right is 1.0
-    return Math.min(selectionStartPercent / maxSelectionStartPercent, 1);
-  }
-
-  /**
-   * index of the single AA selected. This is usually the one closest to the center of the box, except near the ends
-   * where it's at the edge of the selection box (or the ends would never be selected).
-   */
-  get currentlySelectedAminoAcidIndex() {
-    const { aminoAcids, selectionStartPercent } = this.props as PropsWithDefaults;
-    const aaIndexStart = (aminoAcids.length - 1) * selectionStartPercent;
-    const numAAinSelectionBox = aminoAcids.length * this.aminoAcidSelectionWidthPercent;
-    // Calculate position along selection box where AA is selected.
-    // From 0-10% of travel, we go from the left edge to the center of the box. From 10-90% we stay at the center. From
-    // 90-100% we move to the far right edge.
-    const selectionPercentAlongBox = this.travelPercent < 0.1
-      ? this.travelPercent * 5
-      : this.travelPercent > 0.9 ? 0.5 + ((this.travelPercent - 0.9) * 5) : 0.5;
-    return Math.round(aaIndexStart + (numAAinSelectionBox * selectionPercentAlongBox));
-  }
 
   public render() {
     const {
       aminoAcids,
       codons,
-      selectedAminoAcidIndex,
       width,
       aminoAcidWidth,
       dnaFontHeight,
-      highlightColor,
+      margins,
       marks,
       showDNA,
-      dimUnselected
+      showMark
     } = this.props as PropsWithDefaults;
 
+    const marginBtwnAcidCodon = 2;
+
     const frameStyle = {
-      width: `${width}px`
+      width: `${width}px`,
+      margin: `0 ${margins}px`
     };
 
-    const acidMargin = 2; // space below amino acids
-
-    // furthest right offset selection box can be
-    const maxSelectionBoxRightShift = width - this.actualSelectionWidth;
-    // current selection box right offset
-    const selectionRightShift = maxSelectionBoxRightShift * this.travelPercent;
     // center AA image in each space
     const innerAminoAcidOffset = (this.aminoAcidSpacing / 2) - (aminoAcidWidth / 2);
 
-    let wrapperClass = "amino-acid-slider";
-
-    if (selectionRightShift > 10) {
-      wrapperClass += " fade-left";
-    }
-    if (selectionRightShift < maxSelectionBoxRightShift - 10) {
-      wrapperClass += " fade-right";
-    }
-
-    const selectStyle: React.CSSProperties = {
-      width: `${this.actualSelectionWidth}px`,
-      left: `${selectionRightShift}px`
-    };
-    if (highlightColor) {
-      selectStyle.border = `1px solid rgb(${highlightColor})`;
-      selectStyle.backgroundColor = `rgba(${highlightColor}, 0.3)`;
-    }
+    const wrapperClass = "amino-acid-slider";
 
     // Returns an array of images containing both the AA shape and, optionally, the codon below
     const aminoAcidImages = aminoAcids.split("").map((a, i) => {
@@ -223,128 +91,115 @@ export default class AminoAcidSlider extends Component<AminoAcidSliderProps, Ami
         return null;
       }
 
-      // const codonOffset = chainOffset + i * (codonWidth + codonMargin);
-      const dimmed = dimUnselected && selectedAminoAcidIndex !== i;
-      const selected = marks.includes(i);
+      let onHoverEnter: undefined | ((evt: any) => void);
+      let onHoverExit: undefined | ((evt: any) => void);
+      let onClick = this.onAminoAcidSelection(i);
+      if (this.props.selectedAminoAcidIndex === i) {
+        onHoverEnter = this.props.onSelectedHoverEnter;
+        onHoverExit = this.props.onSelectedHoverExit;
+        onClick = (evt: any) => this.props.onMarkLocation(i);
+      }
+
+      const marked = marks.includes(i);
       return (
-        <g key={i} onClick={this.onAminoAcidSelection(i)}>
-          {
-            selected &&
-            <rect x={x + innerAminoAcidOffset - 1} y={1} width={aminoAcidWidth + 1} height={aminoAcidWidth + 2}
-              style={{fill: "#33F", stroke: "#AAF", opacity: (dimmed ? 0.4 : 1), strokeWidth: 2}} />
-          }
+        <g key={i}
+            onMouseEnter={onHoverEnter}
+            onMouseLeave={onHoverExit}
+            onClick={onClick}>
           {
             a !== "0" && a !== "1" &&
-            <AminoAcid type={a} x={x + innerAminoAcidOffset} y={2.5} width={aminoAcidWidth} dimmed={dimmed} />
+            <AminoAcid type={a} x={x + innerAminoAcidOffset} y={showDNA ? -4 : 0} width={aminoAcidWidth}
+              marked={marked} />
           }
           {
             showDNA &&
-            <Codon dna={codons[i]} x={x} y={aminoAcidWidth + acidMargin + dnaFontHeight}
-              fontSize={dnaFontHeight} dimmed={dimmed} />
+            <Codon dna={codons[i]} x={x + 5} y={aminoAcidWidth + marginBtwnAcidCodon + dnaFontHeight - 6}
+              fontSize={dnaFontHeight} />
           }
         </g>
       );
     });
 
-    let svgHeight = aminoAcidWidth + acidMargin + 2;
-    if (showDNA) {
-          svgHeight += dnaFontHeight;
-        }
+    const aaCenterHeight = 24;
 
     const chainLineStart = Math.max(0, this.getXLocationOfAminoAcid(0) + innerAminoAcidOffset + aminoAcidWidth / 2);
     const chainLineEnd = Math.min(width,
       this.getXLocationOfAminoAcid(aminoAcids!.length - 2) + innerAminoAcidOffset + aminoAcidWidth / 2);
 
+    const focusBoxWidth = aminoAcidWidth + (this.aminoAcidSpacing / 2);
+    const focusBoxX = (width / 2) - (focusBoxWidth / 2) - 4;
+    const focusT1X = (width / 2) - 5 - 4;
+    const focusT2X = (width / 2) + 5 - 4;
+    const focusT3X = (width / 2) - 4;
+    const focusT3Y = 8;
+    const chainY = (aminoAcidWidth / 2) + (showDNA ? -4 : 0);
     return (
-      <div className={wrapperClass} style={frameStyle} ref={this.setWrapperRef}
-          onMouseDown={this.onMouseDown}>
-        <div
-          className="selection"
-          style={selectStyle}
-          ref={this.setSelectionRef}
-        />
-        <div className="amino-acids" ref={this.setDnaStringRef}>
-          <svg width={width} height={svgHeight} viewBox={`0 0 ${width} ${svgHeight}`}>
-            <path d={`M${chainLineStart},${(aminoAcidWidth / 2) + 3}L${chainLineEnd},${(aminoAcidWidth / 2) + 3}`}
-              style={{stroke: "#AAA", strokeWidth: "2px", opacity: (dimUnselected ? 0.4 : 1)}} />
-            { aminoAcidImages }
+      <div className={wrapperClass} style={frameStyle}>
+        <div className="amino-acids">
+          <svg width={width} height={46} viewBox={`0 0 ${width} ${46}`}>
+            <rect id="background" x={4} y={2} width={width - 8} height={44} rx={20}
+              style={{fill: "#FFF"}}/>
+
+            <rect id="aaBackground" x={chainLineStart - 16} y={4}
+              width={chainLineEnd - chainLineStart + (16 * 2)}
+              height={37}
+              style={{fill: "#d4520088"}}/>
+
+            <rect id="backgroundBorderWhite" x={4} y={3} width={width - 8} height={39} rx={20}
+              style={{fill: "none", stroke: "#FFF", strokeWidth: 2}}/>
+
+            <rect id="backgroundBorderPink" x={0} y={1} width={width - 2} height={43} rx={22}
+              style={{fill: "none", stroke: "#ffd9c0", strokeWidth: 2}}/>
+
+            <rect className="focusBox" x={focusBoxX} y={1} width={focusBoxWidth} height={42} rx="5" />
+            <path className={`focusTriangle ${showMark ? "mark" : ""}`}
+              d={`M${focusT1X},2L${focusT2X},2L${focusT3X},${focusT3Y}Z`} />
+            <g transform={`translate(0, ${aaCenterHeight / 2})`}>
+              <path id="chain"
+                d={`M${chainLineStart},${chainY}L${chainLineEnd},${chainY}`}
+                style={{stroke: "#5e5e5e", strokeWidth: "5px"}} />
+              { aminoAcidImages }
+            </g>
+
+            <rect id="backgroundBorderWhiteTop" x={6.5} y={3} width={width - 10} height={39} rx={20}
+              style={{fill: "none", stroke: "#FFF", strokeWidth: 2, strokeDasharray: "150 50 380 50 200 0"}}/>
+
+            <rect id="backgroundBorderPinkTop" x={-2} y={-6} width={width + 7} height={57} rx={29}
+              style={{fill: "none", stroke: "#ffd9c0", strokeWidth: 15, strokeDasharray: "150 50 400 50 200 0"}}/>
+
           </svg>
         </div>
       </div>
     );
   }
 
-   // returns x location within view of an amino acid, in pixels
-   private getXLocationOfAminoAcid = (index: number) => {
-    const { width } = this.props as PropsWithDefaults;
-    // furthest left offset amino acid chain can be
-    const maxAminoAcidLeftShift = this.aminoAcidChainLength - width;
-    // current left shift
-    const aminoAcidLeftShift = maxAminoAcidLeftShift * this.travelPercent;
-
-    return (this.aminoAcidSpacing * index) - aminoAcidLeftShift + chainMargin;
+  /** distance between amino acids */
+  get aminoAcidSpacing() {
+    const { aminoAcidWidth } = this.props as PropsWithDefaults;
+    return aminoAcidWidth + aminoAcidMargin;
   }
 
-  // calculate relative position to the mouse and set dragging=true
-  private onMouseDown = (evt: React.MouseEvent<HTMLDivElement>) => {
-    // only left mouse button
-    if (evt.button !== 0) return;
-
-    const { selectionStartPercent } = this.props as PropsWithDefaults;
-
-    this.setState({
-      dragging: true,
-      draggingXStart: evt.pageX,
-      draggingInitialStartPercent: selectionStartPercent
-    });
-    evt.stopPropagation();
-    evt.preventDefault();
-
-    lastMouseDownTime = Date.now();
-  }
-
-  /**
-   * returns an appropriate selection start for a given selected amino acid.
-   * Inverse of get currentlySelectedAminoAcidIndex.
-   */
-  private getSelectionStartPercentForAminoAcid(index: number) {
+  /** length amino acid chain would be in fuly drawn, in pixels */
+  get aminoAcidChainLength() {
     const { aminoAcids } = this.props as PropsWithDefaults;
-    const numAAinSelectionBox = aminoAcids.length * this.aminoAcidSelectionWidthPercent;
-    // Calculate position along selection box where AA is selected.
-    // From 0-10% of travel, we go from the left edge to the center of the box. From 10-90% we stay at the center. From
-    // 90-100% we move to the far right edge.
-    const selectionPercentAlongBox = this.travelPercent < 0.1
-      ? this.travelPercent * 5
-      : this.travelPercent > 0.9 ? 0.5 + ((this.travelPercent - 0.9) * 5) : 0.5;
-    return (index - (numAAinSelectionBox * selectionPercentAlongBox)) / (aminoAcids.length - 1);
+    return aminoAcids.length * this.aminoAcidSpacing;
   }
 
-  private onMouseUp = (evt: MouseEvent) => {
-    this.setState({dragging: false});
-    evt.stopPropagation();
-    evt.preventDefault();
-  }
+  // returns x location within view of an amino acid, in pixels
+  private getXLocationOfAminoAcid = (index: number) => {
+    const { width, aminoAcidWidth, selectedAminoAcidIndex } = this.props as PropsWithDefaults;
 
-  private onMouseMove = (evt: MouseEvent) => {
-    if (!this.state.dragging) return;
+    const scrollStartPercent = 0.5;      // the scrolling starts at the slider midpoint
+    const start = width * scrollStartPercent - aminoAcidWidth;
+    const aaDistance = this.aminoAcidSpacing * index;
+    const offset = this.aminoAcidSpacing * selectedAminoAcidIndex;
 
-    const { width } = this.props as PropsWithDefaults;
-
-    const dx = evt.pageX - this.state.draggingXStart;
-    const newStartPercent = this.state.draggingInitialStartPercent +
-      (dx / (width - this.actualSelectionWidth));
-
-    const maxSelectionStartPercent = 1 - this.aminoAcidSelectionWidthPercent;
-
-    this.props.updateSelectionStart(Math.max(0, Math.min(newStartPercent, maxSelectionStartPercent)));
-
-    evt.stopPropagation();
-    evt.preventDefault();
+    return start + aaDistance - offset;
   }
 
   private onAminoAcidSelection = (index: number) => {
     return (evt: React.MouseEvent<SVGGElement>) => {
-      this.props.animateToSelectionStart(this.getSelectionStartPercentForAminoAcid(index));
+      this.props.animateToSelectionIndex(index);
       evt.stopPropagation();
       evt.preventDefault();
     };

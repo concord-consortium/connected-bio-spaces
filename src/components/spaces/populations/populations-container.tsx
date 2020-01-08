@@ -26,6 +26,10 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
     super(props);
   }
 
+  public componentDidMount() {
+    setTimeout(this.stores.populations.setupGraph, 1000);
+  }
+
   public componentWillUnmount() {
     this.stores.populations.close();
   }

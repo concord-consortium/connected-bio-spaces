@@ -385,7 +385,8 @@ export const MousePopulationsModel = types
         destroyInteractive() {
           interactive = undefined;
           setupGraph();
-        }
+        },
+        setupGraph
       }
     };
   })

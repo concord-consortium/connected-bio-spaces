@@ -8,6 +8,7 @@ import { ModeType, ZoomLevelType } from "../../../models/spaces/organisms/organi
 
 interface IProps extends IBaseProps {
   rowIndex: number;
+  disableNucleusControls: boolean;
 }
 interface IState {}
 
@@ -16,7 +17,7 @@ interface IState {}
 export class ManipulationControls extends BaseComponent<IProps, IState> {
 
   public render() {
-    const {organisms} = this.stores;
+    const { organisms } = this.stores;
     const row = this.getControlsRow();
     const hormoneClass = "hormone " + (row.selectedSubstance === "hormone" ? "active" : "");
     const signalProteinClass = "signal-protein " + (row.selectedSubstance === "signalProtein" ? "active" : "");
@@ -25,6 +26,8 @@ export class ManipulationControls extends BaseComponent<IProps, IState> {
     const addDisabledClass = this.getButtonDisabledClass("add", ["cell", "receptor"]);
     const zoomLevel = row.zoomLevel;
     const showNucleusButtons = zoomLevel === "nucleus";
+    const nucleusCondensed = row.nucleusState !== "expanded";
+    const nucleusPaired = row.nucleusState === "paired";
     return (
       <div className="manipulation-controls" data-test="manipulations-panel">
         {
@@ -88,26 +91,38 @@ export class ManipulationControls extends BaseComponent<IProps, IState> {
         {
           showNucleusButtons &&
           <React.Fragment>
-            <button className={"organism-button sticky"}
-                    onClick={this.handleNucleusColorClick} data-test="color">
-              <svg className={"icon"}>
-                <use xlinkHref={`#icon-${ row.nucleusColored ? "decolor" : "color" }`} />
-              </svg>
-              <div className="label">{ row.nucleusColored ? "Decolor" : "Color" }</div>
-            </button>
-            <button className={"organism-button sticky"}
+            <button className={"organism-button sticky" + this.getNucleusButtonClass()}
                     onClick={this.handleNucleusCondenseClick} data-test="condense">
               <svg className={"icon"}>
-                <use xlinkHref={`#icon-${ row.nucleusCondensed ? "expand" : "condense" }`} />
+                <use xlinkHref={`#icon-${ nucleusCondensed ? "expand" : "condense" }`} />
               </svg>
-              <div className="label">{ row.nucleusCondensed ? "Expand" : "Condense" }</div>
+              <div className="label">{ nucleusCondensed ? "Expand" : "Condense" }</div>
             </button>
-            <button className={"organism-button sticky disabled"} data-test="collect-dna">
+
+            <button className={"organism-button sticky" + this.getNucleusButtonClass("condensed")}
+                    onClick={this.handleNucleusPairClick} data-test="color">
               <svg className={"icon"}>
-                <use xlinkHref="#icon-collect-dna" />
+                <use xlinkHref={`#icon-${ nucleusPaired ? "unpair" : "pair" }`} />
               </svg>
-              <div className="label">Collect</div>
+              <div className="label">{ nucleusPaired ? "Unpair" : "Pair" }</div>
             </button>
+
+            <button className={"organism-button sticky" + this.getNucleusButtonClass("condensed", "inspect")}
+                onClick={this.handleInspectClick}  data-test="inspect-dna">
+              <svg className={"icon"}>
+                <use xlinkHref="#icon-inspect-dna" />
+              </svg>
+              <div className="label">Inspect</div>
+            </button>
+
+            <label className={"organism-check" + this.getNucleusButtonClass()}>
+              <input
+                      type="checkbox"
+                      checked={row.nucleusColored}
+                      onChange={this.handleNucleusColorClick} data-test="color"
+              />
+              <span className="label">Color</span>
+            </label>
           </React.Fragment>
         }
       </div>
@@ -126,6 +141,20 @@ export class ManipulationControls extends BaseComponent<IProps, IState> {
     const row = this.getControlsRow();
     const disabledClass = enabledZooms.indexOf(row.zoomLevel) === -1 ? " disabled" : "";
     return disabledClass;
+  }
+
+  private getNucleusButtonClass = (state?: string, buttonMode?: ModeType) => {
+    const row = this.getControlsRow();
+    const nucleusCondensed = row.nucleusState !== "expanded";
+    if (this.props.disableNucleusControls) {
+      return " disabled";
+    } else if (state && state === "condensed" && !nucleusCondensed) {
+      return " disabled";
+    }
+
+    const activeClass = row.mode === buttonMode ? " active" : "";
+
+    return activeClass;
   }
 
   private getControlsRow = () => {
@@ -170,12 +199,20 @@ export class ManipulationControls extends BaseComponent<IProps, IState> {
   }
 
   private handleNucleusColorClick = () => {
+    if (this.props.disableNucleusControls) return;
     const row = this.getControlsRow();
     row.toggleNucleusColor();
   }
 
   private handleNucleusCondenseClick = () => {
+    if (this.props.disableNucleusControls) return;
     const row = this.getControlsRow();
     row.toggleNucleusCondense();
+  }
+
+  private handleNucleusPairClick = () => {
+    if (this.props.disableNucleusControls) return;
+    const row = this.getControlsRow();
+    row.toggleNucleusPair();
   }
 }

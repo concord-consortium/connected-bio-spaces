@@ -122,6 +122,23 @@
       .icon
         fill: $color-white
 
+  .organism-check
+    display: flex
+    align-items: center
+    width: 63px
+    height: 20px
+    margin: 24px 0 0 10px
+    color: $color-simdata-carrot-dark2
+    font-size: 12px
+
+    &.disabled
+      opacity: .5
+
+  .cell-zoom-panel
+    &.inspect
+      svg
+        cursor: url('../../../assets/cell-zoom/inspect-proteins-cursor.png') 0 0, auto
+
 /* -fail- */
 @-webkit-keyframes fade
   from {opacity: 0}

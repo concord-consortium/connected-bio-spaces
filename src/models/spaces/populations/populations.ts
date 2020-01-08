@@ -106,6 +106,9 @@ export const PopulationsModel = types
         close() {
           self.model.interactive.stop();
           self.model.destroyInteractive();
+        },
+        setupGraph() {
+          self.model.setupGraph();
         }
       }
     };

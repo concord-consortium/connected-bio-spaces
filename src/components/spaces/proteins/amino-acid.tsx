@@ -37,18 +37,24 @@ interface AminoAcidProps {
   width?: number;
   x?: number;
   y?: number;
-  dimmed?: boolean;
+  marked?: boolean;
 }
 
 const AminoAcid: React.StatelessComponent<AminoAcidProps> = props => {
-  const {type, width, x, y, dimmed} = props;
+  const {type, width, x, y, marked} = props;
   const scale = width! / originalWidth;
   const transform = `
     scale(${scale})
     translate(${x! / scale}, ${y! / scale})
   `;
+  const outlineColor = marked ? "#FF0" : "#ffd9c088";
   return (
-    <g style={{opacity: dimmed ? 0.4 : 1}} transform={transform}>
+    <g transform={transform}>
+      <circle id="AA outline"
+        cx={originalWidth / 2}
+        cy={originalWidth / 2}
+        r={(originalWidth / 2) + 10}
+        style={{fill: outlineColor}} />
       <circle id="AA back" data-name="AA back"
         cx={originalWidth / 2}
         cy={originalWidth / 2}
@@ -64,8 +70,7 @@ const AminoAcid: React.StatelessComponent<AminoAcidProps> = props => {
 AminoAcid.defaultProps = {
   width: 18,
   x: 0,
-  y: 0,
-  dimmed: false
+  y: 0
 };
 
 export default AminoAcid;

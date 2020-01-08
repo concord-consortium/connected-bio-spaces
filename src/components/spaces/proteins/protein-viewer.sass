@@ -1,12 +1,30 @@
 .protein-viewer
   display: flex
   position: initial !important
-  height: 100%
 
 .proteins-and-sliders
   display: flex
   flex-direction: column
   justify-content: space-between
+
+  .mark
+    position: absolute
+    top: 124px
+    left: 44%
+    width: 40px
+    text-align: center
+    z-index: 2
+    color: #434e56
+    font-size: 11px
+    font-weight: 400
+    font-style: oblique
+
+  .amino-acids-scrubber
+    margin-top: 6px
+
+    .line-chart-controls
+      width: 93%
+      margin-left: 3%
 
 .proteins
   display: flex
@@ -21,31 +39,6 @@
     position: relative
 
 .info-and-options
-  font-size: 0.8em;
-
-  .options
-    position: absolute
-    bottom: 5px
-    display: flex
-    flex-direction: column
-    align-items: flex-start
-
-  .info-box-wrapper
-    right: 230px
-    bottom: 230px
-
-@media screen and (max-height: 570px)
-  .info-and-options
-    font-size: 2.5vh
-
-    .info
-      padding: 0.5vh
-
-    .info > div
-      padding: 0.5vh
-
-    .info>svg
-      width: 4vh
-
-    .options > label
-      margin-bottom: -3px
+  font-size: 0.8em
+  position: absolute
+  left: 45%

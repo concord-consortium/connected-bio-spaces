@@ -1,4 +1,10 @@
 # Changelog
+## Version 1.0.9 - released Jan 7, 2020
+
+- Updated protein viewer
+- Created nucleus zoom level
+- Fixed various Chart.js bugs caused by latest version
+
 ## Version 1.0.8 - released November 13, 2019
 
 - Fix bug caused by Chrome no longer performing calculations on hidden SVGs

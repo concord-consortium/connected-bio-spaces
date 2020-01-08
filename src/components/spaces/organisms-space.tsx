@@ -13,6 +13,7 @@ import { kOrganelleInfo } from "../../models/spaces/organisms/organisms-space";
 import { extractCodons } from "./proteins/util/dna-utils";
 import { getAminoAcidsFromCodons } from "./proteins/util/amino-acid-utils";
 import { CollectButtonComponent } from "../collect-button";
+import ChromosomeViewer from "./organisms/chromosome-viewer";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -53,9 +54,9 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
     organisms.setProteinSliderStartPercent(percent);
   }
 
-  private handleUpdateSelectedAminoAcidIndex = (selectedAminoAcidIndex: number, selectedAminoAcidXLocation: number) => {
+  private handleUpdateSelectedAminoAcidIndex = (selectedAminoAcidIndex: number) => {
     const { organisms } = this.stores;
-    organisms.setProteinSliderSelectedAminoAcidIndex(selectedAminoAcidIndex, selectedAminoAcidXLocation);
+    organisms.setProteinSliderSelectedAminoAcidIndex(Math.round(selectedAminoAcidIndex));
   }
 
   private toggleShowInfoBox = () => {
@@ -66,15 +67,13 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
   private getOrganismsRow(rowIndex: number) {
     const { backpack, organisms } = this.stores;
     const { activeMouse } = backpack;
-    const { proteinSliderStartPercent, proteinSliderSelectedAminoAcidIndex,
-      proteinSliderSelectedAminoAcidXLocation, showProteinInfoBox } = organisms;
+    const { proteinSliderSelectedAminoAcidIndex, showProteinInfoBox } = organisms;
     const row = organisms.rows[rowIndex];
     const { organismsMouse } = row;
     const { currentData, selectedOrganelle,
       showProteinAminoAcidsOnProtein, showProteinDNA,
-      rightPanel } = row;
+      rightPanel, selectedChromosome } = row;
 
-    let aminoAcidBoxAlert = false;
     if (selectedOrganelle && kOrganelleInfo[selectedOrganelle].protein) {
       const otherRow = organisms.rows[rowIndex ? 0 : 1];
       if (otherRow.selectedOrganelle && kOrganelleInfo[otherRow.selectedOrganelle].protein) {
@@ -85,11 +84,10 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
         const codons2 = extractCodons(protein2!.dna);
         const aminoAcids1 = getAminoAcidsFromCodons(codons1);
         const aminoAcids2 = getAminoAcidsFromCodons(codons2);
-        if (aminoAcids1[proteinSliderSelectedAminoAcidIndex] !== aminoAcids2[proteinSliderSelectedAminoAcidIndex]) {
-          aminoAcidBoxAlert = true;
-        }
       }
     }
+
+    const zoomLevel = row.zoomLevel;
 
     const rightPanelContent = (() => {
       switch (rightPanel) {
@@ -103,31 +101,63 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
             isPlaying={false} />;
         case "information":
         default:
-          if (selectedOrganelle && kOrganelleInfo[selectedOrganelle].protein) {
-            return <ProteinViewer
+          if (zoomLevel === "receptor") {
+            if (selectedOrganelle && kOrganelleInfo[selectedOrganelle].protein) {
+              return <ProteinViewer
               protein={kOrganelleInfo[selectedOrganelle].protein!}
-              selectionStartPercent={proteinSliderStartPercent}
               selectedAminoAcidIndex={proteinSliderSelectedAminoAcidIndex}
-              selectedAminoAcidXLocation={proteinSliderSelectedAminoAcidXLocation}
               showInfoBox={showProteinInfoBox}
               showAminoAcidsOnProtein={showProteinAminoAcidsOnProtein}
               showDNA={showProteinDNA}
-              dnaSwitchable={true}
               toggleShowDNA={this.toggleShowDNA(rowIndex)}
               toggleShowingAminoAcidsOnProtein={this.toggleShowingAminoAcidsOnViewer(rowIndex)}
-              setSelectStartPercent={this.handleSetSelectStartPercent}
               setSelectedAminoAcidIndex={this.handleUpdateSelectedAminoAcidIndex}
               toggleShowInfoBox={this.toggleShowInfoBox}
-              infoBoxAlert={aminoAcidBoxAlert}
             />;
+            } else {
+              return (
+                <div>
+                  Find and inspect a protein to view it here.
+                </div>);
+            }
+          } else if (zoomLevel === "nucleus") {
+            if (organismsMouse && selectedChromosome) {
+              return <ChromosomeViewer
+                genotype={organismsMouse.backpackMouse.genotype}
+                chromosome={selectedChromosome}
+                colored={row.nucleusColored}
+              />;
+            } else {
+              return (
+                <div>
+                  Find and inspect a chromosome to view it here.
+                </div>);
+            }
           } else {
             return (
-              <div>
-                Find and inspect a protein to view it here.
-              </div>);
+              <div>You'll need to zoom in deeper to find something to inspect</div>);
           }
       }
     })();
+
+    const buttons = [];
+    if (selectedOrganelle && kOrganelleInfo[selectedOrganelle].protein) {
+      buttons.push({
+        title: "DNA",
+        type: "checkbox",
+        value: row.showProteinDNA,
+        action: (val: boolean) => row.setShowProteinDNA(val),
+        section: "information"
+      });
+
+      buttons.push({
+        title: "Amino Acids on Protein",
+        type: "checkbox",
+        value: row.showProteinAminoAcidsOnProtein,
+        action: (val: boolean) => row.setShowProteinAminoAcidsOnProtein(val),
+        section: "information"
+      });
+    }
 
     return (
       <div className="fullwidth">
@@ -147,6 +177,7 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
           onClickRightIcon={this.setRightPanel(rowIndex)}
           spaceClass="organism"
           rowNumber={rowIndex}
+          rightPanelButtons={buttons}
         />
       </div>
     );

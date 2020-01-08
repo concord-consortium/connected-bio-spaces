@@ -21,9 +21,9 @@ describe("chart annotations", () => {
       label: {
         content: "Test",
         enabled: true,
-        position: "top",
+        position: "bottom",
         xAdjust: 0,
-        yAdjust: 0,
+        yAdjust: 305,
         backgroundColor: "rgba(0,0,0,0.8)",
         fontColor: "white"
       },
@@ -53,7 +53,7 @@ describe("chart annotations", () => {
         enabled: true,
         position: "right",
         xAdjust: 10,
-        yAdjust: 0,
+        yAdjust: 305,
         backgroundColor: "rgba(0,0,0,0.8)",
         fontColor: "white"
       },
@@ -102,7 +102,7 @@ describe("chart annotations", () => {
       scaleID: "x-axis-0",
       value: 20,
       label: {
-        position: "top"
+        position: "bottom"
       },
       borderColor: "red",
       borderWidth: 2
