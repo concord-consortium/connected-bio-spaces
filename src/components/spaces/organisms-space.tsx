@@ -151,7 +151,7 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
       });
 
       buttons.push({
-        title: "Amino Acids on Protein",
+        title: "Amino acids on protein",
         type: "checkbox",
         value: row.showProteinAminoAcidsOnProtein,
         action: (val: boolean) => row.setShowProteinAminoAcidsOnProtein(val),
