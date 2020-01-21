@@ -265,6 +265,36 @@
         color: white
 
 
+  .breeding
+    .checkmark
+      background-color: $color-simdata-brick-light2
+
+    /* On mouse-over, add a background color */
+    .check-container:hover input ~ .checkmark
+      background-color: $color-simdata-brick-light1
+
+    /* On mouse-down, add a background color */
+    .check-container:active input ~ .checkmark
+      background-color: $color-simdata-brick-dark1
+
+    /* checkbox is checked */
+    .check-container input:checked ~ .checkmark
+      background-color: $color-simdata-brick-dark1
+
+    .check-container:hover input:checked ~ .checkmark
+      background-color: $color-simdata-brick-light1
+
+    .check-container:active input:checked ~ .checkmark
+      background-color: $color-simdata-brick-light2
+
+    .check-container
+      .label-holder .label
+        color: $color-simdata-brick-dark3
+
+    .check-container.checked
+      .label-holder .label
+        color: white
+
 .left-abutment
   margin-left: $two-up-margin
 

@@ -40,6 +40,16 @@ export const BackpackMouse = types
           return "assets/mouse_tan.png";
       }
     },
+    get nestImage(): string {
+      switch (self.genotype) {
+        case "RR":
+          return "assets/mouse_field_nest.png";
+        case "CC":
+          return "assets/mouse_beach_nest.png";
+        default:
+          return "assets/mouse_tan_nest.png";
+      }
+    },
     get zoomImage(): string {
       switch (self.genotype) {
         case "RR":

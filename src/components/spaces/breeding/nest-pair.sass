@@ -1,0 +1,198 @@
+@import "../../vars"
+
+.nest-pair
+  position: absolute
+  width: 170px
+  height: 90px
+  &:hover .pair-label.show
+    opacity: 100%
+  &:hover .nest-pair-background-hover.show
+    opacity: 100%
+  &:hover .nest-inspect.show
+    opacity: 75%
+  &.left-top
+    top: 30px
+  &.left-middle
+    top: 136px
+  &.left-bottom
+    top: 300px
+  &.right-top
+    top: 60px
+    left: 220px
+  &.right-middle
+    top: 208px
+    left: 162px
+  &.right-bottom
+    top: 330px
+    left: 224px
+  .nest-pair-background
+    position: absolute
+    height: 100px
+    &.left-top
+      height: 69px
+    &.left-middle
+      height: 76px
+    &.left-bottom
+      height: 79px
+    &.right-top
+      height: 77px
+    &.right-middle
+      height: 82px
+    &.right-bottom
+      height: 75px
+  .nest-pair-background-hover
+    position: absolute
+    height: 100px
+    opacity: 0
+    transition-duration: .25s
+    &.left-top
+      height: 69px
+    &.left-middle
+      height: 76px
+    &.left-bottom
+      height: 79px
+    &.right-top
+      height: 77px
+    &.right-middle
+      height: 82px
+    &.right-bottom
+      height: 75px
+  .nest-inspect
+    position: absolute
+    height: 80px
+    width: 150px
+    background-color: $color-simdata-brick-light1
+    opacity: 0%
+    border-radius: 40px
+    transition-duration: .25s
+    &.left-top
+      left: 16px
+      top: -6px
+      transform: rotate(0deg)
+    &.left-middle
+      left: 50px
+      top: 2px
+      transform: rotate(8deg)
+    &.left-bottom
+      left: 18px
+      top: 2px
+      transform: rotate(8deg)
+    &.right-top
+      left: 14px
+      top: 0px
+      transform: rotate(-8deg)
+    &.right-middle
+      left: 16px
+      top: 6px
+      transform: rotate(-8deg)
+    &.right-bottom
+      left: 20px
+      top: -4px
+      transform: rotate(-6deg)
+
+  .mouse
+    position: absolute
+    &:hover .selection-stack.show
+      opacity: 100%
+    &.left
+      &.left-top
+        top: 0px
+        left: 10px
+      &.left-middle
+        top: 0px
+        left: 50px
+      &.left-bottom
+        top: -6px
+        left: 16px
+      &.right-top
+        top: 4px
+        left: 20px
+      &.right-middle
+        top: 12px
+        left: 22px
+      &.right-bottom
+        top: 0px
+        left: 22px
+    &.right
+      &.left-top
+        top: -2px
+        left: 75px
+      &.left-middle
+        top: 6px
+        left: 116px
+      &.left-bottom
+        top: 8px
+        left: 80px
+      &.right-top
+        top: -8px
+        left: 82px
+      &.right-middle
+        top: 4px
+        left: 90px
+      &.right-bottom
+        top: -6px
+        left: 90px
+    .selection-stack
+      position: absolute
+      height: 80px
+      top: 0
+      left: 0
+      opacity: 0
+      transition-duration: .25s
+    .mouse-image
+      position: absolute
+      height: 56px
+      top: 8px
+      left: -18px
+      &.flip
+        transform: scaleX(-1)
+        left: 4px
+      &.outline
+        opacity: 0
+      &.show
+        opacity: 100%
+    .hetero-stack
+      position: absolute
+      height: 80px
+      top: 0
+      left: 0
+      opacity: 0
+      transition-duration: .25s
+      &.show
+        opacity: 100%
+    .sex-stack
+      position: absolute
+      height: 80px
+      top: 0
+      left: 0
+      opacity: 0
+      transition-duration: .25s
+      &.show
+        opacity: 100%
+  .pair-label
+    position: absolute
+    font-size: 14px
+    color: $color-black
+    opacity: 0
+    transition-duration: .25s
+    &.left-top
+      top: 76px
+      left: 60px
+    &.left-middle
+      color: $color-white
+      top: 80px
+      left: 80px
+    &.left-bottom
+      top: 80px
+      left: 44px
+    &.right-top
+      color: $color-white
+      top: 80px
+      left: 90px
+    &.right-middle
+      top: 85px
+      left: 90px
+    &.right-bottom
+      color: $color-white
+      top: 76px
+      left: 90px
