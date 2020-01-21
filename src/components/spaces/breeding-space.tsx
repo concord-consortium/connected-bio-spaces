@@ -4,7 +4,7 @@ import { BaseComponent, IBaseProps } from "../base";
 import { TwoUpDisplayComponent } from "../two-up-display";
 import { InstructionsComponent } from "../instructions";
 import { RightPanelType } from "../../models/ui";
-import { NestingContainer } from "./breeding/nesting-container";
+import { BreedingContainer } from "./breeding/breeding-container";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -22,7 +22,7 @@ export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
     return (
       <TwoUpDisplayComponent
         leftTitle="Explore: Nesting Pairs"
-        leftPanel={<NestingContainer />}
+        leftPanel={<BreedingContainer />}
         rightPanel={rightPanelContent}
         instructionsIconEnabled={true}
         dataIconEnabled={false}

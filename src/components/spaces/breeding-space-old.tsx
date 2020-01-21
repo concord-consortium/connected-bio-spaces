@@ -6,7 +6,7 @@ import { PopulationsComponent } from "./populations/populations-container";
 import { InstructionsComponent } from "../instructions";
 import { RightPanelType } from "../../models/ui";
 import { CollectButtonComponent } from "../collect-button";
-import { BreedingContainer } from "./breeding/breeding-container";
+import { BreedingContainerOld } from "./breeding/breeding-container-old";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -24,7 +24,7 @@ export class OldBreedingSpaceComponent extends BaseComponent<IProps, IState> {
     return (
       <TwoUpDisplayComponent
         leftTitle="Explore: Breeding"
-        leftPanel={<BreedingContainer />}
+        leftPanel={<BreedingContainerOld />}
         rightPanel={rightPanelContent}
         instructionsIconEnabled={true}
         dataIconEnabled={false}

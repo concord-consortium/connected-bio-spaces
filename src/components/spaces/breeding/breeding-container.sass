@@ -1,77 +1,222 @@
 @import "../../vars"
 
-.breeding-container
-  width: 100%
-  display: grid
-  grid-template-columns: [mother] 30% [center] 1fr [father] 30%
-  grid-template-rows: [top] 440px [bottom] 1fr
+.nesting-container
+  cursor: auto
+  &.select
+    cursor: url('../../../assets/collect-cursor.png') 27 20, auto
+  &.inspect
+    cursor: url('../../../assets/inspect-cursor-nests.png') 6 5, auto
+  &.breed
+    cursor: url('../../../assets/breed-cursor.png') 6 3, auto
 
-  div
+.nesting-toolbar
+  height: 100px
+  display: flex
+  flex-direction: column
+  justify-content: center
+  width: 100%
+  position: absolute
+  bottom: 0px
+  background-color: $color-simdata-brick
+  border-style: solid
+  border-color: white
+  border-width: 2px 0 0 0
+  transform: translate3d(0px, 0px, 0px)  // needed to keep visibility after scaling
+
+.toolbar-row
+  display: flex
+  flex-direction: row
+  width: 100%
+  justify-content: center
+  &.align-left
+    justify-content: left
+
+  .nesting-checkbox
+    height: 20px
+    width: 20px
+    background: $color-simdata-brick-light2
+
+  .nesting-button
     display: flex
     flex-direction: column
-    align-items: center
     justify-content: center
-
-  .parent
-    margin: 3px
-    background-color: $color-simdata-brick-light3
-    border: 2px solid $color-simdata-brick-light1
-    border-radius: 10px
-    grid-row-start: top
-
-  .mother
-    grid-column-start: mother
-
-  .father
-    grid-column-start: father
-
-  .breed-button
-    grid-column-start: center
-    grid-row-start: top
-
-    &.gametes
-      padding-top: 10px
-      justify-content: start
-
-  .litter
-    grid-column-start: mother
-    grid-column-end: span 3
-    grid-row-start: bottom
-    height: 85px
-    margin: 3px
-    border: 2px solid black
-    border-radius: 10px
-    flex-direction: row
-    overflow: hidden
-
-  .gamete-container
-    grid-column-start: center
-    grid-row-start: top
-    display: flex
-    flex-direction: row
-    justify-content: space-between
-    align-items: start
-    padding-top: 165px
-    padding-left: 20px
-    padding-right: 20px
-
-
-  .offspring
-    grid-column-start: center
-    grid-row-start: top
-    padding-top: 42px
-
-
-  .button-holder
-    width: 120px
-    margin: 0 2px
-    border-radius: 13px
-    background-color: $color-simdata-brick-light1
-    color: $color-white
-    font-size: 15px
-    &:hover:not(.disabled):not(.active)
-      background-color: $color-simdata-brick
-    &:active:not(.disabled), &.active
+    align-items: center
+    height: 50px
+    width: 52px
+    margin: 6px
+    border: none
+    outline: none
+    border-radius: $component-border-radius
+    font-size: $font-size-label1
+    font-family: $font-stack
+    color: $color-simdata-brick-dark2
+    background-color: $color-simdata-brick-light2
+    cursor: pointer
+    transition-duration: $fade-time
+    &.breed, &.gametes
+      width: 62px
       background-color: $color-simdata-brick-dark1
-      &:hover
-        background-color: $color-simdata-brick-dark2
+      color: $color-simdata-brick-light3
+    &.gametes
+      width: 95px
+
+    &.sticky
+      color: $color-white
+      background-color: $color-simdata-brick-dark1
+
+    &.sticky-alt
+      color: $color-white
+      background-color: $color-nav-cerulean-dark1
+
+    &.disabled
+      opacity: .5
+      pointer-events: none
+
+    .icon
+      width: 44px
+      height: 28px
+      fill: $color-simdata-brick
+
+      &.sticky
+        fill: $color-white
+
+      &.sticky-alt
+        fill: $color-white
+
+      &.disabled
+        opacity: .5
+
+    .horizontal-container
+      display: flex
+      flex-direction: row
+
+    .inner-box
+      background-color: $color-simdata-brick-light2
+      border-radius: $component-border-radius * 3
+      height: 28px
+      width: 54px
+      &.left
+        width: 42px
+        height: 28px
+        margin-right: 1px
+        border-radius: $component-border-radius * 3 0 0 $component-border-radius * 3
+        .icon
+          width: 12px
+          height: 12px
+          margin: 0
+      &.right
+        width: 42px
+        height: 28px
+        margin-left: 1px
+        border-radius: 0 $component-border-radius * 3 $component-border-radius * 3 0
+        .icon
+          width: 12px
+          height: 12px
+          margin: 0
+      .label
+        font-size: 10px
+        margin: 0
+        color: $color-simdata-brick
+      .icon
+        width: 20px
+
+    .label
+      margin-top: $internal-component-margin
+      margin-bottom: $internal-component-margin
+
+    &.sticky-breed
+      .inner-box
+        background-color: $color-nav-shamrock-dark1
+      .icon
+        fill: $color-white
+
+
+  /* hover and mousedown states */
+
+  .nesting-button:active .icon
+    fill: $color-white
+
+  .nesting-button:hover .inner-box
+    background-color: $color-simdata-brick-light1
+
+  .nesting-button:active .inner-box
+    background-color: $color-nav-shamrock-dark1
+
+  /* hover and mousedown states of green sticky button */
+  .nesting-button.sticky-breed:hover .inner-box
+    background-color: $color-nav-shamrock-light1
+
+  .nesting-button.sticky-breed:active .inner-box
+    background-color: $color-nav-shamrock-light2
+
+  .nesting-button.sticky-breed:active .icon
+    fill: $color-nav-shamrock
+
+  /* hover and mousedown states of red sticky button */
+  .nesting-button.sticky-off:hover
+    background-color: $color-simdata-brick-light1
+
+  .nesting-button.sticky-off:active
+    color: $color-white
+    background-color: $color-simdata-brick-dark1
+
+  .nesting-button.sticky:hover
+    background-color: $color-simdata-brick-light1
+
+  .nesting-button.sticky:active
+    color: $color-simdata-brick-dark2
+    background-color: $color-simdata-brick-light2
+
+  .nesting-button:active .icon.sticky
+    fill: $color-simdata-brick
+
+  /* hover and mousedown states of blue sticky button */
+  .nesting-button.sticky-alt-off:hover
+    background-color: $color-simdata-brick-light1
+
+  .nesting-button.sticky-alt:hover
+    background-color: $color-nav-cerulean-light1
+
+  .nesting-button.sticky-alt:active
+    color: $color-nav-cerulean-dark2
+    background-color: $color-nav-cerulean-light2
+
+  .nesting-button:active .icon.sticky-alt
+    fill: $color-nav-cerulean
+
+  .nesting-button.sticky-alt-off:active
+    color: $color-white
+    background-color: $color-nav-cerulean-dark1
+
+  .nesting-button:active .icon.sticky-alt-off
+    fill: $color-white
+
+
+.label-holder
+  display: flex
+  flex-direction: column
+  justify-content: center
+  height: 22px
+
+  .label
+    display: flex
+    align-items: center
+    font-size: $font-size-label1
+    color: $color-simdata-brick-dark2
+
+.circle
+  height: 6px
+  width: 6px
+  border-radius: 3px
+  margin-left: 3px
+  margin-top: 3px
+  border: 1px solid white
+
+  &.male
+    background-color: $color-key-red
+
+  &.female
+    background-color: $color-key-yellow
+
+  &.heterozygote
+    background-color: $color-key-blue
