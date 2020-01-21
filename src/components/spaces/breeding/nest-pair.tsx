@@ -52,7 +52,7 @@ export class NestPair extends BaseComponent<IProps, IState> {
     const leftHeteroClass = "hetero-stack " + ((showHeteroStack && leftMouse.isHeterozygote) ? "show" : "");
     const rightHeteroClass = "hetero-stack " + ((showHeteroStack && rightMouse.isHeterozygote) ? "show" : "");
     const nestBackgroundHoverClass = `nest-pair-background-hover ${positionClass} ` + (showNestHighlight ? "show" : "");
-    const pairLabelClass = "pair-label " + ((showNestHighlight || showPairHighlight) ? "show" : "");
+    const pairLabelClass = `pair-label ${positionClass} ` + ((showNestHighlight || showPairHighlight) ? "show" : "");
     const nestInspectClass = `nest-inspect ${positionClass} ` + (showPairHighlight ? "show" : "");
     const rightMouseOutlineClass = `mouse-image outline flip ` + (rightMouseCollected ? "show" : "");
     const leftMouseOutlineClass = `mouse-image outline ` + (leftMouseCollected ? "show" : "");

@@ -67,7 +67,7 @@
     transition-duration: .25s
     &.left-top
       left: 16px
-      top: 0px
+      top: -6px
       transform: rotate(0deg)
     &.left-middle
       left: 50px
@@ -171,9 +171,28 @@
         opacity: 100%
   .pair-label
     position: absolute
-    top: 80px
-    left: 60px
     font-size: 14px
     color: $color-black
     opacity: 0
     transition-duration: .25s
+    &.left-top
+      top: 76px
+      left: 60px
+    &.left-middle
+      color: $color-white
+      top: 80px
+      left: 80px
+    &.left-bottom
+      top: 80px
+      left: 44px
+    &.right-top
+      color: $color-white
+      top: 80px
+      left: 90px
+    &.right-middle
+      top: 85px
+      left: 90px
+    &.right-bottom
+      color: $color-white
+      top: 76px
+      left: 90px
