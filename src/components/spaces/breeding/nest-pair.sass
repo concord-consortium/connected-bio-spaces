@@ -9,89 +9,87 @@
   &:hover .pair-label.show
     opacity: 100%
   &:hover .nest-pair-background-hover.show
-    opacity: 50%
+    opacity: 100%
   &:hover .nest-inspect.show
     opacity: 75%
   &.left-top
-    top: 60px
+    top: 30px
   &.left-middle
-    left: 120px
-    top: 220px
+    top: 136px
   &.left-bottom
-    top: 310px
+    top: 300px
   &.right-top
-    top: 10px
-    left: 210px
-  &.right-middle
-    top: 120px
-    left: 240px
-  &.right-bottom
-    top: 320px
+    top: 60px
     left: 220px
+  &.right-middle
+    top: 208px
+    left: 162px
+  &.right-bottom
+    top: 330px
+    left: 224px
   .nest-pair-background
     position: absolute
     height: 100px
-    opacity: 60%
     &.left-top
-      height: 100px
+      height: 69px
     &.left-middle
-      height: 95px
+      height: 76px
     &.left-bottom
-      height: 113px
+      height: 79px
     &.right-top
-      height: 100px
+      height: 77px
     &.right-middle
-      height: 104px
+      height: 82px
     &.right-bottom
-      height: 106px
+      height: 75px
   .nest-pair-background-hover
     position: absolute
     height: 100px
     opacity: 0
     transition-duration: .25s
     &.left-top
-      height: 100px
+      height: 69px
     &.left-middle
-      height: 95px
+      height: 76px
     &.left-bottom
-      height: 113px
+      height: 79px
     &.right-top
-      height: 100px
+      height: 77px
     &.right-middle
-      height: 104px
+      height: 82px
     &.right-bottom
-      height: 106px
+      height: 75px
   .nest-inspect
     position: absolute
-    height: 70px
-    width: 140px
+    height: 80px
+    width: 150px
     background-color: $color-simdata-brick-light1
     opacity: 0%
     border-radius: 40px
     transition-duration: .25s
     &.left-top
-      left: 10px
-      top: 10px
-      transform: rotate(-8deg)
+      left: 16px
+      top: 0px
+      transform: rotate(0deg)
     &.left-middle
-      left: 10px
-      top: 15px
-      transform: rotate(-8deg)
+      left: 50px
+      top: 2px
+      transform: rotate(8deg)
     &.left-bottom
-      left: 30px
-      top: 20px
+      left: 18px
+      top: 2px
       transform: rotate(8deg)
     &.right-top
-      left: 10px
-      top: 20px
-      transform: rotate(0deg)
+      left: 14px
+      top: 0px
+      transform: rotate(-8deg)
     &.right-middle
-      left: 10px
-      top: 20px
-      transform: rotate(8deg)
+      left: 16px
+      top: 6px
+      transform: rotate(-8deg)
     &.right-bottom
       left: 20px
-      top: 20px
+      top: -4px
       transform: rotate(-6deg)
 
   .mouse
@@ -100,42 +98,42 @@
       opacity: 100%
     &.left
       &.left-top
-        top: 13px
+        top: 0px
         left: 10px
       &.left-middle
-        top: 15px
-        left: 10px
+        top: 0px
+        left: 50px
       &.left-bottom
-        top: 11px
-        left: 30px
+        top: -6px
+        left: 16px
       &.right-top
-        top: 17px
-        left: 10px
-      &.right-middle
-        top: 15px
-        left: 10px
-      &.right-bottom
-        top: 20px
+        top: 4px
         left: 20px
+      &.right-middle
+        top: 12px
+        left: 22px
+      &.right-bottom
+        top: 0px
+        left: 22px
     &.right
       &.left-top
-        top: 7px
+        top: -2px
         left: 75px
       &.left-middle
-        top: 10px
-        left: 75px
+        top: 6px
+        left: 116px
       &.left-bottom
-        top: 17px
-        left: 95px
+        top: 8px
+        left: 80px
       &.right-top
-        top: 17px
-        left: 75px
+        top: -8px
+        left: 82px
       &.right-middle
-        top: 20px
-        left: 75px
+        top: 4px
+        left: 90px
       &.right-bottom
-        top: 15px
-        left: 85px
+        top: -6px
+        left: 90px
     .selection-stack
       position: absolute
       height: 80px
@@ -175,9 +173,9 @@
         opacity: 100%
   .pair-label
     position: absolute
-    top: 90px
-    left: 50px
+    top: 80px
+    left: 60px
     font-size: 14px
-    color: white
+    color: $color-black
     opacity: 0
     transition-duration: .25s
