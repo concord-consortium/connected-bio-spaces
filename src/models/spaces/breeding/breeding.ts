@@ -2,9 +2,32 @@ import { types, Instance } from "mobx-state-tree";
 import { RightPanelTypeEnum } from "../../ui";
 import { BackpackMouse, BackpackMouseType } from "../../backpack-mouse";
 import { breed, createGamete, fertilize } from "../../../utilities/genetics";
+import { ToolbarButton } from "../populations/populations";
+import uuid = require("uuid");
 
 export const BreedingTypeEnum = types.enumeration("type", ["litter", "singleGamete"]);
 export type BreedingType = typeof BreedingTypeEnum.Type;
+
+const BreedingInteractionModeEnum = types.enumeration("interaction", ["none", "breed", "select", "inspect"]);
+export type BreedingInteractionModeType = typeof BreedingInteractionModeEnum.Type;
+
+const NestPair = types.model({
+  id: types.optional(types.identifier, () => uuid()),
+  leftMouse: BackpackMouse,
+  rightMouse: BackpackMouse,
+  leftMouseBackpackId: types.maybe(types.string),
+  rightMouseBackpackId: types.maybe(types.string),
+  label: types.string
+})
+.actions(self => ({
+  setLeftMouseBackpackId(id: string) {
+    self.leftMouseBackpackId = id;
+  },
+  setRightMouseBackpackId(id: string) {
+    self.rightMouseBackpackId = id;
+  },
+}));
+export type INestPair = Instance<typeof NestPair>;
 
 export const BreedingModel = types
   .model("Breeding", {
@@ -17,7 +40,12 @@ export const BreedingModel = types
     motherGamete: types.maybe(types.string),
     fatherGamete: types.maybe(types.string),
     rightPanel: types.optional(RightPanelTypeEnum, "instructions"),
-    instructions: ""
+    instructions: "",
+    showSexStack: false,
+    showHeteroStack: false,
+    interactionMode: types.optional(BreedingInteractionModeEnum, "none"),
+    nestPairs: types.array(NestPair),
+    inspectedNestPairId: types.maybe(types.string)
   })
   .actions(self => ({
     activeBackpackMouseUpdated(backpackMouse: BackpackMouseType) {
@@ -71,7 +99,69 @@ export const BreedingModel = types
 
       self.motherGamete = undefined;
       self.fatherGamete = undefined;
-    }
-  }));
+    },
+
+    setShowSexStack(show: boolean) {
+      self.showSexStack = show;
+    },
+
+    setShowHeteroStack(show: boolean) {
+      self.showHeteroStack = show;
+    },
+
+    toggleInteractionMode(mode: "select" | "inspect" | "breed") {
+      if (self.interactionMode === mode) {
+        self.interactionMode = "none";
+      } else {
+        self.interactionMode = mode;
+      }
+    },
+
+    setNestPairLeftMouseBackpackId(nestPairId: string, backpackId: string) {
+      const nestPair = self.nestPairs.find(pair => pair.id === nestPairId);
+      if (nestPair) {
+        nestPair.setLeftMouseBackpackId(backpackId);
+      }
+    },
+    setNestPairRightMouseBackpackId(nestPairId: string, backpackId: string) {
+      const nestPair = self.nestPairs.find(pair => pair.id === nestPairId);
+      if (nestPair) {
+        nestPair.setRightMouseBackpackId(backpackId);
+      }
+    },
+
+    setInspectedNest(nestPairId: string) {
+      self.inspectedNestPairId = nestPairId;
+    },
+  }))
+  .views((self) => {
+    return {
+      get toolbarButtons(): ToolbarButton[] {
+        const buttons = [];
+        buttons.push({
+          title: "Females",
+          imageClass: "circle female",
+          secondaryTitle: "Males",
+          secondaryTitleImageClass: "circle male",
+          type: "checkbox",
+          value: self.showSexStack,
+          action: (val: boolean) => {
+            self.setShowSexStack(val);
+          }
+        });
+
+        buttons.push({
+          title: "Heterozygotes",
+          imageClass: "circle heterozygote",
+          type: "checkbox",
+          value: self.showHeteroStack,
+          action: (val: boolean) => {
+            self.setShowHeteroStack(val);
+          }
+        });
+        return buttons;
+      },
+    };
+  });
 
 export type BreedingModelType = Instance<typeof BreedingModel>;

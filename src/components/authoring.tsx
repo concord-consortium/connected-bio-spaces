@@ -65,9 +65,16 @@ export const defaultAuthoring: ConnectedBioAuthoring = {
   },
   breeding: {
     instructions: "",
-    breedingType: "litter"
+    breedingType: "litter",
+    nestPairs: [
+      {leftMouse: {sex: "male", genotype: "RC"}, rightMouse: {sex: "female", genotype: "RR"}, label: "Pair 1"},
+      {leftMouse: {sex: "male", genotype: "CC"}, rightMouse: {sex: "female", genotype: "RR"}, label: "Pair 2"},
+      {leftMouse: {sex: "male", genotype: "CC"}, rightMouse: {sex: "female", genotype: "CC"}, label: "Pair 3"},
+      {leftMouse: {sex: "male", genotype: "RR"}, rightMouse: {sex: "female", genotype: "RR"}, label: "Pair 4"},
+      {leftMouse: {sex: "male", genotype: "RC"}, rightMouse: {sex: "female", genotype: "RC"}, label: "Pair 5"},
+      {leftMouse: {sex: "male", genotype: "CC"}, rightMouse: {sex: "female", genotype: "RC"}, label: "Pair 6"},
+    ]
   }
-
 };
 
 const uiSchema = {

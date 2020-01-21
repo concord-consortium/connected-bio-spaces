@@ -2,16 +2,18 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { BaseComponent, IBaseProps } from "../base";
 import { TwoUpDisplayComponent } from "../two-up-display";
+import { PopulationsComponent } from "./populations/populations-container";
 import { InstructionsComponent } from "../instructions";
 import { RightPanelType } from "../../models/ui";
-import { NestingContainer } from "./breeding/nesting-container";
+import { CollectButtonComponent } from "../collect-button";
+import { BreedingContainer } from "./breeding/breeding-container";
 
 interface IProps extends IBaseProps {}
 interface IState {}
 
 @inject("stores")
 @observer
-export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
+export class OldBreedingSpaceComponent extends BaseComponent<IProps, IState> {
 
   public render() {
     const { breeding } = this.stores;
@@ -21,8 +23,8 @@ export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
 
     return (
       <TwoUpDisplayComponent
-        leftTitle="Explore: Nesting Pairs"
-        leftPanel={<NestingContainer />}
+        leftTitle="Explore: Breeding"
+        leftPanel={<BreedingContainer />}
         rightPanel={rightPanelContent}
         instructionsIconEnabled={true}
         dataIconEnabled={false}
@@ -38,4 +40,5 @@ export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
     const { populations } = this.stores;
     populations.setRightPanel(panelType);
   }
+
 }
