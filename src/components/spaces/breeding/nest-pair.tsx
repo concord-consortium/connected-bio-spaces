@@ -122,17 +122,17 @@ export class NestPair extends BaseComponent<IProps, IState> {
   private getNestImage = () => {
     switch (this.props.positionIndex) {
       case 2:
-        return "../../../assets/curriculum/mouse/breeding/nesting/left-top.png";
+        return "assets/curriculum/mouse/breeding/nesting/left-top.png";
       case 4:
-        return "../../../assets/curriculum/mouse/breeding/nesting/left-middle.png";
+        return "assets/curriculum/mouse/breeding/nesting/left-middle.png";
       case 5:
-        return "../../../assets/curriculum/mouse/breeding/nesting/left-bottom.png";
+        return "assets/curriculum/mouse/breeding/nesting/left-bottom.png";
       case 1:
-        return "../../../assets/curriculum/mouse/breeding/nesting/right-top.png";
+        return "assets/curriculum/mouse/breeding/nesting/right-top.png";
       case 3:
-        return "../../../assets/curriculum/mouse/breeding/nesting/right-middle.png";
+        return "assets/curriculum/mouse/breeding/nesting/right-middle.png";
       case 6:
-        return "../../../assets/curriculum/mouse/breeding/nesting/right-bottom.png";
+        return "assets/curriculum/mouse/breeding/nesting/right-bottom.png";
       default:
         return "";
     }
@@ -141,17 +141,17 @@ export class NestPair extends BaseComponent<IProps, IState> {
   private getNestHoverImage = () => {
     switch (this.props.positionIndex) {
       case 2:
-        return "../../../assets/curriculum/mouse/breeding/nesting/left-top-hover.png";
+        return "assets/curriculum/mouse/breeding/nesting/left-top-hover.png";
       case 4:
-        return "../../../assets/curriculum/mouse/breeding/nesting/left-middle-hover.png";
+        return "assets/curriculum/mouse/breeding/nesting/left-middle-hover.png";
       case 5:
-        return "../../../assets/curriculum/mouse/breeding/nesting/left-bottom-hover.png";
+        return "assets/curriculum/mouse/breeding/nesting/left-bottom-hover.png";
       case 1:
-        return "../../../assets/curriculum/mouse/breeding/nesting/right-top-hover.png";
+        return "assets/curriculum/mouse/breeding/nesting/right-top-hover.png";
       case 3:
-        return "../../../assets/curriculum/mouse/breeding/nesting/right-middle-hover.png";
+        return "assets/curriculum/mouse/breeding/nesting/right-middle-hover.png";
       case 6:
-        return "../../../assets/curriculum/mouse/breeding/nesting/right-bottom-hover.png";
+        return "assets/curriculum/mouse/breeding/nesting/right-bottom-hover.png";
       default:
         return "";
     }

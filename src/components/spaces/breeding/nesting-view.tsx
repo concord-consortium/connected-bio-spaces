@@ -33,7 +33,7 @@ export class NestingView extends BaseComponent<IProps, IState> {
       );
     });
 
-    const bgImage = "../../../assets/curriculum/mouse/populations/neutral.png";
+    const bgImage = "assets/curriculum/mouse/populations/neutral.png";
 
     return(
       <div className="nesting-view">
