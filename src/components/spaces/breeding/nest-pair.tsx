@@ -35,14 +35,14 @@ export class NestPair extends BaseComponent<IProps, IState> {
     const leftMouseImage = leftMouse.nestImage;
     const rightMouseImage = rightMouse.nestImage;
     const leftSexImage = leftMouse.sex === "female"
-                          ? "../../../assets/curriculum/mouse/populations/female-stack.png"
-                          : "../../../assets/curriculum/mouse/populations/male-stack.png";
+                          ? "assets/curriculum/mouse/populations/female-stack.png"
+                          : "assets/curriculum/mouse/populations/male-stack.png";
     const rightSexImage = rightMouse.sex === "female"
-                          ? "../../../assets/curriculum/mouse/populations/female-stack.png"
-                          : "../../../assets/curriculum/mouse/populations/male-stack.png";
-    const heteroImage = "../../../assets/curriculum/mouse/populations/heterozygous-stack.png";
-    const selectionImage = "../../../assets/curriculum/mouse/populations/select-stack.png";
-    const mouseOutlineImage = "../../../assets/curriculum/mouse/breeding/nesting/nest_mouse_outline.png";
+                          ? "assets/curriculum/mouse/populations/female-stack.png"
+                          : "assets/curriculum/mouse/populations/male-stack.png";
+    const heteroImage = "assets/curriculum/mouse/populations/heterozygous-stack.png";
+    const selectionImage = "assets/curriculum/mouse/populations/select-stack.png";
+    const mouseOutlineImage = "assets/curriculum/mouse/breeding/nesting/nest_mouse_outline.png";
     const nestClass = `nest-pair ${positionClass} ` + (showNestHighlight ? "selectable" : "");
     const rightSelectionClass = "selection-stack " +
                                 ((this.props.showSelectionStack && !rightMouseCollected) ? "show" : "");
