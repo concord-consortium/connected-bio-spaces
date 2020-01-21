@@ -29,6 +29,18 @@ const NestPair = types.model({
 }));
 export type INestPair = Instance<typeof NestPair>;
 
+export function createBreedingModel(breedingProps: any) {
+  breedingProps.nestPairs = [
+    {leftMouse: {sex: "male", genotype: "RC"}, rightMouse: {sex: "female", genotype: "RR"}, label: "Pair 1"},
+    {leftMouse: {sex: "male", genotype: "CC"}, rightMouse: {sex: "female", genotype: "RR"}, label: "Pair 2"},
+    {leftMouse: {sex: "male", genotype: "CC"}, rightMouse: {sex: "female", genotype: "CC"}, label: "Pair 3"},
+    {leftMouse: {sex: "male", genotype: "RR"}, rightMouse: {sex: "female", genotype: "RR"}, label: "Pair 4"},
+    {leftMouse: {sex: "male", genotype: "RC"}, rightMouse: {sex: "female", genotype: "RC"}, label: "Pair 5"},
+    {leftMouse: {sex: "male", genotype: "CC"}, rightMouse: {sex: "female", genotype: "RC"}, label: "Pair 6"},
+  ];
+  return BreedingModel.create(breedingProps);
+}
+
 export const BreedingModel = types
   .model("Breeding", {
     breedingType: types.optional(BreedingTypeEnum, "litter"),

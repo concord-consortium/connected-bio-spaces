@@ -10,7 +10,7 @@ import { OrganismsMouseModelType } from "./spaces/organisms/organisms-mouse";
 import { OrganismsRowModelType } from "./spaces/organisms/organisms-row";
 import { autorun } from "mobx";
 import { onAction } from "mobx-state-tree";
-import { BreedingModelType, BreedingModel } from "./spaces/breeding/breeding";
+import { BreedingModelType, createBreedingModel } from "./spaces/breeding/breeding";
 
 export type Curriculum = "mouse";
 
@@ -34,7 +34,7 @@ export function createStores(initialModel: ConnectedBioModelCreationType): IStor
   // since organisms and breeding may contain references to backpack mice, yet are in different trees,
   // we need to pass them in explicitly so they can be found
   const organisms = createOrganismsModel(initialModel.organisms, backpack);
-  const breeding = BreedingModel.create(initialModel.breeding);
+  const breeding = createBreedingModel(initialModel.breeding);
 
   // inform organisms space if user selects a backpack mouse
   autorun(() => {
