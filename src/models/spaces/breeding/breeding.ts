@@ -43,7 +43,7 @@ export const BreedingModel = types
     instructions: "",
     showSexStack: false,
     showHeteroStack: false,
-    interactionMode: types.optional(BreedingInteractionModeEnum, "none"),
+    interactionMode: types.optional(BreedingInteractionModeEnum, "breed"),
     nestPairs: types.array(NestPair),
     inspectedNestPairId: types.maybe(types.string)
   })
