@@ -45,7 +45,8 @@ export class NestingContainer extends BaseComponent<IProps, IState> {
     const inspectButtonClass = breeding.interactionMode === "inspect" ? "sticky" : "sticky-off";
     const collectButtonClass = breeding.interactionMode === "select" ? "sticky-alt" : "sticky-alt-off";
     let containerClass = "nesting-container " + (breeding.interactionMode === "inspect" ? "inspect" : "");
-    containerClass = containerClass + (breeding.interactionMode === "select" ? "select" : "");
+    containerClass = containerClass + (breeding.interactionMode === "select" ? "select" : "")
+                     + (breeding.interactionMode === "breed" ? "breed" : "");
     return(
       <div>
         <div className={containerClass}>
