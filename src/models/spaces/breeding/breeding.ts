@@ -30,14 +30,25 @@ const NestPair = types.model({
 export type INestPair = Instance<typeof NestPair>;
 
 export function createBreedingModel(breedingProps: any) {
-  breedingProps.nestPairs = [
-    {leftMouse: {sex: "male", genotype: "RC"}, rightMouse: {sex: "female", genotype: "RR"}, label: "Pair 1"},
-    {leftMouse: {sex: "male", genotype: "CC"}, rightMouse: {sex: "female", genotype: "RR"}, label: "Pair 2"},
-    {leftMouse: {sex: "male", genotype: "CC"}, rightMouse: {sex: "female", genotype: "CC"}, label: "Pair 3"},
-    {leftMouse: {sex: "male", genotype: "RR"}, rightMouse: {sex: "female", genotype: "RR"}, label: "Pair 4"},
-    {leftMouse: {sex: "male", genotype: "RC"}, rightMouse: {sex: "female", genotype: "RC"}, label: "Pair 5"},
-    {leftMouse: {sex: "male", genotype: "CC"}, rightMouse: {sex: "female", genotype: "RC"}, label: "Pair 6"},
-  ];
+  if (!breedingProps.nestPairs || breedingProps.nestPairs.length === 0) {
+    const breedingPairs = [
+      ["RC", "RR"],
+      ["CC", "RR"],
+      ["CC", "CC"],
+      ["RR", "RR"],
+      ["RC", "RC"],
+      ["CC", "RC"]
+    ];
+    breedingProps.nestPairs = breedingPairs.map((pair, i) => {
+      const leftSex = Math.round(Math.random());
+      const rightSex = 1 - leftSex;
+      return {
+        leftMouse: {sex: leftSex >= 0.5 ? "female" : "male", genotype: pair[0]},
+        rightMouse: {sex: rightSex >= 0.5 ? "female" : "male", genotype: pair[1]},
+        label: `Pair ${i + 1}`
+      };
+    });
+  }
   return BreedingModel.create(breedingProps);
 }
 
