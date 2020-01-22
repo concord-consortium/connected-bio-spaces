@@ -58,7 +58,7 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
                       onClick={this.handleClickBreedButton} data-test="breed-button">
                 <div className="inner-box">
                   <svg className={"icon " + breedButtonClass}>
-                    <use xlinkHref="#icon-run" />
+                    <use xlinkHref="#icon-breed" />
                   </svg>
                 </div>
                 <div className="label">Breed</div>
@@ -67,14 +67,11 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
                       onClick={this.handleClickBreedButton} data-test="gametes-button">
                 <div className="horizontal-container">
                   <div className="inner-box left">
-                    <svg className={"icon " + gametesButtonClass}>
-                      <use xlinkHref="#icon-run" />
-                    </svg>
                     <div className="label">Hide</div>
                   </div>
                   <div className="inner-box right">
                     <svg className={"icon " + gametesButtonClass}>
-                      <use xlinkHref="#icon-run" />
+                      <use xlinkHref="#icon-gametes" />
                     </svg>
                     <div className="label">Show</div>
                   </div>
