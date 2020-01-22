@@ -58,7 +58,7 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
                       onClick={this.handleClickBreedButton} data-test="breed-button">
                 <div className="inner-box">
                   <svg className={"icon " + breedButtonClass}>
-                    <use xlinkHref="#icon-run" />
+                    <use xlinkHref="#icon-breed" />
                   </svg>
                 </div>
                 <div className="label">Breed</div>
