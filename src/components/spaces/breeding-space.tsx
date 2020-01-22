@@ -5,6 +5,7 @@ import { TwoUpDisplayComponent } from "../two-up-display";
 import { InstructionsComponent } from "../instructions";
 import { RightPanelType } from "../../models/ui";
 import { BreedingContainer } from "./breeding/breeding-container";
+import { BreedingData } from "./breeding/breeding-data";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -16,8 +17,17 @@ export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
   public render() {
     const { breeding } = this.stores;
     const rightPanelType = breeding.rightPanel;
-    const instructionsPanel = <InstructionsComponent content={breeding.instructions}/>;
-    const rightPanelContent = rightPanelType === "instructions" ? instructionsPanel : null;
+    const rightPanelContent = (() => {
+      switch (rightPanelType) {
+        case "instructions":
+          return <InstructionsComponent content={breeding.instructions}/>;
+        case "data":
+          return <BreedingData/>;
+        case "information":
+        default:
+          return null;
+      }
+    })();
 
     return (
       <TwoUpDisplayComponent
@@ -25,17 +35,19 @@ export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
         leftPanel={<BreedingContainer />}
         rightPanel={rightPanelContent}
         instructionsIconEnabled={true}
-        dataIconEnabled={false}
+        dataIconEnabled={true}
         informationIconEnabled={false}
         selectedRightPanel={rightPanelType}
         onClickRightIcon={this.setRightPanel}
         spaceClass="breeding"
+        rightPanelFooterHeading="Graph:"
+        rightPanelButtons={breeding.graphButtons}
       />
     );
   }
 
   private setRightPanel = (panelType: RightPanelType) => {
-    const { populations } = this.stores;
-    populations.setRightPanel(panelType);
+    const { breeding } = this.stores;
+    breeding.setRightPanel(panelType);
   }
 }

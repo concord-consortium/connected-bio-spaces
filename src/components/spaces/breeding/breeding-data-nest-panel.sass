@@ -1,0 +1,58 @@
+@import "../../vars"
+
+.nesting-pair-data-panel
+  display: flex
+  flex-direction: column
+  .pair-data
+    display: flex
+    flex-direction: row
+    justify-content: center
+    align-items: center
+
+    .nest-display
+      width: 74px
+      height: 58px
+      border: 2px dashed gray
+      border-radius: 10px
+      font-size: 12px
+      font-family: $font-stack
+      font-weight: 500
+      background-color: white
+      margin: 6px
+      &.current
+        background-color: $color-simdata-brick-dark1
+        border-width: 0
+      &.active
+        background-color: $color-simdata-brick-light2
+        border-width: 0
+        cursor: pointer
+        &:hover
+          background-color: $color-simdata-brick-light1
+        &:active
+          background-color: $color-simdata-brick-dark1
+      .mouse-holder
+        height: 38px
+        .left-mouse
+          margin: 10px 2px 0 5px
+          width: 30px
+        .right-mouse
+          margin: 5px 3px 5px 0
+          width: 30px
+          transform: translate3d(0px, 0px, 0px) scaleX(-1)
+      .title
+        color: $color-simdata-brick-light1
+        width: 100%
+        text-align: center
+        &.active, &.current
+          color: white
+    .empty-pie
+      width: 86px
+      height: 86px
+      border: 2px dashed gray
+      border-radius: 50%
+  .pie-label
+    font-size: 14px
+    font-color: #434E56
+    text-align: right
+    margin-right: 20px
+    margin-top: 6px

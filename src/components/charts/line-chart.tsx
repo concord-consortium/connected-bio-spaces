@@ -20,6 +20,11 @@ interface ILineProps {
 interface ILineState { }
 
 const defaultOptions: ChartOptions = {
+  plugins: {
+    datalabels: {
+      display: false,
+    },
+  },
   annotation: {
     drawTime: "afterDraw",
     events: ["click", "mouseenter", "mouseleave"],
