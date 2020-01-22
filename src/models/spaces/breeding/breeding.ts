@@ -31,37 +31,23 @@ export type INestPair = Instance<typeof NestPair>;
 
 export function createBreedingModel(breedingProps: any) {
   if (!breedingProps.nestPairs || breedingProps.nestPairs.length === 0) {
-    const numPairs = 6;
-    const sexpairs = [];
-    for (let i = 0; i < numPairs; i++) {
-      Math.random() >= 0.5 ? sexpairs.push({ls: "male", rs: "female"}) : sexpairs.push({ls: "female", rs: "male"});
-    }
-    breedingProps.nestPairs = [
-      { leftMouse: {sex: sexpairs[0].ls, genotype: "RC"},
-        rightMouse: {sex: sexpairs[0].rs, genotype: "RR"},
-        label: "Pair 1"
-      },
-      { leftMouse: {sex: sexpairs[1].ls, genotype: "CC"},
-        rightMouse: {sex: sexpairs[1].rs, genotype: "RR"},
-        label: "Pair 2"
-      },
-      { leftMouse: {sex: sexpairs[2].ls, genotype: "CC"},
-        rightMouse: {sex: sexpairs[2].rs, genotype: "CC"},
-        label: "Pair 3"
-      },
-      { leftMouse: {sex: sexpairs[3].ls, genotype: "RR"},
-        rightMouse: {sex: sexpairs[3].rs, genotype: "RR"},
-        label: "Pair 4"
-      },
-      { leftMouse: {sex: sexpairs[4].ls, genotype: "RC"},
-        rightMouse: {sex: sexpairs[4].rs, genotype: "RC"},
-        label: "Pair 5"
-      },
-      { leftMouse: {sex: sexpairs[5].ls, genotype: "CC"},
-        rightMouse: {sex: sexpairs[5].rs, genotype: "RC"},
-        label: "Pair 6"
-      },
+    const breedingPairs = [
+      ["RC", "RR"],
+      ["CC", "RR"],
+      ["CC", "CC"],
+      ["RR", "RR"],
+      ["RC", "RC"],
+      ["CC", "RC"]
     ];
+    breedingProps.nestPairs = breedingPairs.map((pair, i) => {
+      const leftSex = Math.round(Math.random());
+      const rightSex = 1 - leftSex;
+      return {
+        leftMouse: {sex: leftSex >= 0.5 ? "female" : "male", genotype: pair[0]},
+        rightMouse: {sex: rightSex >= 0.5 ? "female" : "male", genotype: pair[1]},
+        label: `Pair ${i + 1}`
+      };
+    });
   }
   return BreedingModel.create(breedingProps);
 }
