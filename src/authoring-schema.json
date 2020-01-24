@@ -255,18 +255,6 @@
         "instructions": {
           "title": "Instructions (as markdown)",
           "type": "string"
-        },
-        "breedingType": {
-          "title": "Breeding Type",
-          "type": "string",
-          "enum": [
-            "litter",
-            "singleGamete"
-          ],
-          "enumNames": [
-            "Litter",
-            "Single Gamete"
-          ]
         }
       }
     }

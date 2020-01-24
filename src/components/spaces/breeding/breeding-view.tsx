@@ -16,7 +16,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
 
   public render() {
     const { breeding } = this.stores;
-    const { breedingType, mother, father, litter,
+    const { mother, father, litter,
       motherGamete, fatherGamete, offspring } = breeding;
     const readyToBreed = mother && father;
     const readyToFertilize = motherGamete && fatherGamete;
@@ -48,80 +48,23 @@ export class BreedingView extends BaseComponent<IProps, IState> {
           />
         </div>
 
-        {
-          breedingType === "litter" &&
-          <React.Fragment>
-            <div className="breed-button">
-              <div className={breedButtonClass} onClick={this.breedLitter}>
-                Breed
-              </div>
-            </div>
-            <div className="litter">
-              {
-                litter.map((org, i) =>
-                  <CollectButtonComponent
-                    key={`offspring-${i}`}
-                    backpackMouse={org}
-                    hideCloseButton={true}
-                    placeable={false}
-                  />
-                )
-              }
-            </div>
-          </React.Fragment>
-        }
-
-        {
-          breedingType === "singleGamete" &&
-          <React.Fragment>
-            <div className="breed-button gametes">
-              {
-                !readyToFertilize && !offspring &&
-                <div className={breedButtonClass} onClick={this.createGametes}>
-                  Create Gametes
-                </div>
-              }
-              {
-                readyToFertilize &&
-                <div className={breedButtonClass} onClick={this.fertilize}>
-                  Fertilize
-                </div>
-              }
-            </div>
-            <div className="gamete-container">
-              {
-                motherGamete &&
-                <div className="mother-gamete">
-                  <Chromosomes
-                    gamete={JSON.parse(motherGamete)}
-                  />
-                </div>
-              }
-              {
-                fatherGamete &&
-                <div className="father-gamete">
-                  <Chromosomes
-                    gamete={JSON.parse(fatherGamete)}
-                    onRight={true}
-                  />
-                </div>
-              }
-            </div>
-            {
-              offspring &&
-              <div className="offspring">
-                <CollectButtonComponent
-                  backpackMouse={offspring}
-                  clickClose={this.clickClose("offspring")}
-                  placeable={false}
-                />
-                <Chromosomes
-                  organism={offspring}
-                />
-              </div>
-            }
-          </React.Fragment>
-        }
+        <div className="breed-button">
+          <div className={breedButtonClass} onClick={this.breedLitter}>
+            Breed
+          </div>
+        </div>
+        <div className="litter">
+          {
+            litter.map((org, i) =>
+              <CollectButtonComponent
+                key={`offspring-${i}`}
+                backpackMouse={org}
+                hideCloseButton={true}
+                placeable={false}
+              />
+            )
+          }
+        </div>
       </div>
     );
   }
