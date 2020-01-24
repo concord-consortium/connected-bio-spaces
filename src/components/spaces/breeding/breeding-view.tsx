@@ -12,7 +12,7 @@ interface IState {}
 
 @inject("stores")
 @observer
-export class BreedingContainerOld extends BaseComponent<IProps, IState> {
+export class BreedingView extends BaseComponent<IProps, IState> {
 
   public render() {
     const { breeding } = this.stores;
