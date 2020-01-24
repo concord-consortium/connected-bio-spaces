@@ -4,6 +4,7 @@ import { BaseComponent, IBaseProps } from "../../base";
 import { INestPair } from "../../../models/spaces/breeding/breeding";
 import { BackpackMouse } from "../../../models/backpack-mouse";
 import "./nest-pair.sass";
+import { StackedOrganism } from "../../stacked-organism";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -23,7 +24,7 @@ interface IProps extends IBaseProps {
 export class NestPair extends BaseComponent<IProps, IState> {
 
   public render() {
-    const { showHeteroStack, showNestHighlight, showPairHighlight } = this.props;
+    const { showNestHighlight, showPairHighlight } = this.props;
     const positionClass = this.getPositionClass();
     const nestImage = this.getNestImage();
     const nestHoverImage = this.getNestHoverImage();
@@ -31,31 +32,14 @@ export class NestPair extends BaseComponent<IProps, IState> {
     const rightMouse = this.props.nestPair.rightMouse;
     const leftMouseCollected = this.isMouseCollected(this.props.nestPair.leftMouseBackpackId);
     const rightMouseCollected = this.isMouseCollected(this.props.nestPair.rightMouseBackpackId);
-    const leftMouseImage = leftMouse.nestImage;
-    const rightMouseImage = rightMouse.nestImage;
-    const leftSexImage = leftMouse.sex === "female"
-                          ? "assets/curriculum/mouse/populations/female-stack.png"
-                          : "assets/curriculum/mouse/populations/male-stack.png";
-    const rightSexImage = rightMouse.sex === "female"
-                          ? "assets/curriculum/mouse/populations/female-stack.png"
-                          : "assets/curriculum/mouse/populations/male-stack.png";
-    const heteroImage = "assets/curriculum/mouse/populations/heterozygous-stack.png";
-    const selectionImage = "assets/curriculum/mouse/populations/select-stack.png";
-    const mouseOutlineImage = "assets/curriculum/mouse/breeding/nesting/nest_mouse_outline.png";
     const nestClass = `nest-pair ${positionClass} ` + (showNestHighlight ? "selectable" : "");
-    const rightSelectionClass = "selection-stack " +
-                                ((this.props.showSelectionStack && !rightMouseCollected) ? "show" : "");
-    const leftSelectionClass = "selection-stack " +
-                               ((this.props.showSelectionStack && !leftMouseCollected) ? "show" : "");
-    const sexClass = "sex-stack " + (this.props.showSexStack ? "show" : "");
-    const leftHeteroClass = "hetero-stack " + ((showHeteroStack && leftMouse.isHeterozygote) ? "show" : "");
-    const rightHeteroClass = "hetero-stack " + ((showHeteroStack && rightMouse.isHeterozygote) ? "show" : "");
     const nestBackgroundHoverClass = `nest-pair-background-hover ${positionClass} ` + (showNestHighlight ? "show" : "");
     const pairLabelClass = `pair-label ${positionClass} ` + ((showNestHighlight || showPairHighlight) ? "show" : "");
     const nestInspectClass = `nest-inspect ${positionClass} ` + (showPairHighlight ? "show" : "");
-    const rightMouseOutlineClass = `mouse-image outline flip ` + (rightMouseCollected ? "show" : "");
-    const leftMouseOutlineClass = `mouse-image outline ` + (leftMouseCollected ? "show" : "");
-
+    const leftMouseImages = [leftMouse.nestImage];
+    if (leftMouseCollected) leftMouseImages.push("assets/curriculum/mouse/breeding/nesting/nest_mouse_outline.png");
+    const rightMouseImages = [rightMouse.nestImage];
+    if (rightMouseCollected) rightMouseImages.push("assets/curriculum/mouse/breeding/nesting/nest_mouse_outline.png");
     return(
       <div className={nestClass} onClick={this.handleClickNest}>
         <img
@@ -70,18 +54,25 @@ export class NestPair extends BaseComponent<IProps, IState> {
         />
         <div className={nestInspectClass} />
         <div className={`mouse left ${positionClass}`} onClick={this.handleClickLeftMouse}>
-          <img src={selectionImage} className={leftSelectionClass} data-test="mouse-selection-image" />
-          <img src={leftMouseImage} className={`mouse-image`} data-test="mouse-image" />
-          <img src={mouseOutlineImage} className={leftMouseOutlineClass} data-test="mouse-outline-image" />
-          <img src={heteroImage} className={leftHeteroClass} data-test="mouse-hetero-image" />
-          <img src={leftSexImage} className={sexClass} data-test="mouse-sex-image" />
+          <StackedOrganism
+            organism={leftMouse}
+            organismImages={leftMouseImages}
+            height={80}
+            showSelection={this.props.showSelectionStack && !leftMouseCollected}
+            showSex={this.props.showSexStack}
+            showHetero={this.props.showHeteroStack}
+          />
         </div>
         <div className={`mouse right ${positionClass}`} onClick={this.handleClickRightMouse}>
-          <img src={selectionImage} className={rightSelectionClass} data-test="mouse-selection-image" />
-          <img src={rightMouseImage} className={`mouse-image flip`} data-test="mouse-image" />
-          <img src={mouseOutlineImage} className={rightMouseOutlineClass} data-test="mouse-outline-image" />
-          <img src={heteroImage} className={rightHeteroClass} data-test="mouse-hetero-image" />
-          <img src={rightSexImage} className={sexClass} data-test="mouse-sex-image" />
+          <StackedOrganism
+            organism={rightMouse}
+            organismImages={rightMouseImages}
+            height={80}
+            flipped={true}
+            showSelection={this.props.showSelectionStack && !rightMouseCollected}
+            showSex={this.props.showSexStack}
+            showHetero={this.props.showHeteroStack}
+          />
         </div>
         <div className={pairLabelClass}>{this.props.nestPair.label}</div>
       </div>
