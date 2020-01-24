@@ -3,9 +3,10 @@ import * as React from "react";
 
 import { BaseComponent, IBaseProps } from "../../base";
 
-import "./breeding-container.sass";
+import "./breeding-view.sass";
 import { CollectButtonComponent } from "../../collect-button";
 import { Chromosomes } from "./chromosomes";
+import { StackedOrganism } from "../../stacked-organism";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -16,72 +17,64 @@ export class BreedingView extends BaseComponent<IProps, IState> {
 
   public render() {
     const { breeding } = this.stores;
-    const { mother, father, litter,
-      motherGamete, fatherGamete, offspring } = breeding;
-    const readyToBreed = mother && father;
-    const readyToFertilize = motherGamete && fatherGamete;
+    const activeBreedingPair = breeding.activeBreedingPair!;
+    const { leftMouse, rightMouse } = activeBreedingPair;
+    const mother = leftMouse.sex === "female" ? leftMouse : rightMouse;
+    const father = leftMouse.sex === "male" ? leftMouse : rightMouse;
 
-    const breedButtonClass = "button-holder" + (readyToBreed ? "" : " disabled");
+    const breedButtonClass = "nesting-button";
 
     return (
-      <div className="breeding-container">
-        <div className="parent mother">
-          Mother
-          <CollectButtonComponent
-            backpackMouse={mother}
-            clickClose={this.clickClose("mother")}
-            placeable={false}
-          />
-          <Chromosomes
-            organism={mother}
-          />
-        </div>
-        <div className="parent father">
-          Father
-          <CollectButtonComponent
-            backpackMouse={father}
-            clickClose={this.clickClose("father")}
-            placeable={false}
-          />
-          <Chromosomes
-            organism={father}
-          />
-        </div>
-
-        <div className="breed-button">
-          <div className={breedButtonClass} onClick={this.breedLitter}>
-            Breed
+      <div className="breeding-view">
+        <div className="parents">
+          <div className="parent mother">
+            Mother
+            <div className="parent-image">
+              <StackedOrganism
+                organism={mother}
+                organismImages={[mother.nestImage]}
+                height={110}
+                showSelection={false}
+                showSex={breeding.showSexStack}
+                showHetero={breeding.showHeteroStack}
+              />
+            </div>
+          </div>
+          <div className="breed-button-container">
+            <button className={"nesting-button breed-button"}
+                      onClick={this.handleClickBreedButton} data-test="inspect-button">
+              <svg className={"icon breed"}>
+                <use xlinkHref="#icon-breed" />
+              </svg>
+              <div className="label">Breed</div>
+            </button>
+          </div>
+          <div className="parent father">
+            Father
+            <div className="parent-image">
+              <StackedOrganism
+                organism={father}
+                organismImages={[father.nestImage]}
+                height={110}
+                flipped={true}
+                showSelection={false}
+                showSex={breeding.showSexStack}
+                showHetero={breeding.showHeteroStack}
+              />
+            </div>
           </div>
         </div>
-        <div className="litter">
-          {
-            litter.map((org, i) =>
-              <CollectButtonComponent
-                key={`offspring-${i}`}
-                backpackMouse={org}
-                hideCloseButton={true}
-                placeable={false}
-              />
-            )
-          }
+
+        <div className="offspring">
+          <div className="litters">
+            {/*  */}
+          </div>
         </div>
       </div>
     );
   }
 
-  private breedLitter = () => {
+  private handleClickBreedButton = () => {
     this.stores.breeding.breedLitter();
-  }
-
-  private createGametes = () => {
-    this.stores.breeding.createGametes();
-  }
-
-  private fertilize = () => {
-    this.stores.breeding.fertilize();
-  }
-
-  private clickClose(org: "mother" | "father" | "offspring") {
-    return () => this.stores.breeding.removeOrganism(org);
   }
 }
