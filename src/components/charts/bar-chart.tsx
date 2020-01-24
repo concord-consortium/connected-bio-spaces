@@ -15,6 +15,11 @@ interface IBarProps {
 }
 
 const defaultOptions: ChartOptions = {
+  plugins: {
+    datalabels: {
+      display: false,
+    },
+  },
   title: {
     display: false,
     text: "",
