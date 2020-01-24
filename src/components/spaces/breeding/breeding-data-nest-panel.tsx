@@ -18,12 +18,12 @@ interface IProps extends IBaseProps {
 export class BreedingDataNestPanel extends BaseComponent<IProps, IState> {
   public render() {
     const { nestPair } = this.props;
-    const activeBreeding = nestPair.activeBreeding;
+    const hasBred = nestPair.hasBred;
     const currentBreeding = nestPair.currentBreeding;
-    const leftMouseImage = activeBreeding ? nestPair.leftMouse.baseImage : "assets/mouse_collect.png";
-    const rightMouseImage = activeBreeding ? nestPair.rightMouse.baseImage : "assets/mouse_collect.png";
-    const nestClass = "nest-display " + (currentBreeding ? "current" : (activeBreeding ? "active" : ""));
-    const titleClass = "title " + (currentBreeding ? "current" : (activeBreeding ? "active" : ""));
+    const leftMouseImage = hasBred ? nestPair.leftMouse.baseImage : "assets/mouse_collect.png";
+    const rightMouseImage = hasBred ? nestPair.rightMouse.baseImage : "assets/mouse_collect.png";
+    const nestClass = "nest-display " + (currentBreeding ? "current" : (hasBred ? "active" : ""));
+    const titleClass = "title " + (currentBreeding ? "current" : (hasBred ? "active" : ""));
     const showLabel = nestPair.numOffspring > 0;
     const pieLabel = showLabel ? `${nestPair.numOffspring} offspring` : "";
 
@@ -37,7 +37,7 @@ export class BreedingDataNestPanel extends BaseComponent<IProps, IState> {
             </div>
             <div className={titleClass}>{nestPair.label}</div>
           </div>
-          { activeBreeding
+          { hasBred
             ? this.renderPieChart()
             : <div className="empty-pie"/>
           }
@@ -72,10 +72,10 @@ export class BreedingDataNestPanel extends BaseComponent<IProps, IState> {
 
   private handleClickMouseButton = () => {
     const { nestPair } = this.props;
-    const activeBreeding = nestPair.activeBreeding;
-    if (activeBreeding) {
+    const hasBred = nestPair.hasBred;
+    if (hasBred) {
       const currentBreeding = nestPair.currentBreeding;
-      !currentBreeding && this.stores.breeding.setNestPairCurrentBreeding(nestPair.id, true);
+      !currentBreeding && this.stores.breeding.setNestPairCurrentBreeding(nestPair.id);
     }
   }
 

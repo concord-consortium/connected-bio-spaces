@@ -183,7 +183,7 @@ export class NestPair extends BaseComponent<IProps, IState> {
     if (inspecting) {
       breeding.setInspectedNest(nestPair.id);
     } else if (breed) {
-      breeding.toggleNestPairActiveBreeding(nestPair.id);
+      breeding.setNestPairCurrentBreeding(nestPair.id);
     }
   }
 }
