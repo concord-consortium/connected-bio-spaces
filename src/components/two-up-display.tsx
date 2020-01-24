@@ -110,7 +110,7 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
           && this.props.selectedRightPanel === button.section;
       }).map( (button: any) => {
         if (!button.type || button.type === "button") {
-          let className = "button-holder" + (button.value ? " active" : "");
+          let className = `button-holder ${this.props.spaceClass} ` + (button.value ? "active" : "");
           let action = button.action;
           if (button.disabled) {
             className += " disabled";

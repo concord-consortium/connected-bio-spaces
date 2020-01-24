@@ -113,6 +113,7 @@
     "canvas": "^2.6.0",
     "chart.js": "^2.9.3",
     "chartjs-plugin-annotation": "^0.5.7",
+    "chartjs-plugin-datalabels": "^0.7.0",
     "flat": "^4.1.0",
     "gifler": "^0.1.0",
     "iframe-phone": "^1.2.0",

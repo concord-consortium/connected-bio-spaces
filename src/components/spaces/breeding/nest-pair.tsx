@@ -1,10 +1,9 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { BaseComponent, IBaseProps } from "../../base";
-
-import "./nest-pair.sass";
 import { INestPair } from "../../../models/spaces/breeding/breeding";
 import { BackpackMouse } from "../../../models/backpack-mouse";
+import "./nest-pair.sass";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -189,8 +188,11 @@ export class NestPair extends BaseComponent<IProps, IState> {
     const { breeding } = this.stores;
     const nestPair = this.props.nestPair;
     const inspecting = breeding.interactionMode === "inspect";
+    const breed = breeding.interactionMode === "breed";
     if (inspecting) {
       breeding.setInspectedNest(nestPair.id);
+    } else if (breed) {
+      breeding.toggleNestPairActiveBreeding(nestPair.id);
     }
   }
 }
