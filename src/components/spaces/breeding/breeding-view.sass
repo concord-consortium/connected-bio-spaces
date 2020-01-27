@@ -68,3 +68,28 @@
       background-color: $color-simdata-brick-light3
       border: 2px solid white
       border-radius: 5px
+      overflow-y: scroll
+
+      &:before
+        content: ' '
+
+      .litter
+        display: flex
+        justify-content: center
+        margin: 20px 0
+        transition: all 0.5s
+        animation: push-down 0.8s ease
+
+        .stacked-organism
+          margin: -6px;
+        .stacked-organism:nth-child(even)
+          margin-top: 10px
+          z-index: 2
+
+@keyframes push-down
+  0%
+    opacity: -1
+    height: 0
+  100%
+    opacity: 0.9
+    height: 63px

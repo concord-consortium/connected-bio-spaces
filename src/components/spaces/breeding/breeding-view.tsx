@@ -18,7 +18,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
   public render() {
     const { breeding } = this.stores;
     const activeBreedingPair = breeding.activeBreedingPair!;
-    const { mother, father } = activeBreedingPair;
+    const { mother, father, litters } = activeBreedingPair;
 
     return (
       <div className="breeding-view">
@@ -63,7 +63,25 @@ export class BreedingView extends BaseComponent<IProps, IState> {
 
         <div className="offspring">
           <div className="litters">
-            {/*  */}
+            {
+              litters.reverse().map((litter, i) => (
+                <div className="litter" key={"litter" + (litters.length - i)}>
+                  {
+                    litter.map((org, j) => (
+                      <StackedOrganism
+                        key={"org" + j}
+                        organism={org}
+                        organismImages={[org.nestImage]}
+                        height={60}
+                        showSelection={false}
+                        showSex={breeding.showSexStack}
+                        showHetero={breeding.showHeteroStack}
+                      />
+                    ))
+                  }
+                </div>
+              ))
+            }
           </div>
         </div>
       </div>
