@@ -18,10 +18,11 @@ interface IProps extends IBaseProps {
 export class BreedingDataNestPanel extends BaseComponent<IProps, IState> {
   public render() {
     const { nestPair } = this.props;
-    const hasBred = nestPair.hasBred;
+    const hasBred = nestPair.numOffspring > 0;
     const currentBreeding = nestPair.currentBreeding;
-    const leftMouseImage = hasBred ? nestPair.leftMouse.baseImage : "assets/mouse_collect.png";
-    const rightMouseImage = hasBred ? nestPair.rightMouse.baseImage : "assets/mouse_collect.png";
+    const isVisible = hasBred || currentBreeding;
+    const leftMouseImage = isVisible ? nestPair.leftMouse.baseImage : "assets/mouse_collect.png";
+    const rightMouseImage = isVisible ? nestPair.rightMouse.baseImage : "assets/mouse_collect.png";
     const nestClass = "nest-display " + (currentBreeding ? "current" : (hasBred ? "active" : ""));
     const titleClass = "title " + (currentBreeding ? "current" : (hasBred ? "active" : ""));
     const showLabel = nestPair.numOffspring > 0;
@@ -50,21 +51,25 @@ export class BreedingDataNestPanel extends BaseComponent<IProps, IState> {
   private renderPieChart() {
     let pieData: PieChartData[] = [];
     const { breeding } = this.stores;
-    const { chartType } = breeding;
-    // TODO this is fake data that needs to be replaced
+    const { chartType  } = breeding;
+    const data = this.props.nestPair.getData(chartType);
+
     if (chartType === "genotype") {
-      pieData = [{label: "RLRL", value: 10, color: colors.colorDataMouseBrownLightRep},
-                 {label: "RLRD", value: 15, color: colors.colorDataMouseBrownMediumRep},
-                 {label: "RDRL", value: 20, color: colors.colorDataMouseBrownMediumRep},
-                 {label: "RDRD", value: 13, color: colors.colorDataMouseBrownDarkRep}];
+      pieData = [{label: "RLRL", value: data.CC, color: colors.colorDataMouseBrownLightRep},
+                 {label: "RLRD", value: data.CR, color: colors.colorDataMouseBrownMediumRep},
+                 {label: "RDRL", value: data.RC, color: colors.colorDataMouseBrownMediumRep},
+                 {label: "RDRD", value: data.RR, color: colors.colorDataMouseBrownDarkRep}];
     } else if (chartType === "sex") {
-      pieData = [{label: "Female", value: 20, color: colors.colorChartYellow},
-                 {label: "Male", value: 20, color: colors.colorChartRed}];
+      pieData = [{label: "Female", value: data.female, color: colors.colorChartYellow},
+                 {label: "Male", value: data.male, color: colors.colorChartRed}];
     } else {
-      pieData = [{label: "Light", value: 20, color: colors.colorDataMouseBrownLightRep},
-                 {label: "Medium", value: 20, color: colors.colorDataMouseBrownMediumRep},
-                 {label: "Dark", value: 10, color: colors.colorDataMouseBrownDarkRep}];
+      pieData = [{label: "Light", value: data.white, color: colors.colorDataMouseBrownLightRep},
+                 {label: "Medium", value: data.tan, color: colors.colorDataMouseBrownMediumRep},
+                 {label: "Dark", value: data.brown, color: colors.colorDataMouseBrownDarkRep}];
     }
+    // remove missing values
+    pieData = pieData.filter(datum => datum.value);
+
     return (
       <PieChart data={pieData}/>
     );
@@ -72,7 +77,7 @@ export class BreedingDataNestPanel extends BaseComponent<IProps, IState> {
 
   private handleClickMouseButton = () => {
     const { nestPair } = this.props;
-    const hasBred = nestPair.hasBred;
+    const hasBred = nestPair.numOffspring > 0;
     if (hasBred) {
       const currentBreeding = nestPair.currentBreeding;
       !currentBreeding && this.stores.breeding.setNestPairCurrentBreeding(nestPair.id);

@@ -20,7 +20,6 @@ const NestPair = types.model({
   rightMouseBackpackId: types.maybe(types.string),
   label: types.string,
   currentBreeding: false,
-  hasBred: false, // TODO: might be replaced based on breeding changes
   litters: types.array(types.array(BackpackMouse))
 })
 .views((self) => ({
@@ -32,6 +31,18 @@ const NestPair = types.model({
   },
   get numOffspring() {
     return self.litters.reduce((size, litter) => litter.length + size, 0);
+  },
+  getData(chartType: BreedingChartType) {
+    const data: {[key: string]: number} = {};
+    const prop = chartType === "color" ? "baseColor" : chartType;
+    self.litters.forEach(litter => {
+      litter.forEach(org => {
+        const val = org[prop];
+        if (!data[val]) data[val] = 0;
+        data[val] = data[val] + 1;
+      });
+    });
+    return data;
   }
 }))
 .actions(self => ({
@@ -43,9 +54,6 @@ const NestPair = types.model({
   },
   setCurrentBreeding(val: boolean) {
     self.currentBreeding = val;
-    if (val) {
-      self.hasBred = true;    // can't be unset
-    }
   },
   breedLitter(litterSize: number) {
     const litter: BackpackMouseType[] = [];
