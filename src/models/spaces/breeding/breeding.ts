@@ -1,4 +1,4 @@
-import { types, Instance } from "mobx-state-tree";
+import { types, Instance, cast } from "mobx-state-tree";
 import { RightPanelTypeEnum } from "../../ui";
 import { BackpackMouse, BackpackMouseType } from "../../backpack-mouse";
 import { breed, createGamete, fertilize } from "../../../utilities/genetics";
@@ -19,10 +19,21 @@ const NestPair = types.model({
   leftMouseBackpackId: types.maybe(types.string),
   rightMouseBackpackId: types.maybe(types.string),
   label: types.string,
-  currentBreeding: false, // TODO: might be replaced based on breeding changes
+  currentBreeding: false,
   hasBred: false, // TODO: might be replaced based on breeding changes
-  numOffspring: 0 // TODO: replace by requesting size of offspring data structure
+  litters: types.array(types.array(BackpackMouse))
 })
+.views((self) => ({
+  get mother() {
+    return self.leftMouse.sex === "female" ? self.leftMouse : self.rightMouse;
+  },
+  get father() {
+    return self.leftMouse.sex === "male" ? self.leftMouse : self.rightMouse;
+  },
+  get numOffspring() {
+    return self.litters.reduce((size, litter) => litter.length + size, 0);
+  }
+}))
 .actions(self => ({
   setLeftMouseBackpackId(id: string) {
     self.leftMouseBackpackId = id;
@@ -35,6 +46,14 @@ const NestPair = types.model({
     if (val) {
       self.hasBred = true;    // can't be unset
     }
+  },
+  breedLitter(litterSize: number) {
+    const litter: BackpackMouseType[] = [];
+    for (let i = 0; i < litterSize; i++) {
+      const child = breed(self.mother, self.father);
+      litter.push(BackpackMouse.create(child));
+    }
+    self.litters.push(litter as any);
   }
 }));
 export type INestPair = Instance<typeof NestPair>;
@@ -72,12 +91,17 @@ export const BreedingModel = types
     nestPairs: types.array(NestPair),
     inspectedNestPairId: types.maybe(types.string),
     breedingNestPairId: types.maybe(types.string),
-    userChartType: types.optional(BreedingChartTypeEnum, "color")
+    userChartType: types.optional(BreedingChartTypeEnum, "color"),
+    minLitterSize: 3,
+    maxLitterSize: 5
   })
   .actions(self => ({
 
     breedLitter() {
-      // nothing yet
+      const nestPair = self.nestPairs.find(pair => pair.id === self.breedingNestPairId);
+      if (!nestPair) return;
+      const litterSize = self.minLitterSize + Math.floor(Math.random() * (self.maxLitterSize - self.minLitterSize + 1));
+      nestPair.breedLitter(litterSize);
     },
 
     setShowSexStack(show: boolean) {
@@ -122,6 +146,7 @@ export const BreedingModel = types
           pair.setCurrentBreeding(false);
         });
         nestPair.setCurrentBreeding(true);
+        self.rightPanel = "data";   // auto-switch to data when we go to breeding
       }
     },
 

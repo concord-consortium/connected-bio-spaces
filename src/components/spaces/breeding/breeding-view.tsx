@@ -18,11 +18,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
   public render() {
     const { breeding } = this.stores;
     const activeBreedingPair = breeding.activeBreedingPair!;
-    const { leftMouse, rightMouse } = activeBreedingPair;
-    const mother = leftMouse.sex === "female" ? leftMouse : rightMouse;
-    const father = leftMouse.sex === "male" ? leftMouse : rightMouse;
-
-    const breedButtonClass = "nesting-button";
+    const { mother, father } = activeBreedingPair;
 
     return (
       <div className="breeding-view">
