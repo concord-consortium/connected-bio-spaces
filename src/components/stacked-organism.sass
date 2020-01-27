@@ -1,0 +1,33 @@
+.stacked-organism
+  position: relative
+
+  &:hover .selection-stack.show
+    opacity: 1
+
+  .selection-stack
+    position: absolute
+    top: 0
+    left: 0
+    opacity: 0
+    transition-duration: .25s
+  .organism-image
+    position: absolute
+    top: 10%
+    &.flip
+      transform: translate3d(0px, 0px, 0px) scaleX(-1)
+  .hetero-stack
+    position: absolute
+    top: 0
+    left: 0
+    opacity: 0
+    transition-duration: .25s
+    &.show
+      opacity: 1
+  .sex-stack
+    position: absolute
+    top: 0
+    left: 0
+    opacity: 0
+    transition-duration: .25s
+    &.show
+      opacity: 1

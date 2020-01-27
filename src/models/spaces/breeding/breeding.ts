@@ -1,12 +1,10 @@
-import { types, Instance } from "mobx-state-tree";
+import { types, Instance, cast } from "mobx-state-tree";
 import { RightPanelTypeEnum } from "../../ui";
 import { BackpackMouse, BackpackMouseType } from "../../backpack-mouse";
 import { breed, createGamete, fertilize } from "../../../utilities/genetics";
 import { ToolbarButton } from "../populations/populations";
 import uuid = require("uuid");
 import { RightPanelType } from "../../../models/ui";
-export const BreedingTypeEnum = types.enumeration("type", ["litter", "singleGamete"]);
-export type BreedingType = typeof BreedingTypeEnum.Type;
 
 const BreedingInteractionModeEnum = types.enumeration("interaction", ["none", "breed", "select", "inspect"]);
 export type BreedingInteractionModeType = typeof BreedingInteractionModeEnum.Type;
@@ -21,10 +19,32 @@ const NestPair = types.model({
   leftMouseBackpackId: types.maybe(types.string),
   rightMouseBackpackId: types.maybe(types.string),
   label: types.string,
-  currentBreeding: false, // TODO: might be replaced based on breeding changes
-  activeBreeding: false, // TODO: might be replaced based on breeding changes
-  numOffspring: 0 // TODO: replace by requesting size of offspring data structure
+  currentBreeding: false,
+  litters: types.array(types.array(BackpackMouse))
 })
+.views((self) => ({
+  get mother() {
+    return self.leftMouse.sex === "female" ? self.leftMouse : self.rightMouse;
+  },
+  get father() {
+    return self.leftMouse.sex === "male" ? self.leftMouse : self.rightMouse;
+  },
+  get numOffspring() {
+    return self.litters.reduce((size, litter) => litter.length + size, 0);
+  },
+  getData(chartType: BreedingChartType) {
+    const data: {[key: string]: number} = {};
+    const prop = chartType === "color" ? "baseColor" : chartType;
+    self.litters.forEach(litter => {
+      litter.forEach(org => {
+        const val = org[prop];
+        if (!data[val]) data[val] = 0;
+        data[val] = data[val] + 1;
+      });
+    });
+    return data;
+  }
+}))
 .actions(self => ({
   setLeftMouseBackpackId(id: string) {
     self.leftMouseBackpackId = id;
@@ -32,11 +52,16 @@ const NestPair = types.model({
   setRightMouseBackpackId(id: string) {
     self.rightMouseBackpackId = id;
   },
-  setActiveBreeding(val: boolean) {
-    self.activeBreeding = val;
-  },
   setCurrentBreeding(val: boolean) {
     self.currentBreeding = val;
+  },
+  breedLitter(litterSize: number) {
+    const litter: BackpackMouseType[] = [];
+    for (let i = 0; i < litterSize; i++) {
+      const child = breed(self.mother, self.father);
+      litter.push(BackpackMouse.create(child));
+    }
+    self.litters.push(litter as any);
   }
 }));
 export type INestPair = Instance<typeof NestPair>;
@@ -66,14 +91,6 @@ export function createBreedingModel(breedingProps: any) {
 
 export const BreedingModel = types
   .model("Breeding", {
-    breedingType: types.optional(BreedingTypeEnum, "litter"),
-    mother: types.maybe(types.reference(BackpackMouse)),
-    father: types.maybe(types.reference(BackpackMouse)),
-    offspring: types.maybe(BackpackMouse),
-    litter: types.array(BackpackMouse),
-    litterSize: 8,
-    motherGamete: types.maybe(types.string),
-    fatherGamete: types.maybe(types.string),
     rightPanel: types.optional(RightPanelTypeEnum, "instructions"),
     instructions: "",
     showSexStack: false,
@@ -81,60 +98,18 @@ export const BreedingModel = types
     interactionMode: types.optional(BreedingInteractionModeEnum, "breed"),
     nestPairs: types.array(NestPair),
     inspectedNestPairId: types.maybe(types.string),
-    userChartType: types.optional(BreedingChartTypeEnum, "color")
+    breedingNestPairId: types.maybe(types.string),
+    userChartType: types.optional(BreedingChartTypeEnum, "color"),
+    minLitterSize: 3,
+    maxLitterSize: 5
   })
   .actions(self => ({
-    activeBackpackMouseUpdated(backpackMouse: BackpackMouseType) {
-      if (backpackMouse.sex === "female" && !self.mother) {
-        self.mother = backpackMouse;
-        return true;
-      } else if (backpackMouse.sex === "male" && !self.father) {
-        self.father = backpackMouse;
-        return true;
-      }
-    },
-
-    removeOrganism(org: "mother" | "father" | "offspring") {
-      if (org === "mother") {
-        self.mother = undefined;
-      } else if (org === "father") {
-        self.father = undefined;
-      } else if (org === "offspring") {
-        self.offspring = undefined;
-      }
-      self.litter.clear();
-    },
 
     breedLitter() {
-      if (!self.mother && self.father) {
-        return;
-      }
-      self.litter.clear();
-      for (let i = 0; i < self.litterSize; i++) {
-        const child = breed(self.mother!, self.father!);
-        self.litter.push(BackpackMouse.create(child));
-      }
-    },
-
-    createGametes() {
-      if (!self.mother && self.father) {
-        return;
-      }
-      self.motherGamete = JSON.stringify(createGamete(self.mother!));
-      self.fatherGamete = JSON.stringify(createGamete(self.father!));
-
-      self.offspring = undefined;
-    },
-
-    fertilize() {
-      if (!self.motherGamete && self.fatherGamete) {
-        return;
-      }
-      const child = fertilize(JSON.parse(self.motherGamete!), JSON.parse(self.fatherGamete!));
-      self.offspring = BackpackMouse.create(child);
-
-      self.motherGamete = undefined;
-      self.fatherGamete = undefined;
+      const nestPair = self.nestPairs.find(pair => pair.id === self.breedingNestPairId);
+      if (!nestPair) return;
+      const litterSize = self.minLitterSize + Math.floor(Math.random() * (self.maxLitterSize - self.minLitterSize + 1));
+      nestPair.breedLitter(litterSize);
     },
 
     setShowSexStack(show: boolean) {
@@ -165,19 +140,21 @@ export const BreedingModel = types
         nestPair.setRightMouseBackpackId(backpackId);
       }
     },
-    toggleNestPairActiveBreeding(nestPairId: string) {
-      const nestPair = self.nestPairs.find(pair => pair.id === nestPairId);
-      if (nestPair) {
-        nestPair.setActiveBreeding(!nestPair.activeBreeding);
-      }
+    clearNestPairActiveBreeding() {
+      self.nestPairs.forEach(pair => {
+        pair.setCurrentBreeding(false);
+      });
+      self.breedingNestPairId = undefined;
     },
-    setNestPairCurrentBreeding(nestPairId: string, val: boolean) {
+    setNestPairCurrentBreeding(nestPairId: string) {
       const nestPair = self.nestPairs.find(pair => pair.id === nestPairId);
       if (nestPair) {
-        val && self.nestPairs.forEach(pair => {
+        self.breedingNestPairId = nestPairId;
+        self.nestPairs.forEach(pair => {
           pair.setCurrentBreeding(false);
         });
-        nestPair.setCurrentBreeding(val);
+        nestPair.setCurrentBreeding(true);
+        self.rightPanel = "data";   // auto-switch to data when we go to breeding
       }
     },
 
@@ -194,6 +171,9 @@ export const BreedingModel = types
   }))
   .views((self) => {
     return {
+      get activeBreedingPair(): INestPair | undefined {
+        return self.nestPairs.find(pair => pair.id === self.breedingNestPairId);
+      },
       get chartType(): BreedingChartType {
         return self.userChartType ? self.userChartType : "color";
       },

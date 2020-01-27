@@ -1,0 +1,95 @@
+@import "../../vars"
+
+.breeding-view
+  width: 100%
+  height: 433px
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+  align-items: center
+  font-size: $font-size-label1
+  font-family: $font-stack
+  color: $color-simdata-brick-dark2
+
+  .parents
+    display: flex
+    width: 100%
+    justify-content: space-around
+    align-items: center
+    font-size: 1.5em
+    padding-top: 5px
+
+    .parent
+      display: flex
+      flex-direction: column
+      align-items: center
+      &.mother
+        padding-left: 20px
+      &.father
+        padding-right: 20px
+      .parent-image
+        display: flex
+        justify-content: center
+        align-items: center
+        height: 115px
+        width: 115px
+        border-radius: 50%
+        background-color: $color-simdata-brick-light3
+        margin-top: 5px
+
+    .nesting-button.breed-button
+      color: $color-nav-shamrock-dark2
+      background-color: $color-nav-shamrock-light2
+      height: 70px
+      width: 73px
+      border: 2px solid white
+      font-size: 1.1em
+      &:hover
+        background-color: $color-nav-shamrock-light1
+      &:active
+        background-color: $color-nav-shamrock-dark1
+        color: white
+        .icon
+          fill: white
+      .icon
+        width: 70px
+        height: 45px
+        fill: $color-nav-shamrock-dark1
+
+  .offspring
+    width: 100%
+    height: 200px
+    display: flex
+    justify-content: space-around
+
+    .litters
+      width: 70%
+      height: 93%
+      background-color: $color-simdata-brick-light3
+      border: 2px solid white
+      border-radius: 5px
+      overflow-y: scroll
+
+      &:before
+        content: ' '
+
+      .litter
+        display: flex
+        justify-content: center
+        margin: 20px 0
+        transition: all 0.5s
+        animation: push-down 0.8s ease
+
+        .stacked-organism
+          margin: -6px;
+        .stacked-organism:nth-child(even)
+          margin-top: 10px
+          z-index: 2
+
+@keyframes push-down
+  0%
+    opacity: -1
+    height: 0
+  100%
+    opacity: 0.9
+    height: 63px

@@ -4,6 +4,7 @@ import { BaseComponent, IBaseProps } from "../../base";
 import { ToolbarButton } from "../../../models/spaces/populations/populations";
 import { NestingView } from "./nesting-view";
 import "./breeding-container.sass";
+import { BreedingView } from "./breeding-view";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -40,28 +41,37 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
       }
     });
 
-    const breedButtonClass = "breed " + (breeding.interactionMode === "breed" ? "sticky-breed " : "sticky-breed-off ");
+    const showingNesting = breeding.breedingNestPairId === undefined;
+    const breedButtonClass = "breed " + (showingNesting && breeding.interactionMode === "breed" ?
+      "sticky-breed " : "sticky-breed-off ");
     const gametesButtonClass = "gametes disabled";
     const inspectButtonClass = breeding.interactionMode === "inspect" ? "sticky" : "sticky-off";
     const collectButtonClass = breeding.interactionMode === "select" ? "sticky-alt" : "sticky-alt-off";
-    let containerClass = "nesting-container " + (breeding.interactionMode === "inspect" ? "inspect" : "");
-    containerClass = containerClass + (breeding.interactionMode === "select" ? "select" : "")
-                     + (breeding.interactionMode === "breed" ? "breed" : "");
+    let containerClass = breeding.breedingNestPairId ? "breeding-container" : "nesting-container";
+    containerClass += (breeding.interactionMode === "inspect" ? " inspect" : "")
+                    + (breeding.interactionMode === "select" ? " select" : "")
+                    + (breeding.interactionMode === "breed" ? " breed" : "");
+
+    const mainComponent = showingNesting ? <NestingView /> : <BreedingView />;
+    const switchLevelsButtonLabel = showingNesting ? "Breeding" : "Nesting";
+    const switchLevelsIcon = showingNesting ? "breed" : "nests";
+
     return(
       <div>
         <div className={containerClass}>
-            <NestingView />
+            { mainComponent }
           </div>
         <div className="nesting-toolbar" data-test="breed-toolbar">
             <div className="toolbar-row">
               <button className={"nesting-button " + breedButtonClass}
-                      onClick={this.handleClickBreedButton} data-test="breed-button">
+                      onClick={showingNesting ? this.handleClickBreedButton : this.handleClickNestingButton}
+                      data-test="breed-button">
                 <div className="inner-box">
                   <svg className={"icon " + breedButtonClass}>
-                    <use xlinkHref="#icon-breed" />
+                    <use xlinkHref={`#icon-${switchLevelsIcon}`} />
                   </svg>
                 </div>
-                <div className="label">Breed</div>
+                <div className="label">{switchLevelsButtonLabel}</div>
               </button>
               <button className={"nesting-button " + gametesButtonClass}
                       onClick={this.handleClickBreedButton} data-test="gametes-button">
@@ -117,6 +127,10 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
 
   private handleClickBreedButton = () => {
     this.stores.breeding.toggleInteractionMode("breed");
+  }
+
+  private handleClickNestingButton = () => {
+    this.stores.breeding.clearNestPairActiveBreeding();
   }
 
   private handleClickInspectButton = () => {

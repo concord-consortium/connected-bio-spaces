@@ -43,11 +43,6 @@ export function createStores(initialModel: ConnectedBioModelCreationType): IStor
       if (organismAdded) {
         backpack.deselectMouse();
       }
-    } else if (ui.investigationPanelSpace === "breeding" && backpack.activeMouse) {
-      const organismAdded = breeding.activeBackpackMouseUpdated(backpack.activeMouse);
-      if (organismAdded) {
-        backpack.deselectMouse();
-      }
     }
   });
 

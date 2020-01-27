@@ -31,169 +31,169 @@
   &.align-left
     justify-content: left
 
-  .nesting-checkbox
-    height: 20px
-    width: 20px
-    background: $color-simdata-brick-light2
+.nesting-checkbox
+  height: 20px
+  width: 20px
+  background: $color-simdata-brick-light2
 
-  .nesting-button
-    display: flex
-    flex-direction: column
-    justify-content: center
-    align-items: center
-    height: 50px
-    width: 52px
-    margin: 6px
-    border: none
-    outline: none
-    border-radius: $component-border-radius
-    font-size: $font-size-label1
-    font-family: $font-stack
-    color: $color-simdata-brick-dark2
-    background-color: $color-simdata-brick-light2
-    cursor: pointer
-    transition-duration: $fade-time
-    &.breed, &.gametes
-      width: 62px
-      background-color: $color-simdata-brick-dark1
-      color: $color-simdata-brick-light3
-    &.gametes
-      width: 95px
+.nesting-button
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
+  height: 50px
+  width: 52px
+  margin: 6px
+  border: none
+  outline: none
+  border-radius: $component-border-radius
+  font-size: $font-size-label1
+  font-family: $font-stack
+  color: $color-simdata-brick-dark2
+  background-color: $color-simdata-brick-light2
+  cursor: pointer
+  transition-duration: $fade-time
+  &.breed, &.gametes
+    width: 62px
+    background-color: $color-simdata-brick-dark1
+    color: $color-simdata-brick-light3
+  &.gametes
+    width: 95px
 
-    &.sticky
-      color: $color-white
-      background-color: $color-simdata-brick-dark1
-
-    &.sticky-alt
-      color: $color-white
-      background-color: $color-nav-cerulean-dark1
-
-    &.disabled
-      opacity: .5
-      pointer-events: none
-
-    .icon
-      width: 44px
-      height: 28px
-      fill: $color-simdata-brick
-
-      &.sticky
-        fill: $color-white
-
-      &.sticky-alt
-        fill: $color-white
-
-      &.disabled
-        opacity: .5
-
-    .horizontal-container
-      display: flex
-      flex-direction: row
-
-    .inner-box
-      background-color: $color-simdata-brick-light2
-      border-radius: $component-border-radius * 3
-      height: 28px
-      width: 54px
-      &.left
-        width: 42px
-        height: 28px
-        margin-right: 1px
-        border-radius: $component-border-radius * 3 0 0 $component-border-radius * 3
-        .label
-          position: absolute
-          top: 30px
-          left: 150px
-      &.right
-        width: 42px
-        height: 28px
-        margin-left: 1px
-        border-radius: 0 $component-border-radius * 3 $component-border-radius * 3 0
-        .icon
-          width: 42px
-          height: 16px
-          margin: 0
-        .label
-          position: absolute
-          top: 30px
-          left: 186px
-      .label
-        font-size: 10px
-        margin: 0
-        color: $color-simdata-brick
-      .icon
-        width: 54px
-
-    .label
-      margin-top: $internal-component-margin
-      margin-bottom: $internal-component-margin
-
-    &.sticky-breed
-      .inner-box
-        background-color: $color-nav-shamrock-dark1
-      .icon
-        fill: $color-white
-
-
-  /* hover and mousedown states */
-
-  .nesting-button:active .icon
-    fill: $color-white
-
-  .nesting-button:hover .inner-box
-    background-color: $color-simdata-brick-light1
-
-  .nesting-button:active .inner-box
-    background-color: $color-nav-shamrock-dark1
-
-  /* hover and mousedown states of green sticky button */
-  .nesting-button.sticky-breed:hover .inner-box
-    background-color: $color-nav-shamrock-light1
-
-  .nesting-button.sticky-breed:active .inner-box
-    background-color: $color-nav-shamrock-light2
-
-  .nesting-button.sticky-breed:active .icon
-    fill: $color-nav-shamrock
-
-  /* hover and mousedown states of red sticky button */
-  .nesting-button.sticky-off:hover
-    background-color: $color-simdata-brick-light1
-
-  .nesting-button.sticky-off:active
+  &.sticky
     color: $color-white
     background-color: $color-simdata-brick-dark1
 
-  .nesting-button.sticky:hover
-    background-color: $color-simdata-brick-light1
-
-  .nesting-button.sticky:active
-    color: $color-simdata-brick-dark2
-    background-color: $color-simdata-brick-light2
-
-  .nesting-button:active .icon.sticky
-    fill: $color-simdata-brick
-
-  /* hover and mousedown states of blue sticky button */
-  .nesting-button.sticky-alt-off:hover
-    background-color: $color-simdata-brick-light1
-
-  .nesting-button.sticky-alt:hover
-    background-color: $color-nav-cerulean-light1
-
-  .nesting-button.sticky-alt:active
-    color: $color-nav-cerulean-dark2
-    background-color: $color-nav-cerulean-light2
-
-  .nesting-button:active .icon.sticky-alt
-    fill: $color-nav-cerulean
-
-  .nesting-button.sticky-alt-off:active
+  &.sticky-alt
     color: $color-white
     background-color: $color-nav-cerulean-dark1
 
-  .nesting-button:active .icon.sticky-alt-off
-    fill: $color-white
+  &.disabled
+    opacity: .5
+    pointer-events: none
+
+  .icon
+    width: 44px
+    height: 28px
+    fill: $color-simdata-brick
+
+    &.sticky
+      fill: $color-white
+
+    &.sticky-alt
+      fill: $color-white
+
+    &.disabled
+      opacity: .5
+
+  .horizontal-container
+    display: flex
+    flex-direction: row
+
+  .inner-box
+    background-color: $color-simdata-brick-light2
+    border-radius: $component-border-radius * 3
+    height: 28px
+    width: 54px
+    &.left
+      width: 42px
+      height: 28px
+      margin-right: 1px
+      border-radius: $component-border-radius * 3 0 0 $component-border-radius * 3
+      .label
+        position: absolute
+        top: 30px
+        left: 150px
+    &.right
+      width: 42px
+      height: 28px
+      margin-left: 1px
+      border-radius: 0 $component-border-radius * 3 $component-border-radius * 3 0
+      .icon
+        width: 42px
+        height: 16px
+        margin: 0
+      .label
+        position: absolute
+        top: 30px
+        left: 186px
+    .label
+      font-size: 10px
+      margin: 0
+      color: $color-simdata-brick
+    .icon
+      width: 54px
+
+  .label
+    margin-top: $internal-component-margin
+    margin-bottom: $internal-component-margin
+
+  &.sticky-breed
+    .inner-box
+      background-color: $color-nav-shamrock-dark1
+    .icon
+      fill: $color-white
+
+
+/* hover and mousedown states */
+
+.nesting-button:active .icon
+  fill: $color-white
+
+.nesting-button:hover .inner-box
+  background-color: $color-simdata-brick-light1
+
+.nesting-button:active .inner-box
+  background-color: $color-nav-shamrock-dark1
+
+/* hover and mousedown states of green sticky button */
+.nesting-button.sticky-breed:hover .inner-box
+  background-color: $color-nav-shamrock-light1
+
+.nesting-button.sticky-breed:active .inner-box
+  background-color: $color-nav-shamrock-light2
+
+.nesting-button.sticky-breed:active .icon
+  fill: $color-nav-shamrock
+
+/* hover and mousedown states of red sticky button */
+.nesting-button.sticky-off:hover
+  background-color: $color-simdata-brick-light1
+
+.nesting-button.sticky-off:active
+  color: $color-white
+  background-color: $color-simdata-brick-dark1
+
+.nesting-button.sticky:hover
+  background-color: $color-simdata-brick-light1
+
+.nesting-button.sticky:active
+  color: $color-simdata-brick-dark2
+  background-color: $color-simdata-brick-light2
+
+.nesting-button:active .icon.sticky
+  fill: $color-simdata-brick
+
+/* hover and mousedown states of blue sticky button */
+.nesting-button.sticky-alt-off:hover
+  background-color: $color-simdata-brick-light1
+
+.nesting-button.sticky-alt:hover
+  background-color: $color-nav-cerulean-light1
+
+.nesting-button.sticky-alt:active
+  color: $color-nav-cerulean-dark2
+  background-color: $color-nav-cerulean-light2
+
+.nesting-button:active .icon.sticky-alt
+  fill: $color-nav-cerulean
+
+.nesting-button.sticky-alt-off:active
+  color: $color-white
+  background-color: $color-nav-cerulean-dark1
+
+.nesting-button:active .icon.sticky-alt-off
+  fill: $color-white
 
 
 .label-holder

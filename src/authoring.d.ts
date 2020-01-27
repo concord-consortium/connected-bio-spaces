@@ -40,7 +40,6 @@ export type ShowMysterySubstanceLabels = boolean;
 export type AllowZoomingToReceptor = boolean;
 export type AllowZoomingToNucleus = boolean;
 export type InstructionsAsMarkdown2 = string;
-export type BreedingType = "litter" | "singleGamete";
 
 export interface ConnectedBioAuthoring {
   curriculum?: Unit;
@@ -116,6 +115,5 @@ export interface OrganismModel {
 }
 export interface BreedingModel {
   instructions?: InstructionsAsMarkdown2;
-  breedingType?: BreedingType;
   [k: string]: any;
 }

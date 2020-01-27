@@ -65,7 +65,6 @@ export const defaultAuthoring: ConnectedBioAuthoring = {
   },
   breeding: {
     instructions: "",
-    breedingType: "litter",
     nestPairs: []
   }
 };
