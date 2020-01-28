@@ -45,11 +45,14 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
     const breedButtonClass = "breed " + (showingNesting && breeding.interactionMode === "breed" ?
       "sticky-breed " : "sticky-breed-off ");
     const gametesButtonClass = "gametes disabled";
-    const inspectButtonClass = breeding.interactionMode === "inspect" ? "sticky" : "sticky-off";
-    const collectButtonClass = breeding.interactionMode === "select" ? "sticky-alt" : "sticky-alt-off";
-    const containerClass = "breeding-container" + (breeding.interactionMode === "inspect" ? " inspect" : "")
-                    + (breeding.interactionMode === "select" ? " select" : "")
-                    + (breeding.interactionMode === "breed" ? " breed" : "");
+    const inspectButtonClass = (breeding.interactionMode === "inspect" ? "sticky" : "sticky-off")
+                          + (!showingNesting ? " disabled" : "");
+    const collectButtonClass = (breeding.interactionMode === "select" ? "sticky-alt" : "sticky-alt-off")
+                          + (!showingNesting ? " disabled" : "");
+    const containerClass = "breeding-container"
+                    + ((breeding.interactionMode === "inspect" && showingNesting) ? " inspect" : "")
+                    + ((breeding.interactionMode === "select" && showingNesting) ? " select" : "")
+                    + ((breeding.interactionMode === "breed" && showingNesting) ? " breed" : "");
 
     const mainComponent = showingNesting ? <NestingView /> : <BreedingView />;
     const switchLevelsButtonLabel = showingNesting ? "Breeding" : "Nesting";
