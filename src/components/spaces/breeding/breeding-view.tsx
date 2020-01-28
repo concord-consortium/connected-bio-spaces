@@ -42,7 +42,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
             </div>
           </div>
           <div className="breed-button-container">
-            <button className={"nesting-button breed-button"}
+            <button className={"breeding-button breed-button"}
                       onClick={this.handleClickBreedButton} data-test="inspect-button">
               <svg className={"icon breed"}>
                 <use xlinkHref="#icon-breed" />
