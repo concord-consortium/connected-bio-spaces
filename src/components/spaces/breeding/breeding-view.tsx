@@ -18,18 +18,23 @@ export class BreedingView extends BaseComponent<IProps, IState> {
   public render() {
     const { breeding } = this.stores;
     const activeBreedingPair = breeding.activeBreedingPair!;
-    const { mother, father, litters } = activeBreedingPair;
+    const { mother, father, litters, label, numOffspring } = activeBreedingPair;
+    const numLitters = activeBreedingPair.litters.length;
+    const offspringClass = "offspring" + (numOffspring === 0 ? " hide" : "");
 
     return (
       <div className="breeding-view">
         <div className="parents">
+          <div className="parent-label">
+            { label }
+          </div>
           <div className="parent mother">
             Mother
             <div className="parent-image">
               <StackedOrganism
                 organism={mother}
                 organismImages={[mother.nestImage]}
-                height={110}
+                height={90}
                 showSelection={false}
                 showSex={breeding.showSexStack}
                 showHetero={breeding.showHeteroStack}
@@ -51,7 +56,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
               <StackedOrganism
                 organism={father}
                 organismImages={[father.nestImage]}
-                height={110}
+                height={90}
                 flipped={true}
                 showSelection={false}
                 showSex={breeding.showSexStack}
@@ -61,11 +66,17 @@ export class BreedingView extends BaseComponent<IProps, IState> {
           </div>
         </div>
 
-        <div className="offspring">
+        <div className={offspringClass}>
+          <div className="litter-number">
+            Litter { numLitters }
+          </div>
+          <div className="total-offspring">
+            Total offspring { numOffspring }
+          </div>
           <div className="litters">
             {
               litters.reverse().map((litter, i) => (
-                <div className="litter" key={"litter" + (litters.length - i)}>
+                <div className="litter" key={"litter" + label + (litters.length - i)}>
                   {
                     litter.map((org, j) => (
                       <StackedOrganism
@@ -82,6 +93,11 @@ export class BreedingView extends BaseComponent<IProps, IState> {
                 </div>
               ))
             }
+          </div>
+          <div className="focus-overlay">
+            <div className="focus-overlay-top" />
+            <div className="focus-window" />
+            <div className="focus-overlay-bottom" />
           </div>
         </div>
       </div>
