@@ -13,8 +13,11 @@
   .organism-image
     position: absolute
     top: 10%
+    left: 50%
+    top: 50%
+    transform: translateY(-50%) translateX(-50%)
     &.flip
-      transform: translate3d(0px, 0px, 0px) scaleX(-1)
+      transform: translate3d(0px, 0px, 0px) translateY(-50%) translateX(-50%) scaleX(-1)
   .hetero-stack
     position: absolute
     top: 0

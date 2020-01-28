@@ -127,6 +127,7 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
 
   private handleClickBreedButton = () => {
     this.stores.breeding.toggleInteractionMode("breed");
+    this.stores.breeding.setInspectedNest("");
   }
 
   private handleClickNestingButton = () => {

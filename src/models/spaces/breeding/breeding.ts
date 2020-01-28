@@ -160,6 +160,7 @@ export const BreedingModel = types
 
     setInspectedNest(nestPairId: string) {
       self.inspectedNestPairId = nestPairId;
+      self.rightPanel = "information";   // auto-switch to inspect
     },
     setRightPanel(val: RightPanelType) {
       self.rightPanel = val;
