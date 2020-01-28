@@ -1,6 +1,6 @@
 @import "../../vars"
 
-.nesting-container
+.breeding-container
   cursor: auto
   &.select
     cursor: url('../../../assets/collect-cursor.png') 27 20, auto
@@ -9,7 +9,7 @@
   &.breed
     cursor: url('../../../assets/breed-cursor.png') 6 3, auto
 
-.nesting-toolbar
+.breeding-toolbar
   height: 100px
   display: flex
   flex-direction: column
@@ -31,12 +31,12 @@
   &.align-left
     justify-content: left
 
-.nesting-checkbox
+.breeding-checkbox
   height: 20px
   width: 20px
   background: $color-simdata-brick-light2
 
-.nesting-button
+.breeding-button
   display: flex
   flex-direction: column
   justify-content: center
@@ -137,62 +137,62 @@
 
 /* hover and mousedown states */
 
-.nesting-button:active .icon
+.breeding-button:active .icon
   fill: $color-white
 
-.nesting-button:hover .inner-box
+.breeding-button:hover .inner-box
   background-color: $color-simdata-brick-light1
 
-.nesting-button:active .inner-box
+.breeding-button:active .inner-box
   background-color: $color-nav-shamrock-dark1
 
 /* hover and mousedown states of green sticky button */
-.nesting-button.sticky-breed:hover .inner-box
+.breeding-button.sticky-breed:hover .inner-box
   background-color: $color-nav-shamrock-light1
 
-.nesting-button.sticky-breed:active .inner-box
+.breeding-button.sticky-breed:active .inner-box
   background-color: $color-nav-shamrock-light2
 
-.nesting-button.sticky-breed:active .icon
+.breeding-button.sticky-breed:active .icon
   fill: $color-nav-shamrock
 
 /* hover and mousedown states of red sticky button */
-.nesting-button.sticky-off:hover
+.breeding-button.sticky-off:hover
   background-color: $color-simdata-brick-light1
 
-.nesting-button.sticky-off:active
+.breeding-button.sticky-off:active
   color: $color-white
   background-color: $color-simdata-brick-dark1
 
-.nesting-button.sticky:hover
+.breeding-button.sticky:hover
   background-color: $color-simdata-brick-light1
 
-.nesting-button.sticky:active
+.breeding-button.sticky:active
   color: $color-simdata-brick-dark2
   background-color: $color-simdata-brick-light2
 
-.nesting-button:active .icon.sticky
+.breeding-button:active .icon.sticky
   fill: $color-simdata-brick
 
 /* hover and mousedown states of blue sticky button */
-.nesting-button.sticky-alt-off:hover
+.breeding-button.sticky-alt-off:hover
   background-color: $color-simdata-brick-light1
 
-.nesting-button.sticky-alt:hover
+.breeding-button.sticky-alt:hover
   background-color: $color-nav-cerulean-light1
 
-.nesting-button.sticky-alt:active
+.breeding-button.sticky-alt:active
   color: $color-nav-cerulean-dark2
   background-color: $color-nav-cerulean-light2
 
-.nesting-button:active .icon.sticky-alt
+.breeding-button:active .icon.sticky-alt
   fill: $color-nav-cerulean
 
-.nesting-button.sticky-alt-off:active
+.breeding-button.sticky-alt-off:active
   color: $color-white
   background-color: $color-nav-cerulean-dark1
 
-.nesting-button:active .icon.sticky-alt-off
+.breeding-button:active .icon.sticky-alt-off
   fill: $color-white
 
 

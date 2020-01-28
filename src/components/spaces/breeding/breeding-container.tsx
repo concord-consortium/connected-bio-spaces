@@ -24,7 +24,7 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
           <label key={button.title} className={checkClass}>
             <input
               key={button.title}
-              className="nesting-checkbox"
+              className="breeding-checkbox"
               type="checkbox"
               checked={button.value}
               onChange={this.handleClickToolbarCheckbox(button)} />
@@ -47,8 +47,7 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
     const gametesButtonClass = "gametes disabled";
     const inspectButtonClass = breeding.interactionMode === "inspect" ? "sticky" : "sticky-off";
     const collectButtonClass = breeding.interactionMode === "select" ? "sticky-alt" : "sticky-alt-off";
-    let containerClass = breeding.breedingNestPairId ? "breeding-container" : "nesting-container";
-    containerClass += (breeding.interactionMode === "inspect" ? " inspect" : "")
+    const containerClass = "breeding-container" + (breeding.interactionMode === "inspect" ? " inspect" : "")
                     + (breeding.interactionMode === "select" ? " select" : "")
                     + (breeding.interactionMode === "breed" ? " breed" : "");
 
@@ -61,9 +60,9 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
         <div className={containerClass}>
             { mainComponent }
           </div>
-        <div className="nesting-toolbar" data-test="breed-toolbar">
+        <div className="breeding-toolbar" data-test="breed-toolbar">
             <div className="toolbar-row">
-              <button className={"nesting-button " + breedButtonClass}
+              <button className={"breeding-button " + breedButtonClass}
                       onClick={showingNesting ? this.handleClickBreedButton : this.handleClickNestingButton}
                       data-test="breed-button">
                 <div className="inner-box">
@@ -73,7 +72,7 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
                 </div>
                 <div className="label">{switchLevelsButtonLabel}</div>
               </button>
-              <button className={"nesting-button " + gametesButtonClass}
+              <button className={"breeding-button " + gametesButtonClass}
                       onClick={this.handleClickBreedButton} data-test="gametes-button">
                 <div className="horizontal-container">
                   <div className="inner-box left">
@@ -88,14 +87,14 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
                 </div>
                 <div className="label">Inspect Gametes</div>
               </button>
-              <button className={"nesting-button " + inspectButtonClass}
+              <button className={"breeding-button " + inspectButtonClass}
                       onClick={this.handleClickInspectButton} data-test="inspect-button">
                 <svg className={"icon " + inspectButtonClass}>
                   <use xlinkHref="#icon-inspect" />
                 </svg>
                 <div className="label">Inspect</div>
               </button>
-              <button className={"nesting-button " + collectButtonClass}
+              <button className={"breeding-button " + collectButtonClass}
                       onClick={this.handleClickSelect} data-test="collect-button">
                 <svg className={"icon " + collectButtonClass}>
                   <use xlinkHref="#icon-collect" />
