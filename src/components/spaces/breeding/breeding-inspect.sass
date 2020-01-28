@@ -1,0 +1,51 @@
+@import "../../vars"
+
+.breeding-inspect
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
+  .inspect-title
+    color: $color-simdata-brick-dark3
+    margin-top: 15px
+    text-align: center
+    font-size: 16px
+  .pair-container
+    display: flex
+    flex-direction: row
+    &.single
+        margin-top: 32px
+    .inspect-background
+      position: absolute
+      top: 40px
+      left: 26px
+      height: 175px
+      width: 362px
+      background-color: $color-simdata-brick-light1
+      border-radius: 84px
+      opacity: .75
+      &.single
+        width: 175px
+        left: 119px
+    .mouse-container
+      display: flex
+      flex-direction: column
+      justify-content: center
+      align-items: center
+      margin: 10px
+      .mouse-label
+        color: $color-simdata-brick-dark3
+        font-size: 16px
+        margin: 10px
+      .info-row
+        display: flex
+        flex-direction: row
+        width: 170px
+        margin-top: 6px
+        .info-type
+          color: $color-simdata-brick-dark3
+          font-size: 14px
+          margin-right: 5px
+        .info-data
+          color: $color-nav-cinder-dark2
+          font-size: 14px

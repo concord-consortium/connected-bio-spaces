@@ -32,8 +32,7 @@ export const StackedOrganism: React.SFC<IProps> = (props) => {
     width: props.height
   };
   const innerSize = {
-    height: props.height * 0.7,
-    left: props.flipped ? props.height * 0.05 : -props.height * 0.225
+    height: props.height * 0.45,
   };
 
   return (
