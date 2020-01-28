@@ -12,9 +12,9 @@
     .nest-display
       width: 74px
       height: 58px
-      border: 2px dashed gray
+      border: 2px dashed $color-nav-cinder-light1
       border-radius: 10px
-      font-size: 12px
+      font-size: 14px
       font-family: $font-stack
       font-weight: 500
       background-color: white
@@ -30,10 +30,14 @@
         cursor: pointer
         &:hover
           background-color: $color-simdata-brick-light1
+        &:hover .title
+          color: $color-simdata-brick-dark2
         &:active
           background-color: $color-simdata-brick-dark1
+        &:active .title
+          color: white
       .mouse-holder
-        height: 38px
+        height: 34px
         .left-mouse
           margin: 10px 2px 0 5px
           width: 30px
@@ -42,15 +46,20 @@
           width: 30px
           transform: translate3d(0px, 0px, 0px) scaleX(-1)
       .title
-        color: $color-simdata-brick-light1
+        color: $color-simdata-brick-dark2
+        opacity: .5
         width: 100%
         text-align: center
-        &.active, &.current
+        &.active
+          color: $color-simdata-brick-dark2
+          opacity: 1
+        &.current
           color: white
+          opacity: 1
     .empty-pie
       width: 86px
       height: 86px
-      border: 2px dashed gray
+      border: 2px dashed $color-nav-cinder-light1
       border-radius: 50%
   .pie-label
     font-size: 14px
