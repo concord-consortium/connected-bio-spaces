@@ -47,9 +47,21 @@ export class PieChart extends BaseComponent<IProps, IState> {
             const percentage = (value * 100 / sum).toFixed(0) + "%";
             return percentage;
           },
-          color: "#ffffff",
+          color(ctx: any) {
+            let labelColor = "";
+            switch (ctx.dataset.backgroundColor[ctx.dataIndex]) {
+              case "#bf8f53":
+              case "#dfc39d":
+              case "#FEFF59":
+                labelColor = "#000000";
+                break;
+              default:
+                labelColor = "#ffffff";
+            }
+            return labelColor;
+          },
           font: {
-            size: 10
+            size: 12
           }
         }
       },
