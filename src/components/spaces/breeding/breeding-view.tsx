@@ -73,6 +73,15 @@ export class BreedingView extends BaseComponent<IProps, IState> {
           <div className="total-offspring">
             Total offspring { numOffspring }
           </div>
+          <div className="reset-button-container">
+            <button className={"breeding-button reset-button"}
+                      onClick={this.handleClickResetButton} data-test="inspect-button">
+              <svg className={"icon breed"}>
+                <use xlinkHref="#icon-reset" />
+              </svg>
+              <div className="label">Reset</div>
+            </button>
+          </div>
           <div className="litters">
             {
               litters.reverse().map((litter, i) => (
@@ -106,5 +115,9 @@ export class BreedingView extends BaseComponent<IProps, IState> {
 
   private handleClickBreedButton = () => {
     this.stores.breeding.breedLitter();
+  }
+
+  private handleClickResetButton = () => {
+    this.stores.breeding.clearLitters();
   }
 }

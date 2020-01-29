@@ -20,6 +20,7 @@ const NestPair = types.model({
   rightMouseBackpackId: types.maybe(types.string),
   label: types.string,
   currentBreeding: false,
+  hasBeenVisited: false,
   litters: types.array(types.array(BackpackMouse))
 })
 .views((self) => ({
@@ -54,6 +55,9 @@ const NestPair = types.model({
   },
   setCurrentBreeding(val: boolean) {
     self.currentBreeding = val;
+    if (val) {
+      self.hasBeenVisited = true;     // can't be set false
+    }
   },
   breedLitter(litterSize: number) {
     const litter: BackpackMouseType[] = [];
@@ -62,6 +66,9 @@ const NestPair = types.model({
       litter.push(BackpackMouse.create(child));
     }
     self.litters.push(litter as any);
+  },
+  clearLitters() {
+    self.litters.length = 0;
   }
 }));
 export type INestPair = Instance<typeof NestPair>;
@@ -110,6 +117,12 @@ export const BreedingModel = types
       if (!nestPair) return;
       const litterSize = self.minLitterSize + Math.floor(Math.random() * (self.maxLitterSize - self.minLitterSize + 1));
       nestPair.breedLitter(litterSize);
+    },
+
+    clearLitters() {
+      const nestPair = self.nestPairs.find(pair => pair.id === self.breedingNestPairId);
+      if (!nestPair) return;
+      nestPair.clearLitters();
     },
 
     setShowSexStack(show: boolean) {
