@@ -255,6 +255,22 @@
         "instructions": {
           "title": "Instructions (as markdown)",
           "type": "string"
+        },
+        "enableInspectGametes": {
+          "title": "Enable inspect gametes button",
+          "type": "boolean"
+        },
+        "enableColorChart": {
+          "title": "Enable mouse fur color pie chart",
+          "type": "boolean"
+        },
+        "enableGenotypeChart": {
+          "title": "Enable mouse genotypes pie chart",
+          "type": "boolean"
+        },
+        "enableSexChart": {
+          "title": "Enable mouse sex pie chart",
+          "type": "boolean"
         }
       }
     }
