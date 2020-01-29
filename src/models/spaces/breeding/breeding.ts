@@ -20,6 +20,7 @@ const NestPair = types.model({
   rightMouseBackpackId: types.maybe(types.string),
   label: types.string,
   currentBreeding: false,
+  hasBeenVisited: false,
   litters: types.array(types.array(BackpackMouse))
 })
 .views((self) => ({
@@ -54,6 +55,9 @@ const NestPair = types.model({
   },
   setCurrentBreeding(val: boolean) {
     self.currentBreeding = val;
+    if (val) {
+      self.hasBeenVisited = true;     // can't be set false
+    }
   },
   breedLitter(litterSize: number) {
     const litter: BackpackMouseType[] = [];

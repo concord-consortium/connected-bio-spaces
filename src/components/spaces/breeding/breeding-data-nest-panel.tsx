@@ -18,13 +18,13 @@ interface IProps extends IBaseProps {
 export class BreedingDataNestPanel extends BaseComponent<IProps, IState> {
   public render() {
     const { nestPair } = this.props;
-    const hasBred = nestPair.numOffspring > 0;
     const currentBreeding = nestPair.currentBreeding;
-    const isVisible = hasBred || currentBreeding;
-    const leftMouseImage = isVisible ? nestPair.leftMouse.baseImage : "assets/mouse_collect.png";
-    const rightMouseImage = isVisible ? nestPair.rightMouse.baseImage : "assets/mouse_collect.png";
-    const nestClass = "nest-display " + (currentBreeding ? "current" : (hasBred ? "active" : ""));
-    const titleClass = "title " + (currentBreeding ? "current" : (hasBred ? "active" : ""));
+    const hasBeenVisited = nestPair.hasBeenVisited;
+    const hasBred = nestPair.numOffspring > 0;
+    const leftMouseImage = hasBeenVisited ? nestPair.leftMouse.baseImage : "assets/mouse_collect.png";
+    const rightMouseImage = hasBeenVisited ? nestPair.rightMouse.baseImage : "assets/mouse_collect.png";
+    const nestClass = "nest-display " + (currentBreeding ? "current" : (hasBeenVisited ? "active" : ""));
+    const titleClass = "title " + (currentBreeding ? "current" : (hasBeenVisited ? "active" : ""));
     const showLabel = nestPair.numOffspring > 0;
     const pieLabel = showLabel ? `${nestPair.numOffspring} offspring` : "";
 
@@ -77,8 +77,7 @@ export class BreedingDataNestPanel extends BaseComponent<IProps, IState> {
 
   private handleClickMouseButton = () => {
     const { nestPair } = this.props;
-    const hasBred = nestPair.numOffspring > 0;
-    if (hasBred) {
+    if (nestPair.hasBeenVisited) {
       const currentBreeding = nestPair.currentBreeding;
       !currentBreeding && this.stores.breeding.setNestPairCurrentBreeding(nestPair.id);
     }
