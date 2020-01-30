@@ -129,6 +129,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
             max={sliderMax}
             value={litterSliderVal}
             vertical={true}
+            reverse={true}
             disabled={numLitters < 2}
           />
         </div>
