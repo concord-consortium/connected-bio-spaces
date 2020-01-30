@@ -65,7 +65,9 @@ export const defaultAuthoring: ConnectedBioAuthoring = {
   },
   breeding: {
     instructions: "",
-    nestPairs: []
+    enableColorChart: true,
+    enableGenotypeChart: true,
+    enableSexChart: true
   }
 };
 

@@ -106,9 +106,13 @@ export const BreedingModel = types
     nestPairs: types.array(NestPair),
     inspectedNestPairId: types.maybe(types.string),
     breedingNestPairId: types.maybe(types.string),
-    userChartType: types.optional(BreedingChartTypeEnum, "color"),
+    userChartType: types.maybe(BreedingChartTypeEnum),
     minLitterSize: 3,
-    maxLitterSize: 5
+    maxLitterSize: 5,
+    enableColorChart: true,
+    enableGenotypeChart: true,
+    enableSexChart: true,
+    enableInspectGametes: true,
   })
   .actions(self => ({
 
@@ -185,11 +189,18 @@ export const BreedingModel = types
   }))
   .views((self) => {
     return {
+      get chartType(): BreedingChartType {
+        return self.userChartType ? self.userChartType :
+          self.enableColorChart ? "color" :
+          self.enableGenotypeChart ? "genotype" :
+          self.enableSexChart ? "sex" : "color";
+      },
+    };
+  })
+  .views((self) => {
+    return {
       get activeBreedingPair(): INestPair | undefined {
         return self.nestPairs.find(pair => pair.id === self.breedingNestPairId);
-      },
-      get chartType(): BreedingChartType {
-        return self.userChartType ? self.userChartType : "color";
       },
       get toolbarButtons(): ToolbarButton[] {
         const buttons = [];
@@ -220,27 +231,30 @@ export const BreedingModel = types
         const buttons = [];
         buttons.push({
           title: "Fur Colors",
-          value: self.userChartType === "color",
+          value: self.chartType === "color",
           action: (val: boolean) => {
             self.setChartType("color");
           },
           section: "data",
+          disabled: !self.enableColorChart,
         });
         buttons.push({
           title: "Genotypes",
-          value: self.userChartType === "genotype",
+          value: self.chartType === "genotype",
           action: (val: boolean) => {
             self.setChartType("genotype");
           },
           section: "data",
+          disabled: !self.enableGenotypeChart,
         });
         buttons.push({
           title: "Sex",
-          value: self.userChartType === "sex",
+          value: self.chartType === "sex",
           action: (val: boolean) => {
             self.setChartType("sex");
           },
           section: "data",
+          disabled: !self.enableSexChart,
         });
 
         return buttons;
