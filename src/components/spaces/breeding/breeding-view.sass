@@ -114,16 +114,17 @@
           width: 27px
           height: 20px
 
-    .litters
+    .litters-container
       width: 300px
       height: 225px
       background-color: white
+      overflow: hidden
       border: 2px solid white
       border-radius: 5px
-      overflow-y: scroll
-
-      &:before          // allows appearance animation
-        content: ' '
+      .litters
+        position: relative
+        &:before          // allows appearance animation
+          content: ' '
 
       .litter
         display: flex
@@ -171,6 +172,12 @@
           border-style: solid
           border-width: 5px 6px 5px 0
           border-color: transparent $color-simdata-brick-dark2 transparent transparent
+
+    .litter-scroll
+      position: absolute
+      right: 20px
+      height: 225px
+
 @keyframes push-down
   0%
     opacity: -1

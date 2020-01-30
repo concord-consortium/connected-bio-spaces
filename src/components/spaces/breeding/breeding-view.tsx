@@ -1,19 +1,24 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-
+import Slider from "rc-slider";
 import { BaseComponent, IBaseProps } from "../../base";
-
-import "./breeding-view.sass";
-import { CollectButtonComponent } from "../../collect-button";
-import { Chromosomes } from "./chromosomes";
 import { StackedOrganism } from "../../stacked-organism";
 
+import "./breeding-view.sass";
+import "rc-slider/assets/index.css";
+
 interface IProps extends IBaseProps {}
-interface IState {}
+interface IState {
+  litterSliderVal: number;
+}
 
 @inject("stores")
 @observer
 export class BreedingView extends BaseComponent<IProps, IState> {
+
+  public state: IState = {
+    litterSliderVal: 0
+  };
 
   public render() {
     const { breeding } = this.stores;
@@ -21,6 +26,14 @@ export class BreedingView extends BaseComponent<IProps, IState> {
     const { mother, father, litters, label, numOffspring } = activeBreedingPair;
     const numLitters = activeBreedingPair.litters.length;
     const offspringClass = "offspring" + (numOffspring === 0 ? " hide" : "");
+
+    const { litterSliderVal } = this.state;
+    const maxLitter = numLitters - 1;
+    const sliderResolution = numLitters > 50 ? 1 : numLitters > 30 ? 2 : numLitters > 10 ? 10 : 100;
+    const sliderMax = Math.max(maxLitter * sliderResolution, 0);
+    const sliderPercent = sliderMax ? litterSliderVal / sliderMax : 0;
+    const litterOffset = 85 * maxLitter * sliderPercent;
+    const currentLitter = maxLitter - Math.round(maxLitter * sliderPercent);
 
     return (
       <div className="breeding-view">
@@ -68,7 +81,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
 
         <div className={offspringClass}>
           <div className="litter-number">
-            Litter { numLitters }
+            Litter { currentLitter + 1 }
           </div>
           <div className="total-offspring">
             Total offspring { numOffspring }
@@ -82,32 +95,42 @@ export class BreedingView extends BaseComponent<IProps, IState> {
               <div className="label">Reset</div>
             </button>
           </div>
-          <div className="litters">
-            {
-              litters.reverse().map((litter, i) => (
-                <div className="litter" key={"litter" + label + (litters.length - i)}>
-                  {
-                    litter.map((org, j) => (
-                      <StackedOrganism
-                        key={"org" + j}
-                        organism={org}
-                        organismImages={[org.nestImage]}
-                        height={60}
-                        showSelection={false}
-                        showSex={breeding.showSexStack}
-                        showHetero={breeding.showHeteroStack}
-                      />
-                    ))
-                  }
-                </div>
-              ))
-            }
+          <div className="litters-container">
+            <div className="litters" style={{top: -litterOffset}}>
+              {
+                litters.slice().reverse().map((litter, i) => (
+                  <div className="litter" key={"litter" + label + (litters.length - i)}>
+                    {
+                      litter.map((org, j) => (
+                        <StackedOrganism
+                          key={"org" + j}
+                          organism={org}
+                          organismImages={[org.nestImage]}
+                          height={60}
+                          showSelection={false}
+                          showSex={breeding.showSexStack}
+                          showHetero={breeding.showHeteroStack}
+                        />
+                      ))
+                    }
+                  </div>
+                ))
+              }
+            </div>
           </div>
           <div className="focus-overlay">
             <div className="focus-overlay-top" />
             <div className="focus-window" />
             <div className="focus-overlay-bottom" />
           </div>
+          <Slider className="litter-scroll"
+            onChange={this.handleLitterScrollChange}
+            min={0}
+            max={sliderMax}
+            value={litterSliderVal}
+            vertical={true}
+            disabled={numLitters < 2}
+          />
         </div>
       </div>
     );
@@ -115,9 +138,14 @@ export class BreedingView extends BaseComponent<IProps, IState> {
 
   private handleClickBreedButton = () => {
     this.stores.breeding.breedLitter();
+    this.setState({litterSliderVal: 0});
   }
 
   private handleClickResetButton = () => {
     this.stores.breeding.clearLitters();
+  }
+
+  private handleLitterScrollChange = (value: number) => {
+    this.setState({litterSliderVal: value});
   }
 }
