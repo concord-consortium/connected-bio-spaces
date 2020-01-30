@@ -35,6 +35,14 @@ export class BreedingView extends BaseComponent<IProps, IState> {
     const litterOffset = 85 * maxLitter * sliderPercent;
     const currentLitter = maxLitter - Math.round(maxLitter * sliderPercent);
 
+    const sliderClass = "litter-scroll" + (numLitters < 2 ? " hide" : "");
+    const trackStyle = { width: 10 };
+    const handleStyle = {
+      height: 24,
+      width: 24
+    };
+    const railStyle = { width: 10 };
+
     return (
       <div className="breeding-view">
         <div className="parents">
@@ -123,7 +131,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
             <div className="focus-window" />
             <div className="focus-overlay-bottom" />
           </div>
-          <Slider className="litter-scroll"
+          <Slider className={sliderClass}
             onChange={this.handleLitterScrollChange}
             min={0}
             max={sliderMax}
@@ -131,6 +139,9 @@ export class BreedingView extends BaseComponent<IProps, IState> {
             vertical={true}
             reverse={true}
             disabled={numLitters < 2}
+            trackStyle={trackStyle}
+            handleStyle={handleStyle}
+            railStyle={railStyle}
           />
         </div>
       </div>
