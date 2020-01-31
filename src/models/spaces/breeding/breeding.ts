@@ -44,6 +44,16 @@ const NestPair = types.model({
       });
     });
     return data;
+  },
+  getGametesForLitter(litterIndex: number) {
+    const gametes = { leftMouseGametes: [] as string[], rightMouseGametes: [] as string[] };
+    if (self.litters.length && litterIndex < self.litters.length ) {
+      self.litters[litterIndex].forEach(org => {
+        gametes.leftMouseGametes.push(org.genotype.charAt(0));
+        gametes.rightMouseGametes.push(org.genotype.charAt(1));
+      });
+    }
+    return gametes;
   }
 }))
 .actions(self => ({
@@ -113,6 +123,7 @@ export const BreedingModel = types
     enableGenotypeChart: true,
     enableSexChart: true,
     enableInspectGametes: true,
+    showGametes: false,
   })
   .actions(self => ({
 
@@ -135,6 +146,10 @@ export const BreedingModel = types
 
     setShowHeteroStack(show: boolean) {
       self.showHeteroStack = show;
+    },
+
+    setShowGametes(show: boolean) {
+      self.showGametes = show;
     },
 
     toggleInteractionMode(mode: "select" | "inspect" | "breed") {
@@ -178,6 +193,9 @@ export const BreedingModel = types
     setInspectedNest(nestPairId: string) {
       self.inspectedNestPairId = nestPairId;
       self.rightPanel = "information";   // auto-switch to inspect
+    },
+    clearInspectedNest() {
+      self.inspectedNestPairId = "";
     },
     setRightPanel(val: RightPanelType) {
       self.rightPanel = val;

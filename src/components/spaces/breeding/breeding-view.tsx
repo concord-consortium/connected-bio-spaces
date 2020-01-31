@@ -3,6 +3,7 @@ import * as React from "react";
 import Slider from "rc-slider";
 import { BaseComponent, IBaseProps } from "../../base";
 import { StackedOrganism } from "../../stacked-organism";
+import { gameteHTMLLabel } from "../../../utilities/genetics";
 
 import "./breeding-view.sass";
 import "rc-slider/assets/index.css";
@@ -34,6 +35,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
     const sliderPercent = sliderMax ? litterSliderVal / sliderMax : 0;
     const litterOffset = 85 * maxLitter * sliderPercent;
     const currentLitter = maxLitter - Math.round(maxLitter * sliderPercent);
+    const gametes = activeBreedingPair.getGametesForLitter(currentLitter);
 
     const sliderClass = "litter-scroll" + (numLitters < 2 ? " hide" : "");
     const trackStyle = { width: 10 };
@@ -49,6 +51,11 @@ export class BreedingView extends BaseComponent<IProps, IState> {
           <div className="parent-label">
             { label }
           </div>
+          {breeding.showGametes && <div className="gametes-box mother"/>}
+          {breeding.showGametes && <div className="gametes-box father"/>}
+          {breeding.showGametes && <div className="gametes-message">
+            Gametes given to offspring
+          </div>}
           <div className="parent mother">
             Mother
             <div className="parent-image">
@@ -59,8 +66,13 @@ export class BreedingView extends BaseComponent<IProps, IState> {
                 showSelection={false}
                 showSex={breeding.showSexStack}
                 showHetero={breeding.showHeteroStack}
+                showLabel={breeding.showGametes}
+                isOffspring={false}
               />
             </div>
+            { breeding.showGametes && <div className="gametes">
+                { this.renderGametes(gametes.leftMouseGametes, true) }
+            </div> }
           </div>
           <div className="breed-button-container">
             <button className={"breeding-button breed-button"}
@@ -82,8 +94,13 @@ export class BreedingView extends BaseComponent<IProps, IState> {
                 showSelection={false}
                 showSex={breeding.showSexStack}
                 showHetero={breeding.showHeteroStack}
+                showLabel={breeding.showGametes}
+                isOffspring={false}
               />
             </div>
+            { breeding.showGametes && <div className="gametes">
+                { this.renderGametes(gametes.rightMouseGametes, false) }
+            </div> }
           </div>
         </div>
 
@@ -91,6 +108,9 @@ export class BreedingView extends BaseComponent<IProps, IState> {
           <div className="litter-number">
             Litter { currentLitter + 1 }
           </div>
+          {breeding.showGametes && <div className="alleles-message">
+            Alleles received from parents
+          </div>}
           <div className="total-offspring">
             Total offspring { numOffspring }
           </div>
@@ -118,6 +138,8 @@ export class BreedingView extends BaseComponent<IProps, IState> {
                           showSelection={false}
                           showSex={breeding.showSexStack}
                           showHetero={breeding.showHeteroStack}
+                          showLabel={breeding.showGametes}
+                          isOffspring={true}
                         />
                       ))
                     }
@@ -160,6 +182,24 @@ export class BreedingView extends BaseComponent<IProps, IState> {
             ? Math.min(litterSliderVal + increment, sliderMax)
             : Math.max(litterSliderVal - increment, 0);
     this.setState({litterSliderVal: change});
+  }
+
+  private renderGametes = (gametes: string[], mother: boolean) => {
+    const iconId = mother ? "#icon-egg" : "#icon-sperm";
+    return(
+      gametes.map((gamete, i) => {
+        return(
+          <div className="gamete" key={i} >
+            <svg className={"icon"}>
+              <use xlinkHref={iconId} />
+            </svg>
+            <div className="info-data" dangerouslySetInnerHTML={{
+                __html: gameteHTMLLabel(gamete)
+            }} />
+          </div>
+        );
+      })
+    );
   }
 
   private handleClickBreedButton = () => {
