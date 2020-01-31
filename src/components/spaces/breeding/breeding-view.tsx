@@ -87,7 +87,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
           </div>
         </div>
 
-        <div className={offspringClass}>
+        <div className={offspringClass} onWheel={this.handleWheel}>
           <div className="litter-number">
             Litter { currentLitter + 1 }
           </div>
@@ -146,6 +146,20 @@ export class BreedingView extends BaseComponent<IProps, IState> {
         </div>
       </div>
     );
+  }
+
+  private handleWheel = (e: any) => {
+    const { breeding } = this.stores;
+    const { litterSliderVal } = this.state;
+    const activeBreedingPair = breeding.activeBreedingPair!;
+    const numLitters = activeBreedingPair.litters.length;
+    const sliderResolution = numLitters > 50 ? 1 : numLitters > 30 ? 2 : numLitters > 10 ? 10 : 100;
+    const sliderMax = Math.max((numLitters - 1) * sliderResolution, 0);
+    const increment = sliderMax / numLitters * .5;
+    const change = e.deltaY > 0
+            ? Math.min(litterSliderVal + increment, sliderMax)
+            : Math.max(litterSliderVal - increment, 0);
+    this.setState({litterSliderVal: change});
   }
 
   private handleClickBreedButton = () => {
