@@ -185,15 +185,13 @@ export class BreedingView extends BaseComponent<IProps, IState> {
   }
 
   private renderGametes = (gametes: string[], mother: boolean) => {
-    const iconId = mother ? "#icon-egg" : "#icon-sperm";
+    const iconClass = mother ? "icon egg" : "icon sperm";
     return(
       gametes.map((gamete, i) => {
         const offset = i % 2 === 1 ? 6 : 0;
         return(
           <div className="gamete" key={i} style={{marginTop: offset}}>
-            <svg className={"icon"}>
-              <use xlinkHref={iconId} />
-            </svg>
+            <div className={iconClass}/>
             <div className="info-data" dangerouslySetInnerHTML={{
                 __html: gameteHTMLLabel(gamete)
             }} />
