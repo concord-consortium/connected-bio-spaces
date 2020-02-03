@@ -188,8 +188,9 @@ export class BreedingView extends BaseComponent<IProps, IState> {
     const iconId = mother ? "#icon-egg" : "#icon-sperm";
     return(
       gametes.map((gamete, i) => {
+        const offset = i % 2 === 1 ? 6 : 0;
         return(
-          <div className="gamete" key={i} >
+          <div className="gamete" key={i} style={{marginTop: offset}}>
             <svg className={"icon"}>
               <use xlinkHref={iconId} />
             </svg>
