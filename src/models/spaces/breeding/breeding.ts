@@ -33,7 +33,7 @@ interface LitterMeta {
   RR: number;
 }
 
-const NestPair = types.model({
+export const NestPair = types.model({
   id: types.optional(types.identifier, () => uuid()),
   leftMouse: BackpackMouse,
   rightMouse: BackpackMouse,
