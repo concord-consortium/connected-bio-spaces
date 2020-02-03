@@ -24,6 +24,14 @@ const ShuffledGametePositions = types.model({
   }
 }));
 export type IShuffledGametePositions = Instance<typeof ShuffledGametePositions>;
+const MAX_VERBOSE_LITTERS = 20;
+interface LitterMeta {
+  litters: number;
+  CC: number;
+  CR: number;
+  RC: number;
+  RR: number;
+}
 
 const NestPair = types.model({
   id: types.optional(types.identifier, () => uuid()),
@@ -36,6 +44,7 @@ const NestPair = types.model({
   hasBeenVisited: false,
   litters: types.array(types.array(BackpackMouse)),
   litterShuffledGametePositions: types.array(ShuffledGametePositions),
+  condensedLitterMeta: types.maybe(types.string),
 })
 .views((self) => ({
   get mother() {
@@ -106,7 +115,71 @@ const NestPair = types.model({
     self.litters.length = 0;
     self.litterShuffledGametePositions.length = 0;
   }
+}))
+.postProcessSnapshot(snapshot => {
+  if (snapshot.litters.length > MAX_VERBOSE_LITTERS) {
+    // remove raw litter data and save condensed meatadata version instead
+    const meta: LitterMeta = {
+      litters: snapshot.litters.length,
+      CC: 0,
+      CR: 0,
+      RC: 0,
+      RR: 0
+    };
+    snapshot.litters.forEach(litter => {
+      litter.forEach(org => {
+        meta[org.genotype]++;
+      });
+    });
+    snapshot.condensedLitterMeta = JSON.stringify(meta);
+    delete snapshot.litters;
+  } else {
+    delete snapshot.condensedLitterMeta;
+  }
+  return snapshot;
+})
+.actions(self => ({
+  afterCreate() {
+    if (self.condensedLitterMeta) {
+      // ** create new set of litters, given the metadata saved **
+      const meta = JSON.parse(self.condensedLitterMeta) as LitterMeta;
+
+      // create random array of genotypes, with correct numbers;
+      const totalOffspring = meta.CC + meta.CR + meta.RC + meta.RR;
+      let  genotypes = new Array(totalOffspring);
+      genotypes.fill("CC", 0, meta.CC);
+      genotypes.fill("CR", meta.CC, meta.CC + meta.CR);
+      genotypes.fill("RC", meta.CC + meta.CR, meta.CC + meta.CR + meta.RC);
+      genotypes.fill("RR", meta.CC + meta.CR + meta.RC, totalOffspring);
+      genotypes = shuffle(genotypes);
+
+      // create random array of litter sizes, each 3-5, adding up to corect number of offspring
+      let litterSizes: number[] = new Array(meta.litters).fill(3);
+      let littersOfFour = totalOffspring - (meta.litters * 3);
+      const littersOfFive = totalOffspring - (meta.litters * 4) > 0 ?
+        totalOffspring - (meta.litters * 4) : Math.round(Math.random() * (littersOfFour / 2));
+      littersOfFour -= littersOfFive * 2;
+      litterSizes.fill(5, 0, littersOfFive);
+      litterSizes.fill(4, littersOfFive, littersOfFive + littersOfFour);
+      litterSizes = shuffle(litterSizes);
+
+      // create offspring
+      let currOffspring = 0;
+      for (let i = 0; i < meta.litters; i++) {
+        const litter: BackpackMouseType[] = [];
+        for (let j = 0; j < litterSizes[i]; j++) {
+          litter.push(BackpackMouse.create({
+            sex: Math.random() < 0.5 ? "female" : "male",
+            genotype: genotypes[currOffspring]
+          }));
+          currOffspring++;
+        }
+        self.litters.push(litter as any);
+      }
+    }
+  }
 }));
+
 export type INestPair = Instance<typeof NestPair>;
 
 export function createBreedingModel(breedingProps: any) {
