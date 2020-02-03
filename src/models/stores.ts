@@ -10,7 +10,7 @@ import { OrganismsMouseModelType } from "./spaces/organisms/organisms-mouse";
 import { OrganismsRowModelType } from "./spaces/organisms/organisms-row";
 import { autorun } from "mobx";
 import { onAction } from "mobx-state-tree";
-import { BreedingModelType, createBreedingModel } from "./spaces/breeding/breeding";
+import { BreedingModelType, createBreedingModel, INestPair } from "./spaces/breeding/breeding";
 
 export type Curriculum = "mouse";
 
@@ -82,6 +82,9 @@ export interface UserSaveDataType {
     organismsMice: OrganismsMouseModelType[],
     rows: OrganismsRowModelType[]
   };
+  breeding?: {
+    nestPairs: INestPair[]
+  };
 }
 
 export function getUserSnapshot(stores: IStores): UserSaveDataType {
@@ -97,6 +100,9 @@ export function getUserSnapshot(stores: IStores): UserSaveDataType {
     organisms: {
       organismsMice,
       rows
+    },
+    breeding: {
+      nestPairs: stores.breeding.nestPairs
     }
   };
 }

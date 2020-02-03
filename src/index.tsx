@@ -58,6 +58,7 @@ function initializeModel(studentData: UserSaveDataType) {
     onSnapshot(stores.backpack, saveUserData);
     onSnapshot(stores.ui, saveUserData);
     onSnapshot(stores.organisms, saveUserData);
+    onSnapshot(stores.breeding, saveUserData);
 
     const outerWrapperStyle = { className: "outer-scale-wrapper" };
     const aspectRatio = initialStore.topBar ? ASPECT_RATIO_TOP_BAR : ASPECT_RATIO;
