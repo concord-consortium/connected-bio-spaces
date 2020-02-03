@@ -35,8 +35,8 @@ export class BreedingView extends BaseComponent<IProps, IState> {
     const sliderPercent = sliderMax ? litterSliderVal / sliderMax : 0;
     const litterOffset = 85 * maxLitter * sliderPercent;
     const currentLitter = maxLitter - Math.round(maxLitter * sliderPercent);
-    const gametes = activeBreedingPair.getGametesForLitter(currentLitter);
-
+    const gametes = activeBreedingPair.getLitterGametes(currentLitter);
+    const gametePositions = activeBreedingPair.getLitterGametePositions(currentLitter);
     const sliderClass = "litter-scroll" + (numLitters < 2 ? " hide" : "");
     const trackStyle = { width: 10 };
     const handleStyle = {
@@ -71,7 +71,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
               />
             </div>
             { breeding.showGametes && <div className="gametes">
-                { this.renderGametes(gametes.leftMouseGametes, true) }
+                { this.renderGametes(gametes.leftMouseGametes, gametePositions.leftMousePositions, true) }
             </div> }
           </div>
           <div className="breed-button-container">
@@ -99,7 +99,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
               />
             </div>
             { breeding.showGametes && <div className="gametes">
-                { this.renderGametes(gametes.rightMouseGametes, false) }
+                { this.renderGametes(gametes.rightMouseGametes, gametePositions.rightMousePositions, false) }
             </div> }
           </div>
         </div>
@@ -184,11 +184,12 @@ export class BreedingView extends BaseComponent<IProps, IState> {
     this.setState({litterSliderVal: change});
   }
 
-  private renderGametes = (gametes: string[], mother: boolean) => {
+  private renderGametes = (gametes: string[], gametePositions: number[], mother: boolean) => {
     const iconClass = mother ? "icon egg" : "icon sperm";
     return(
-      gametes.map((gamete, i) => {
+      gametePositions.map((position, i) => {
         const offset = i % 2 === 1 ? 6 : 0;
+        const gamete = gametes[position];
         return(
           <div className="gamete" key={i} style={{marginTop: offset}}>
             <div className={iconClass}/>
