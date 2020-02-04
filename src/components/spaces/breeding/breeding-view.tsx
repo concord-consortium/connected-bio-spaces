@@ -36,7 +36,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
     const litterOffset = 85 * maxLitter * sliderPercent;
     const currentLitter = maxLitter - Math.round(maxLitter * sliderPercent);
     const gametes = activeBreedingPair.getLitterGametes(currentLitter);
-    const gametePositions = activeBreedingPair.getLitterGametePositions(currentLitter);
+    const gametePositions = activeBreedingPair.getLitterShuffledGametePositions(currentLitter);
     const sliderClass = "litter-scroll" + (numLitters < 2 ? " hide" : "");
     const trackStyle = { width: 10 };
     const handleStyle = {
@@ -44,7 +44,6 @@ export class BreedingView extends BaseComponent<IProps, IState> {
       width: 24
     };
     const railStyle = { width: 10 };
-
     return (
       <div className="breeding-view">
         <div className="parents">
@@ -71,7 +70,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
               />
             </div>
             { breeding.showGametes && <div className="gametes">
-                { this.renderGametes(gametes.leftMouseGametes, gametePositions.leftMousePositions, true) }
+                { this.renderGametes(gametes.leftMouseGametes, gametePositions.leftMouse, true) }
             </div> }
           </div>
           <div className="breed-button-container">
@@ -99,7 +98,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
               />
             </div>
             { breeding.showGametes && <div className="gametes">
-                { this.renderGametes(gametes.rightMouseGametes, gametePositions.rightMousePositions, false) }
+                { this.renderGametes(gametes.rightMouseGametes, gametePositions.rightMouse, false) }
             </div> }
           </div>
         </div>
