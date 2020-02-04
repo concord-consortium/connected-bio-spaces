@@ -5,12 +5,25 @@ import { breed, createGamete, fertilize } from "../../../utilities/genetics";
 import { ToolbarButton } from "../populations/populations";
 import uuid = require("uuid");
 import { RightPanelType } from "../../../models/ui";
+import { shuffle } from "lodash";
 
 const BreedingInteractionModeEnum = types.enumeration("interaction", ["none", "breed", "select", "inspect"]);
 export type BreedingInteractionModeType = typeof BreedingInteractionModeEnum.Type;
 
 const BreedingChartTypeEnum = types.enumeration("chart", ["color", "genotype", "sex"]);
 export type BreedingChartType = typeof BreedingChartTypeEnum.Type;
+
+const ShuffledGametePositions = types.model({
+  leftMouse: types.array(types.number),
+  rightMouse: types.array(types.number),
+})
+.actions(self => ({
+  setPositions(leftPositions: any, rightPositions: any) {
+    self.leftMouse = leftPositions;
+    self.rightMouse = rightPositions;
+  }
+}));
+export type IShuffledGametePositions = Instance<typeof ShuffledGametePositions>;
 
 const NestPair = types.model({
   id: types.optional(types.identifier, () => uuid()),
@@ -21,7 +34,8 @@ const NestPair = types.model({
   label: types.string,
   currentBreeding: false,
   hasBeenVisited: false,
-  litters: types.array(types.array(BackpackMouse))
+  litters: types.array(types.array(BackpackMouse)),
+  litterShuffledGametePositions: types.array(ShuffledGametePositions),
 })
 .views((self) => ({
   get mother() {
@@ -44,6 +58,22 @@ const NestPair = types.model({
       });
     });
     return data;
+  },
+  getLitterGametes(litterIndex: number) {
+    const gametes = { leftMouseGametes: [] as string[], rightMouseGametes: [] as string[] };
+    if (self.litters.length && litterIndex < self.litters.length) {
+      self.litters[litterIndex].forEach(org => {
+        gametes.leftMouseGametes.push(org.genotype.charAt(0));
+        gametes.rightMouseGametes.push(org.genotype.charAt(1));
+      });
+    }
+    return gametes;
+  },
+  getLitterShuffledGametePositions(litterIndex: number) {
+    if (self.litterShuffledGametePositions.length && litterIndex < self.litterShuffledGametePositions.length) {
+      return self.litterShuffledGametePositions[litterIndex];
+    }
+    return { leftMouse: [] as number[], rightMouse: [] as number[] };
   }
 }))
 .actions(self => ({
@@ -61,14 +91,20 @@ const NestPair = types.model({
   },
   breedLitter(litterSize: number) {
     const litter: BackpackMouseType[] = [];
+    const positions: number[] = [];
     for (let i = 0; i < litterSize; i++) {
       const child = breed(self.mother, self.father);
       litter.push(BackpackMouse.create(child));
+      positions.push(i);
     }
     self.litters.push(litter as any);
+    const shuffledPositions = ShuffledGametePositions.create();
+    shuffledPositions.setPositions(shuffle(positions), shuffle(positions));
+    self.litterShuffledGametePositions.push(shuffledPositions);
   },
   clearLitters() {
     self.litters.length = 0;
+    self.litterShuffledGametePositions.length = 0;
   }
 }));
 export type INestPair = Instance<typeof NestPair>;
@@ -113,6 +149,7 @@ export const BreedingModel = types
     enableGenotypeChart: true,
     enableSexChart: true,
     enableInspectGametes: true,
+    showGametes: false,
   })
   .actions(self => ({
 
@@ -135,6 +172,10 @@ export const BreedingModel = types
 
     setShowHeteroStack(show: boolean) {
       self.showHeteroStack = show;
+    },
+
+    setShowGametes(show: boolean) {
+      self.showGametes = show;
     },
 
     toggleInteractionMode(mode: "select" | "inspect" | "breed") {
@@ -178,6 +219,9 @@ export const BreedingModel = types
     setInspectedNest(nestPairId: string) {
       self.inspectedNestPairId = nestPairId;
       self.rightPanel = "information";   // auto-switch to inspect
+    },
+    clearInspectedNest() {
+      self.inspectedNestPairId = "";
     },
     setRightPanel(val: RightPanelType) {
       self.rightPanel = val;

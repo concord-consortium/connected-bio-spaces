@@ -44,7 +44,7 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
     const showingNesting = breeding.breedingNestPairId === undefined;
     const breedButtonClass = "breed " + (showingNesting && breeding.interactionMode === "breed" ?
       "sticky-breed " : "sticky-breed-off ");
-    const gametesButtonClass = "gametes disabled";
+    const gametesButtonClass = "gametes" + (showingNesting ? " disabled" : "");
     const inspectButtonClass = (breeding.interactionMode === "inspect" ? "sticky" : "sticky-off")
                           + (!showingNesting ? " disabled" : "");
     const collectButtonClass = (breeding.interactionMode === "select" ? "sticky-alt" : "sticky-alt-off")
@@ -57,6 +57,8 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
     const mainComponent = showingNesting ? <NestingView /> : <BreedingView />;
     const switchLevelsButtonLabel = showingNesting ? "Breeding" : "Nesting";
     const switchLevelsIcon = showingNesting ? "breed" : "nests";
+    const hideGametesClass = "inner-box inner-button left" + (!breeding.showGametes ? " selected" : " unselected");
+    const showGametesClass = "inner-box inner-button right" + (breeding.showGametes ? " selected" : " unselected");
 
     return(
       <div>
@@ -68,20 +70,19 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
               <button className={"breeding-button " + breedButtonClass}
                       onClick={showingNesting ? this.handleClickBreedButton : this.handleClickNestingButton}
                       data-test="breed-button">
-                <div className="inner-box">
+                <div className="inner-box container">
                   <svg className={"icon " + breedButtonClass}>
                     <use xlinkHref={`#icon-${switchLevelsIcon}`} />
                   </svg>
                 </div>
                 <div className="label">{switchLevelsButtonLabel}</div>
               </button>
-              <button className={"breeding-button " + gametesButtonClass}
-                      onClick={this.handleClickBreedButton} data-test="gametes-button">
+              <button className={"breeding-button " + gametesButtonClass} data-test="gametes-button">
                 <div className="horizontal-container">
-                  <div className="inner-box left">
+                  <div className={hideGametesClass} onClick={this.handleClickHideGametesButton}>
                     <div className="label">Hide</div>
                   </div>
-                  <div className="inner-box right">
+                  <div className={showGametesClass} onClick={this.handleClickShowGametesButton}>
                     <svg className={"icon " + gametesButtonClass}>
                       <use xlinkHref="#icon-gametes" />
                     </svg>
@@ -129,7 +130,7 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
 
   private handleClickBreedButton = () => {
     this.stores.breeding.toggleInteractionMode("breed");
-    this.stores.breeding.setInspectedNest("");
+    this.stores.breeding.clearInspectedNest();
   }
 
   private handleClickNestingButton = () => {
@@ -149,5 +150,13 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
       const target = event.target;
       button.action((target as any).checked);
     };
+  }
+
+  private handleClickHideGametesButton = () => {
+    this.stores.breeding.setShowGametes(false);
+  }
+
+  private handleClickShowGametesButton = () => {
+    this.stores.breeding.setShowGametes(true);
   }
 }

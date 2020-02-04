@@ -1,3 +1,5 @@
+@import "./vars"
+
 .stacked-organism
   position: relative
 
@@ -34,3 +36,15 @@
     transition-duration: .25s
     &.show
       opacity: 1
+  .genotype-label
+    position: absolute
+    color: $color-nav-cinder-dark2
+    font-weight: 400
+    font-size: 12px
+    &.parent-mouse
+      top: 68px
+      left: 35px
+    &.child-mouse
+      top: 2px
+      left: 20px
+      font-size: 10px

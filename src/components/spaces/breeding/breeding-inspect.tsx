@@ -4,6 +4,7 @@ import { BaseComponent, IBaseProps } from "../../base";
 import { INestPair } from "../../../models/spaces/breeding/breeding";
 import { BackpackMouseType } from "../../../models/backpack-mouse";
 import { StackedOrganism } from "../../stacked-organism";
+import { genotypeHTMLLabel } from "../../../utilities/genetics";
 import "./breeding-inspect.sass";
 
 interface IProps extends IBaseProps {
@@ -63,7 +64,7 @@ export class BreedingInspect extends BaseComponent<IProps, IState> {
     const sexLabel = mouse.sex === "female" ? "Female" : "Male";
     const colorLabel = mouse.baseColor === "white" ? "Light brown fur" :
                        mouse.baseColor === "tan" ? "Medium brown fur" : "Dark brown fur";
-    const genotypeLabel = this.getGenotypeLabel(mouse.genotype);
+    const genotypeLabel = genotypeHTMLLabel(mouse.genotype);
     return (
       <div className="mouse-info">
         <div className="info-row">
@@ -82,21 +83,6 @@ export class BreedingInspect extends BaseComponent<IProps, IState> {
         </div>
       </div>
     );
-  }
-
-  public getGenotypeLabel(genotype: string) {
-    switch (genotype) {
-      case "CC":
-        return "R<sup>L</sup>R<sup>L</sup>";
-      case "RR":
-        return "R<sup>D</sup>R<sup>D</sup>";
-      case "RC":
-        return "R<sup>D</sup>R<sup>L</sup>";
-      case "CR":
-        return "R<sup>L</sup>R<sup>D</sup>";
-      default:
-        return "";
-    }
   }
 
   public renderInspectedMouse(mouse: BackpackMouseType) {

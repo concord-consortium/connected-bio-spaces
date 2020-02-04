@@ -95,8 +95,15 @@
     border-radius: $component-border-radius * 3
     height: 28px
     width: 54px
-    &.left
+    &.inner-button
       width: 42px
+    &.selected
+      background-color: $color-nav-shamrock-dark1
+      .label
+        color: white
+      .icon
+        fill: white
+    &.left
       height: 28px
       margin-right: 1px
       border-radius: $component-border-radius * 3 0 0 $component-border-radius * 3
@@ -105,7 +112,6 @@
         top: 30px
         left: 150px
     &.right
-      width: 42px
       height: 28px
       margin-left: 1px
       border-radius: 0 $component-border-radius * 3 $component-border-radius * 3 0
@@ -120,7 +126,7 @@
     .label
       font-size: 10px
       margin: 0
-      color: $color-simdata-brick
+      color: $color-simdata-brick-dark2
     .icon
       width: 54px
 
@@ -137,20 +143,31 @@
 
 /* hover and mousedown states */
 
-.breeding-button:active .icon
+.breeding-button:active:not(.gametes) .icon
   fill: $color-white
 
-.breeding-button:hover .inner-box
+.breeding-button:hover .inner-box.container
   background-color: $color-simdata-brick-light1
 
-.breeding-button:active .inner-box
+.breeding-button:active .inner-box.container
   background-color: $color-nav-shamrock-dark1
 
+.inner-box.inner-button.unselected:hover
+  background-color: $color-simdata-brick-light1
+
+.inner-box.inner-button.unselected:active
+  background-color: $color-nav-shamrock-dark1
+.inner-box.inner-button.unselected:active .icon
+  fill: $color-white
+
+.inner-box.inner-button.unselected:active .label
+  color: $color-white
+
 /* hover and mousedown states of green sticky button */
-.breeding-button.sticky-breed:hover .inner-box
+.breeding-button.sticky-breed:hover .inner-box.container
   background-color: $color-nav-shamrock-light1
 
-.breeding-button.sticky-breed:active .inner-box
+.breeding-button.sticky-breed:active .inner-box.container
   background-color: $color-nav-shamrock-light2
 
 .breeding-button.sticky-breed:active .icon

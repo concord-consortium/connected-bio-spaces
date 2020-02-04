@@ -15,7 +15,6 @@
     display: flex
     width: 100%
     justify-content: space-around
-    align-items: center
     font-size: 14px
     font-weight: 500
     padding-top: 8px
@@ -25,10 +24,33 @@
       top: 20px
       left: 6px
 
+    .gametes-box
+      position: absolute
+      width: 112px
+      height: 158px
+      border-radius: 10px
+      background-color: $color-simdata-brick-light3
+      top: 6px
+      &.mother
+        left: 55px
+      &.father
+        left: 246px
+
+    .gametes-message
+      position: absolute
+      width: 40px
+      text-align: center
+      color: $color-nav-cinder-dark2
+      top: 120px
+      left: 5px
+      font-size: 10px
+      font-weight: 400
+
     .parent
       display: flex
       flex-direction: column
       align-items: center
+      z-index: 1
       &.mother
         padding-left: 61px
       &.father
@@ -42,9 +64,33 @@
         border-radius: 50%
         background-color: $color-simdata-brick-light3
         margin-top: 5px
+      .gametes
+        display: flex
+        flex-direction: row
+        .gamete
+          display: flex
+          flex-direction: column
+          justify-content: center
+          align-items: center
+          color: $color-nav-cinder-dark2
+          margin: 1px
+          font-size: 10px
+          .icon
+            width: 16px
+            height: 16px
+            margin-bottom: 2px
+            transition-duration: $fade-time
+            &.egg
+              background-image: url("../../../assets/icons/egg.svg")
+              &:hover
+                background-image: url("../../../assets/icons/egg-hi.svg")
+            &.sperm
+              background-image: url("../../../assets/icons/sperm.svg")
+              &:hover
+                background-image: url("../../../assets/icons/sperm-hi.svg")
 
     .breed-button-container
-      padding-top: 18px
+      padding-top: 30px
 
       .breeding-button.breed-button
         color: $color-nav-shamrock-dark2
@@ -80,7 +126,7 @@
     &.hide
       opacity: 0
 
-    .litter-number, .total-offspring, .reset-button-container
+    .litter-number, .total-offspring, .reset-button-container, .alleles-message
       position: absolute
       width: 40px
       text-align: center
@@ -90,7 +136,14 @@
       font-size: 14px
       font-weight: 500
     .total-offspring
+      color: $color-nav-cinder-dark2
       top: 155px
+      left: 5px
+      font-size: 10px
+      font-weight: 400
+    .alleles-message
+      color: $color-nav-cinder-dark2
+      top: 50px
       left: 5px
       font-size: 10px
       font-weight: 400

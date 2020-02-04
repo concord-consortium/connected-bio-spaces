@@ -1,5 +1,5 @@
 import * as React from "react";
-
+import { genotypeHTMLLabel } from "../utilities/genetics";
 import "./stacked-organism.sass";
 import { BackpackMouseType } from "../models/backpack-mouse";
 
@@ -11,6 +11,8 @@ interface IProps {
   showSelection: boolean;
   showSex: boolean;
   showHetero: boolean;
+  showLabel?: boolean;
+  isOffspring?: boolean;
 }
 
 const path = "assets/curriculum/mouse/populations/";
@@ -25,7 +27,8 @@ export const StackedOrganism: React.SFC<IProps> = (props) => {
   const sexImage = props.organism.sex === "female" ? femaleSexImage : maleSexImage;
   const sexClass = "sex-stack " + (props.showSex ? "show" : "");
   const imgClasses = "organism-image " + (props.flipped ? "flip" : "");
-
+  const label = genotypeHTMLLabel(props.organism.genotype);
+  const labelClass = "genotype-label " + (props.isOffspring ? "child-mouse" : "parent-mouse");
   // sizes defined here instead of in css so we can base width and left dimension off height dimension
   const fullSize = {
     height: props.height,
@@ -37,6 +40,7 @@ export const StackedOrganism: React.SFC<IProps> = (props) => {
 
   return (
     <div className="stacked-organism" style={fullSize}>
+      { props.showLabel && <div className={labelClass} dangerouslySetInnerHTML={{ __html: label }}/> }
       <img src={selectionImage} className={selectionClass} style={fullSize} data-test="selection-image" />
       {
         props.organismImages.map((image, i) =>
@@ -48,4 +52,5 @@ export const StackedOrganism: React.SFC<IProps> = (props) => {
       <img src={sexImage} className={sexClass} style={fullSize} data-test="sex-image" />
     </div>
   );
+
 };
