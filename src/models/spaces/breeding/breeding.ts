@@ -133,6 +133,7 @@ export const NestPair = types.model({
     });
     snapshot.condensedLitterMeta = JSON.stringify(meta);
     delete snapshot.litters;
+    delete snapshot.litterShuffledGametePositions;
   } else {
     delete snapshot.condensedLitterMeta;
   }
@@ -175,6 +176,11 @@ export const NestPair = types.model({
           currOffspring++;
         }
         self.litters.push(litter as any);
+
+        const shuffledPositions = ShuffledGametePositions.create();
+        const indices = Array.from(Array(litterSizes[i]).keys());   // [0, 1, ... n]
+        shuffledPositions.setPositions(shuffle(indices), shuffle(indices));
+        self.litterShuffledGametePositions.push(shuffledPositions);
       }
     }
   }
