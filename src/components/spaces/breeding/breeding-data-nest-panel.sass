@@ -13,20 +13,19 @@
       width: 74px
       height: 58px
       border: 2px dashed $color-nav-cinder-light1
-      border-radius: 10px
+      border-radius: 7px
       font-size: 14px
       font-family: $font-stack
       font-weight: 500
       background-color: white
-      margin: 6px
+      margin: 10px
+      box-sizing: border-box
       &.current
         background-color: $color-simdata-brick-dark1
-        border-width: 0
-        margin: 8px
+        border: 2px solid $color-white
       &.active
         background-color: $color-simdata-brick-light2
-        border-width: 0
-        margin: 8px
+        border: 2px solid $color-white
         cursor: pointer
         &:hover
           background-color: $color-simdata-brick-light1
@@ -37,9 +36,9 @@
         &:active .title
           color: white
       .mouse-holder
-        height: 34px
+        height: 33px
         .left-mouse
-          margin: 10px 2px 0 5px
+          margin: 10px 1px 0 5px
           width: 30px
         .right-mouse
           margin: 5px 3px 5px 0
@@ -50,21 +49,27 @@
         opacity: .5
         width: 100%
         text-align: center
+        transform: translate3d(0px, 0px, 0px)  // needed to keep visibility after scaling
         &.active
           color: $color-simdata-brick-dark2
           opacity: 1
         &.current
           color: white
           opacity: 1
+    .pie-chart
+      margin-right: 12px
     .empty-pie
       width: 86px
       height: 86px
       border: 2px dashed $color-nav-cinder-light1
       border-radius: 50%
+      margin-right: 12px
   .pie-label
+    font-family: "Arial"
     font-size: 14px
-    color: #434E56
+    font-weight: 400
+    color: $color-nav-cinder-dark2
     text-align: right
-    margin-right: 20px
+    margin-right: 26px
     margin-top: 6px
     height: 20px
