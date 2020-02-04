@@ -42,3 +42,13 @@ export function downsample(points: DataPointType[], maxSize: number) {
 function calculateTriangleArea(a: DataPointType, b: DataPointType, c: DataPointType) {
   return Math.abs((a.a1 - c.a1) * (b.a2 - a.a2) - (a.a1 - b.a1) * (c.a2 - a.a2)) / 2;
 }
+
+/**
+ * Durstenfelt in-place shuffle
+ */
+export function shuffle(arr: any[]) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
