@@ -69,7 +69,7 @@ const chartData = {
       axisLabelA2: "Number of mice"
     },
     {
-      name: "CC Mice",
+      name: "RᴸRᴸ Mice",
       dataPoints: [],
       color: "#f4ce83",
       maxPoints: 25,
@@ -83,7 +83,7 @@ const chartData = {
       axisLabelA2: "Percent (%)"
     },
     {
-      name: "CR Mice",
+      name: "RᴸRᴰ Mice",
       dataPoints: [],
       color: "#db9e26",
       maxPoints: 25,
@@ -97,7 +97,7 @@ const chartData = {
       axisLabelA2: "Percent (%)"
     },
     {
-      name: "RC Mice",
+      name: "RᴰRᴸ Mice",
       dataPoints: [],
       color: "#db9e26",
       maxPoints: 25,
@@ -111,7 +111,7 @@ const chartData = {
       axisLabelA2: "Percent (%)"
     },
     {
-      name: "RR Mice",
+      name: "RᴰRᴰ Mice",
       dataPoints: [],
       color: "#795423",
       maxPoints: 25,
