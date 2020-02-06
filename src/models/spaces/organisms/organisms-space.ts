@@ -24,7 +24,7 @@ export const kSubstanceInfo: SubstanceInfo = {
     graphPattern: "diagonal"
   },
   signalProtein: {
-    displayName: "Signal Protein",
+    displayName: "Activated SP",
     mysteryLabel: "substance B",
     color: "#29abe2",
     graphPattern: "diagonal-right-left"
