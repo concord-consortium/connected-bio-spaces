@@ -26,7 +26,6 @@ export class NestPair extends BaseComponent<IProps, IState> {
   public render() {
     const { showNestHighlight, showPairHighlight } = this.props;
     const positionClass = this.getPositionClass();
-    const nestImage = this.getNestImage();
     const nestHoverImage = this.getNestHoverImage();
     const leftMouse = this.props.nestPair.leftMouse;
     const rightMouse = this.props.nestPair.rightMouse;
@@ -42,11 +41,6 @@ export class NestPair extends BaseComponent<IProps, IState> {
     if (rightMouseCollected) rightMouseImages.push("assets/curriculum/mouse/breeding/nesting/nest_mouse_outline.png");
     return(
       <div className={nestClass} onClick={this.handleClickNest}>
-        <img
-          src={nestImage}
-          className={`nest-pair-background ${positionClass}`}
-          data-test="nest-pair-background-image"
-        />
         <img
           src={nestHoverImage}
           className={nestBackgroundHoverClass}
@@ -104,25 +98,6 @@ export class NestPair extends BaseComponent<IProps, IState> {
         return "left-bottom";
       case 6:
         return "right-bottom";
-      default:
-        return "";
-    }
-  }
-
-  private getNestImage = () => {
-    switch (this.props.positionIndex) {
-      case 1:
-        return "assets/curriculum/mouse/breeding/nesting/left-top.png";
-      case 2:
-        return "assets/curriculum/mouse/breeding/nesting/right-top.png";
-      case 3:
-        return "assets/curriculum/mouse/breeding/nesting/left-middle.png";
-      case 4:
-        return "assets/curriculum/mouse/breeding/nesting/right-middle.png";
-      case 5:
-        return "assets/curriculum/mouse/breeding/nesting/left-bottom.png";
-      case 6:
-        return "assets/curriculum/mouse/breeding/nesting/right-bottom.png";
       default:
         return "";
     }
