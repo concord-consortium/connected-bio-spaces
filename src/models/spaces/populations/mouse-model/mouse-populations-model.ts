@@ -125,7 +125,7 @@ const chartData = {
       axisLabelA2: "Percent (%)"
     },
     {
-      name: "C Alleles",
+      name: "Rᴸ Alleles",
       dataPoints: [],
       color: "#f4ce83",
       maxPoints: 25,
@@ -139,7 +139,7 @@ const chartData = {
       axisLabelA2: "Percent (%)"
     },
     {
-      name: "R Alleles",
+      name: "Rᴰ Alleles",
       dataPoints: [],
       color: "#795423",
       maxPoints: 25,
