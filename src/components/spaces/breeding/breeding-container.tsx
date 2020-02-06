@@ -44,7 +44,7 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
     const showingNesting = breeding.breedingNestPairId === undefined;
     const breedButtonClass = "breed " + (showingNesting && breeding.interactionMode === "breed" ?
       "sticky-breed " : "sticky-breed-off ");
-    const gametesButtonClass = "gametes" + (showingNesting ? " disabled" : "");
+    const gametesButtonClass = "gametes" + (showingNesting || !breeding.enableInspectGametes ? " disabled" : "");
     const inspectButtonClass = (breeding.interactionMode === "inspect" ? "sticky" : "sticky-off")
                           + (!showingNesting ? " disabled" : "");
     const collectButtonClass = (breeding.interactionMode === "select" ? "sticky-alt" : "sticky-alt-off")
