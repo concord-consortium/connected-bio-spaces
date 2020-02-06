@@ -23,222 +23,222 @@
   border-width: 2px 0 0 0
   transform: translate3d(0px, 0px, 0px)  // needed to keep visibility after scaling
 
-.toolbar-row
-  display: flex
-  flex-direction: row
-  width: 100%
-  justify-content: center
-  &.align-left
-    justify-content: left
-    left-margin: 6px
+  .toolbar-row
+    display: flex
+    flex-direction: row
+    width: 100%
+    justify-content: center
+    &.align-left
+      justify-content: left
+      margin-left: 6px
 
-.breeding-checkbox
-  height: 20px
-  width: 20px
-  background: $color-simdata-brick-light2
+  .breeding-checkbox
+    height: 20px
+    width: 20px
+    background: $color-simdata-brick-light2
 
-.breeding-button
-  display: flex
-  flex-direction: column
-  justify-content: center
-  align-items: center
-  height: 50px
-  width: 52px
-  margin: 6px
-  border: none
-  outline: none
-  border-radius: $component-border-radius
-  font-size: $font-size-label1
-  font-family: $font-stack
-  color: $color-simdata-brick-dark2
-  background-color: $color-simdata-brick-light2
-  cursor: pointer
-  transition-duration: $fade-time
-  &.breed, &.gametes
-    width: 62px
-    background-color: $color-simdata-brick-dark1
-    color: $color-simdata-brick-light3
-  &.gametes
-    width: 95px
-
-  &.sticky
-    color: $color-white
-    background-color: $color-simdata-brick-dark1
-
-  &.sticky-alt
-    color: $color-white
-    background-color: $color-nav-cerulean-dark1
-
-  &.disabled
-    opacity: .5
-    pointer-events: none
-
-  .icon
-    width: 44px
-    height: 28px
-    fill: $color-simdata-brick
+  .breeding-button
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    height: 50px
+    width: 52px
+    margin: 6px
+    border: none
+    outline: none
+    border-radius: $component-border-radius
+    font-size: $font-size-label1
+    font-family: $font-stack
+    color: $color-simdata-brick-dark2
+    background-color: $color-simdata-brick-light2
+    cursor: pointer
+    transition-duration: $fade-time
+    &.breed, &.gametes
+      width: 62px
+      background-color: $color-simdata-brick-dark1
+      color: $color-simdata-brick-light3
+    &.gametes
+      width: 95px
 
     &.sticky
-      fill: $color-white
+      color: $color-white
+      background-color: $color-simdata-brick-dark1
 
     &.sticky-alt
-      fill: $color-white
+      color: $color-white
+      background-color: $color-nav-cerulean-dark1
 
     &.disabled
       opacity: .5
+      pointer-events: none
 
-  .horizontal-container
-    display: flex
-    flex-direction: row
-
-  .inner-box
-    background-color: $color-simdata-brick-light2
-    border-radius: 14px
-    height: 28px
-    width: 54px
-    &.inner-button
-      width: 42px
-    &.selected
-      background-color: $color-nav-shamrock-dark1
-      .label
-        color: white
-      .icon
-        fill: white
-    &.left
-      height: 28px
-      margin-right: 1px
-      border-radius: 14px 0 0 14px
-      .label
-        position: absolute
-        top: 30px
-        left: 150px
-    &.right
-      height: 28px
-      margin-left: 1px
-      border-radius: 0 14px 14px 0
-      .icon
-        width: 42px
-        height: 16px
-        margin: 0
-      .label
-        position: absolute
-        top: 30px
-        left: 186px
-    .label
-      font-size: 10px
-      margin: 0
-      color: $color-simdata-brick-dark2
     .icon
-      width: 54px
+      width: 44px
+      height: 28px
+      fill: $color-simdata-brick
 
-  .label
-    margin-top: $internal-component-margin
-    margin-bottom: $internal-component-margin
+      &.sticky
+        fill: $color-white
 
-  &.sticky-breed
+      &.sticky-alt
+        fill: $color-white
+
+      &.disabled
+        opacity: .5
+
+    .horizontal-container
+      display: flex
+      flex-direction: row
+
     .inner-box
-      background-color: $color-nav-shamrock-dark1
-    .icon
-      fill: $color-white
+      background-color: $color-simdata-brick-light2
+      border-radius: 14px
+      height: 28px
+      width: 54px
+      &.inner-button
+        width: 42px
+      &.selected
+        background-color: $color-nav-shamrock-dark1
+        .label
+          color: white
+        .icon
+          fill: white
+      &.left
+        height: 28px
+        margin-right: 1px
+        border-radius: 14px 0 0 14px
+        .label
+          position: absolute
+          top: 30px
+          left: 150px
+      &.right
+        height: 28px
+        margin-left: 1px
+        border-radius: 0 14px 14px 0
+        .icon
+          width: 42px
+          height: 16px
+          margin: 0
+        .label
+          position: absolute
+          top: 30px
+          left: 186px
+      .label
+        font-size: 10px
+        margin: 0
+        color: $color-simdata-brick-dark2
+      .icon
+        width: 54px
+
+    .label
+      margin-top: $internal-component-margin
+      margin-bottom: $internal-component-margin
+
+    &.sticky-breed
+      .inner-box
+        background-color: $color-nav-shamrock-dark1
+      .icon
+        fill: $color-white
 
 
-/* hover and mousedown states */
+  /* hover and mousedown states */
 
-.breeding-button:active:not(.gametes) .icon
-  fill: $color-white
+  .breeding-button:active:not(.gametes) .icon
+    fill: $color-white
 
-.breeding-button:hover .inner-box.container
-  background-color: $color-simdata-brick-light1
+  .breeding-button:hover .inner-box.container
+    background-color: $color-simdata-brick-light1
 
-.breeding-button:active .inner-box.container
-  background-color: $color-nav-shamrock-dark1
+  .breeding-button:active .inner-box.container
+    background-color: $color-nav-shamrock-dark1
 
-.inner-box.inner-button.unselected:hover
-  background-color: $color-simdata-brick-light1
+  .inner-box.inner-button.unselected:hover
+    background-color: $color-simdata-brick-light1
 
-.inner-box.inner-button.unselected:active
-  background-color: $color-nav-shamrock-dark1
-.inner-box.inner-button.unselected:active .icon
-  fill: $color-white
+  .inner-box.inner-button.unselected:active
+    background-color: $color-nav-shamrock-dark1
+  .inner-box.inner-button.unselected:active .icon
+    fill: $color-white
 
-.inner-box.inner-button.unselected:active .label
-  color: $color-white
+  .inner-box.inner-button.unselected:active .label
+    color: $color-white
 
-/* hover and mousedown states of green sticky button */
-.breeding-button.sticky-breed:hover .inner-box.container
-  background-color: $color-nav-shamrock-light1
+  /* hover and mousedown states of green sticky button */
+  .breeding-button.sticky-breed:hover .inner-box.container
+    background-color: $color-nav-shamrock-light1
 
-.breeding-button.sticky-breed:active .inner-box.container
-  background-color: $color-nav-shamrock-light2
+  .breeding-button.sticky-breed:active .inner-box.container
+    background-color: $color-nav-shamrock-light2
 
-.breeding-button.sticky-breed:active .icon
-  fill: $color-nav-shamrock
+  .breeding-button.sticky-breed:active .icon
+    fill: $color-nav-shamrock
 
-/* hover and mousedown states of red sticky button */
-.breeding-button.sticky-off:hover
-  background-color: $color-simdata-brick-light1
+  /* hover and mousedown states of red sticky button */
+  .breeding-button.sticky-off:hover
+    background-color: $color-simdata-brick-light1
 
-.breeding-button.sticky-off:active
-  color: $color-white
-  background-color: $color-simdata-brick-dark1
+  .breeding-button.sticky-off:active
+    color: $color-white
+    background-color: $color-simdata-brick-dark1
 
-.breeding-button.sticky:hover
-  background-color: $color-simdata-brick-light1
+  .breeding-button.sticky:hover
+    background-color: $color-simdata-brick-light1
 
-.breeding-button.sticky:active
-  color: $color-simdata-brick-dark2
-  background-color: $color-simdata-brick-light2
-
-.breeding-button:active .icon.sticky
-  fill: $color-simdata-brick
-
-/* hover and mousedown states of blue sticky button */
-.breeding-button.sticky-alt-off:hover
-  background-color: $color-simdata-brick-light1
-
-.breeding-button.sticky-alt:hover
-  background-color: $color-nav-cerulean-light1
-
-.breeding-button.sticky-alt:active
-  color: $color-nav-cerulean-dark2
-  background-color: $color-nav-cerulean-light2
-
-.breeding-button:active .icon.sticky-alt
-  fill: $color-nav-cerulean
-
-.breeding-button.sticky-alt-off:active
-  color: $color-white
-  background-color: $color-nav-cerulean-dark1
-
-.breeding-button:active .icon.sticky-alt-off
-  fill: $color-white
-
-
-.label-holder
-  display: flex
-  flex-direction: column
-  justify-content: center
-  height: 22px
-
-  .label
-    display: flex
-    align-items: center
-    font-size: $font-size-label1
+  .breeding-button.sticky:active
     color: $color-simdata-brick-dark2
+    background-color: $color-simdata-brick-light2
 
-.circle
-  height: 6px
-  width: 6px
-  border-radius: 3px
-  margin-left: 3px
-  margin-top: 3px
-  border: 1px solid white
+  .breeding-button:active .icon.sticky
+    fill: $color-simdata-brick
 
-  &.male
-    background-color: $color-key-red
+  /* hover and mousedown states of blue sticky button */
+  .breeding-button.sticky-alt-off:hover
+    background-color: $color-simdata-brick-light1
 
-  &.female
-    background-color: $color-key-yellow
+  .breeding-button.sticky-alt:hover
+    background-color: $color-nav-cerulean-light1
 
-  &.heterozygote
-    background-color: $color-key-blue
+  .breeding-button.sticky-alt:active
+    color: $color-nav-cerulean-dark2
+    background-color: $color-nav-cerulean-light2
+
+  .breeding-button:active .icon.sticky-alt
+    fill: $color-nav-cerulean
+
+  .breeding-button.sticky-alt-off:active
+    color: $color-white
+    background-color: $color-nav-cerulean-dark1
+
+  .breeding-button:active .icon.sticky-alt-off
+    fill: $color-white
+
+
+  .label-holder
+    display: flex
+    flex-direction: column
+    justify-content: center
+    height: 22px
+
+    .label
+      display: flex
+      align-items: center
+      font-size: $font-size-label1
+      color: $color-simdata-brick-dark2
+
+  .circle
+    height: 6px
+    width: 6px
+    border-radius: 3px
+    margin-left: 3px
+    margin-top: 3px
+    border: 1px solid white
+
+    &.male
+      background-color: $color-key-red
+
+    &.female
+      background-color: $color-key-yellow
+
+    &.heterozygote
+      background-color: $color-key-blue
