@@ -4,6 +4,7 @@ import Slider from "rc-slider";
 import { BaseComponent, IBaseProps } from "../../base";
 import { StackedOrganism } from "../../stacked-organism";
 import { gameteHTMLLabel } from "../../../utilities/genetics";
+import { ArrowPanel, ArrowInfo } from "./arrow-panel";
 
 import "./breeding-view.sass";
 import "rc-slider/assets/index.css";
@@ -11,6 +12,8 @@ import "rc-slider/assets/index.css";
 interface IProps extends IBaseProps {}
 interface IState {
   litterSliderVal: number;
+  offspringHightlightIndex: number;
+  parentHightlightIndex: number;
 }
 
 @inject("stores")
@@ -18,20 +21,21 @@ interface IState {
 export class BreedingView extends BaseComponent<IProps, IState> {
 
   public state: IState = {
-    litterSliderVal: 0
+    litterSliderVal: 0,
+    offspringHightlightIndex: -1,
+    parentHightlightIndex: -1
   };
 
   public render() {
     const { breeding } = this.stores;
     const activeBreedingPair = breeding.activeBreedingPair!;
     const { mother, father, litters, label, numOffspring } = activeBreedingPair;
-    const numLitters = activeBreedingPair.litters.length;
+    const numLitters = litters.length;
     const offspringClass = "offspring" + (numOffspring === 0 ? " hide" : "");
 
     const { litterSliderVal } = this.state;
     const maxLitter = numLitters - 1;
-    const sliderResolution = numLitters > 50 ? 1 : numLitters > 30 ? 2 : numLitters > 10 ? 10 : 100;
-    const sliderMax = Math.max(maxLitter * sliderResolution, 0);
+    const sliderMax = this.getSliderMax(numLitters);
     const sliderPercent = sliderMax ? litterSliderVal / sliderMax : 0;
     const litterOffset = 85 * maxLitter * sliderPercent;
     const currentLitter = maxLitter - Math.round(maxLitter * sliderPercent);
@@ -57,12 +61,15 @@ export class BreedingView extends BaseComponent<IProps, IState> {
           </div>}
           <div className="parent mother">
             Mother
-            <div className="parent-image">
+            <div className="parent-image"
+                 onMouseEnter={this.handleParentHoverEnter(0)}
+                 onMouseLeave={this.handleParentHoverExit(0)}>
               <StackedOrganism
                 organism={mother}
                 organismImages={[mother.nestImage]}
                 height={90}
                 showSelection={false}
+                showGameteSelectionOnHover={breeding.showGametes}
                 showSex={breeding.showSexStack}
                 showHetero={breeding.showHeteroStack}
                 showLabel={breeding.showGametes}
@@ -84,13 +91,16 @@ export class BreedingView extends BaseComponent<IProps, IState> {
           </div>
           <div className="parent father">
             Father
-            <div className="parent-image">
+            <div className="parent-image"
+                 onMouseEnter={this.handleParentHoverEnter(1)}
+                 onMouseLeave={this.handleParentHoverExit(1)}>
               <StackedOrganism
                 organism={father}
                 organismImages={[father.nestImage]}
                 height={90}
                 flipped={true}
                 showSelection={false}
+                showGameteSelectionOnHover={breeding.showGametes}
                 showSex={breeding.showSexStack}
                 showHetero={breeding.showHeteroStack}
                 showLabel={breeding.showGametes}
@@ -98,11 +108,11 @@ export class BreedingView extends BaseComponent<IProps, IState> {
               />
             </div>
             { breeding.showGametes && <div className="gametes">
-                { this.renderGametes(gametes.rightMouseGametes, gametePositions.rightMouse, false) }
+            { this.renderGametes(gametes.rightMouseGametes, gametePositions.rightMouse, false) }
             </div> }
           </div>
         </div>
-
+        { breeding.showGametes && this.renderArrowPanel(gametePositions.leftMouse, gametePositions.rightMouse) }
         <div className={offspringClass} onWheel={this.handleWheel}>
           <div className="litter-number">
             Litter { currentLitter + 1 }
@@ -128,19 +138,36 @@ export class BreedingView extends BaseComponent<IProps, IState> {
                 litters.slice().reverse().map((litter, i) => (
                   <div className="litter" key={"litter" + label + (litters.length - i)}>
                     {
-                      litter.map((org, j) => (
-                        <StackedOrganism
-                          key={"org" + j}
-                          organism={org}
-                          organismImages={[org.nestImage]}
-                          height={60}
-                          showSelection={false}
-                          showSex={breeding.showSexStack}
-                          showHetero={breeding.showHeteroStack}
-                          showLabel={breeding.showGametes}
-                          isOffspring={true}
-                        />
-                      ))
+                      litter.map((org, j) => {
+                        const litterNum = litters.length - i;
+                        return (
+                          <div
+                            className="offspring-container"
+                            onMouseEnter={currentLitter === (litterNum - 1)
+                                          ? this.handleOffspringHoverEnter(j)
+                                          : undefined}
+                            onMouseLeave={currentLitter === (litterNum - 1)
+                                          ? this.handleOffspringHoverExit(j)
+                                          : undefined}
+                            key={"org-cont" + j}>
+                            <StackedOrganism
+                              key={"org" + j}
+                              organism={org}
+                              organismImages={[org.nestImage]}
+                              height={60}
+                              showSelection={false}
+                              showGameteSelectionOnHover={breeding.showGametes && (currentLitter === (litterNum - 1))}
+                              showGameteSelection={breeding.showGametes
+                                                  && currentLitter === (litterNum - 1)
+                                                  && j === this.state.offspringHightlightIndex}
+                              showSex={breeding.showSexStack}
+                              showHetero={breeding.showHeteroStack}
+                              showLabel={breeding.showGametes}
+                              isOffspring={true}
+                            />
+                          </div>
+                        );
+                      })
                     }
                   </div>
                 ))
@@ -174,30 +201,110 @@ export class BreedingView extends BaseComponent<IProps, IState> {
     const { litterSliderVal } = this.state;
     const activeBreedingPair = breeding.activeBreedingPair!;
     const numLitters = activeBreedingPair.litters.length;
-    const sliderResolution = numLitters > 50 ? 1 : numLitters > 30 ? 2 : numLitters > 10 ? 10 : 100;
-    const sliderMax = Math.max((numLitters - 1) * sliderResolution, 0);
-    const increment = sliderMax / numLitters * .5;
+    const sliderMax = this.getSliderMax(numLitters);
+    const scrollIncrement = sliderMax / numLitters * .5;
     const change = e.deltaY > 0
-            ? Math.min(litterSliderVal + increment, sliderMax)
-            : Math.max(litterSliderVal - increment, 0);
+            ? Math.min(litterSliderVal + scrollIncrement, sliderMax)
+            : Math.max(litterSliderVal - scrollIncrement, 0);
     this.setState({litterSliderVal: change});
   }
 
+  private getSliderMax = (numLitters: number) => {
+    const sliderResolution = numLitters > 50 ? 1 : numLitters > 30 ? 2 : numLitters > 10 ? 10 : 100;
+    const sliderMax = Math.max((numLitters - 1) * sliderResolution, 0);
+    return sliderMax;
+  }
+
   private renderGametes = (gametes: string[], gametePositions: number[], mother: boolean) => {
-    const iconClass = mother ? "icon egg" : "icon sperm";
+    const parentIndex = mother ? 0 : 1;
+    const iconClass = mother ? "icon egg " : "icon sperm ";
+    const { offspringHightlightIndex, parentHightlightIndex } = this.state;
     return(
       gametePositions.map((position, i) => {
-        const offset = i % 2 === 1 ? 6 : 0;
+        const offset = i % 2 === 0 ? -6 : 0;
         const gamete = gametes[position];
+        const highlightMouse = offspringHightlightIndex === position;
+        const highlightParent = parentHightlightIndex === parentIndex;
+        const gameteViewClass = "hover-view " + (highlightMouse || highlightParent ? "show " : "")
+                                + (highlightMouse ? "tall" : "");
+        const gameteIconClass = iconClass + (highlightMouse ? "highlight" : "");
         return(
-          <div className="gamete" key={i} style={{marginTop: offset}}>
-            <div className={iconClass}/>
+          <div className="gamete" key={i} style={{marginTop: offset}}
+               onMouseEnter={this.handleOffspringHoverEnter(position)}
+               onMouseLeave={this.handleOffspringHoverExit(position)}>
+            <div className={gameteViewClass} />
+            <div className={gameteIconClass} />
             <div className="info-data" dangerouslySetInnerHTML={{
                 __html: gameteHTMLLabel(gamete)
             }} />
           </div>
         );
       })
+    );
+  }
+
+  private handleOffspringHoverEnter = (index: number) => () => {
+    this.setState({offspringHightlightIndex: index});
+  }
+  private handleOffspringHoverExit = (index: number) => () => {
+    this.setState({offspringHightlightIndex: -1});
+  }
+  private handleParentHoverEnter = (index: number) => () => {
+    this.setState({parentHightlightIndex: index});
+  }
+  private handleParentHoverExit = (index: number) => () => {
+    this.setState({parentHightlightIndex: -1});
+  }
+
+  private renderArrowPanel = (gameteLeftPositions: number[], gameteRightPositions: number[]) => {
+    const hoverArrows: ArrowInfo[] = [];
+    // calculate arrow offset due to scrolling
+    const { breeding } = this.stores;
+    const { litterSliderVal, offspringHightlightIndex } = this.state;
+    const activeBreedingPair = breeding.activeBreedingPair!;
+    const numLitters = activeBreedingPair.litters.length;
+    const sliderMax = this.getSliderMax(numLitters);
+    const sliderInterval = numLitters > 1 ? sliderMax / (numLitters - 1) : 100;
+    const sliderOffset = litterSliderVal % sliderInterval;
+    const scrollAmount = numLitters > 1
+                         ? (sliderOffset < sliderInterval / 2 ? -1 * sliderOffset : sliderInterval - sliderOffset)
+                         : 0;
+    const scrollYAdjustment = 82 * (scrollAmount / sliderInterval);
+
+    const maxGametes = 5;
+    const gameteCount = gameteLeftPositions.length;
+    const baseEndY = 46 + scrollYAdjustment;
+    const yStagger = 16;
+    const leftGameteXStart = 18;
+    const rightGameteXStart = 201;
+    const gameteXOffset = (maxGametes - gameteCount) * 10;
+    const gameteYStagger = 6;
+    const gameteDelta = 20;
+    const mouseXStart = 48;
+    const mouseXOffset = (maxGametes - gameteCount) * 24;
+    const mouseXIncrement = 48;
+    const arrowGap = 15;
+    gameteLeftPositions.forEach((position, i) => {
+      const startY = i % 2 === 1 ? gameteYStagger : 0;
+      const endY = baseEndY + (position % 2 === 1 ? yStagger : 0);
+      const startX = leftGameteXStart + gameteXOffset + i * gameteDelta;
+      const endX = mouseXStart + mouseXOffset + position * mouseXIncrement;
+      const visible = offspringHightlightIndex === position;
+      const arrow: ArrowInfo = { startX, endX, startY, endY, headRotation: -10, visible };
+      hoverArrows.push(arrow);
+    });
+    gameteRightPositions.forEach((position, i) => {
+      const startY = i % 2 === 1 ? gameteYStagger : 0;
+      const endY = baseEndY + (position % 2 === 1 ? yStagger : 0);
+      const startX = rightGameteXStart + gameteXOffset + i * gameteDelta;
+      const endX = mouseXStart + mouseXOffset + position * mouseXIncrement + arrowGap;
+      const visible = offspringHightlightIndex === position;
+      const arrow: ArrowInfo = { startX, endX, startY, endY, headRotation: 10, visible };
+      hoverArrows.push(arrow);
+    });
+
+    return(
+      <ArrowPanel arrows={hoverArrows} />
     );
   }
 
