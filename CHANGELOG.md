@@ -1,4 +1,8 @@
 # Changelog
+## Version 1.0.10 - released Feb 6, 2020
+
+- Update label to Activated SP
+
 ## Version 1.0.9 - released Jan 7, 2020
 
 - Updated protein viewer
