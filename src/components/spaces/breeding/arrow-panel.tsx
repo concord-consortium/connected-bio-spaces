@@ -25,14 +25,14 @@ export class ArrowPanel extends BaseComponent<IProps, IState> {
     return(
       <div className="arrow-panel">
         <svg height={130} width={300}>
-          {this.renderArrowCurve()}
-          {this.renderArrowHead()}
+          {this.renderArrowCurves()}
+          {this.renderArrowHeads()}
         </svg>
       </div>
     );
   }
 
-  private renderArrowCurve = () => {
+  private renderArrowCurves = () => {
     return(
       this.props.arrows.map((arrow, i) => {
         const { startX, startY, endX, endY } = arrow;
@@ -54,7 +54,7 @@ export class ArrowPanel extends BaseComponent<IProps, IState> {
     );
   }
 
-  private renderArrowHead = () => {
+  private renderArrowHeads = () => {
     return(
       this.props.arrows.map((arrow, i) => {
         const { endX, endY } = arrow;
