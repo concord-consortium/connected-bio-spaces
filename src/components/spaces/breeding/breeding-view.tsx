@@ -63,7 +63,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
             Mother
             <div className="parent-image"
                  onMouseEnter={this.handleParentHoverEnter(0)}
-                 onMouseLeave={this.handleParentHoverExit(0)}>
+                 onMouseLeave={this.handleParentHoverExit}>
               <StackedOrganism
                 organism={mother}
                 organismImages={[mother.nestImage]}
@@ -93,7 +93,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
             Father
             <div className="parent-image"
                  onMouseEnter={this.handleParentHoverEnter(1)}
-                 onMouseLeave={this.handleParentHoverExit(1)}>
+                 onMouseLeave={this.handleParentHoverExit}>
               <StackedOrganism
                 organism={father}
                 organismImages={[father.nestImage]}
@@ -147,7 +147,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
                                           ? this.handleOffspringHoverEnter(j)
                                           : undefined}
                             onMouseLeave={currentLitter === (litterNum - 1)
-                                          ? this.handleOffspringHoverExit(j)
+                                          ? this.handleOffspringHoverExit
                                           : undefined}
                             key={"org-cont" + j}>
                             <StackedOrganism
@@ -231,7 +231,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
         return(
           <div className="gamete" key={i} style={{marginTop: offset}}
                onMouseEnter={this.handleOffspringHoverEnter(position)}
-               onMouseLeave={this.handleOffspringHoverExit(position)}>
+               onMouseLeave={this.handleOffspringHoverExit}>
             <div className={gameteViewClass} />
             <div className={gameteIconClass} />
             <div className="info-data" dangerouslySetInnerHTML={{
@@ -246,13 +246,13 @@ export class BreedingView extends BaseComponent<IProps, IState> {
   private handleOffspringHoverEnter = (index: number) => () => {
     this.setState({offspringHightlightIndex: index});
   }
-  private handleOffspringHoverExit = (index: number) => () => {
+  private handleOffspringHoverExit = () => {
     this.setState({offspringHightlightIndex: -1});
   }
   private handleParentHoverEnter = (index: number) => () => {
     this.setState({parentHightlightIndex: index});
   }
-  private handleParentHoverExit = (index: number) => () => {
+  private handleParentHoverExit = () => {
     this.setState({parentHightlightIndex: -1});
   }
 
