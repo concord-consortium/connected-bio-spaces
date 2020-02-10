@@ -52,7 +52,7 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
                     + (breeding.interactionMode === "inspect" ? " inspect" : "")
                     + ((breeding.interactionMode === "select" && showingNesting) ? " select" : "")
                     + ((breeding.interactionMode === "breed" && showingNesting) ? " breed" : "")
-                    + (breeding.interactionMode === "gametes" ? " gametes" : "");
+                    + ((breeding.interactionMode === "gametes" && !showingNesting) ? " gametes" : "");
 
     const mainComponent = showingNesting ? <NestingView /> : <BreedingView />;
     const switchLevelsButtonLabel = showingNesting ? "Breeding" : "Nesting";

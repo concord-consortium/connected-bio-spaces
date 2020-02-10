@@ -63,13 +63,13 @@ export class BreedingInspect extends BaseComponent<IProps, IState> {
 
   public renderMouseInfo(mouse: BackpackMouseType) {
     const sexLabel = mouse.sex === "female" ? "Female" : "Male";
-    const colorLabel = mouse.baseColor === "white" ? "Fur Color: Light brown" :
-                       mouse.baseColor === "tan" ? "Fur Color: Medium brown" : "Fur Color: Dark brown";
+    const colorLabel = mouse.baseColor === "white" ? "Light brown" :
+                       mouse.baseColor === "tan" ? "Medium brown" : "Dark brown";
     const genotypeLabel = genotypeHTMLLabel(mouse.genotype);
     return (
       <div className="mouse-info">
         <div className="info-row">
-          <div className="info-type">Color: </div>
+          <div className="info-type">Fur Color: </div>
           <div className="info-data">{colorLabel}</div>
         </div>
         <div className="info-row">
@@ -90,7 +90,7 @@ export class BreedingInspect extends BaseComponent<IProps, IState> {
     return(
       <div className="pair-container single">
         <div className="inspect-background single" />
-        {this.renderMouse(mouse, false)}
+        {this.renderMouse(mouse, !this.props.isOffspring && mouse.sex === "male")}
       </div>
     );
   }

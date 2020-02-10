@@ -274,6 +274,7 @@ export const BreedingModel = types
       if (!nestPair) return;
       const litterSize = self.minLitterSize + Math.floor(Math.random() * (self.maxLitterSize - self.minLitterSize + 1));
       nestPair.breedLitter(litterSize);
+      self.rightPanel = "data";
     },
 
     clearLitters() {
@@ -315,6 +316,7 @@ export const BreedingModel = types
         pair.setCurrentBreeding(false);
       });
       self.breedingNestPairId = undefined;
+      self.interactionMode = "breed";
     },
     setNestPairCurrentBreeding(nestPairId: string) {
       const nestPair = self.nestPairs.find(pair => pair.id === nestPairId);
