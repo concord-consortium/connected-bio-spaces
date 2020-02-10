@@ -11,6 +11,7 @@ interface IProps extends IBaseProps {
   mouse1?: BackpackMouseType;
   mouse2?: BackpackMouseType;
   pairLabel: string;
+  isOffspring: boolean;
 }
 interface IState {}
 
@@ -53,7 +54,7 @@ export class BreedingInspect extends BaseComponent<IProps, IState> {
           flipped={flip}
         />
         <div className="mouse-label">
-          {mouse.sex === "female" ? "Mother" : "Father"}
+          {this.props.isOffspring ? "Offspring" : (mouse.sex === "female" ? "Mother" : "Father")}
         </div>
         {this.renderMouseInfo(mouse)}
       </div>
@@ -62,8 +63,8 @@ export class BreedingInspect extends BaseComponent<IProps, IState> {
 
   public renderMouseInfo(mouse: BackpackMouseType) {
     const sexLabel = mouse.sex === "female" ? "Female" : "Male";
-    const colorLabel = mouse.baseColor === "white" ? "Light brown fur" :
-                       mouse.baseColor === "tan" ? "Medium brown fur" : "Dark brown fur";
+    const colorLabel = mouse.baseColor === "white" ? "Fur Color: Light brown" :
+                       mouse.baseColor === "tan" ? "Fur Color: Medium brown" : "Fur Color: Dark brown";
     const genotypeLabel = genotypeHTMLLabel(mouse.genotype);
     return (
       <div className="mouse-info">

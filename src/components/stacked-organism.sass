@@ -7,6 +7,8 @@
     opacity: 1
   &:hover .gamete-view-stack
     opacity: .75
+  &:hover .inspect-stack
+    opacity: .75
 
   .selection-stack
     position: absolute
@@ -39,12 +41,23 @@
     &.show
       opacity: 1
   .gamete-view-stack
+    position: absolute
+    top: 0
+    left: 0
     border-radius: 50%
     opacity: 0
     transition-duration: .25s
     background-color: $color-nav-shamrock-light1
     &.show
       opacity: .75
+  .inspect-stack
+    position: absolute
+    top: 0
+    left: 0
+    border-radius: 50%
+    opacity: 0
+    transition-duration: .25s
+    background-color: $color-simdata-brick-light1
   .genotype-label
     position: absolute
     color: $color-nav-cinder-dark2

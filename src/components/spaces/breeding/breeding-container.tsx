@@ -45,20 +45,21 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
     const breedButtonClass = "breed " + (showingNesting && breeding.interactionMode === "breed" ?
       "sticky-breed " : "sticky-breed-off ");
     const gametesButtonClass = "gametes" + (showingNesting || !breeding.enableInspectGametes ? " disabled" : "");
-    const inspectButtonClass = (breeding.interactionMode === "inspect" ? "sticky" : "sticky-off")
-                          + (!showingNesting ? " disabled" : "");
+    const inspectButtonClass = (breeding.interactionMode === "inspect" ? "sticky" : "sticky-off");
     const collectButtonClass = (breeding.interactionMode === "select" ? "sticky-alt" : "sticky-alt-off")
                           + (!showingNesting ? " disabled" : "");
     const containerClass = "breeding-container"
-                    + ((breeding.interactionMode === "inspect" && showingNesting) ? " inspect" : "")
+                    + (breeding.interactionMode === "inspect" ? " inspect" : "")
                     + ((breeding.interactionMode === "select" && showingNesting) ? " select" : "")
-                    + ((breeding.interactionMode === "breed" && showingNesting) ? " breed" : "");
+                    + ((breeding.interactionMode === "breed" && showingNesting) ? " breed" : "")
+                    + (breeding.interactionMode === "gametes" ? " gametes" : "");
 
     const mainComponent = showingNesting ? <NestingView /> : <BreedingView />;
     const switchLevelsButtonLabel = showingNesting ? "Breeding" : "Nesting";
     const switchLevelsIcon = showingNesting ? "breed" : "nests";
-    const hideGametesClass = "inner-box inner-button left" + (!breeding.showGametes ? " selected" : " unselected");
-    const showGametesClass = "inner-box inner-button right" + (breeding.showGametes ? " selected" : " unselected");
+    const showGametes = breeding.interactionMode === "gametes";
+    const hideGametesClass = "inner-box inner-button left" + (!showGametes ? " selected" : " unselected");
+    const showGametesClass = "inner-box inner-button right" + (showGametes ? " selected" : " unselected");
 
     return(
       <div>
@@ -153,10 +154,10 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
   }
 
   private handleClickHideGametesButton = () => {
-    this.stores.breeding.setShowGametes(false);
+    this.stores.breeding.toggleInteractionMode("gametes");
   }
 
   private handleClickShowGametesButton = () => {
-    this.stores.breeding.setShowGametes(true);
+    this.stores.breeding.toggleInteractionMode("gametes");
   }
 }

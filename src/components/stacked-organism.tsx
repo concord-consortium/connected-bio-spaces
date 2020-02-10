@@ -10,6 +10,7 @@ interface IProps {
   flipped?: boolean;
   showSelection: boolean;
   showGameteSelection?: boolean;
+  showInspect?: boolean;
   showSex: boolean;
   showHetero: boolean;
   showLabel?: boolean;
@@ -25,6 +26,7 @@ const selectionImage =  path + "select-stack.png";
 export const StackedOrganism: React.SFC<IProps> = (props) => {
   const selectionClass = "selection-stack " + (props.showSelection ? "show" : "");
   const gameteViewClass = "gamete-view-stack " + (props.showGameteSelection ? "show" : "");
+  const inspectClass = "inspect-stack";
   const heteroClass = "hetero-stack " + ((props.showHetero && props.organism.isHeterozygote) ? "show" : "");
   const sexImage = props.organism.sex === "female" ? femaleSexImage : maleSexImage;
   const sexClass = "sex-stack " + (props.showSex ? "show" : "");
@@ -42,10 +44,8 @@ export const StackedOrganism: React.SFC<IProps> = (props) => {
 
   return (
     <div className="stacked-organism" style={fullSize}>
-      {
-        (props.showGameteSelection)
-        && <div className={gameteViewClass} style={fullSize} data-test="gamete-view" />
-      }
+      { props.showGameteSelection && <div className={gameteViewClass} style={fullSize} data-test="gamete-view" /> }
+      { props.showInspect && <div className={inspectClass} style={fullSize} data-test="inspect-view" /> }
       { props.showLabel && <div className={labelClass} dangerouslySetInnerHTML={{ __html: label }}/> }
       <img src={selectionImage} className={selectionClass} style={fullSize} data-test="selection-image" />
       {
