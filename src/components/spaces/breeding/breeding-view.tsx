@@ -69,7 +69,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
                 organismImages={[mother.nestImage]}
                 height={90}
                 showSelection={false}
-                showGameteSelectionOnHover={breeding.showGametes}
+                showGameteSelection={breeding.showGametes && this.state.parentHightlightIndex === 0}
                 showSex={breeding.showSexStack}
                 showHetero={breeding.showHeteroStack}
                 showLabel={breeding.showGametes}
@@ -100,7 +100,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
                 height={90}
                 flipped={true}
                 showSelection={false}
-                showGameteSelectionOnHover={breeding.showGametes}
+                showGameteSelection={breeding.showGametes && this.state.parentHightlightIndex === 1}
                 showSex={breeding.showSexStack}
                 showHetero={breeding.showHeteroStack}
                 showLabel={breeding.showGametes}
@@ -156,7 +156,6 @@ export class BreedingView extends BaseComponent<IProps, IState> {
                               organismImages={[org.nestImage]}
                               height={60}
                               showSelection={false}
-                              showGameteSelectionOnHover={breeding.showGametes && (currentLitter === (litterNum - 1))}
                               showGameteSelection={breeding.showGametes
                                                   && currentLitter === (litterNum - 1)
                                                   && j === this.state.offspringHightlightIndex}

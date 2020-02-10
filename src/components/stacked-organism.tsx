@@ -9,7 +9,6 @@ interface IProps {
   height: number;
   flipped?: boolean;
   showSelection: boolean;
-  showGameteSelectionOnHover?: boolean;
   showGameteSelection?: boolean;
   showSex: boolean;
   showHetero: boolean;
@@ -44,7 +43,7 @@ export const StackedOrganism: React.SFC<IProps> = (props) => {
   return (
     <div className="stacked-organism" style={fullSize}>
       {
-        (props.showGameteSelection || props.showGameteSelectionOnHover)
+        (props.showGameteSelection)
         && <div className={gameteViewClass} style={fullSize} data-test="gamete-view" />
       }
       { props.showLabel && <div className={labelClass} dangerouslySetInnerHTML={{ __html: label }}/> }
