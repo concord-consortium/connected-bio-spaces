@@ -32,9 +32,9 @@
       background-color: $color-simdata-brick-light3
       top: 6px
       &.mother
-        left: 55px
+        left: 59px
       &.father
-        left: 246px
+        left: 242px
 
     .gametes-message
       position: absolute
@@ -50,6 +50,7 @@
       display: flex
       flex-direction: column
       align-items: center
+      width: 100px
       z-index: 1
       &.mother
         padding-left: 61px
@@ -67,27 +68,51 @@
       .gametes
         display: flex
         flex-direction: row
+        justify-content: center
+        align-items: center
+        margin-top: 4px
         .gamete
           display: flex
           flex-direction: column
-          justify-content: center
           align-items: center
           color: $color-nav-cinder-dark2
-          margin: 1px
           font-size: 10px
+          width: 20px
+          height: 45px
+          &:hover .hover-view
+            opacity: .75
+            height: 45px
+          &:hover .icon.egg
+            background-image: url("../../../assets/icons/egg-hi.svg")
+          &:hover .icon.sperm
+            background-image: url("../../../assets/icons/sperm-hi.svg")
           .icon
             width: 16px
             height: 16px
-            margin-bottom: 2px
-            transition-duration: $fade-time
+            margin-bottom: 1px
+            margin-top: 2px
+            transition-duration: .25s
             &.egg
               background-image: url("../../../assets/icons/egg.svg")
-              &:hover
+              &.highlight
                 background-image: url("../../../assets/icons/egg-hi.svg")
             &.sperm
               background-image: url("../../../assets/icons/sperm.svg")
-              &:hover
+              &.highlight
                 background-image: url("../../../assets/icons/sperm-hi.svg")
+          .hover-view
+            transition-duration: .25s
+            z-index: -1
+            position: absolute
+            background-color: $color-nav-shamrock-light1
+            opacity: 0
+            width: 20px
+            height: 35px
+            border-radius: 10px
+            &.show
+              opacity: .75
+            &.tall
+              height: 45px
 
     .breed-button-container
       padding-top: 30px
@@ -185,10 +210,9 @@
         margin: 32px 0 -11px 0
         transition: all 0.5s
         animation: push-down 0.8s ease
-
-        .stacked-organism
-          margin: -6px;
-        .stacked-organism:nth-child(even)
+        .offspring-container
+          margin: -6px
+        .offspring-container:nth-child(even)
           margin-top: 10px
           z-index: 2
 
