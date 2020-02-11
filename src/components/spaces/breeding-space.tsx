@@ -8,7 +8,14 @@ import { BreedingContainer } from "./breeding/breeding-container";
 import { BreedingData } from "./breeding/breeding-data";
 import { BreedingInspect } from "./breeding/breeding-inspect";
 
-interface InspectContent { title: string; mouse1: any; mouse2: any; label: string; isOffspring: boolean; }
+interface InspectContent {
+  title: string;
+  mouse1: any;
+  mouse2: any;
+  label: string;
+  isOffspring: boolean;
+  isGamete: boolean;
+}
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -35,6 +42,7 @@ export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
                   mouse2={content.mouse2}
                   pairLabel={content.label}
                   isOffspring={content.isOffspring}
+                  isGamete={content.isGamete}
                  />;
         default:
           return null;
@@ -66,7 +74,8 @@ export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
                                     mouse1: undefined,
                                     mouse2: undefined,
                                     label: "",
-                                    isOffspring: false
+                                    isOffspring: false,
+                                    isGamete: false,
                                   };
     let inspectedName = "Nesting Pairs";
     if (inspectInfo && inspectInfo.type === "nest") {
@@ -76,6 +85,7 @@ export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
       content.mouse2 = nestPair && nestPair.rightMouse;
       content.label = nestPair ? nestPair.label : "Pair";
     } else if (inspectInfo && (inspectInfo.type === "organism" || inspectInfo.type === "gamete")) {
+      const isGamete = inspectInfo.type === "gamete";
       const pairId = inspectInfo.nestPairId;
       const nestPairIndex = nestPairs.findIndex(pair => pair.id === pairId);
       const nestPair = nestPairs[nestPairIndex];
@@ -83,19 +93,21 @@ export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
         if (inspectInfo.isParent) {
           if (nestPair.leftMouse.id === inspectInfo.organismId) {
             content.mouse1 = nestPair.leftMouse;
-            inspectedName = `Pair ${nestPairIndex + 1} ${content.mouse1.sex === "female" ? "Mother" : "Father"}`;
           } else if (nestPair.rightMouse.id === inspectInfo.organismId) {
             content.mouse1 = nestPair.rightMouse;
-            inspectedName = `Pair ${nestPairIndex + 1} ${content.mouse1.sex === "female" ? "Mother" : "Father"}`;
           }
+          inspectedName = isGamete
+                          ? `${content.mouse1.sex === "female" ? "Mother" : "Father"} Gametes`
+                          : `Pair ${nestPairIndex + 1} ${content.mouse1.sex === "female" ? "Mother" : "Father"}`;
         } else {
           content.mouse1 = nestPair.litters[inspectInfo.litterIndex].find(mouse => mouse.id === inspectInfo.organismId);
-          inspectedName = `Pair ${nestPairIndex + 1} Litter ${inspectInfo.litterIndex + 1} Offspring`;
+          inspectedName = isGamete
+                          ? "Offspring Gametes"
+                          : `Pair ${nestPairIndex + 1} Litter ${inspectInfo.litterIndex + 1} Offspring`;
           content.isOffspring = true;
         }
+        content.isGamete = isGamete;
       }
-    } else if (inspectInfo && inspectInfo.type === "gamete") {
-      content.mouse1 = undefined;
     }
     content.title = (inspectInfo.type !== "none" ? `Inspect: ${inspectedName}` : "Inspect");
     return content;
