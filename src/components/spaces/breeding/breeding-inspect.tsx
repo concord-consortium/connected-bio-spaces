@@ -40,7 +40,8 @@ export class BreedingInspect extends BaseComponent<IProps, IState> {
   }
 
   private renderInspectedMouse(mouse: BackpackMouseType) {
-    const bgClass = "inspect-background single " + (this.props.isGamete && this.props.isOffspring ? "low" : "");
+    const bgClass = "inspect-background single " + (this.props.isGamete ? "gamete " : "")
+                    + (this.props.isGamete && this.props.isOffspring ? "low" : "");
     return(
       <div className="pair-container single">
         { (this.props.isGamete && this.props.isOffspring) && this.renderGametePanel(mouse) }
