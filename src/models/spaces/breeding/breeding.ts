@@ -7,7 +7,7 @@ import uuid = require("uuid");
 import { RightPanelType } from "../../../models/ui";
 import { shuffle } from "lodash";
 
-const BreedingInteractionModeEnum = types.enumeration("interaction", ["none", "breed", "select", "inspect"]);
+const BreedingInteractionModeEnum = types.enumeration("interaction", ["none", "breed", "select", "inspect", "gametes"]);
 export type BreedingInteractionModeType = typeof BreedingInteractionModeEnum.Type;
 
 const BreedingChartTypeEnum = types.enumeration("chart", ["color", "genotype", "sex"]);
@@ -32,6 +32,43 @@ interface LitterMeta {
   RC: number;
   RR: number;
 }
+
+const BreedingInspectTypeEnum = types.enumeration("inspect", ["none", "nest", "organism", "gamete"]);
+export type BreedingInspectType = typeof BreedingInspectTypeEnum.Type;
+
+const InspectInfo = types.model({
+  type: types.optional(BreedingInspectTypeEnum, "none"),
+  nestPairId: types.string,
+  litterIndex: types.number,
+  isParent: types.boolean,
+  organismId: types.string,
+})
+.views((self) => ({
+}))
+.actions(self => ({
+  setInspectedNestPair(id: string) {
+    self.type = "nest";
+    self.nestPairId = id;
+    self.organismId = "";
+  },
+  setInspectedMouse(pairId: string, litterIndex: number, organismId: string, isParent: boolean) {
+    self.type = "organism";
+    self.nestPairId = pairId;
+    self.litterIndex = litterIndex;
+    self.organismId = organismId;
+    self.isParent = isParent;
+  },
+  setInspectedGamete(pairId: string, litterIndex: number, id: string, isParent: boolean) {
+    self.type = "gamete";
+    self.nestPairId = pairId;
+    self.litterIndex = litterIndex;
+    self.organismId = id;
+    self.isParent = isParent;
+  },
+  clearInspection() {
+    self.type = "none";
+  },
+}));
 
 export const NestPair = types.model({
   id: types.optional(types.identifier, () => uuid()),
@@ -208,6 +245,7 @@ export function createBreedingModel(breedingProps: any) {
       };
     });
   }
+  breedingProps.inspectInfo = InspectInfo.create({nestPairId: "", organismId: "", litterIndex: 0, isParent: false, });
   return BreedingModel.create(breedingProps);
 }
 
@@ -219,7 +257,7 @@ export const BreedingModel = types
     showHeteroStack: false,
     interactionMode: types.optional(BreedingInteractionModeEnum, "breed"),
     nestPairs: types.array(NestPair),
-    inspectedNestPairId: types.maybe(types.string),
+    inspectInfo: InspectInfo,
     breedingNestPairId: types.maybe(types.string),
     userChartType: types.maybe(BreedingChartTypeEnum),
     minLitterSize: 3,
@@ -228,7 +266,6 @@ export const BreedingModel = types
     enableGenotypeChart: true,
     enableSexChart: true,
     enableInspectGametes: true,
-    showGametes: false,
   })
   .actions(self => ({
 
@@ -237,6 +274,7 @@ export const BreedingModel = types
       if (!nestPair) return;
       const litterSize = self.minLitterSize + Math.floor(Math.random() * (self.maxLitterSize - self.minLitterSize + 1));
       nestPair.breedLitter(litterSize);
+      self.rightPanel = "data";
     },
 
     clearLitters() {
@@ -253,11 +291,7 @@ export const BreedingModel = types
       self.showHeteroStack = show;
     },
 
-    setShowGametes(show: boolean) {
-      self.showGametes = show;
-    },
-
-    toggleInteractionMode(mode: "select" | "inspect" | "breed") {
+    toggleInteractionMode(mode: "select" | "inspect" | "breed" | "gametes") {
       if (self.interactionMode === mode) {
         self.interactionMode = "none";
       } else {
@@ -282,6 +316,7 @@ export const BreedingModel = types
         pair.setCurrentBreeding(false);
       });
       self.breedingNestPairId = undefined;
+      self.interactionMode = "breed";
     },
     setNestPairCurrentBreeding(nestPairId: string) {
       const nestPair = self.nestPairs.find(pair => pair.id === nestPairId);
@@ -294,13 +329,20 @@ export const BreedingModel = types
         self.rightPanel = "data";   // auto-switch to data when we go to breeding
       }
     },
-
-    setInspectedNest(nestPairId: string) {
-      self.inspectedNestPairId = nestPairId;
+    setInspectedMouse(mouseId: string, pairId: string, litterIndex: number, isParent: boolean) {
+      self.inspectInfo.setInspectedMouse(pairId, litterIndex, mouseId, isParent);
+      self.rightPanel = "information";   // auto-switch to inspect
+    },
+    setInspectedGamete(mouseId: string, pairId: string, litterIndex: number, isParent: boolean) {
+      self.inspectInfo.setInspectedGamete(pairId, litterIndex, mouseId, isParent);
+      self.rightPanel = "information";   // auto-switch to inspect
+    },
+    setInspectedNest(pairId: string) {
+      self.inspectInfo.setInspectedNestPair(pairId);
       self.rightPanel = "information";   // auto-switch to inspect
     },
     clearInspectedNest() {
-      self.inspectedNestPairId = "";
+      self.inspectInfo.clearInspection();
     },
     setRightPanel(val: RightPanelType) {
       self.rightPanel = val;

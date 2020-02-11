@@ -16,18 +16,23 @@
     flex-direction: row
     &.single
         margin-top: 32px
+        flex-direction: column
     .inspect-background
       position: absolute
-      top: 40px
-      left: 26px
+      top: 41px
+      left: 23px
+      width: 367px
       height: 175px
-      width: 362px
+      border-radius: 100px
       background-color: $color-simdata-brick-light1
-      border-radius: 84px
       opacity: .75
+      &.gamete
+        background-color: $color-nav-shamrock-light1
       &.single
         width: 175px
         left: 119px
+      &.low
+        top: 153px
     .mouse-container
       display: flex
       flex-direction: column
@@ -44,6 +49,8 @@
         flex-direction: row
         width: 170px
         margin-top: 6px
+        &.wide
+          width: 210px
         .info-type
           color: $color-simdata-brick-dark3
           font-size: 14px
@@ -53,3 +60,45 @@
           color: $color-nav-cinder-dark2
           font-size: 14px
           font-weight: 400
+  .gamete-icons
+    position: absolute
+    top: 302px
+    right: 320px
+    display: flex
+    flex-direction: row
+  .gamete-panel
+    display: flex
+    flex-direction: row
+    justify-content: center
+    align-items: center
+    margin-bottom: 40px
+    .gamete-panel-container
+      display: flex
+      flex-direction: column
+      justify-content: center
+      align-items: center
+      margin: 0 10px 0 10px
+      .gamete-panel-title
+        color: $color-simdata-brick-dark3
+        width: 100px
+        text-align: center
+        font-size: 16px
+        font-weight: 500
+    .arrow
+      position: absolute
+      top: 112px
+      left: 142px
+      z-index: 2
+  .gamete-icon-container
+    display: flex
+    flex-direction: column
+    font-size: 13px
+    font-weight: 400
+    .gamete-icon
+      width: 16px
+      height: 16px
+      margin: 2px
+      &.egg
+        background-image: url("../../../assets/icons/egg.svg")
+      &.sperm
+        background-image: url("../../../assets/icons/sperm.svg")
