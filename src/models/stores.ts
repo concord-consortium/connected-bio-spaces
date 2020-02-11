@@ -11,6 +11,7 @@ import { OrganismsRowModelType } from "./spaces/organisms/organisms-row";
 import { autorun } from "mobx";
 import { onAction } from "mobx-state-tree";
 import { BreedingModelType, createBreedingModel, INestPair } from "./spaces/breeding/breeding";
+import { EnvironmentColorType } from "../models/spaces/breeding/breeding";
 
 export type Curriculum = "mouse";
 
@@ -83,6 +84,7 @@ export interface UserSaveDataType {
     rows: OrganismsRowModelType[]
   };
   breeding?: {
+    backgroundType: EnvironmentColorType,
     nestPairs: INestPair[]
   };
 }
@@ -102,6 +104,7 @@ export function getUserSnapshot(stores: IStores): UserSaveDataType {
       rows
     },
     breeding: {
+      backgroundType: stores.breeding.backgroundType,
       nestPairs: stores.breeding.nestPairs
     }
   };

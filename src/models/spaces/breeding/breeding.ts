@@ -10,6 +10,9 @@ import { shuffle } from "lodash";
 const BreedingInteractionModeEnum = types.enumeration("interaction", ["none", "breed", "select", "inspect", "gametes"]);
 export type BreedingInteractionModeType = typeof BreedingInteractionModeEnum.Type;
 
+export const EnvironmentColorTypeEnum = types.enumeration("environment", ["white", "neutral", "brown"]);
+export type EnvironmentColorType = typeof EnvironmentColorTypeEnum.Type;
+
 const BreedingChartTypeEnum = types.enumeration("chart", ["color", "genotype", "sex"]);
 export type BreedingChartType = typeof BreedingChartTypeEnum.Type;
 
@@ -226,6 +229,10 @@ export const NestPair = types.model({
 export type INestPair = Instance<typeof NestPair>;
 
 export function createBreedingModel(breedingProps: any) {
+  if (!breedingProps.backgroundType) {
+    const rand = Math.random();
+    breedingProps.backgroundType = rand > .66 ? "neutral" : (rand > .33 ? "brown" : "white");
+  }
   if (!breedingProps.nestPairs || breedingProps.nestPairs.length === 0) {
     const breedingPairs = [
       ["RC", "RR"],
@@ -256,6 +263,7 @@ export const BreedingModel = types
     showSexStack: false,
     showHeteroStack: false,
     interactionMode: types.optional(BreedingInteractionModeEnum, "breed"),
+    backgroundType: types.optional(EnvironmentColorTypeEnum, "neutral"),
     nestPairs: types.array(NestPair),
     inspectInfo: InspectInfo,
     breedingNestPairId: types.maybe(types.string),
@@ -364,6 +372,16 @@ export const BreedingModel = types
   })
   .views((self) => {
     return {
+      get backgroundImage() {
+        switch (self.backgroundType) {
+          case "brown":
+            return "assets/curriculum/mouse/breeding/nesting/environment-brown-nests.png";
+          case "white":
+            return "assets/curriculum/mouse/breeding/nesting/environment-white-nests.png";
+          default:
+            return "assets/curriculum/mouse/breeding/nesting/environment-mixed-nests.png";
+        }
+      },
       get activeBreedingPair(): INestPair | undefined {
         return self.nestPairs.find(pair => pair.id === self.breedingNestPairId);
       },
