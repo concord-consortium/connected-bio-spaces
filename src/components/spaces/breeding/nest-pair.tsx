@@ -24,6 +24,7 @@ interface IProps extends IBaseProps {
 export class NestPair extends BaseComponent<IProps, IState> {
 
   public render() {
+    const { backgroundType } = this.stores.breeding;
     const { showNestHighlight, showPairHighlight } = this.props;
     const positionClass = this.getPositionClass();
     const nestHoverImage = this.getNestHoverImage();
@@ -33,7 +34,9 @@ export class NestPair extends BaseComponent<IProps, IState> {
     const rightMouseCollected = this.isMouseCollected(this.props.nestPair.rightMouseBackpackId);
     const nestClass = `nest-pair ${positionClass} ` + (showNestHighlight ? "selectable" : "");
     const nestBackgroundHoverClass = `nest-pair-background-hover ${positionClass} ` + (showNestHighlight ? "show" : "");
-    const pairLabelClass = `pair-label ${positionClass} ` + ((showNestHighlight || showPairHighlight) ? "show" : "");
+    const bgClass = backgroundType === "brown" ? "white" : (backgroundType === "white" ? "black" : "");
+    const pairLabelClass = `pair-label ${positionClass} `
+                           + ((showNestHighlight || showPairHighlight) ? "show " : "") + bgClass;
     const nestInspectClass = `nest-inspect ${positionClass} ` + (showPairHighlight ? "show" : "");
     const leftMouseImages = [leftMouse.nestImage];
     if (leftMouseCollected) leftMouseImages.push("assets/curriculum/mouse/breeding/nesting/nest_mouse_outline.png");
