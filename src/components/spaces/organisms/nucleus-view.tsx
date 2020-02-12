@@ -5,6 +5,7 @@ import { BaseComponent, IBaseProps } from "../../base";
 import "./organism-view.sass";
 import { onAction, ISerializedActionCall } from "mobx-state-tree";
 import { ChromIdType } from "../../../models/spaces/organisms/organisms-row";
+import { IDisposer } from "mobx-state-tree/dist/utils";
 
 type ChromosomeState = "expanded" | "condensed" | "paired";
 type OutlineState = "condensedOutline" | "pairedOutline";
@@ -67,6 +68,7 @@ interface IState {
   hoveredChromosome?: ChromIdType;
 }
 
+let timer: number;
 const animationTime = 3000;
 
 @inject("stores")
@@ -77,8 +79,15 @@ export class NucleusView extends BaseComponent<IProps, IState> {
     previousChromosomeState: "expanded" as ChromosomeState
   };
 
+  private disposer: IDisposer;
+
   public componentWillMount() {
-    onAction(this.stores.organisms, this.updatingModel);
+    this.disposer = onAction(this.stores.organisms, this.updatingModel);
+  }
+
+  public componentWillUnmount() {
+    if (this.disposer) this.disposer();
+    if (timer) (window as any).clearTimeout(timer);
   }
 
   public render() {
@@ -130,7 +139,7 @@ export class NucleusView extends BaseComponent<IProps, IState> {
   // The `onNucleusAnimating` call just disables the menu buttons
   private startAnimation = () => {
     this.props.onNucleusAnimating(true);
-    (window as any).setTimeout(() => {
+    timer = (window as any).setTimeout(() => {
       this.setState({previousChromosomeState: this.chromosomeState});
       this.props.onNucleusAnimating(false);
     }, animationTime);
