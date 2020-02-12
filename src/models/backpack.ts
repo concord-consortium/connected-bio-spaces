@@ -28,7 +28,7 @@ export const BackpackModel = types
       },
 
       cloneExists(id: string | undefined): boolean {
-        return (id && self.collectedMice.find(bpMouse => bpMouse.originMouseRefId === id) ? true : false);
+        return (self.collectedMice.some(bpMouse => bpMouse.originMouseRefId === id));
       },
     };
   })
