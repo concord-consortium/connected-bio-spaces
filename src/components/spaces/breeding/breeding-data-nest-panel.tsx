@@ -55,10 +55,10 @@ export class BreedingDataNestPanel extends BaseComponent<IProps, IState> {
     const data = this.props.nestPair.getData(chartType);
 
     if (chartType === "genotype") {
-      pieData = [{label: "RLRL", value: data.CC, color: colors.colorDataMouseBrownLightRep},
-                 {label: "RLRD", value: data.CR, color: colors.colorDataMouseBrownMediumRep},
-                 {label: "RDRL", value: data.RC, color: colors.colorDataMouseBrownMediumRep},
-                 {label: "RDRD", value: data.RR, color: colors.colorDataMouseBrownDarkRep}];
+      pieData = [{label: "RᴸRᴸ", value: data.CC, color: colors.colorDataMouseBrownLightRep},
+                 {label: "RᴸRᴰ", value: data.CR, color: colors.colorDataMouseBrownMediumRep},
+                 {label: "RᴰRᴸ", value: data.RC, color: colors.colorDataMouseBrownMediumRep},
+                 {label: "RᴰRᴰ", value: data.RR, color: colors.colorDataMouseBrownDarkRep}];
     } else if (chartType === "sex") {
       pieData = [{label: "Female", value: data.female, color: colors.colorChartYellow},
                  {label: "Male", value: data.male, color: colors.colorChartRed}];
