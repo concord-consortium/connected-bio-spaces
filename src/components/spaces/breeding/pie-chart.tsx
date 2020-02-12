@@ -36,7 +36,7 @@ export class PieChart extends BaseComponent<IProps, IState> {
       tooltips: {
         enabled: true,
         callbacks: {
-          label: function(tooltipItems: any, data: any) {
+          label(tooltipItems: any, data: any) {
             return (data.labels && tooltipItems ? data.labels[tooltipItems.index] : "");
           }
         }
