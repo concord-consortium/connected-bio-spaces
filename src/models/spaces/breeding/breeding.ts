@@ -77,8 +77,6 @@ export const NestPair = types.model({
   id: types.optional(types.identifier, () => uuid()),
   leftMouse: BackpackMouse,
   rightMouse: BackpackMouse,
-  leftMouseBackpackId: types.maybe(types.string),
-  rightMouseBackpackId: types.maybe(types.string),
   label: types.string,
   currentBreeding: false,
   hasBeenVisited: false,
@@ -126,12 +124,6 @@ export const NestPair = types.model({
   }
 }))
 .actions(self => ({
-  setLeftMouseBackpackId(id: string) {
-    self.leftMouseBackpackId = id;
-  },
-  setRightMouseBackpackId(id: string) {
-    self.rightMouseBackpackId = id;
-  },
   setCurrentBreeding(val: boolean) {
     self.currentBreeding = val;
     if (val) {
@@ -304,19 +296,6 @@ export const BreedingModel = types
         self.interactionMode = "none";
       } else {
         self.interactionMode = mode;
-      }
-    },
-
-    setNestPairLeftMouseBackpackId(nestPairId: string, backpackId: string) {
-      const nestPair = self.nestPairs.find(pair => pair.id === nestPairId);
-      if (nestPair) {
-        nestPair.setLeftMouseBackpackId(backpackId);
-      }
-    },
-    setNestPairRightMouseBackpackId(nestPairId: string, backpackId: string) {
-      const nestPair = self.nestPairs.find(pair => pair.id === nestPairId);
-      if (nestPair) {
-        nestPair.setRightMouseBackpackId(backpackId);
       }
     },
     clearNestPairActiveBreeding() {

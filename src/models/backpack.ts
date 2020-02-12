@@ -25,7 +25,11 @@ export const BackpackModel = types
 
       isSelected(mouse?: BackpackMouseType) {
         return self.activeMouse && self.activeMouse === mouse;
-      }
+      },
+
+      cloneExists(id: string | undefined): boolean {
+        return (id && self.collectedMice.find(bpMouse => bpMouse.originMouseRefId === id) ? true : false);
+      },
     };
   })
   .actions((self) => {

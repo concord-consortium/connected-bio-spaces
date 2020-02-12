@@ -5,6 +5,7 @@ import { BaseComponent, IBaseProps } from "../../base";
 import { StackedOrganism } from "../../stacked-organism";
 import { gameteHTMLLabel } from "../../../utilities/genetics";
 import { ArrowPanel, ArrowInfo } from "./arrow-panel";
+import { BackpackMouse, BackpackMouseType } from "../../../models/backpack-mouse";
 
 import "./breeding-view.sass";
 import "rc-slider/assets/index.css";
@@ -28,6 +29,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
 
   public render() {
     const { breeding } = this.stores;
+    const { backpack } = this.stores;
     const activeBreedingPair = breeding.activeBreedingPair!;
     const { mother, father, litters, label, numOffspring, id } = activeBreedingPair;
     const numLitters = litters.length;
@@ -48,6 +50,12 @@ export class BreedingView extends BaseComponent<IProps, IState> {
       width: 24
     };
     const railStyle = { width: 10 };
+    const motherCollected = backpack.cloneExists(mother.id);
+    const fatherCollected = backpack.cloneExists(father.id);
+    const motherImages = [mother.nestImage];
+    if (motherCollected) motherImages.push(mother.nestOutlineImage);
+    const fatherImages = [father.nestImage];
+    if (fatherCollected) fatherImages.push(father.nestOutlineImage);
     return (
       <div className="breeding-view">
         <div className="parents">
@@ -64,12 +72,12 @@ export class BreedingView extends BaseComponent<IProps, IState> {
             <div className="parent-image"
                  onMouseEnter={this.handleParentHoverEnter(0)}
                  onMouseLeave={this.handleParentHoverExit}
-                 onClick={this.handleClickMouse(mother.id, id, -1, true)}>
+                 onClick={this.handleClickMouse(mother, id, -1, true)}>
               <StackedOrganism
                 organism={mother}
-                organismImages={[mother.nestImage]}
+                organismImages={motherImages}
                 height={90}
-                showSelection={false}
+                showSelection={breeding.interactionMode === "select" && !motherCollected}
                 showGameteSelection={showGametes && this.state.parentHightlightIndex === 0}
                 showInspect={breeding.interactionMode === "inspect"}
                 showSex={breeding.showSexStack}
@@ -96,13 +104,13 @@ export class BreedingView extends BaseComponent<IProps, IState> {
             <div className="parent-image"
                  onMouseEnter={this.handleParentHoverEnter(1)}
                  onMouseLeave={this.handleParentHoverExit}
-                 onClick={this.handleClickMouse(father.id, id, -1, true)}>
+                 onClick={this.handleClickMouse(father, id, -1, true)}>
               <StackedOrganism
                 organism={father}
-                organismImages={[father.nestImage]}
+                organismImages={fatherImages}
                 height={90}
                 flipped={true}
-                showSelection={false}
+                showSelection={breeding.interactionMode === "select" && !fatherCollected}
                 showGameteSelection={showGametes && this.state.parentHightlightIndex === 1}
                 showInspect={breeding.interactionMode === "inspect"}
                 showSex={breeding.showSexStack}
@@ -144,6 +152,9 @@ export class BreedingView extends BaseComponent<IProps, IState> {
                     {
                       litter.map((org, j) => {
                         const litterNum = litters.length - i;
+                        const orgCollected = backpack.cloneExists(org.id);
+                        const orgImages = [org.nestImage];
+                        if (orgCollected) orgImages.push(org.nestOutlineImage);
                         return (
                           <div
                             className="offspring-container"
@@ -153,14 +164,16 @@ export class BreedingView extends BaseComponent<IProps, IState> {
                             onMouseLeave={currentLitter === (litterNum - 1)
                                           ? this.handleOffspringHoverExit
                                           : undefined}
-                            onClick={this.handleClickMouse(org.id, id, litters.length - i - 1, false)}
+                            onClick={this.handleClickMouse(org, id, litters.length - i - 1, false)}
                             key={"org-cont" + j}>
                             <StackedOrganism
                               key={"org" + j}
                               organism={org}
-                              organismImages={[org.nestImage]}
+                              organismImages={orgImages}
                               height={60}
-                              showSelection={false}
+                              showSelection={breeding.interactionMode === "select"
+                                            && !orgCollected
+                                            && currentLitter === (litterNum - 1)}
                               showGameteSelection={showGametes
                                                   && currentLitter === (litterNum - 1)
                                                   && j === this.state.offspringHightlightIndex}
@@ -326,14 +339,26 @@ export class BreedingView extends BaseComponent<IProps, IState> {
     this.setState({litterSliderVal: value});
   }
 
-  private handleClickMouse = ( mouseId: string, pairId: string, litterIndex: number, isParent: boolean) => () => {
+  private handleClickMouse = (mouse: BackpackMouseType,
+                              pairId: string,
+                              litterIndex: number,
+                              isParent: boolean) => () => {
     const { breeding } = this.stores;
+    const { backpack } = this.stores;
     const inspecting = breeding.interactionMode === "inspect";
     const showGametes = breeding.interactionMode === "gametes";
+    const selecting = breeding.interactionMode === "select";
     if (inspecting) {
-      breeding.setInspectedMouse(mouseId, pairId, litterIndex, isParent);
+      breeding.setInspectedMouse(mouse.id, pairId, litterIndex, isParent);
     } else if (showGametes) {
-      breeding.setInspectedGamete(mouseId, pairId, litterIndex, isParent);
+      breeding.setInspectedGamete(mouse.id, pairId, litterIndex, isParent);
+    } else if (selecting && !backpack.cloneExists(mouse.id)) {
+      const backpackMouse = BackpackMouse.create({sex: mouse.sex,
+                                                  genotype: mouse.genotype,
+                                                  label: mouse.label,
+                                                  originMouseRefId: mouse.id});
+      backpack.addCollectedMouse(backpackMouse);
     }
   }
+
 }

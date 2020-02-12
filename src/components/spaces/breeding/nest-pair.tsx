@@ -2,9 +2,9 @@ import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { BaseComponent, IBaseProps } from "../../base";
 import { INestPair } from "../../../models/spaces/breeding/breeding";
-import { BackpackMouse } from "../../../models/backpack-mouse";
-import "./nest-pair.sass";
+import { BackpackMouse, BackpackMouseType } from "../../../models/backpack-mouse";
 import { StackedOrganism } from "../../stacked-organism";
+import "./nest-pair.sass";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -24,14 +24,15 @@ interface IProps extends IBaseProps {
 export class NestPair extends BaseComponent<IProps, IState> {
 
   public render() {
+    const { backpack } = this.stores;
     const { backgroundType } = this.stores.breeding;
     const { showNestHighlight, showPairHighlight } = this.props;
     const positionClass = this.getPositionClass();
     const nestHoverImage = this.getNestHoverImage();
     const leftMouse = this.props.nestPair.leftMouse;
     const rightMouse = this.props.nestPair.rightMouse;
-    const leftMouseCollected = this.isMouseCollected(this.props.nestPair.leftMouseBackpackId);
-    const rightMouseCollected = this.isMouseCollected(this.props.nestPair.rightMouseBackpackId);
+    const leftMouseCollected = backpack.cloneExists(leftMouse.id);
+    const rightMouseCollected = backpack.cloneExists(rightMouse.id);
     const nestClass = `nest-pair ${positionClass} ` + (showNestHighlight ? "selectable" : "");
     const nestBackgroundHoverClass = `nest-pair-background-hover ${positionClass} ` + (showNestHighlight ? "show" : "");
     const bgClass = backgroundType === "brown" ? "white" : (backgroundType === "white" ? "black" : "");
@@ -39,9 +40,9 @@ export class NestPair extends BaseComponent<IProps, IState> {
                            + ((showNestHighlight || showPairHighlight) ? "show " : "") + bgClass;
     const nestInspectClass = `nest-inspect ${positionClass} ` + (showPairHighlight ? "show" : "");
     const leftMouseImages = [leftMouse.nestImage];
-    if (leftMouseCollected) leftMouseImages.push("assets/curriculum/mouse/breeding/nesting/nest_mouse_outline.png");
+    if (leftMouseCollected) leftMouseImages.push(leftMouse.nestOutlineImage);
     const rightMouseImages = [rightMouse.nestImage];
-    if (rightMouseCollected) rightMouseImages.push("assets/curriculum/mouse/breeding/nesting/nest_mouse_outline.png");
+    if (rightMouseCollected) rightMouseImages.push(rightMouse.nestOutlineImage);
     return(
       <div className={nestClass} onClick={this.handleClickNest}>
         <img
@@ -50,7 +51,7 @@ export class NestPair extends BaseComponent<IProps, IState> {
           data-test="nest-pair-background-image"
         />
         <div className={nestInspectClass} />
-        <div className={`mouse left ${positionClass}`} onClick={this.handleClickLeftMouse}>
+        <div className={`mouse left ${positionClass}`} onClick={this.handleClickMouse(leftMouse)}>
           <StackedOrganism
             organism={leftMouse}
             organismImages={leftMouseImages}
@@ -60,7 +61,7 @@ export class NestPair extends BaseComponent<IProps, IState> {
             showHetero={this.props.showHeteroStack}
           />
         </div>
-        <div className={`mouse right ${positionClass}`} onClick={this.handleClickRightMouse}>
+        <div className={`mouse right ${positionClass}`} onClick={this.handleClickMouse(rightMouse)}>
           <StackedOrganism
             organism={rightMouse}
             organismImages={rightMouseImages}
@@ -74,17 +75,6 @@ export class NestPair extends BaseComponent<IProps, IState> {
         <div className={pairLabelClass}>{this.props.nestPair.label}</div>
       </div>
     );
-  }
-
-  private isMouseCollected = (id: string | undefined) => {
-    if (id) {
-      const { backpack } = this.stores;
-      const mouse = backpack.collectedMice.find(bpMouse => bpMouse.id === id);
-      if (mouse) {
-        return true;
-      }
-    }
-    return false;
   }
 
   private getPositionClass = () => {
@@ -125,31 +115,16 @@ export class NestPair extends BaseComponent<IProps, IState> {
     }
   }
 
-  private handleClickLeftMouse = () => {
+  private handleClickMouse = (mouse: BackpackMouseType) => () => {
     const { breeding } = this.stores;
+    const { backpack } = this.stores;
     const selecting = breeding.interactionMode === "select";
-    if (selecting) {
-      const { backpack } = this.stores;
-      const nestMouse = this.props.nestPair.leftMouse;
-      const backpackMouse = BackpackMouse.create({sex: nestMouse.sex,
-                                                  genotype: nestMouse.genotype,
-                                                  label: nestMouse.label});
+    if (selecting && !backpack.cloneExists(mouse.id)) {
+      const backpackMouse = BackpackMouse.create({sex: mouse.sex,
+                                                  genotype: mouse.genotype,
+                                                  label: mouse.label,
+                                                  originMouseRefId: mouse.id});
       backpack.addCollectedMouse(backpackMouse);
-      breeding.setNestPairLeftMouseBackpackId(this.props.nestPair.id, backpackMouse.id);
-    }
-  }
-
-  private handleClickRightMouse = () => {
-    const { breeding } = this.stores;
-    const selecting = breeding.interactionMode === "select";
-    if (selecting) {
-      const { backpack } = this.stores;
-      const nestMouse = this.props.nestPair.rightMouse;
-      const backpackMouse = BackpackMouse.create({sex: nestMouse.sex,
-                                                  genotype: nestMouse.genotype,
-                                                  label: nestMouse.label});
-      backpack.addCollectedMouse(backpackMouse);
-      breeding.setNestPairRightMouseBackpackId(this.props.nestPair.id, backpackMouse.id);
     }
   }
 
