@@ -230,13 +230,17 @@ export class NucleusView extends BaseComponent<IProps, IState> {
   }
 
   private setHoveredChromosome = (name: ChromIdType) => () => {
-    if (this.row.mode === "inspect") {
+    const isAnimating = this.chromosomeState !== this.state.previousChromosomeState;
+    if (this.row.mode === "inspect" && !isAnimating) {
       this.setState({hoveredChromosome: name});
     }
   }
 
   private unsetHoveredChromosome = () => {
-    this.setState({hoveredChromosome: undefined});
+    const isAnimating = this.chromosomeState !== this.state.previousChromosomeState;
+    if (!isAnimating) {
+      this.setState({hoveredChromosome: undefined});
+    }
   }
 
   private setActiveChromosome = (name: ChromIdType) => () => {
