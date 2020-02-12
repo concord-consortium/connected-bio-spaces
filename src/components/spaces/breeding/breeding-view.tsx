@@ -164,7 +164,8 @@ export class BreedingView extends BaseComponent<IProps, IState> {
                               showGameteSelection={showGametes
                                                   && currentLitter === (litterNum - 1)
                                                   && j === this.state.offspringHightlightIndex}
-                              showInspect={breeding.interactionMode === "inspect"}
+                              showInspect={breeding.interactionMode === "inspect"
+                                          && currentLitter === (litterNum - 1)}
                               showSex={breeding.showSexStack}
                               showHetero={breeding.showHeteroStack}
                               showLabel={showGametes}
