@@ -17,7 +17,8 @@ export const BackpackMouse = types
     id: types.optional(types.identifier, () => uuid()),
     sex: SexTypeEnum,
     genotype: GenotypeEnum,
-    label: ""
+    label: "",
+    originMouseRefId: types.maybe(types.string),
   })
   .views(self => ({
     get baseColor(): ColorType {
@@ -50,6 +51,9 @@ export const BackpackMouse = types
           return "assets/mouse_tan_nest.png";
       }
     },
+    get nestOutlineImage(): string {
+      return "assets/curriculum/mouse/breeding/nesting/nest_mouse_outline.png";
+    },
     get zoomImage(): string {
       switch (self.genotype) {
         case "RR":
@@ -63,6 +67,8 @@ export const BackpackMouse = types
     get isHeterozygote(): boolean {
       return (self.genotype === "RC" || self.genotype === "CR");
     },
+  }))
+  .actions(self => ({
     setLabel(val: string) {
       self.label = val;
     }
