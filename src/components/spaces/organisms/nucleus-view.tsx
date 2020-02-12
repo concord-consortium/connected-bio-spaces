@@ -81,6 +81,14 @@ export class NucleusView extends BaseComponent<IProps, IState> {
 
   private disposer: IDisposer;
 
+  constructor(props: IProps) {
+    super(props);
+
+    this.state = {
+      previousChromosomeState: this.chromosomeState
+    };
+  }
+
   public componentWillMount() {
     this.disposer = onAction(this.stores.organisms, this.updatingModel);
   }
