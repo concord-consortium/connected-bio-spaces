@@ -95,7 +95,7 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
   // We explicitly pass down organismsRow and zoomLevel separately
   private organismZoomedView = (organismsRow: OrganismsRowModelType, zoomLevel: ZoomLevelType, rowIndex: number,
                                 mode: ModeType) => {
-    const { organismsMouse } = organismsRow;
+    const { organismsMouse, previousZoomLevel } = organismsRow;
     const width = DEFAULT_MODEL_WIDTH;
     const { isZoomingIntoOrg, cellModelLoaded } = this.state;
     const cellClassName = `cell-zoom-panel`;
@@ -103,7 +103,8 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
     return (
       <div className="organism-stacker">
         {
-          (zoomLevel === "organism" || isZoomingIntoOrg || !cellModelLoaded) &&
+          (zoomLevel === "organism" || isZoomingIntoOrg ||
+            (previousZoomLevel as unknown as string === "organism" && !cellModelLoaded)) &&
           <OrganismView
             backpackMouse={organismsMouse && organismsMouse.backpackMouse}
             zoomIn={isZoomingIntoOrg}

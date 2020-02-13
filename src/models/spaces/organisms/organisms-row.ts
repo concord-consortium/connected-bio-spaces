@@ -38,6 +38,9 @@ export const OrganismsRowModel = types
     nucleusState: types.optional(NucleusState, "expanded"),
     selectedChromosome: types.maybe(ChromosomeId)
   })
+  .volatile(self => ({
+    previousZoomLevel: types.maybe(ZoomLevel),
+  }))
   .views(self => ({
     get currentData(): ChartDataModelType {
       const chartDataSets: ChartDataSetModelType[] = [];
@@ -98,6 +101,9 @@ export const OrganismsRowModel = types
         self.selectedOrganelle = organelle;
       },
       setZoomLevel(zoomLevel: ZoomLevelType) {
+        if (self.zoomLevel) {
+          self.previousZoomLevel = self.zoomLevel as any;
+        }
         self.zoomLevel = zoomLevel;
 
         // reset stuff between levels
