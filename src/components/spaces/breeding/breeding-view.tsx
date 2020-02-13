@@ -164,7 +164,9 @@ export class BreedingView extends BaseComponent<IProps, IState> {
                             onMouseLeave={currentLitter === (litterNum - 1)
                                           ? this.handleOffspringHoverExit
                                           : undefined}
-                            onClick={this.handleClickMouse(org, id, litters.length - i - 1, false)}
+                            onClick={currentLitter === (litterNum - 1)
+                                     ? this.handleClickMouse(org, id, litters.length - i - 1, false)
+                                     : undefined}
                             key={"org-cont" + j}>
                             <StackedOrganism
                               key={"org" + j}
