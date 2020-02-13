@@ -12,6 +12,7 @@ import { autorun } from "mobx";
 import { onAction } from "mobx-state-tree";
 import { BreedingModelType, createBreedingModel, INestPair } from "./spaces/breeding/breeding";
 import { EnvironmentColorType } from "../models/spaces/breeding/breeding";
+import { RightPanelType } from "./ui";
 
 export type Curriculum = "mouse";
 
@@ -85,7 +86,8 @@ export interface UserSaveDataType {
   };
   breeding?: {
     backgroundType: EnvironmentColorType,
-    nestPairs: INestPair[]
+    nestPairs: INestPair[],
+    rightPanel: RightPanelType
   };
 }
 
@@ -105,7 +107,8 @@ export function getUserSnapshot(stores: IStores): UserSaveDataType {
     },
     breeding: {
       backgroundType: stores.breeding.backgroundType,
-      nestPairs: stores.breeding.nestPairs
+      nestPairs: stores.breeding.nestPairs,
+      rightPanel: stores.breeding.rightPanel
     }
   };
 }
