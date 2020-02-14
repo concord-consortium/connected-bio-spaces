@@ -244,6 +244,9 @@ export function createBreedingModel(breedingProps: any) {
       };
     });
   }
+  if (breedingProps.nestPairs && breedingProps.nestPairs.some((pair: INestPair) => pair.hasBeenVisited)) {
+    breedingProps.rightPanel = "data";
+  }
   breedingProps.inspectInfo = InspectInfo.create({nestPairId: "", organismId: "", litterIndex: 0, isParent: false, });
   return BreedingModel.create(breedingProps);
 }
