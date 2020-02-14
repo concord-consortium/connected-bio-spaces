@@ -281,6 +281,13 @@ export const BreedingModel = types
       const nestPair = self.nestPairs.find(pair => pair.id === self.breedingNestPairId);
       if (!nestPair) return;
       nestPair.clearLitters();
+      // if we're inspecting a litter mouse, clear inspection
+      if ((self.inspectInfo.type === "gamete" || self.inspectInfo.type === "organism")
+          && self.inspectInfo.nestPairId === self.breedingNestPairId
+          && !self.inspectInfo.isParent) {
+        self.inspectInfo.litterIndex = -1;
+        self.inspectInfo.type = "none";
+      }
     },
 
     setShowSexStack(show: boolean) {
