@@ -1,0 +1,284 @@
+@import "../../vars"
+
+.breeding-view
+  width: 100%
+  height: 433px
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+  align-items: center
+  font-size: $font-size-label1
+  font-family: $font-stack
+  color: $color-simdata-brick-dark2
+
+  .parents
+    display: flex
+    width: 100%
+    justify-content: space-around
+    font-size: 14px
+    font-weight: 500
+    padding-top: 8px
+
+    .parent-label
+      position: absolute
+      top: 20px
+      left: 6px
+
+    .gametes-box
+      position: absolute
+      width: 112px
+      height: 158px
+      border-radius: 10px
+      background-color: $color-simdata-brick-light3
+      top: 6px
+      &.mother
+        left: 59px
+      &.father
+        left: 242px
+
+    .gametes-message
+      position: absolute
+      width: 40px
+      text-align: center
+      color: $color-nav-cinder-dark2
+      top: 120px
+      left: 5px
+      font-size: 10px
+      font-weight: 400
+
+    .parent
+      display: flex
+      flex-direction: column
+      align-items: center
+      width: 100px
+      z-index: 1
+      &.mother
+        padding-left: 61px
+      &.father
+        padding-right: 61px
+      .parent-image
+        display: flex
+        justify-content: center
+        align-items: center
+        height: 94px
+        width: 94px
+        border-radius: 50%
+        background-color: $color-simdata-brick-light3
+        margin-top: 5px
+      .gametes
+        display: flex
+        flex-direction: row
+        justify-content: center
+        align-items: center
+        margin-top: 4px
+        .gamete
+          display: flex
+          flex-direction: column
+          align-items: center
+          color: $color-nav-cinder-dark2
+          font-size: 10px
+          width: 20px
+          height: 45px
+          &:hover .hover-view
+            opacity: .75
+            height: 45px
+          &:hover .icon.egg
+            background-image: url("../../../assets/icons/egg-hi.svg")
+          &:hover .icon.sperm
+            background-image: url("../../../assets/icons/sperm-hi.svg")
+          .icon
+            width: 16px
+            height: 16px
+            margin-bottom: 1px
+            margin-top: 2px
+            transition-duration: .25s
+            &.egg
+              background-image: url("../../../assets/icons/egg.svg")
+              &.highlight
+                background-image: url("../../../assets/icons/egg-hi.svg")
+            &.sperm
+              background-image: url("../../../assets/icons/sperm.svg")
+              &.highlight
+                background-image: url("../../../assets/icons/sperm-hi.svg")
+          .hover-view
+            transition-duration: .25s
+            z-index: -1
+            position: absolute
+            background-color: $color-nav-shamrock-light1
+            opacity: 0
+            width: 20px
+            height: 35px
+            border-radius: 10px
+            &.show
+              opacity: .75
+            &.tall
+              height: 45px
+
+    .breed-button-container
+      padding-top: 30px
+
+      .breeding-button.breed-button
+        color: $color-nav-shamrock-dark2
+        background-color: $color-nav-shamrock-light2
+        height: 60px
+        width: 63px
+        border: 2px solid white
+        font-size: 16px
+        font-weight: 500
+        &:hover
+          background-color: $color-nav-shamrock-light1
+        &:active
+          background-color: $color-nav-shamrock-dark1
+          color: white
+          .icon
+            fill: white
+        .icon
+          width: 53px
+          height: 35px
+          fill: $color-nav-shamrock-dark1
+        .label
+          margin-top: -2px
+          margin-bottom: 1px
+
+  .offspring
+    position: relative
+    width: 100%
+    height: 235px
+    display: flex
+    justify-content: space-around
+    opacity: 1
+    transition: opacity 0.5s
+    &.hide
+      opacity: 0
+
+    .litter-number, .total-offspring, .reset-button-container, .alleles-message
+      position: absolute
+      width: 40px
+      text-align: center
+    .litter-number
+      top: 10px
+      left: 6px
+      font-size: 14px
+      font-weight: 500
+    .total-offspring
+      color: $color-nav-cinder-dark2
+      top: 155px
+      left: 5px
+      font-size: 10px
+      font-weight: 400
+    .alleles-message
+      color: $color-nav-cinder-dark2
+      top: 50px
+      left: 5px
+      font-size: 10px
+      font-weight: 400
+    .reset-button-container
+      top: 190px
+      left: 5px
+      .reset-button
+        font-size: 8px
+        background-color: $color-simdata-brick-light3
+        height: unset
+        width: unset
+        padding: 2px 6px 0
+        margin: 0
+        border: 2px solid white
+        border-radius: 3px
+        &:hover
+          background-color: $color-simdata-brick-light2
+        &:active
+          background-color: $color-simdata-brick-light1
+        .icon
+          width: 27px
+          height: 20px
+
+    .litters-container
+      width: 300px
+      height: 225px
+      background-color: white
+      overflow: hidden
+      border: 2px solid white
+      border-radius: 5px
+      .litters
+        position: relative
+        &:before          // allows appearance animation
+          content: ' '
+
+      .litter
+        display: flex
+        justify-content: center
+        margin: 32px 0 -11px 0
+        transition: all 0.5s
+        animation: push-down 0.8s ease
+        .offspring-container
+          margin: -6px
+        .offspring-container:nth-child(even)
+          margin-top: 10px
+          z-index: 2
+
+    .focus-overlay
+      position: absolute
+      top: 2px
+      left: 58px
+      width: 293px
+      height: 218px
+      z-index: 3
+      pointer-events: none
+
+      &>div
+        background-color: #ffe5e590
+        width: 100%
+      .focus-overlay-top
+        height: 8px
+      .focus-overlay-bottom
+        height: 114px
+      .focus-window
+        width: 303px
+        height: 102px
+        margin-left: -5px
+        background-color: transparent
+        border: 2px solid $color-simdata-brick-dark2
+        border-radius: 5px
+        &:before
+          content: ' '
+          position: absolute
+          left: -11px
+          top: 20px
+          width: 0
+          height: 0
+          border-style: solid
+          border-width: 5px 6px 5px 0
+          border-color: transparent $color-simdata-brick-dark2 transparent transparent
+
+    .litter-scroll
+      position: absolute
+      top: 15px
+      right: 20px
+      height: 210px
+      opacity: 1
+      transition: opacity 0.25s
+      &.hide
+        opacity: 0
+
+      .rc-slider-rail
+        background-color: $color-simdata-brick
+      .rc-slider-track
+        background-color: $color-simdata-brick-light1
+      .rc-slider-handle
+        transform: translateY(-10px) translateX(-2px) !important
+        border-color: white
+        background-color: $color-simdata-brick-light2
+        &:hover
+          background-color: $color-simdata-brick-light1
+        &:active
+          background-color: $color-simdata-brick-dark1
+        &:focus
+          box-shadow: none
+
+@keyframes push-down
+  0%
+    opacity: -1
+    height: 0
+  100%
+    opacity: 0.9
+    height: 63px

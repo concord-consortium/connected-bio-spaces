@@ -28,6 +28,8 @@
     font-family: $font-stack
     color: $color-simdata-amber-dark2
     transition-duration: $fade-time
+    &.breeding
+      color: $color-simdata-brick-dark2
     &:hover:not(.disabled)
       cursor: pointer
     &.disabled
@@ -127,19 +129,29 @@
       background-color: $color-simdata-carrot
     &.breeding
       background-color: $color-simdata-brick
+      &.data
+        height: 45px
 
     .button-holder
       width: 92px
       margin: 0 5px 0 7px
       border-radius: 13px
       background-color: $color-simdata-amber-light2
+      &.breeding
+        background-color: $color-simdata-brick-light2
       &:hover:not(.disabled):not(.active)
         background-color: $color-simdata-amber-light1
+        &.breeding
+          background-color: $color-simdata-brick-light1
       &:active:not(.disabled), &.active
         background-color: $color-simdata-amber-dark1
         color: $color-white
+        &.breeding
+          background-color: $color-simdata-brick-dark1
         &:hover
-          background-color: $color-simdata-amber-dark1-5
+          background-color: $color-simdata-amber-dark1
+          &.breeding
+            background-color: $color-simdata-brick-dark1
 
   .float-buttons
     .button-holder
@@ -265,13 +277,43 @@
         color: white
 
 
+  .breeding
+    .checkmark
+      background-color: $color-simdata-brick-light2
+
+    /* On mouse-over, add a background color */
+    .check-container:hover input ~ .checkmark
+      background-color: $color-simdata-brick-light1
+
+    /* On mouse-down, add a background color */
+    .check-container:active input ~ .checkmark
+      background-color: $color-simdata-brick-dark1
+
+    /* checkbox is checked */
+    .check-container input:checked ~ .checkmark
+      background-color: $color-simdata-brick-dark1
+
+    .check-container:hover input:checked ~ .checkmark
+      background-color: $color-simdata-brick-light1
+
+    .check-container:active input:checked ~ .checkmark
+      background-color: $color-simdata-brick-light2
+
+    .check-container
+      .label-holder .label
+        color: $color-simdata-brick-dark3
+
+    .check-container.checked
+      .label-holder .label
+        color: white
+
 .left-abutment
   margin-left: $two-up-margin
 
   .header .title
     position: relative
-    left: 15px
-    width: 200px
+    width: 100%
+    margin-right: 90px
     flex-grow: 0
 
 .right-abutment

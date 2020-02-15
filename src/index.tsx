@@ -24,6 +24,9 @@ const DEFAULT_WIDTH = 1000;     // scale = 1.0. All font sizes etc. will be resp
 const MINIMUM_WIDTH = 300;
 export const DEFAULT_MODEL_WIDTH = DEFAULT_WIDTH * 0.414;
 
+const SAVE_STATE_KEY = "cbioSaveState";
+const localStorage = (window as any).localStorage;
+
 function initializeModel(studentData: UserSaveDataType) {
   if (modelInitialized) return;
   modelInitialized = true;
@@ -43,11 +46,19 @@ function initializeModel(studentData: UserSaveDataType) {
 
     // Save data everytime stores change
     const saveUserData = () => {
-      phone.post("interactiveState", getUserSnapshot(stores));
+      const saveState = getUserSnapshot(stores);
+      (window as any).saveState = saveState;      // for console inspection
+
+      phone.post("interactiveState", saveState);
+
+      if (urlParams.saveToLocalStore) {
+        localStorage.setItem(SAVE_STATE_KEY, JSON.stringify(saveState));
+      }
     };
     onSnapshot(stores.backpack, saveUserData);
     onSnapshot(stores.ui, saveUserData);
     onSnapshot(stores.organisms, saveUserData);
+    onSnapshot(stores.breeding, saveUserData);
 
     const outerWrapperStyle = { className: "outer-scale-wrapper" };
     const aspectRatio = initialStore.topBar ? ASPECT_RATIO_TOP_BAR : ASPECT_RATIO;
@@ -89,6 +100,10 @@ phone.post("supportedFeatures", {
     aspectRatio: ASPECT_RATIO
   }
 });
+
+if (urlParams.saveToLocalStore && localStorage.getItem(SAVE_STATE_KEY)) {
+  initializeModel(JSON.parse(localStorage.getItem(SAVE_STATE_KEY)));
+}
 
 // If we do not receive `initInteractive`, we are not embedded in LARA
 setTimeout( (() => initializeModel({})), 500);

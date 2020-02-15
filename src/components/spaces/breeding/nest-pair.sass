@@ -1,0 +1,153 @@
+@import "../../vars"
+
+.nest-pair
+  position: absolute
+  width: 170px
+  height: 90px
+  &:hover .pair-label.show
+    opacity: 1
+  &:hover .nest-pair-background-hover.show
+    opacity: 1
+  &:hover .nest-inspect.show
+    opacity: .75
+  &.left-top
+    top: 20px
+    left: -2px
+  &.left-middle
+    top: 129px
+    left: -4px
+  &.left-bottom
+    top: 299px
+  &.right-top
+    top: 52px
+    left: 206px
+  &.right-middle
+    top: 208px
+    left: 146px
+  &.right-bottom
+    top: 334px
+    left: 214px
+  .nest-pair-background-hover
+    position: absolute
+    height: 100px
+    opacity: 0
+    transition-duration: .25s
+    &.left-top
+      height: 75px
+    &.left-middle
+      height: 83px
+    &.left-bottom
+      height: 85px
+    &.right-top
+      height: 84px
+    &.right-middle
+      height: 88px
+    &.right-bottom
+      height: 80px
+  .nest-inspect
+    position: absolute
+    height: 80px
+    width: 150px
+    background-color: $color-simdata-brick-light1
+    opacity: 0
+    border-radius: 40px
+    transition-duration: .25s
+    &.left-top
+      left: 16px
+      top: -6px
+      transform: rotate(0deg)
+    &.left-middle
+      left: 50px
+      top: 2px
+      transform: rotate(8deg)
+    &.left-bottom
+      left: 18px
+      top: 2px
+      transform: rotate(8deg)
+    &.right-top
+      left: 14px
+      top: 0px
+      transform: rotate(-8deg)
+    &.right-middle
+      left: 16px
+      top: 6px
+      transform: rotate(-8deg)
+    &.right-bottom
+      left: 20px
+      top: -4px
+      transform: rotate(-6deg)
+
+  .mouse
+    position: absolute
+    &:hover .selection-stack.show
+      opacity: 1
+    &.left
+      &.left-top
+        top: 0px
+        left: 10px
+      &.left-middle
+        top: 0px
+        left: 50px
+      &.left-bottom
+        top: -6px
+        left: 16px
+      &.right-top
+        top: 4px
+        left: 20px
+      &.right-middle
+        top: 12px
+        left: 22px
+      &.right-bottom
+        top: 0px
+        left: 22px
+    &.right
+      &.left-top
+        top: -2px
+        left: 75px
+      &.left-middle
+        top: 6px
+        left: 116px
+      &.left-bottom
+        top: 8px
+        left: 80px
+      &.right-top
+        top: -8px
+        left: 82px
+      &.right-middle
+        top: 4px
+        left: 90px
+      &.right-bottom
+        top: -6px
+        left: 90px
+  .pair-label
+    position: absolute
+    font-size: 14px
+    font-weight: 500
+    color: $color-black
+    opacity: 0
+    transition-duration: .25s
+    &.left-top
+      top: 78px
+      left: 58px
+    &.left-middle
+      color: $color-white
+      top: 86px
+      left: 86px
+    &.left-bottom
+      top: 82px
+      left: 44px
+    &.right-top
+      color: $color-white
+      top: 84px
+      left: 100px
+    &.right-middle
+      top: 90px
+      left: 100px
+    &.right-bottom
+      color: $color-white
+      top: 78px
+      left: 108px
+    &.white
+      color: $color-white
+    &.black
+      color: $color-black

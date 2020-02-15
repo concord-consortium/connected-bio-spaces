@@ -65,9 +65,11 @@ export const defaultAuthoring: ConnectedBioAuthoring = {
   },
   breeding: {
     instructions: "",
-    breedingType: "litter"
+    enableInspectGametes: true,
+    enableColorChart: true,
+    enableGenotypeChart: true,
+    enableSexChart: true
   }
-
 };
 
 const uiSchema = {

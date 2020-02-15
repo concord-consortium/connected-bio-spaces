@@ -1,11 +1,10 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
-
 import { BaseComponent, IBaseProps } from "../../base";
-
+import { ToolbarButton } from "../../../models/spaces/populations/populations";
+import { NestingView } from "./nesting-view";
 import "./breeding-container.sass";
-import { CollectButtonComponent } from "../../collect-button";
-import { Chromosomes } from "./chromosomes";
+import { BreedingView } from "./breeding-view";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -16,129 +15,148 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
 
   public render() {
     const { breeding } = this.stores;
-    const { breedingType, mother, father, litter,
-      motherGamete, fatherGamete, offspring } = breeding;
-    const readyToBreed = mother && father;
-    const readyToFertilize = motherGamete && fatherGamete;
 
-    const breedButtonClass = "button-holder" + (readyToBreed ? "" : " disabled");
+    const checkboxes = breeding.toolbarButtons.map( (button, i) => {
+      const type = button.type || "button";
+      if (type === "checkbox") {
+        const checkClass = button.enabled === false ? "check-container disabled" : "check-container";
+        return (
+          <label key={button.title} className={checkClass}>
+            <input
+              key={button.title}
+              className="breeding-checkbox"
+              type="checkbox"
+              checked={button.value}
+              onChange={this.handleClickToolbarCheckbox(button)} />
+            <span className="checkmark"/>
+            <div className="label-holder">
+              { this.renderCheckBoxLabel(button.title, button.imageClass) }
+              { button.secondaryTitle && button.secondaryTitleImageClass
+                  ? this.renderCheckBoxLabel(button.secondaryTitle, button.secondaryTitleImageClass)
+                  : null
+              }
+            </div>
+          </label>
+        );
+      }
+    });
 
+    const showingNesting = breeding.breedingNestPairId === undefined;
+    const breedButtonClass = "breed " + (showingNesting && breeding.interactionMode === "breed" ?
+      "sticky-breed " : "sticky-breed-off ");
+    const gametesButtonClass = "gametes" + (showingNesting || !breeding.enableInspectGametes ? " disabled" : "");
+    const inspectButtonClass = (breeding.interactionMode === "inspect" ? "sticky" : "sticky-off");
+    const collectButtonClass = (breeding.interactionMode === "select" ? "sticky-alt" : "sticky-alt-off");
+    const containerClass = "breeding-container"
+                    + (breeding.interactionMode === "inspect" ? " inspect" : "")
+                    + (breeding.interactionMode === "select" ? " select" : "")
+                    + ((breeding.interactionMode === "breed" && showingNesting) ? " breed" : "")
+                    + ((breeding.interactionMode === "gametes" && !showingNesting) ? " gametes" : "");
+
+    const mainComponent = showingNesting ? <NestingView /> : <BreedingView />;
+    const switchLevelsButtonLabel = showingNesting ? "Breeding" : "Nesting";
+    const switchLevelsIcon = showingNesting ? "breed" : "nests";
+    const showGametes = breeding.interactionMode === "gametes";
+    const hideGametesClass = "inner-box inner-button left" + (!showGametes ? " selected" : " unselected");
+    const showGametesClass = "inner-box inner-button right" + (showGametes ? " selected" : " unselected");
+
+    return(
+      <div>
+        <div className={containerClass}>
+            { mainComponent }
+          </div>
+        <div className="breeding-toolbar" data-test="breed-toolbar">
+            <div className="toolbar-row">
+              <button className={"breeding-button " + breedButtonClass}
+                      onClick={showingNesting ? this.handleClickBreedButton : this.handleClickNestingButton}
+                      data-test="breed-button">
+                <div className="inner-box container">
+                  <svg className={"icon " + breedButtonClass}>
+                    <use xlinkHref={`#icon-${switchLevelsIcon}`} />
+                  </svg>
+                </div>
+                <div className="label">{switchLevelsButtonLabel}</div>
+              </button>
+              <button className={"breeding-button " + gametesButtonClass} data-test="gametes-button">
+                <div className="horizontal-container">
+                  <div className={hideGametesClass} onClick={this.handleClickHideGametesButton}>
+                    <div className="label">Hide</div>
+                  </div>
+                  <div className={showGametesClass} onClick={this.handleClickShowGametesButton}>
+                    <svg className={"icon " + gametesButtonClass}>
+                      <use xlinkHref="#icon-gametes" />
+                    </svg>
+                    <div className="label">Show</div>
+                  </div>
+                </div>
+                <div className="label">Inspect Gametes</div>
+              </button>
+              <button className={"breeding-button " + inspectButtonClass}
+                      onClick={this.handleClickInspectButton} data-test="inspect-button">
+                <svg className={"icon " + inspectButtonClass}>
+                  <use xlinkHref="#icon-inspect" />
+                </svg>
+                <div className="label">Inspect</div>
+              </button>
+              <button className={"breeding-button " + collectButtonClass}
+                      onClick={this.handleClickSelect} data-test="collect-button">
+                <svg className={"icon " + collectButtonClass}>
+                  <use xlinkHref="#icon-collect" />
+                </svg>
+                <div className="label">Collect</div>
+              </button>
+           </div>
+            <div className="toolbar-row align-left">
+              { checkboxes }
+            </div>
+          </div>
+
+      </div>
+    );
+  }
+
+  private renderCheckBoxLabel = (title?: string, imageClass?: string) => {
     return (
-      <div className="breeding-container">
-        <div className="parent mother">
-          Mother
-          <CollectButtonComponent
-            backpackMouse={mother}
-            clickClose={this.clickClose("mother")}
-            placeable={false}
-          />
-          <Chromosomes
-            organism={mother}
-          />
-        </div>
-        <div className="parent father">
-          Father
-          <CollectButtonComponent
-            backpackMouse={father}
-            clickClose={this.clickClose("father")}
-            placeable={false}
-          />
-          <Chromosomes
-            organism={father}
-          />
-        </div>
-
+      <div className="label">
+        <div>{ title }</div>
         {
-          breedingType === "litter" &&
-          <React.Fragment>
-            <div className="breed-button">
-              <div className={breedButtonClass} onClick={this.breedLitter}>
-                Breed
-              </div>
-            </div>
-            <div className="litter">
-              {
-                litter.map((org, i) =>
-                  <CollectButtonComponent
-                    key={`offspring-${i}`}
-                    backpackMouse={org}
-                    hideCloseButton={true}
-                    placeable={false}
-                  />
-                )
-              }
-            </div>
-          </React.Fragment>
-        }
-
-        {
-          breedingType === "singleGamete" &&
-          <React.Fragment>
-            <div className="breed-button gametes">
-              {
-                !readyToFertilize && !offspring &&
-                <div className={breedButtonClass} onClick={this.createGametes}>
-                  Create Gametes
-                </div>
-              }
-              {
-                readyToFertilize &&
-                <div className={breedButtonClass} onClick={this.fertilize}>
-                  Fertilize
-                </div>
-              }
-            </div>
-            <div className="gamete-container">
-              {
-                motherGamete &&
-                <div className="mother-gamete">
-                  <Chromosomes
-                    gamete={JSON.parse(motherGamete)}
-                  />
-                </div>
-              }
-              {
-                fatherGamete &&
-                <div className="father-gamete">
-                  <Chromosomes
-                    gamete={JSON.parse(fatherGamete)}
-                    onRight={true}
-                  />
-                </div>
-              }
-            </div>
-            {
-              offspring &&
-              <div className="offspring">
-                <CollectButtonComponent
-                  backpackMouse={offspring}
-                  clickClose={this.clickClose("offspring")}
-                  placeable={false}
-                />
-                <Chromosomes
-                  organism={offspring}
-                />
-              </div>
-            }
-          </React.Fragment>
+          imageClass
+            ?  <div className={imageClass} />
+            :  null
         }
       </div>
     );
   }
 
-  private breedLitter = () => {
-    this.stores.breeding.breedLitter();
+  private handleClickBreedButton = () => {
+    this.stores.breeding.toggleInteractionMode("breed");
+    this.stores.breeding.clearInspectedNest();
   }
 
-  private createGametes = () => {
-    this.stores.breeding.createGametes();
+  private handleClickNestingButton = () => {
+    this.stores.breeding.clearNestPairActiveBreeding();
   }
 
-  private fertilize = () => {
-    this.stores.breeding.fertilize();
+  private handleClickInspectButton = () => {
+    this.stores.breeding.toggleInteractionMode("inspect");
   }
 
-  private clickClose(org: "mother" | "father" | "offspring") {
-    return () => this.stores.breeding.removeOrganism(org);
+  private handleClickSelect = () => {
+    this.stores.breeding.toggleInteractionMode("select");
+  }
+
+  private handleClickToolbarCheckbox = (button: ToolbarButton) => {
+    return (event: React.ChangeEvent) => {
+      const target = event.target;
+      button.action((target as any).checked);
+    };
+  }
+
+  private handleClickHideGametesButton = () => {
+    this.stores.breeding.toggleInteractionMode("gametes");
+  }
+
+  private handleClickShowGametesButton = () => {
+    this.stores.breeding.toggleInteractionMode("gametes");
   }
 }

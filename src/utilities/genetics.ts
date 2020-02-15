@@ -39,3 +39,29 @@ export function breed(mother: Organism, father: Organism): Organism {
 
   return fertilize(motherGamete, fatherGamete);
 }
+
+export function genotypeHTMLLabel(genotype: string): string {
+  switch (genotype) {
+    case "CC":
+      return "R<sup>L</sup>R<sup>L</sup>";
+    case "RR":
+      return "R<sup>D</sup>R<sup>D</sup>";
+    case "RC":
+      return "R<sup>D</sup>R<sup>L</sup>";
+    case "CR":
+      return "R<sup>L</sup>R<sup>D</sup>";
+    default:
+      return "";
+  }
+}
+
+export function gameteHTMLLabel(gamete: string): string {
+  switch (gamete) {
+    case "C":
+      return "R<sup>L</sup>";
+    case "R":
+      return "R<sup>D</sup>";
+    default:
+      return "";
+  }
+}

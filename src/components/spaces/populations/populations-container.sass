@@ -14,156 +14,156 @@
   border-width: 2px 0 0 0
   transform: translate3d(0px, 0px, 0px)  // needed to keep visibility after scaling
 
-.toolbar-row
-  display: flex
-  flex-direction: row
-  width: 100%
-  justify-content: center
-
-  .population-checkbox
-    height: 20px
-    width: 20px
-    background: $color-simdata-amber-light2
-
-  .population-button
+  .toolbar-row
     display: flex
-    flex-direction: column
+    flex-direction: row
+    width: 100%
     justify-content: center
-    align-items: center
-    height: 50px
-    width: 52px
-    margin: 6px
-    border: none
-    outline: none
-    border-radius: $component-border-radius
-    font-size: $font-size-label1
-    font-family: $font-stack
-    color: $color-simdata-amber-dark2
-    background-color: $color-simdata-amber-light2
-    cursor: pointer
-    transition-duration: $fade-time
 
-    &.sticky
-      color: $color-white
-      background-color: $color-simdata-amber-dark1
+    .population-checkbox
+      height: 20px
+      width: 20px
+      background: $color-simdata-amber-light2
 
-    &.sticky-alt
-      color: $color-white
-      background-color: $color-nav-cerulean-dark1
-
-    &.disabled
-      opacity: .5
-      pointer-events: none
-
-    .icon
-      width: 44px
-      height: 28px
-      fill: $color-simdata-amber
+    .population-button
+      display: flex
+      flex-direction: column
+      justify-content: center
+      align-items: center
+      height: 50px
+      width: 52px
+      margin: 6px
+      border: none
+      outline: none
+      border-radius: $component-border-radius
+      font-size: $font-size-label1
+      font-family: $font-stack
+      color: $color-simdata-amber-dark2
+      background-color: $color-simdata-amber-light2
+      cursor: pointer
+      transition-duration: $fade-time
 
       &.sticky
-        fill: $color-white
+        color: $color-white
+        background-color: $color-simdata-amber-dark1
 
       &.sticky-alt
-        fill: $color-white
+        color: $color-white
+        background-color: $color-nav-cerulean-dark1
 
       &.disabled
         opacity: .5
+        pointer-events: none
+
+      .icon
+        width: 44px
+        height: 28px
+        fill: $color-simdata-amber
+
+        &.sticky
+          fill: $color-white
+
+        &.sticky-alt
+          fill: $color-white
+
+        &.disabled
+          opacity: .5
+
+      .label
+        margin: $internal-component-margin
+
+    /* hover and mousedown states */
+    .population-button:hover
+      background-color: $color-simdata-amber-light1
+
+    .population-button:active
+      color: $color-white
+      background-color: $color-simdata-amber-dark1
+
+    .population-button:active .icon
+      fill: $color-white
+
+    /* hover and mousedown states of brown sticky button */
+    .population-button.sticky:hover
+      background-color: $color-simdata-amber-light1
+
+    .population-button.sticky:active
+      color: $color-simdata-amber-dark2
+      background-color: $color-simdata-amber-light2
+
+    .population-button:active .icon.sticky
+      fill: $color-simdata-amber
+
+
+    /* hover and mousedown states of blue sticky button */
+    .population-button.sticky-alt:hover
+      background-color: $color-nav-cerulean-light1
+
+    .population-button.sticky-alt:active
+      color: $color-nav-cerulean-dark2
+      background-color: $color-nav-cerulean-light2
+
+    .population-button:active .icon.sticky-alt
+      fill: $color-nav-cerulean
+
+    .population-button.sticky-alt-off:active
+      color: $color-white
+      background-color: $color-nav-cerulean-dark1
+
+    .population-button:active .icon.sticky-alt-off
+      fill: $color-white
+
+  .label-holder
+    display: flex
+    flex-direction: column
+    justify-content: center
+    height: 22px
 
     .label
-      margin: $internal-component-margin
+      display: flex
+      align-items: center
+      font-size: $font-size-label1
+      color: $color-simdata-amber-dark2
 
-  /* hover and mousedown states */
-  .population-button:hover
-    background-color: $color-simdata-amber-light1
+  .circle
+    height: 6px
+    width: 6px
+    border-radius: 3px
+    margin-left: 3px
+    margin-top: 3px
 
-  .population-button:active
-    color: $color-white
-    background-color: $color-simdata-amber-dark1
+    &.male
+      background-color: $color-key-red
 
-  .population-button:active .icon
-    fill: $color-white
+    &.female
+      background-color: $color-key-yellow
 
-  /* hover and mousedown states of brown sticky button */
-  .population-button.sticky:hover
-    background-color: $color-simdata-amber-light1
+    &.heterozygote
+      background-color: $color-key-blue
 
-  .population-button.sticky:active
-    color: $color-simdata-amber-dark2
-    background-color: $color-simdata-amber-light2
-
-  .population-button:active .icon.sticky
-    fill: $color-simdata-amber
-
-
-  /* hover and mousedown states of blue sticky button */
-  .population-button.sticky-alt:hover
-    background-color: $color-nav-cerulean-light1
-
-  .population-button.sticky-alt:active
-    color: $color-nav-cerulean-dark2
-    background-color: $color-nav-cerulean-light2
-
-  .population-button:active .icon.sticky-alt
-    fill: $color-nav-cerulean
-
-  .population-button.sticky-alt-off:active
-    color: $color-white
-    background-color: $color-nav-cerulean-dark1
-
-  .population-button:active .icon.sticky-alt-off
-    fill: $color-white
-
-.label-holder
-  display: flex
-  flex-direction: column
-  justify-content: center
-  height: 22px
-
-  .label
+  .environment-box
+    height: 22px
+    width: 38px
+    border: 2px solid $color-simdata-amber
+    border-radius: 3px
+    color: $color-black
+    background-color: $color-white
     display: flex
+    justify-content: center
     align-items: center
-    font-size: $font-size-label1
-    color: $color-simdata-amber-dark2
+    font-size: $font-size-label2
 
-.circle
-  height: 6px
-  width: 6px
-  border-radius: 3px
-  margin-left: 3px
-  margin-top: 3px
+    &.dark
+      color: $color-nav-cinder-light2
+      background-color: $color-nav-cinder
 
-  &.male
-    background-color: $color-key-red
+    &.neutral
+      color: $color-nav-cinder-dark1
+      background-color: $color-nav-cinder-light1
 
-  &.female
-    background-color: $color-key-yellow
-
-  &.heterozygote
-    background-color: $color-key-blue
-
-.environment-box
-  height: 22px
-  width: 38px
-  border: 2px solid $color-simdata-amber
-  border-radius: 3px
-  color: $color-black
-  background-color: $color-white
-  display: flex
-  justify-content: center
-  align-items: center
-  font-size: $font-size-label2
-
-  &.dark
-    color: $color-nav-cinder-light2
-    background-color: $color-nav-cinder
-
-  &.neutral
-    color: $color-nav-cinder-dark1
-    background-color: $color-nav-cinder-light1
-
-  &.light
-    color: $color-nav-cinder
-    background-color: $color-nav-cinder-light3
+    &.light
+      color: $color-nav-cinder
+      background-color: $color-nav-cinder-light3
 
 .populations-container
   cursor: auto

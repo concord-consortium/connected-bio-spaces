@@ -10,7 +10,8 @@ import { OrganismsMouseModelType } from "./spaces/organisms/organisms-mouse";
 import { OrganismsRowModelType } from "./spaces/organisms/organisms-row";
 import { autorun } from "mobx";
 import { onAction } from "mobx-state-tree";
-import { BreedingModelType, BreedingModel } from "./spaces/breeding/breeding";
+import { BreedingModelType, createBreedingModel, INestPair } from "./spaces/breeding/breeding";
+import { EnvironmentColorType } from "../models/spaces/breeding/breeding";
 
 export type Curriculum = "mouse";
 
@@ -34,17 +35,12 @@ export function createStores(initialModel: ConnectedBioModelCreationType): IStor
   // since organisms and breeding may contain references to backpack mice, yet are in different trees,
   // we need to pass them in explicitly so they can be found
   const organisms = createOrganismsModel(initialModel.organisms, backpack);
-  const breeding = BreedingModel.create(initialModel.breeding);
+  const breeding = createBreedingModel(initialModel.breeding);
 
   // inform organisms space if user selects a backpack mouse
   autorun(() => {
     if (ui.investigationPanelSpace === "organism" && backpack.activeMouse) {
       const organismAdded = organisms.activeBackpackMouseUpdated(backpack.activeMouse);
-      if (organismAdded) {
-        backpack.deselectMouse();
-      }
-    } else if (ui.investigationPanelSpace === "breeding" && backpack.activeMouse) {
-      const organismAdded = breeding.activeBackpackMouseUpdated(backpack.activeMouse);
       if (organismAdded) {
         backpack.deselectMouse();
       }
@@ -87,6 +83,10 @@ export interface UserSaveDataType {
     organismsMice: OrganismsMouseModelType[],
     rows: OrganismsRowModelType[]
   };
+  breeding?: {
+    backgroundType: EnvironmentColorType,
+    nestPairs: INestPair[]
+  };
 }
 
 export function getUserSnapshot(stores: IStores): UserSaveDataType {
@@ -102,6 +102,10 @@ export function getUserSnapshot(stores: IStores): UserSaveDataType {
     organisms: {
       organismsMice,
       rows
+    },
+    breeding: {
+      backgroundType: stores.breeding.backgroundType,
+      nestPairs: stores.breeding.nestPairs
     }
   };
 }

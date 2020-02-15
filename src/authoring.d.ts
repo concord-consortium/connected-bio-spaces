@@ -40,7 +40,10 @@ export type ShowMysterySubstanceLabels = boolean;
 export type AllowZoomingToReceptor = boolean;
 export type AllowZoomingToNucleus = boolean;
 export type InstructionsAsMarkdown2 = string;
-export type BreedingType = "litter" | "singleGamete";
+export type EnableInspectGametesButton = boolean;
+export type EnableMouseFurColorPieChart = boolean;
+export type EnableMouseGenotypesPieChart = boolean;
+export type EnableMouseSexPieChart = boolean;
 
 export interface ConnectedBioAuthoring {
   curriculum?: Unit;
@@ -116,6 +119,9 @@ export interface OrganismModel {
 }
 export interface BreedingModel {
   instructions?: InstructionsAsMarkdown2;
-  breedingType?: BreedingType;
+  enableInspectGametes?: EnableInspectGametesButton;
+  enableColorChart?: EnableMouseFurColorPieChart;
+  enableGenotypeChart?: EnableMouseGenotypesPieChart;
+  enableSexChart?: EnableMouseSexPieChart;
   [k: string]: any;
 }

@@ -16,8 +16,8 @@ context("Test the authoring page", () => {
     });
 
     it("contains updated parameters", () => {
-      cy.contains("Top Bar").click();
-      cy.contains("Submit").click();
+      cy.contains("Top Bar").click({force: true});
+      cy.contains("Submit").click({force: true});
 
       const topBarParam = encodeURIComponent(`"topBar":false`);
       cy.get("@windowOpen").should("be.calledWithMatch", topBarParam);

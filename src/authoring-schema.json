@@ -256,17 +256,21 @@
           "title": "Instructions (as markdown)",
           "type": "string"
         },
-        "breedingType": {
-          "title": "Breeding Type",
-          "type": "string",
-          "enum": [
-            "litter",
-            "singleGamete"
-          ],
-          "enumNames": [
-            "Litter",
-            "Single Gamete"
-          ]
+        "enableInspectGametes": {
+          "title": "Enable inspect gametes button",
+          "type": "boolean"
+        },
+        "enableColorChart": {
+          "title": "Enable mouse fur color pie chart",
+          "type": "boolean"
+        },
+        "enableGenotypeChart": {
+          "title": "Enable mouse genotypes pie chart",
+          "type": "boolean"
+        },
+        "enableSexChart": {
+          "title": "Enable mouse sex pie chart",
+          "type": "boolean"
         }
       }
     }

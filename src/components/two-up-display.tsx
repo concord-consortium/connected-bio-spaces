@@ -20,6 +20,7 @@ interface IProps extends IBaseProps {
   informationIconEnabled?: boolean;
   selectedRightPanel: RightPanelType;
   onClickRightIcon?: (icon: RightPanelType) => void;
+  rightTitle?: string;
   rightPanel: React.ReactNode;
   spaceClass: string;
   rowNumber?: number;
@@ -88,7 +89,7 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
           { this.renderIcon("instructions", selectedRightPanel, instructionsIconEnabled) }
           { this.renderIcon("data", selectedRightPanel, dataIconEnabled) }
           { this.renderIcon("information", selectedRightPanel, informationIconEnabled) }
-          <div className="title" data-test="right-title">{title}</div>
+          <div className="title" data-test="right-title">{this.props.rightTitle ? this.props.rightTitle : title}</div>
         </div>
         <div className={contentClass} data-test="right-content">
           {this.props.rightPanel}
@@ -110,7 +111,7 @@ export class TwoUpDisplayComponent extends BaseComponent<IProps, IState> {
           && this.props.selectedRightPanel === button.section;
       }).map( (button: any) => {
         if (!button.type || button.type === "button") {
-          let className = "button-holder" + (button.value ? " active" : "");
+          let className = `button-holder ${this.props.spaceClass} ` + (button.value ? "active" : "");
           let action = button.action;
           if (button.disabled) {
             className += " disabled";
