@@ -1,4 +1,10 @@
 # Changelog
+## Version 1.0.11 - released Feb 14, 2020
+
+- Update breeding level to allow nest pair selection, pair breeding, inspection, collection, and data viewing
+- Save and restore breed level state
+- Allow breed level authoring
+
 ## Version 1.0.10 - released Feb 6, 2020
 
 - Update label to Activated SP
