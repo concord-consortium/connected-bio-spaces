@@ -1,90 +1,54 @@
+import Backpack from '../support/elements/Backpack'
+import ExploreNav from '../support/elements/ExploreNav'
+import Pop from '../support/elements/pop'
+import TwoUpView from '../support/elements/TwoUpView'
+import FourUpView from '../support/elements/FourUpView'
 
 context("Test the population level", () => {
-  describe("Two Up View", () => {
-    it("verifies two up view is visible", () => {
-      cy.visit("")
-      cy.get("div.icon.populations.clickable").click();
-      cy.wait(1000);
-      cy.wait
-      cy.get("[data-test=two-up-display]").should("be.visible");
-      cy.get("[data-test=left-title]").should("be.visible");
-      cy.get("[data-test=right-title]").should("be.visible");
-    });
 
+  let backpack = new Backpack;
+  let exploreNav = new ExploreNav;
+  let pop = new Pop;
+  let twoUpView = new TwoUpView;
+  let fourUpView = new FourUpView;
+
+  beforeEach(function () {
+    cy.visit('/')
+    exploreNav.getExploreView('population').click();
+  })
+
+  context("Two Up View", () => {
     it('exits two up view/population model and returns', () => {
-      cy.get('div.icon.organism.clickable').click()
-      cy.get('[data-test=four-up-display]').should('be.visible')
-      cy.wait(2000)
-      cy.get('div.icon.populations.clickable').click()
-      cy.get('[data-test=two-up-display]').should('be.visible')
+      exploreNav.getExploreView('organism').click();
+      fourUpView.getFourUpView().should('be.visible')
+      exploreNav.getExploreView('population').click();
     });
-
   });
 
-  describe("Tools", () => {
-
-    it("adds mice and runs model", () => {
-      cy.get('[data-test=pop-toolbar]').find('button').eq(2).click({force:true}); //add mice
-      cy.get('[data-test=pop-toolbar]').find('button').eq(0).click({force:true}); //run
-      cy.wait(2000)
+  context("Tools", () => {
+    it("runs, resets, and adds hawks to model", () => {
+      twoUpView.getTwoUpView().should('be.visible')
+      pop.getPopTool('run').click({force:true}); //run
+      pop.getPopTool('reset').click({force:true}); //reset
+      pop.getPopTool('addHawks').click({force:true}); //add hawks
     });
-
-    it('resets model then runs with mice and hawks', () => {
-      cy.get('[data-test=pop-toolbar]').find('button').eq(5).click({force:true}); //reset
-      cy.get('[data-test=pop-toolbar]').find('button').eq(1).click({force:true}); //add hawks
-      cy.wait(2000)
-      cy.get('[data-test=pop-toolbar]').find('button').eq(0).click({force:true}); //add mice and run
-    });
-
     it('runs model after pausing and changing environment', () => {
-      cy.get('[data-test=pop-toolbar]').find('button').eq(0).click({force:true}); //run
-      cy.get('[data-test=pop-toolbar]').find('button').eq(2).click({force:true}); //change env
-      cy.wait(2000)
-      cy.get('[data-test=pop-toolbar]').find('button').eq(2).click({force:true}); //change env
-      cy.get('[data-test=pop-toolbar]').find('button').eq(5).click({force:true}); //reset
-      cy.get('[data-test=pop-toolbar]').find('button').eq(3).click({force:true}); //add hawk
-      cy.get('[data-test=pop-toolbar]').find('button').eq(0).click({force:true}); //add mice and run
+      pop.getPopTool('run').click({force:true});
+      pop.getPopTool('changeEnv').click({force:true});
+      pop.getPopTool('changeEnv').click({force:true});
+      pop.getPopTool('pause').click({force:true});
+      pop.getPopTool('addHawks').click({force:true});
     });
-
-    it("verifies collect button functionality", () => {
-      cy.get('[data-test=pop-toolbar]').find('button').eq(0).click({force:true});
-      cy.get('[data-test=pop-toolbar]').contains('Run');
-      cy.get('[data-test=collect-button]').click({force:true});
-      //Need to be able to read iframe data in order to locate mouse coordinates
+    it("verifies switching to and from Pop view renders correct window", () => {
+      exploreNav.getExploreView('organism').click({force:true});
+      exploreNav.getExploreView('population').click({force:true});
+      exploreNav.getExploreView('organism').click({force:true});
+      exploreNav.getExploreView('population').click({force:true});
+      exploreNav.getExploreView('organism').click({force:true});
+      exploreNav.getExploreView('population').click({force:true});
+      exploreNav.getExploreView('organism').click({force:true});
+      exploreNav.getExploreView('population').click({force:true});
     });
-
-  });
-
-  describe("Backpack", () => {
-
-    it("is visible by default", () => {
-      cy.visit("/")
-      cy.get('div.button-holder.collect').find('img').should('have.length', 6);
-      cy.get('div.button-holder.collect').find('img').eq(0).should('have.class', 'icon')
-    });
-
-it("removes a mouse from the backpack", () => {
-
-    });
-
-    it("attempts to add more than 6 mice to backpack", () => {
-
-    });
-
-
-
-
-  });
-
-  describe("Graph", () => {
-    it("is visible by default", () => {
-
-    });
-
-    it("verifies the legend shows correctly", () => {
-
-    });
-
   });
 
 });
