@@ -200,6 +200,15 @@ export const OrganismsSpaceModel = types
     }
 
     return {
+
+      afterCreate() {
+        if (!self.instructions) {
+          if (self.rows[0]) {
+            self.rows[0].rightPanel = "data";
+          }
+        }
+      },
+
       clearRowBackpackMouse,
       setRowBackpackMouse(rowIndex: number, backpackMouse: BackpackMouseType) {
         let organismsMouse = self.organismsMice.find((existingOrganismsMouse) => {
