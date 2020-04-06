@@ -81,6 +81,8 @@ export class NucleusView extends BaseComponent<IProps, IState> {
 
   private disposer: IDisposer;
 
+  private uniqueDomKey = `nucleus-view-${Math.random()}`;
+
   constructor(props: IProps) {
     super(props);
 
@@ -190,16 +192,16 @@ export class NucleusView extends BaseComponent<IProps, IState> {
     if (this.chromosomeState !== this.state.previousChromosomeState) {
       const previousChromosomeDef = Chromosomes[this.state.previousChromosomeState];
       return (
-        <React.Fragment key={mouseChomId}>
-          <path id={mouseChomId} data-name={chromId} d={previousChromosomeDef[chromId]} style={chromosomeStyle}/>
-          <animate xlinkHref={"#" + mouseChomId} attributeName="d" attributeType="XML"
+        <React.Fragment>
+          <path id={this.uniqueDomKey + mouseChomId} data-name={chromId} d={previousChromosomeDef[chromId]} style={chromosomeStyle}/>
+          <animate xlinkHref={"#" + this.uniqueDomKey + mouseChomId} attributeName="d" attributeType="XML"
             from={previousChromosomeDef[chromId]}
             to={chromosomeDef[chromId]}
             dur={(animationTime / 1000) + "s"} fill="freeze" />
         </React.Fragment>
       );
     } else {
-      return <path key={mouseChomId} id={mouseChomId} data-name={chromId} d={chromosomeDef[chromId]}
+      return <path id={this.uniqueDomKey + mouseChomId} data-name={chromId} d={chromosomeDef[chromId]}
         style={chromosomeStyle} onMouseEnter={this.setHoveredChromosome(chromId)}
         onClick={this.setActiveChromosome(chromId)} />;
     }
