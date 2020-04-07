@@ -272,6 +272,12 @@ export const BreedingModel = types
   })
   .actions(self => ({
 
+    afterCreate() {
+      if (!self.instructions) {
+        self.rightPanel = "data";
+      }
+    },
+
     breedLitter() {
       const nestPair = self.nestPairs.find(pair => pair.id === self.breedingNestPairId);
       if (!nestPair) return;
