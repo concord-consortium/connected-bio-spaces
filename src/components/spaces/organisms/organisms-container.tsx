@@ -13,6 +13,8 @@ import { DEFAULT_MODEL_WIDTH } from "../../..";
 
 interface IProps extends IBaseProps {
   rowIndex: number;
+  disableZoom: boolean;
+  notifyZooming: (isZooming: boolean) => void;
 }
 interface IState {
   zoomLevel: number;
@@ -47,7 +49,8 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
           this.organismZoomedView(organismsRow, zoomLevel, rowIndex, mode)
         }
         <div className="organism-controls">
-          <ZoomControl handleZoom={this.zoomChange} rowIndex={rowIndex} showTargetZoom={showTargetZoom} />
+          <ZoomControl handleZoom={this.zoomChange} rowIndex={rowIndex} showTargetZoom={showTargetZoom}
+            disable={this.props.disableZoom} />
           <ManipulationControls rowIndex={rowIndex} disableNucleusControls={this.state.nucleusAnimating} />
         </div>
       </div>
@@ -79,8 +82,10 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
         isZoomingIntoOrg: false,
         cellModelLoaded: false
       });
+      this.props.notifyZooming(false);
     } else if (zoomLevel === "cell" && current === 0) {
       this.setState({isZoomingIntoOrg: true});
+      this.props.notifyZooming(true);
     }
     organismsRow.setZoomLevel(defaultZoomLevelByIndex[nextIdx]);
   }
@@ -133,6 +138,7 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
 
   private handleOrgZoomInComplete = () => {
     this.setState({isZoomingIntoOrg: false});
+    this.props.notifyZooming(false);
   }
 
   private cellModelLoaded = () => {
