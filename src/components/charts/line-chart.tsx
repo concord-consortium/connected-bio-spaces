@@ -178,6 +178,17 @@ export class LineChart extends BaseComponent<ILineProps, ILineState> {
       },
       annotation: {
         annotations: chartData.formattedAnnotations
+      },
+      tooltips: {
+        enabled: true,
+        callbacks: {
+          labelColor(tooltipItem: any, chart: any) {
+            return {
+              borderColor: "rgb(255, 255, 255)",
+              backgroundColor: chart.config.data.datasets[tooltipItem.datasetIndex].borderColor
+            };
+          },
+        }
       }
     });
     const w = width ? width : 400;
