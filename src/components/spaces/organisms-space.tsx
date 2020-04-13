@@ -16,13 +16,19 @@ import { CollectButtonComponent } from "../collect-button";
 import ChromosomeViewer from "./organisms/chromosome-viewer";
 
 interface IProps extends IBaseProps {}
-interface IState {}
+interface IState {
+  isZooming: boolean;
+}
 
 @inject("stores")
 @observer
 export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
+
+    this.state = {
+      isZooming: false
+    };
   }
 
   public render() {
@@ -168,7 +174,10 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
         />
         <TwoUpDisplayComponent
           leftTitle="Explore: Organism"
-          leftPanel={<OrganismsContainer rowIndex={rowIndex}/>}
+          leftPanel={<OrganismsContainer
+            rowIndex={rowIndex}
+            disableZoom={this.state.isZooming}
+            notifyZooming={this.handleZooming} />}
           rightPanel={rightPanelContent}
           instructionsIconEnabled={true}
           dataIconEnabled={true}
@@ -191,6 +200,10 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
   private clickClose = (rowIndex: number) => () => {
     const { organisms } = this.stores;
     organisms.clearRowBackpackMouse(rowIndex);
+  }
+
+  private handleZooming = (isZooming: boolean) => {
+    this.setState({isZooming});
   }
 
 }

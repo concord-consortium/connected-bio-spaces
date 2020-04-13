@@ -26,16 +26,24 @@ export class OrganismView extends BaseComponent<IProps, IState> {
   public render() {
     return (
       <div className="organism-view-container">
-        <canvas style={{width: "100%"}} ref={this.setCanvasElRef} />
+        <canvas key={this.props.backpackMouse ? "org" : ""} style={{width: "100%"}} ref={this.setCanvasElRef} />
       </div>
     );
   }
 
   public componentDidMount() {
     this.initializeImage();
+    document.addEventListener("visibilitychange", this.handleVisibilityChange);
+  }
+
+  public componentWillUnmount() {
+    document.removeEventListener("visibilitychange", this.handleVisibilityChange);
   }
 
   public componentDidUpdate(prevProps: IProps) {
+    if (!this.props.backpackMouse) {
+      this.handleAnimationFinished();
+    }
     if (this.props.backpackMouse && this.props.backpackMouse !== prevProps.backpackMouse) {
       this.initializeImage();
     }
@@ -44,7 +52,7 @@ export class OrganismView extends BaseComponent<IProps, IState> {
     }
   }
 
-  private initializeImage() {
+  private initializeImage = () => {
     const { backpackMouse } = this.props;
     const mouseImage = backpackMouse && backpackMouse.zoomImage;
     if (mouseImage) {
@@ -66,16 +74,28 @@ export class OrganismView extends BaseComponent<IProps, IState> {
     }
   }
 
-  private startZoom() {
+  private startZoom = () => {
     if (!this.animator) return;
     this.animator._loopCount = 1;
     this.animator._loops = 1;
     this.animator.start();
   }
 
-  private handleAnimationFinished() {
+  private handleAnimationFinished = () => {
     this.props.onZoomInComplete && this.props.onZoomInComplete();
   }
 
   private setCanvasElRef = (element: any) => this.canvasElRef = element;
+
+  // Gifler freezes if we tab away and return.
+  private handleVisibilityChange = () => {
+    if (document.visibilityState === "visible") {
+      // If we return to being visible, that means we had tabbed away
+      // from the model, and we need to jump to the completed animation
+      if (this.animator) {
+        this.animator.stop();
+        this.handleAnimationFinished();
+      }
+    }
+  }
 }

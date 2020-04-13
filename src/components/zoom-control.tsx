@@ -9,6 +9,7 @@ interface IProps extends IBaseProps {
   handleZoom: (zoomLevel: number) => void;
   rowIndex: number;
   showTargetZoom: boolean;
+  disable: boolean;
 }
 interface IState {}
 
@@ -51,9 +52,9 @@ export class ZoomControl extends BaseComponent<IProps, IState> {
 
   private getZoomClass = (enabledZooms: ZoomLevelType[]) => {
     const { organisms } = this.stores;
-    const { rowIndex } = this.props;
+    const { rowIndex, disable } = this.props;
     const row = organisms.rows[rowIndex];
-    if (row.zoomLevel === "cell" && !organisms.showZoomToNucleus && !organisms.showZoomToReceptor) {
+    if (disable || row.zoomLevel === "cell" && !organisms.showZoomToNucleus && !organisms.showZoomToReceptor) {
       return " disabled";
     }
     const disabledClass = !row.organismsMouse || enabledZooms.indexOf(row.zoomLevel) === -1 ? " disabled" : "";
