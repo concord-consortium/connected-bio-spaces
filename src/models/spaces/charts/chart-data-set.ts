@@ -228,7 +228,9 @@ export const ChartDataSetModel = types
     }
 
     function addDataPoint(a1: number, a2: number, label: string) {
-      self.dataPoints.push({ a1, a2, label });
+      if (!self.dataPoints.some(d => d.a1 === a1)) {
+        self.dataPoints.push({ a1, a2, label });
+      }
     }
 
     function updateDataPoint(pointIdx: number, newValA1: number, newValA2: number) {
