@@ -33,6 +33,11 @@ export class OrganismView extends BaseComponent<IProps, IState> {
 
   public componentDidMount() {
     this.initializeImage();
+    document.addEventListener("visibilitychange", this.handleVisibilityChange);
+  }
+
+  public componentWillUnmount() {
+    document.removeEventListener("visibilitychange", this.handleVisibilityChange);
   }
 
   public componentDidUpdate(prevProps: IProps) {
@@ -44,7 +49,7 @@ export class OrganismView extends BaseComponent<IProps, IState> {
     }
   }
 
-  private initializeImage() {
+  private initializeImage = () => {
     const { backpackMouse } = this.props;
     const mouseImage = backpackMouse && backpackMouse.zoomImage;
     if (mouseImage) {
@@ -66,16 +71,28 @@ export class OrganismView extends BaseComponent<IProps, IState> {
     }
   }
 
-  private startZoom() {
+  private startZoom = () => {
     if (!this.animator) return;
     this.animator._loopCount = 1;
     this.animator._loops = 1;
     this.animator.start();
   }
 
-  private handleAnimationFinished() {
+  private handleAnimationFinished = () => {
     this.props.onZoomInComplete && this.props.onZoomInComplete();
   }
 
   private setCanvasElRef = (element: any) => this.canvasElRef = element;
+
+  // Gifler freezes if we tab away and return.
+  private handleVisibilityChange = () => {
+    if (document.visibilityState === "visible") {
+      // If we return to being visible, that means we had tabbed away
+      // from the model, and we need to jump to the completed animation
+      if (this.animator) {
+        this.animator.stop();
+        this.handleAnimationFinished();
+      }
+    }
+  }
 }
