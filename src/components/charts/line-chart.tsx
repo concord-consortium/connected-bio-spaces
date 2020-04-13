@@ -185,6 +185,9 @@ export class LineChart extends BaseComponent<ILineProps, ILineState> {
       tooltips: {
         enabled: true,
         callbacks: {
+          label(tooltipItems: any, data: any) {
+            return `(${tooltipItems.xLabel}, ${Math.round(tooltipItems.yLabel * 100) / 100})`;
+          },
           labelColor(tooltipItem: any, chart: any) {
             return {
               borderColor: "rgb(255, 255, 255)",
