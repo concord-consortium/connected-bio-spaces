@@ -168,7 +168,7 @@ export const ChartDataSetModel = types
             return self.maxPoints;
           }
       } else {
-        return Math.max(...self.visibleDataPoints.map(p => p.a1));
+        return Math.max(self.initialMaxA1 ? self.initialMaxA1 : 0, ...self.visibleDataPoints.map(p => p.a1));
       }
     },
     get maxA2(): number | undefined {

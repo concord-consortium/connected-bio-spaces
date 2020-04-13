@@ -167,7 +167,10 @@ export class LineChart extends BaseComponent<ILineProps, ILineState> {
             minRotation: chartData.dataLabelRotation,
             maxRotation: chartData.dataLabelRotation,
             userCallback: (label: any) => {
-              return Math.ceil(label);
+              return (label === minMaxValues.minA1
+                      ? Math.floor(label)
+                      : Math.ceil(label)
+              );
             },
           },
           scaleLabel: {
