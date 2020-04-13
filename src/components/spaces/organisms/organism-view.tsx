@@ -26,7 +26,7 @@ export class OrganismView extends BaseComponent<IProps, IState> {
   public render() {
     return (
       <div className="organism-view-container">
-        <canvas style={{width: "100%"}} ref={this.setCanvasElRef} />
+        <canvas key={this.props.backpackMouse ? "org" : ""} style={{width: "100%"}} ref={this.setCanvasElRef} />
       </div>
     );
   }
@@ -41,6 +41,9 @@ export class OrganismView extends BaseComponent<IProps, IState> {
   }
 
   public componentDidUpdate(prevProps: IProps) {
+    if (!this.props.backpackMouse) {
+      this.handleAnimationFinished();
+    }
     if (this.props.backpackMouse && this.props.backpackMouse !== prevProps.backpackMouse) {
       this.initializeImage();
     }
