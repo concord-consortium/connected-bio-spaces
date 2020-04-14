@@ -128,6 +128,8 @@ describe("chart data model", () => {
   it("can downsample its visible data", () => {
     chart.dataSets[0].setMaxDataPoints(-1);
 
+    expect(chart.dataSets[0].dataPoints.length).toEqual(3); // 3 initial points
+
     for (let i = 0; i < 200; i++) {
       chart.dataSets[0].addDataPoint(i, 100 + i, "");
     }
@@ -135,16 +137,16 @@ describe("chart data model", () => {
     expect(chart.dataSets[0].dataPoints.length).toEqual(203);
     expect(chart.dataSets[0].visibleDataPoints.length).toEqual(83);   // 80 downsampled points and 3 additional
 
-    for (let i = 0; i < 36; i++) {
-      chart.dataSets[0].addDataPoint(i, 300 + i, "");
+    for (let i = 200; i < 240; i++) {
+      chart.dataSets[0].addDataPoint(i, 300 + i, ""); // add 40 points
     }
 
-    expect(chart.dataSets[0].dataPoints.length).toEqual(239);
-    expect(chart.dataSets[0].visibleDataPoints.length).toEqual(119);   // 80 downsampled points and 39 additional
+    expect(chart.dataSets[0].dataPoints.length).toEqual(243);
+    expect(chart.dataSets[0].visibleDataPoints.length).toEqual(83);   // 80 downsampled points and 3 additional
 
-    chart.dataSets[0].addDataPoint(0, 400, "");
+    chart.dataSets[0].addDataPoint(300, 400, ""); // add 1 point
 
-    expect(chart.dataSets[0].dataPoints.length).toEqual(240);
-    expect(chart.dataSets[0].visibleDataPoints.length).toEqual(80);   // 80 downsampled points
+    expect(chart.dataSets[0].dataPoints.length).toEqual(244);
+    expect(chart.dataSets[0].visibleDataPoints.length).toEqual(84);   // 80 downsampled points and 4 additional
   });
 });
