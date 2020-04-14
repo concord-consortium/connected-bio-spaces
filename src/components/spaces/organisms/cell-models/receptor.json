@@ -14,5 +14,5 @@
     "organelles/g-protein-body.yml",
     "organelles/g-protein-part.yml"
   ],
-  "hotStart": 500
+  "hotStart": 300
 }
