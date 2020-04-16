@@ -1,9 +1,9 @@
 import * as React from "react";
-import { BaseComponent, IBaseProps } from "../../base";
-import { BackpackMouseType } from "../../../models/backpack-mouse";
-import { StackedOrganism } from "../../stacked-organism";
-import { genotypeHTMLLabel, gameteHTMLLabel } from "../../../utilities/genetics";
-import "./breeding-inspect.sass";
+import { BaseComponent, IBaseProps } from "./base";
+import { BackpackMouseType } from "../models/backpack-mouse";
+import { StackedOrganism } from "./stacked-organism";
+import { genotypeHTMLLabel, gameteHTMLLabel } from "../utilities/genetics";
+import "./inspect-panel.sass";
 
 interface IProps extends IBaseProps {
   mouse1?: BackpackMouseType;
@@ -11,15 +11,16 @@ interface IProps extends IBaseProps {
   pairLabel: string;
   isOffspring: boolean;
   isGamete: boolean;
+  isPopulationInspect?: boolean;
 }
 interface IState {}
 
-export class BreedingInspect extends BaseComponent<IProps, IState> {
+export class InspectPanel extends BaseComponent<IProps, IState> {
 
   public render() {
     const { mouse1, mouse2, pairLabel } = this.props;
     return(
-      <div className="breeding-inspect">
+      <div className="inspect-panel">
         {(mouse1 && mouse2) && this.renderInspectedPair(mouse1, mouse2, pairLabel)}
         {(mouse1 && !mouse2) && this.renderInspectedMouse(mouse1)}
       </div>
@@ -41,12 +42,13 @@ export class BreedingInspect extends BaseComponent<IProps, IState> {
 
   private renderInspectedMouse(mouse: BackpackMouseType) {
     const bgClass = "inspect-background single " + (this.props.isGamete ? "gamete " : "")
+                    + (this.props.isPopulationInspect ? "population " : "")
                     + (this.props.isGamete && this.props.isOffspring ? "low" : "");
     return(
       <div className="pair-container single">
         { (this.props.isGamete && this.props.isOffspring) && this.renderGametePanel(mouse) }
         <div className={bgClass} />
-        {this.renderMouse(mouse, !this.props.isOffspring && mouse.sex === "male")}
+        {this.renderMouse(mouse, !this.props.isPopulationInspect && !this.props.isOffspring && mouse.sex === "male")}
       </div>
     );
   }
@@ -64,9 +66,11 @@ export class BreedingInspect extends BaseComponent<IProps, IState> {
           showHetero={true}
           flipped={flip}
         />
-        <div className="mouse-label">
-          {this.props.isOffspring ? "Offspring" : (mouse.sex === "female" ? "Mother" : "Father")}
-        </div>
+        { !this.props.isPopulationInspect &&
+          <div className="mouse-label">
+            {this.props.isOffspring ? "Offspring" : (mouse.sex === "female" ? "Mother" : "Father")}
+          </div>
+        }
         {this.renderMouseInfo(mouse)}
       </div>
     );
@@ -78,24 +82,26 @@ export class BreedingInspect extends BaseComponent<IProps, IState> {
                        mouse.baseColor === "tan" ? "Medium brown" : "Dark brown";
     const genotypeLabel = genotypeHTMLLabel(mouse.genotype);
     const rowClass = "info-row" + (this.props.mouse2 ? "" : " wide");
+    const mouseInfoClass = "mouse-info" + (this.props.isPopulationInspect ? " no-header" : "");
+    const infoTypeClass = "info-type" + (this.props.isPopulationInspect ? " population " : "");
     return (
-      <div className="mouse-info">
+      <div className={mouseInfoClass}>
         <div className={rowClass}>
-          <div className="info-type">
+          <div className={infoTypeClass}>
             {"Fur Color: "}
             <span className="info-data">{colorLabel}</span>
           </div>
         </div>
         { (!this.props.isGamete || this.props.isOffspring) &&
           <div className={rowClass}>
-            <div className="info-type">
+            <div className={infoTypeClass}>
               {"Sex: "}
               <span className="info-data">{sexLabel}</span>
             </div>
           </div>
         }
         <div className={rowClass}>
-          <div className="info-type">
+          <div className={infoTypeClass}>
             {"Genotype: "}
             <span className="info-data"
                dangerouslySetInnerHTML={{ __html: genotypeLabel }}
@@ -104,7 +110,7 @@ export class BreedingInspect extends BaseComponent<IProps, IState> {
         </div>
         { (this.props.isGamete && !this.props.isOffspring) &&
           <div className={rowClass}>
-            <div className="info-type">
+            <div className={infoTypeClass}>
               {"Gametes: "}
               <span className="info-data"
                dangerouslySetInnerHTML={{ __html: this.getGameteLabel(mouse) }}
@@ -114,7 +120,7 @@ export class BreedingInspect extends BaseComponent<IProps, IState> {
         }
         { (this.props.isGamete && !this.props.isOffspring) &&
           <div className={rowClass}>
-            <div className="info-type">
+            <div className={infoTypeClass}>
               {"Gametes given to offspring: "}
               <span className="info-data">{this.getGameteOffspringLabel(mouse)}</span>
             </div>

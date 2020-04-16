@@ -1,6 +1,6 @@
-@import "../../vars"
+@import vars
 
-.breeding-inspect
+.inspect-panel
   display: flex
   flex-direction: column
   justify-content: center
@@ -19,13 +19,15 @@
         flex-direction: column
     .inspect-background
       position: absolute
-      top: 41px
+      top: 40px
       left: 23px
       width: 367px
       height: 175px
       border-radius: 100px
       background-color: $color-simdata-brick-light1
       opacity: .75
+      &.population
+        background-color: $color-simdata-amber-light1
       &.gamete
         background-color: $color-nav-shamrock-light1
       &.single
@@ -44,6 +46,9 @@
         font-size: 16px
         font-weight: 500
         margin: 10px
+      .mouse-info
+        &.no-header
+          margin-top: 10px
       .info-row
         display: flex
         flex-direction: row
@@ -56,6 +61,8 @@
           font-size: 14px
           font-weight: 500
           margin-right: 5px
+          &.population
+            color: $color-simdata-amber-dark3
         .info-data
           color: $color-nav-cinder-dark2
           font-size: 14px
@@ -99,6 +106,6 @@
       height: 16px
       margin: 2px
       &.egg
-        background-image: url("../../../assets/icons/egg.svg")
+        background-image: url("../assets/icons/egg.svg")
       &.sperm
-        background-image: url("../../../assets/icons/sperm.svg")
+        background-image: url("../assets/icons/sperm.svg")

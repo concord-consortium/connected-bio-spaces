@@ -6,7 +6,7 @@ import { InstructionsComponent } from "../instructions";
 import { RightPanelType } from "../../models/ui";
 import { BreedingContainer } from "./breeding/breeding-container";
 import { BreedingData } from "./breeding/breeding-data";
-import { BreedingInspect } from "./breeding/breeding-inspect";
+import { InspectPanel } from "../inspect-panel";
 
 interface InspectContent {
   title: string;
@@ -37,7 +37,7 @@ export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
         case "information":
           const content: InspectContent = this.getInspectedContent();
           rightPanelTitle = content.title;
-          return <BreedingInspect
+          return <InspectPanel
                   mouse1={content.mouse1}
                   mouse2={content.mouse2}
                   pairLabel={content.label}
