@@ -39,7 +39,7 @@ context("Test the population level", () => {
       pop.getPopTool('pause').click({force:true});
       pop.getPopTool('addHawks').click({force:true});
     });
-    it("verifies switching to and from Pop view renders correct window", () => {
+    it.skip("verifies switching to and from Pop view renders correct window", () => {
       exploreNav.getExploreView('organism').click({force:true});
       exploreNav.getExploreView('populations').click({force:true});
       exploreNav.getExploreView('organism').click({force:true});

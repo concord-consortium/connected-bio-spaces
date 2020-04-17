@@ -18,27 +18,27 @@ context("Test Organism Level", () => {
 
   beforeEach(function () {
     cy.visit('/?{"backpack":{"collectedMice":[{"sex":"female","genotype":"RR"}]}}')
-    exploreNav.getExploreView('populations').click({force:true})
-    pop.getPopTool('collect').click({force:true})
-    pop.getPopTool('canvas').click('topLeft', {force:true})
-    pop.getPopTool('canvas').click('top', {force:true})
-    pop.getPopTool('canvas').click('topRight', {force:true})
-    pop.getPopTool('canvas').click('left', {force:true})
-    pop.getPopTool('canvas').click('center', {force:true})
-    pop.getPopTool('canvas').click('right', {force:true})
-    pop.getPopTool('canvas').click('bottomLeft', {force:true})
-    pop.getPopTool('canvas').click('bottom', {force:true})
-    pop.getPopTool('canvas').click('bottomRight', {force:true})
+    exploreNav.getExploreView('populations').click({ force: true })
+    pop.getPopTool('collect').click({ force: true })
+    pop.getPopTool('canvas').click('topLeft', { force: true })
+    pop.getPopTool('canvas').click('top', { force: true })
+    pop.getPopTool('canvas').click('topRight', { force: true })
+    pop.getPopTool('canvas').click('left', { force: true })
+    pop.getPopTool('canvas').click('center', { force: true })
+    pop.getPopTool('canvas').click('right', { force: true })
+    pop.getPopTool('canvas').click('bottomLeft', { force: true })
+    pop.getPopTool('canvas').click('bottom', { force: true })
+    pop.getPopTool('canvas').click('bottomRight', { force: true })
     backpack.getFullCollectButton().should('be.visible')
-    exploreNav.getExploreView('organism').click({force:true})
+    exploreNav.getExploreView('organism').click({ force: true })
   })
 
   context("Four Up View", () => {
     it("switches out of view and returns", () => {
-      exploreNav.getExploreView('populations').click({force:true})
-      fourUpView.getFourUpView().should('not.exist')
-      exploreNav.getExploreView('organism').click({force:true})
-      fourUpView.getFourUpView().should('exist').and('be.visible')
+      exploreNav.getExploreView('populations').click({ force: true })
+      fourUpView.getFourUpDisplay().should('not.exist')
+      exploreNav.getExploreView('organism').click({ force: true })
+      fourUpView.getFourUpDisplay().should('exist').and('be.visible')
     });
   });
 
@@ -63,12 +63,10 @@ context("Test Organism Level", () => {
       // rightPanelContentFourUp.getContent().contains('Find and inspect a protein to view it here.')
     })
     it("adds a mouse to the model", () => {
-      org.getOrganismView('top').should('not.exist')
-      backpack.getFullCollectButton().eq(0).should('be.visible').click({force:true})
-      org.getOrgTool('top','mouse-empty').should('be.visible').click({force:true})
       org.getOrganismView('top').should('exist')
-      backpack.findXClose(0).should('be.visible').click({force:true})
+      backpack.getFullCollectButton().eq(0).should('be.visible').click({ force: true })
+      org.getOrgTool('mouse-full').should('be.visible').should('have.length', 1)
       org.getOrganismView('top').should('exist')
-      })
     })
-  });
+  })
+});
