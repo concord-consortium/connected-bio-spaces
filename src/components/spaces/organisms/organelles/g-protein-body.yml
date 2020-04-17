@@ -7,13 +7,28 @@ dieWhenExitingWorld: false
 properties:
   size: 1.7
   speed: 0.7
-  drection: 0
+  direction: 0
   image_selector: gbodypart2
   second_receptor: false
 rules:
   initialization:
+    switch_state: rotate
+  rotate:
+    if:
+      fact: second_receptor
+    then:
+      - change:
+          prop: direction
+          by: 13
+      - switch_state: wait_one_step
+    else:
       switch_state: wait_one_step
   wait_one_step:
+    wait:
+      for: 50
+      finally:
+        switch_state: move_to_path
+  move_to_path:
     if:
       fact: second_receptor
     then:
