@@ -19,122 +19,79 @@ context("Connected Bio Smoke Test", () => {
   let rightPanelContentFourUp = new RightPanelContentFourUp;
   let rightPanelContent = new RightPanelContent;
 
+  let mouse = [{
+    sex: "female",
+    genotype: "RR"
+  }]
+
   before(function () {
-    cy.visit('/')
+    cy.visit('/?{"backpack":{"collectedMice":[{"sex":"' + mouse[0].sex + '","genotype":"' + mouse[0].genotype + '"}]}}')
   })
 
   context("Default Display", () => {
     it('verifies load', () => {
-      cy.get('.main-content.none')
-        .should('be.visible')
+      cy.get('.main-content.none').should('be.visible')
     })
   })
 
   context("Left Nav", () => {
     it('verifies different explore options are visible', () => {
-      exploreNav.getExploreView('population')
-        .should('be.visible');
-      exploreNav.getExploreView('breeding')
-        .should('be.visible')
-      exploreNav.getExploreView('organism')
-        .should('be.visible')
-      exploreNav.getExploreView('dna')
-        .should('be.visible')
+      exploreNav.getExploreView('populations').should('be.visible');
+      exploreNav.getExploreView('breeding').should('be.visible').should('be.visible').should('be.visible')
     })
     it('verifies all 6 empty mouse collectors', () => {
-      backpack.getEmptyCollectButton()
-        .should('be.visible')
-        .and('have.length', 6)
+      backpack.getEmptyCollectButton().should('be.visible').and('have.length', 6 - mouse.length)
+      backpack.getFullCollectButton().should('be.visible').and('have.length', mouse.length)
     })
     it('verifies legend components are visible', () => {
-      backpack.getLegendComponents()
-        .should('be.visible')
-        .and('have.length', 3)
+      backpack.getLegendComponents().should('be.visible').and('have.length', 3)
     })
   })
 
   context("Population model", () => {
     it('checks for two-up view', () => {
-      exploreNav.getExploreView('population')
-        .should('be.visible')
-        .click({force:true})
-      twoUpView.getTwoUpView()
-        .should('be.visible')
-        .and('have.length', 1)
+      exploreNav.getExploreView('populations').should('be.visible').click({ force: true })
+      twoUpView.getTwoUpView().should('be.visible').and('have.length', 1)
     })
 
     it('checks for left and right headers', () => {
-      twoUpView.getLeftTitle()
-        .should('contain', 'Explore: Population')
-      twoUpView.getRightTitle()
-        .should('contain', 'Instructions')
+      twoUpView.getLeftTitle().should('contain', 'Explore: Population')
+      twoUpView.getRightTitle().should('contain', 'Instructions')
     })
 
     it('runs, resets, and adds hawks to model', () => {
-      pop.getPopTool('addHawks')
-        .should('be.visible')
-        .click({force:true});
-      pop.getPopTool('run')
-        .should('be.visible')
-        .click({force:true});
-      pop.getPopTool('reset')
-        .should('be.visible')
-        .click({force:true});
-      })
+      pop.getPopTool('addHawks').should('be.visible').click({ force: true });
+      pop.getPopTool('run').should('be.visible').click({ force: true });
+      pop.getPopTool('reset').should('be.visible').click({ force: true });
+    })
 
     it('changes environment and runs again', () => {
-      pop.getPopTool('changeEnv')
-        .should('be.visible')
-        .click({foce:true})
-      pop.getPopTool('addHawks')
-        .should('be.visible')
-        .click({force:true});
-      pop.getPopTool('run')
-        .should('be.visible')
-        .click({force:true});
-      pop.getPopTool('reset')
-        .should('be.visible')
-        .click({force:true});
+      pop.getPopTool('changeEnv').should('be.visible').click({ foce: true })
+      pop.getPopTool('addHawks').should('be.visible').click({ force: true });
+      pop.getPopTool('run').should('be.visible').click({ force: true });
+      pop.getPopTool('reset').should('be.visible').click({ force: true });
     })
 
     it('changes environment last time and runs again', () => {
-      pop.getPopTool('changeEnv')
-        .should('be.visible')
-        .click({foce:true})
-      pop.getPopTool('addHawks')
-        .should('be.visible')
-        .click({force:true});
-      pop.getPopTool('run')
-        .should('be.visible')
-        .click({force:true});
+      pop.getPopTool('changeEnv').should('be.visible').click({ foce: true })
+      pop.getPopTool('addHawks').should('be.visible').click({ force: true });
+      pop.getPopTool('run').should('be.visible').click({ force: true });
       cy.wait(2000)
     })
 
     it('collects mice, checks backpack for update', () => {
-      pop.getPopTool('collect')
-        .click({force:true})
-      pop.getPopTool('canvas')
-        .click('topLeft')
-      pop.getPopTool('canvas')
-        .click('top')
-      pop.getPopTool('canvas')
-        .click('topRight')
-      pop.getPopTool('canvas')
-        .click('left')
-      pop.getPopTool('canvas')
-        .click('center')
-      pop.getPopTool('canvas')
-        .click('right')
-      pop.getPopTool('canvas')
-        .click('bottomLeft')
-      pop.getPopTool('canvas')
-        .click('bottom')
-      pop.getPopTool('canvas')
-        .click('bottomRight')
-      pop.getPopTool('reset')
-        .click({force:true})
-      backpack.getFullCollectButton()
-        .should('be.visible')
+      pop.getPopTool('collect').click({ force: true })
+      pop.getPopTool('canvas').click('topLeft', { force: true })
+      pop.getPopTool('canvas').click('top', { force: true })
+      pop.getPopTool('canvas').click('topRight', { force: true })
+      pop.getPopTool('canvas').click('left', { force: true })
+      pop.getPopTool('canvas').click('center', { force: true })
+      pop.getPopTool('canvas').click('right', { force: true })
+      pop.getPopTool('canvas').click('bottomLeft', { force: true })
+      pop.getPopTool('canvas').click('bottom', { force: true })
+      pop.getPopTool('canvas').click('bottomRight', { force: true })
+      pop.getPopTool('reset').click({ force: true }, { force: true })
+      backpack.getFullCollectButton().should('be.visible')
     })
 
     it('toggles sex and heterozygote checkboxes', () => {
@@ -144,109 +101,87 @@ context("Connected Bio Smoke Test", () => {
 
   context("Population and Graph", () => {
     it('check default tab statuses, titles, content', () => {
-      rightPanelContent.getTitle()
-        .contains('Instructions')
-        .should('be.visible')
-      rightPanelContent.getDataTab()
-        .should('be.visible')
-        .click({force:true})
-      rightPanelContent.getTitle()
-        .contains('Data')
-      rightPanelContent.getDataContent()
-        .should('exist')
-      rightPanelContent.getInformationTabDisabled()
-        .should('exist')
+      rightPanelContent.getTitle().contains('Instructions').should('be.visible')
+      rightPanelContent.getDataTab().should('be.visible').click({ force: true })
+      rightPanelContent.getTitle().contains('Data')
+      rightPanelContent.getDataContent().should('exist')
+      rightPanelContent.getInformationTabDisabled().should('exist')
     })
 
   })
 
   context("Organism model", () => {
+
     it('loads mice into backback and begins organism model', () => {
-      pop.getPopTool('collect')
-        .click({force:true})
-      pop.getPopTool('canvas')
-        .click('topLeft')
-      pop.getPopTool('canvas')
-        .click('top')
-      pop.getPopTool('canvas')
-        .click('topRight')
-      pop.getPopTool('canvas')
-        .click('left')
-      pop.getPopTool('canvas')
-        .click('center')
-      pop.getPopTool('canvas')
-        .click('right')
-      pop.getPopTool('canvas')
-        .click('bottomLeft')
-      pop.getPopTool('canvas')
-        .click('bottom')
-      pop.getPopTool('canvas')
-        .click('bottomRight')
-      backpack.getFullCollectButton()
-        .should('be.visible')
-      exploreNav.getExploreView('organism')
-        .click({force:true})
+      pop.getPopTool('collect').click({ force: true })
+      pop.getPopTool('canvas').click('topLeft', { force: true })
+      pop.getPopTool('canvas').click('top', { force: true })
+      pop.getPopTool('canvas').click('topRight', { force: true })
+      pop.getPopTool('canvas').click('left', { force: true })
+      pop.getPopTool('canvas').click('center', { force: true })
+      pop.getPopTool('canvas').click('right', { force: true })
+      pop.getPopTool('canvas').click('bottomLeft', { force: true })
+      pop.getPopTool('canvas').click('bottom', { force: true })
+      pop.getPopTool('canvas').click('bottomRight', { force: true })
+      backpack.getFullCollectButton().should('be.visible')
+      exploreNav.getExploreView('organism').click({ force: true })
     })
     it("checks right panel default for tabs, titles, content", () => {
-      rightPanelContentFourUp.getTitleFourUpTop()
-        .contains('Instructions')
-      rightPanelContentFourUp.getDataTabFourUpTop()
-        .should('be.visible')
-        .click({force:true})
-      rightPanelContentFourUp.getTitleFourUpTop()
-        .contains('Data')
-      rightPanelContentFourUp.getInformationTabFourUpTop()
-        .should('be.visible')
-        .click({force:true})
-      rightPanelContentFourUp.getTitleFourUpTop()
-        .contains('Information')
-      rightPanelContentFourUp.getContentFourUpTop()
-        .contains('Find and inspect a protein to view it here.')
+      rightPanelContentFourUp.getFourUp('top').within(() => {
+        rightPanelContentFourUp.getTitle().contains('Instructions')
+        rightPanelContentFourUp.getRightHeaderTabs().eq(1).should('be.visible').click({ force: true })
+        rightPanelContentFourUp.getTitle().contains('Data')
+        rightPanelContentFourUp.getRightHeaderTabs().eq(2).should('be.visible').click({ force: true })
+        rightPanelContentFourUp.getTitle().contains('Information')
+        rightPanelContentFourUp.getContent().contains("You'll need to zoom in deeper to find something to inspect")
+      })
     })
     it('checks for four-up view', () => {
-      fourUpView.getFourUpView()
-        .should('be.visible')
-      twoUpView.getTwoUpView()
-        .should('be.visible')
-        .and('have.length', 2)
+      fourUpView.getFourUpDisplay().should('be.visible')
+      twoUpView.getTwoUpView().should('be.visible').and('have.length', 2)
+    })
+    it('checks for default disabled tools', () => {
+      fourUpView.getFourUp('top').within( () => {
+      org.getOrgTool('measure').should('have.class', 'disabled')
+      org.getOrgTool('add-substance').should('have.class', 'disabled')
+      org.getOrgTool('inspect').should('have.class', 'disabled')
+      })
     })
     it('adds mouse in organism model', () => {
-      org.getOrganismView('top')
-        .should('not.exist')
-      backpack.getFullCollectButton().eq(0)
-        .should('be.visible')
-        .click({force:true})
-      org.getEmptyButton('top')
-        .should('be.visible')
-        .click({force:true})
-      org.getFullButton('top')
-        .should('exist')
-        .and('be.visible')
-      org.getOrganismView('top')
-        .should('exist')
+      fourUpView.getFourUpDisplay().within(() => {
+        org.getEmptyButton().should('have.length', 2)
+      })
+      backpack.getFullCollectButton().eq(0).click()
+      fourUpView.getFourUpDisplay().within(() => {
+        org.getEmptyButton().should('have.length', 1)
+        org.getFullButton().should('have.length', 1)
+      })
     })
 
-    it('zooms into the cell view', () => {
-      org.getOrgTool('top','zoom-in')
-        .should('be.visible')
-        .click({force:true})
-      org.getCellView('top')
-        .should('exist')
+    it('zooms into the cell view and assert enabled buttons', () => {
+      fourUpView.getFourUp('top').within(() => {
+        org.getOrgTool('zoom-in').should('be.visible').click({ force: true })
+        cy.wait(10000)
+        org.getOrgTool('zoom-out').should('not.have.class', 'disabled')
+        org.getOrgTool('measure').should('not.have.class', 'disabled')
+        org.getOrgTool('add-substance').should('not.have.class', 'disabled')
+        org.getOrgTool('inspect').should('have.class', 'disabled')
+      })
     })
 
     it('zooms into the protein view', () => {
-      org.getOrgTool('top','zoom-in')
-        .should('be.visible')
-        .click({force:true})
-      org.getProteinView('top')
-        .should('exist')
+      fourUpView.getFourUp('top').within(() => {
+        org.getOrgTool('zoom-in').click({ force: true })
+        org.triggerTargetZoom1()
+
+      })
+
     })
-    it('zooms out to cell view', () => {
-      org.getOrgTool('top','zoom-out')
-        .should('be.visible')
-        .click({force:true})
-      org.getProteinView('top')
-        .should('exist')
+    it.skip('zooms out to cell view', () => {
+      fourUpView.getFourUp('top').within(() => {
+        org.getOrgTool('zoom-out').should('be.visible').click({ force: true })
+        cy.wait(5000)
+      })
     })
   })
 

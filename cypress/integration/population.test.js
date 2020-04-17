@@ -14,14 +14,14 @@ context("Test the population level", () => {
 
   beforeEach(function () {
     cy.visit('/')
-    exploreNav.getExploreView('population').click();
+    exploreNav.getExploreView('populations').click();
   })
 
   context("Two Up View", () => {
     it('exits two up view/population model and returns', () => {
       exploreNav.getExploreView('organism').click();
-      fourUpView.getFourUpView().should('be.visible')
-      exploreNav.getExploreView('population').click();
+      fourUpView.getFourUpDisplay().should('be.visible')
+      exploreNav.getExploreView('populations').click();
     });
   });
 
@@ -41,13 +41,13 @@ context("Test the population level", () => {
     });
     it("verifies switching to and from Pop view renders correct window", () => {
       exploreNav.getExploreView('organism').click({force:true});
-      exploreNav.getExploreView('population').click({force:true});
+      exploreNav.getExploreView('populations').click({force:true});
       exploreNav.getExploreView('organism').click({force:true});
-      exploreNav.getExploreView('population').click({force:true});
+      exploreNav.getExploreView('populations').click({force:true});
       exploreNav.getExploreView('organism').click({force:true});
-      exploreNav.getExploreView('population').click({force:true});
+      exploreNav.getExploreView('populations').click({force:true});
       exploreNav.getExploreView('organism').click({force:true});
-      exploreNav.getExploreView('population').click({force:true});
+      exploreNav.getExploreView('populations').click({force:true});
     });
   });
 
