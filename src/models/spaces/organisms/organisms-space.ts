@@ -190,7 +190,14 @@ export const OrganismsSpaceModel = types
   .actions((self) => {
     function clearRowBackpackMouse(rowIndex: number) {
       const clearedOrganismsMouse = self.rows[rowIndex].organismsMouse;
-      self.rows[rowIndex] = OrganismsRowModel.create();
+
+      // keep right panel as-is, unless it's on "information" which doesn't make sense for no org
+      let rightPanel: RightPanelType = (rowIndex === 0 && self.instructions) ? "instructions" : "data";
+      if (self.rows[rowIndex] && self.rows[rowIndex].rightPanel && self.rows[rowIndex].rightPanel !== "information") {
+        rightPanel = self.rows[rowIndex].rightPanel;
+      }
+
+      self.rows[rowIndex] = OrganismsRowModel.create({ rightPanel });
 
       if (clearedOrganismsMouse) {
         if (!self.rows.some(row => row.organismsMouse === clearedOrganismsMouse)) {
@@ -200,6 +207,15 @@ export const OrganismsSpaceModel = types
     }
 
     return {
+
+      afterCreate() {
+        if (!self.instructions) {
+          if (self.rows[0]) {
+            self.rows[0].rightPanel = "data";
+          }
+        }
+      },
+
       clearRowBackpackMouse,
       setRowBackpackMouse(rowIndex: number, backpackMouse: BackpackMouseType) {
         let organismsMouse = self.organismsMice.find((existingOrganismsMouse) => {
@@ -211,7 +227,7 @@ export const OrganismsSpaceModel = types
         }
 
         // keep right panel as it was
-        let rightPanel: RightPanelType = rowIndex === 0 ? "instructions" : "data";
+        let rightPanel: RightPanelType = (rowIndex === 0 && self.instructions) ? "instructions" : "data";
         if (self.rows[rowIndex] && self.rows[rowIndex].rightPanel) {
           rightPanel = self.rows[rowIndex].rightPanel;
         }

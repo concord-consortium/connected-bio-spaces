@@ -73,6 +73,13 @@ export const PopulationsModel = types
         }
       },
       actions: {
+
+        afterCreate() {
+          if (!self.instructions) {
+            self.rightPanel = "data";
+          }
+        },
+
         togglePlay() {
           if (!self.isPlaying) {
             self.model.interactive.play();

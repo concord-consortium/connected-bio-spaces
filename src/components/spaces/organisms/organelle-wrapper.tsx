@@ -356,20 +356,16 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     model.on("view.loaded", () => {
       this.updateReceptorImage();
       this.props.onModelLoaded && this.props.onModelLoaded();
-    });
 
-    if (this.props.zoomLevel === "receptor") {
-      model.setTimeout(
-        () => {
-          for (let i = 0; i < 3; i++) {
-            // The world could have been unmounted since the timeout was set
-            if (model && model.world) {
-              model.world.createAgent(model.world.species.gProtein);
-            }
+      if (this.props.zoomLevel === "receptor") {
+        for (let i = 0; i < 3; i++) {
+          // The world could have been unmounted since the timeout was set
+          if (model && model.world) {
+            model.world.createAgent(model.world.species.gProtein);
           }
-        },
-        1300);
-    }
+        }
+      }
+    });
 
     model.on("hexagon.notify", () => this.updateReceptorImage());
 

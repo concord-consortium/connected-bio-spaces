@@ -200,6 +200,7 @@ export const MousePopulationsModel = types
     let interactive: HawksMiceInteractive | undefined;
     let lastEnvironmentColorAnnotationDate = 0;
     let lastEnvironmentColorAnnotation: ChartAnnotationType;
+    let lastSettingsAnnotationDate = -100;
 
     function getChartTypeOrDefault() {
       return self.userChartType ? self.userChartType :
@@ -258,15 +259,6 @@ export const MousePopulationsModel = types
       return 0;
     }
 
-    Events.addEventListener(Environment.EVENTS.START, () => {
-      if (interactive) {
-        const date = interactive.environment.date;
-        if (date === 0) {
-          addData(date, interactive.getData());
-        }
-      }
-    });
-
     Events.addEventListener(Environment.EVENTS.STEP, () => {
       if (interactive) {
         const date = interactive.environment.date;
@@ -298,6 +290,22 @@ export const MousePopulationsModel = types
       self.chartData.addAnnotation(colorAnnotation);
       lastEnvironmentColorAnnotationDate = date;
       lastEnvironmentColorAnnotation = colorAnnotation;
+    }
+
+    function addSettingsAnnotation(label: string, labelXOffset: number) {
+      const now = interactive ? interactive.environment.date : 0;
+      const timeSinceLastAnnotation = now - lastSettingsAnnotationDate;
+      const labelYOffset = timeSinceLastAnnotation < 30 ? 55 : 30;
+
+      self.chartData.addAnnotation(ChartAnnotationModel.create({
+        type: "verticalLine",
+        value: getModelDate(),
+        label,
+        labelXOffset,
+        labelYOffset
+      }));
+      // simplifies alternating low and high labels
+      lastSettingsAnnotationDate = timeSinceLastAnnotation > 30 ? now : now - 100;
     }
 
     function setupGraph() {
@@ -386,22 +394,13 @@ export const MousePopulationsModel = types
           interactive = undefined;
           setupGraph();
         },
-        setupGraph
+        setupGraph,
+        addSettingsAnnotation,
       }
     };
   })
   .extend(self => {
-    function addHawksAnnotation(added: boolean) {
-      const label = added ? "Hawks added" : "Hawks removed";
-      const labelXOffset = added ? -50 : -60;
-      self.chartData.addAnnotation(ChartAnnotationModel.create({
-        type: "verticalLine",
-        value: self.modelDate,
-        label,
-        labelXOffset,
-        labelYOffset: 30
-      }));
-    }
+
     return {
       views: {
         get toolbarButtons(): ToolbarButton[] {
@@ -414,7 +413,7 @@ export const MousePopulationsModel = types
               action: (e: any) => {
                 self.interactive.addInitialHawksPopulation(self.numHawks);
                 self.setHawksAdded(true);
-                addHawksAnnotation(true);
+                self.addSettingsAnnotation("Hawks added", -50);
               },
               enabled: (self.numHawks > 0)
             });
@@ -425,7 +424,7 @@ export const MousePopulationsModel = types
               action: (e: any) => {
                 self.interactive.removeHawks();
                 self.setHawksAdded(false);
-                addHawksAnnotation(false);
+                self.addSettingsAnnotation("Hawks removed", -60);
               },
               enabled: (self.numHawks > 0)
             });
@@ -467,6 +466,8 @@ export const MousePopulationsModel = types
             value: self["inheritance.breedWithMutations"],
             action: (val: boolean) => {
               self.setBreedWithMutations(val);
+              const label = val ? "Mutations on" : "Mutations off";
+              self.addSettingsAnnotation(label, -50);
             },
             enabled: self["inheritance.showStudentControlOfMutations"]
           });
@@ -477,6 +478,8 @@ export const MousePopulationsModel = types
             value: self["inheritance.breedWithInheritance"],
             action: (val: boolean) => {
               self.setBreedWithInheritance(val);
+              const label = val ? "Inheritance on" : "Inheritance off";
+              self.addSettingsAnnotation(label, -60);
             },
             enabled: self["inheritance.showStudentControlOfInheritance"]
           });
