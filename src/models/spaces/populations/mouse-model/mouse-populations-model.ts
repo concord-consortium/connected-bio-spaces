@@ -176,6 +176,7 @@ export const MousePopulationsModel = types
     "initialPopulation.tan": types.number,
     "showSwitchEnvironmentsButton": types.boolean,
     "includeNeutralEnvironment": types.boolean,
+    "showInspectGenotype": types.boolean,
     "inheritance.showStudentControlOfMutations": types.boolean,
     "inheritance.breedWithMutations": types.boolean,
     "inheritance.chanceOfMutations": types.number,

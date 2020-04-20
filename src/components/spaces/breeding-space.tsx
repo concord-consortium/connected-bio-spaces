@@ -43,6 +43,7 @@ export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
                   pairLabel={content.label}
                   isOffspring={content.isOffspring}
                   isGamete={content.isGamete}
+                  showGenotype={true}
                  />;
         default:
           return null;

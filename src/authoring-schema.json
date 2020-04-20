@@ -135,6 +135,10 @@
           "title": "Include mixed environment",
           "type": "boolean"
         },
+        "showInspectGenotype": {
+          "title": "Show genotype in inspect view",
+          "type": "boolean"
+        },
         "initialPopulation": {
           "title": "Initial mouse population",
           "type": "object",

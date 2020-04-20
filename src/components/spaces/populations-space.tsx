@@ -37,6 +37,7 @@ export class PopulationsSpaceComponent extends BaseComponent<IProps, IState> {
                   isGamete={false}
                   isOffspring={false}
                   isPopulationInspect={true}
+                  showGenotype={populations.model.showInspectGenotype}
                  />;
         default:
           return null;

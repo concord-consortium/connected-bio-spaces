@@ -12,6 +12,7 @@ interface IProps extends IBaseProps {
   isOffspring: boolean;
   isGamete: boolean;
   isPopulationInspect?: boolean;
+  showGenotype: boolean;
 }
 interface IState {}
 
@@ -100,14 +101,16 @@ export class InspectPanel extends BaseComponent<IProps, IState> {
             </div>
           </div>
         }
-        <div className={rowClass}>
-          <div className={infoTypeClass}>
-            {"Genotype: "}
-            <span className="info-data"
-               dangerouslySetInnerHTML={{ __html: genotypeLabel }}
-            />
+        { this.props.showGenotype &&
+          <div className={rowClass}>
+            <div className={infoTypeClass}>
+              {"Genotype: "}
+              <span className="info-data"
+                dangerouslySetInnerHTML={{ __html: genotypeLabel }}
+              />
+            </div>
           </div>
-        </div>
+        }
         { (this.props.isGamete && !this.props.isOffspring) &&
           <div className={rowClass}>
             <div className={infoTypeClass}>
