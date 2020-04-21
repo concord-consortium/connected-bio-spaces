@@ -19,6 +19,7 @@ export type InstructionsAsMarkdown = string;
 export type InitialEnvironment = "white" | "neutral" | "brown";
 export type EnableChangeEnvironmentsButton = boolean;
 export type IncludeMixedEnvironment = boolean;
+export type ShowGenotypeInInspectView = boolean;
 export type White = number;
 export type Tan = number;
 export type NumberOfHawks = number;
@@ -76,6 +77,7 @@ export interface PopulationsModel {
   environment?: InitialEnvironment;
   showSwitchEnvironmentsButton?: EnableChangeEnvironmentsButton;
   includeNeutralEnvironment?: IncludeMixedEnvironment;
+  showInspectGenotype?: ShowGenotypeInInspectView;
   initialPopulation?: InitialMousePopulation;
   numHawks?: NumberOfHawks;
   inheritance?: Inheritance;

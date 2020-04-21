@@ -2,6 +2,9 @@
 
 .stacked-organism
   position: relative
+  display: flex
+  justify-content: center
+  align-items: center
 
   &:hover .selection-stack.show
     opacity: 1
@@ -26,20 +29,25 @@
       transform: translate3d(0px, 0px, 0px) translateY(-50%) translateX(-50%) scaleX(-1)
   .hetero-stack
     position: absolute
-    top: 0
-    left: 0
+    border-color: $left-nav-legend-heterozygote-color
+    border-style: dotted
+    border-radius: 50%
     opacity: 0
     transition-duration: .25s
     &.show
       opacity: 1
   .sex-stack
     position: absolute
-    top: 0
-    left: 0
+    border-style: solid
+    border-radius: 50%
     opacity: 0
     transition-duration: .25s
     &.show
       opacity: 1
+    &.male
+      border-color: $left-nav-legend-male-color
+    &.female
+      border-color: $left-nav-legend-female-color
   .gamete-view-stack
     position: absolute
     top: 0

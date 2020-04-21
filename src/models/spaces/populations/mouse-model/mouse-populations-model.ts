@@ -4,6 +4,7 @@ import { Events, Environment } from "populations.js";
 import { ToolbarButton } from "../populations";
 import { ChartDataModel } from "../../charts/chart-data";
 import { ChartAnnotationModel, ChartAnnotationType } from "../../charts/chart-annotation";
+import { BackpackMouse, BackpackMouseType } from "../../../backpack-mouse";
 
 const dataColors = {
   white: {
@@ -175,6 +176,7 @@ export const MousePopulationsModel = types
     "initialPopulation.tan": types.number,
     "showSwitchEnvironmentsButton": types.boolean,
     "includeNeutralEnvironment": types.boolean,
+    "showInspectGenotype": types.boolean,
     "inheritance.showStudentControlOfMutations": types.boolean,
     "inheritance.breedWithMutations": types.boolean,
     "inheritance.chanceOfMutations": types.number,
@@ -190,7 +192,8 @@ export const MousePopulationsModel = types
     "enableGenotypeChart": true,
     "enableAllelesChart": true,
     "deadMice.chanceOfShowingBody": types.number,
-    "deadMice.timeToShowBody": types.number
+    "deadMice.timeToShowBody": types.number,
+    "inspectedMouse": types.maybe(BackpackMouse)
   })
   .volatile(self => ({
     hawksAdded: false,
@@ -350,6 +353,9 @@ export const MousePopulationsModel = types
         }
       },
       actions: {
+        setInspectedMouse(mouse: BackpackMouseType) {
+          self.inspectedMouse = mouse;
+        },
         setEnvironmentColor(color: EnvironmentColorType) {
           self.environment = color;
           if (interactive) {

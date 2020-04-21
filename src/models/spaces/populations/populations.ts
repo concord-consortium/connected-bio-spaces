@@ -141,14 +141,6 @@ export const PopulationsModel = types
             }
             self.interactionMode = mode;
           }
-
-          // set "info" mode on interactive. This is temporary, eventually we will show info in right
-          // panel using the same mouse handler as the select view.
-          if (self.interactionMode === "inspect") {
-            self.model.interactive.enterInspectMode();
-          } else {
-            self.model.interactive.exitInspectMode();
-          }
         }
       }
     };

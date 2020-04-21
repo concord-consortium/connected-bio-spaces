@@ -32,6 +32,7 @@ export const defaultAuthoring: ConnectedBioAuthoring = {
     environment: "white",
     showSwitchEnvironmentsButton: true,
     includeNeutralEnvironment: true,
+    showInspectGenotype: true,
     initialPopulation: {
       white: 33.33,
       tan: 33.33

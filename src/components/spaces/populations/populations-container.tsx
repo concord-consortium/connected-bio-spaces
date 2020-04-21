@@ -198,6 +198,14 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
           if (added){
             this.stores.populations.removeAgent(selectedMouse);
           }
+        } else if (evt.type === "click" && populations.interactionMode === "inspect") {
+          const selectedMouse = evt.agents.mice;
+          const mouse = BackpackMouse.create({
+            sex: selectedMouse.get("sex"),
+            genotype: (selectedMouse as any)._genomeButtonsString()
+          });
+          populations.model.setInspectedMouse(mouse);
+          populations.setRightPanel("information");
         } else if (evt.type === "mousemove" && populations.interactionMode !== "none") {
           if (currentHighlightMouse) {
             currentHighlightMouse.set("hover", "");
