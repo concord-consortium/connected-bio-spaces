@@ -187,7 +187,7 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
     const populations = this.stores.populations;
     if (populations) {
       if (evt.agents && evt.agents.mice) {
-        if (evt.type === "click" && populations.interactionMode === "select") {
+        if ((evt.type === "click" || evt.type === "touchstart") && populations.interactionMode === "select") {
           const selectedMouse = evt.agents.mice;
           const backpack = this.stores.backpack;
           const backpackMouse = BackpackMouse.create({
