@@ -186,7 +186,7 @@ export function createInteractive(model: MousePopulationsModelType) {
 
   Events.addEventListener(Environment.EVENTS.RESET, interactive.setup);
 
-  function addAgent(species: Species, properties: [], traits: Trait[], location?: Rect) {
+  function addAgent(species: Species, properties: [], traits: Trait[], location?: Rect, age?: number) {
     const agent = species.createAgent(traits);
     if ((agent as any).setTypeDescription) {
       (agent as any).setTypeDescription();
@@ -202,7 +202,7 @@ export function createInteractive(model: MousePopulationsModelType) {
       agent.set(prop[0], prop[1]);
     }
 
-    agent.set("age", Math.round(Math.random() * 60) + 70);
+    agent.set("age", age || Math.round(Math.random() * 60) + 70);
     env.addAgent(agent);
   }
 
@@ -323,7 +323,7 @@ export function createInteractive(model: MousePopulationsModelType) {
     const numMice = allMice.length;
     if (numMice < 5) {
       for (let i = 0; i < 4; i++) {
-        addAgent(mouseSpecies, [], [copyColorTraitOfRandomMouse(allMice)]);
+        addAgent(mouseSpecies, [], [copyColorTraitOfRandomMouse(allMice)], undefined, 1);
       }
     }
     countMice(allMice);
@@ -335,19 +335,19 @@ export function createInteractive(model: MousePopulationsModelType) {
     // environment, we want to make sure they don't die out.
     if ((!addedHawks || environmentColor === "white") && numWhite > 0 && numWhite < 2) {
       for (let i = 0; i < 2; i++) {
-        addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:C,b:C")]);
+        addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:C,b:C")], undefined, 1);
       }
     }
 
     if ((!addedHawks || environmentColor === "neutral") && numTan > 0 && numTan < 2) {
       for (let i = 0; i < 2; i++) {
-        addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:C,b:R")]);
+        addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:C,b:R")], undefined, 1);
       }
     }
 
     if ((!addedHawks || environmentColor === "brown") && numBrown > 0 && numBrown < 2) {
       for (let i = 0; i < 2; i++) {
-        addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:R,b:R")]);
+        addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:R,b:R")], undefined, 1);
       }
     }
 
