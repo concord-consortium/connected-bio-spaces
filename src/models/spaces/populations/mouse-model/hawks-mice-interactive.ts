@@ -6,8 +6,8 @@ import { hawkSpecies } from "./hawks";
 
 let environmentColor: EnvironmentColorType;
 
-function createEnvironment(color: EnvironmentColorType) {
-  return new Environment({
+function createEnvironment(color: EnvironmentColorType, mouseSpecies: Species) {
+  const environment = new Environment({
     width: 450,
     height: 480,
     viewWidth: 900,
@@ -16,32 +16,8 @@ function createEnvironment(color: EnvironmentColorType) {
     wrapNorthSouth: false,
     depthPerception : true
   });
-}
 
-// all numbers below are floats representing percentages out of 100
-interface IInitialColorSpecs {
-  white: number;
-  tan: number;
-}
-
-export class HawksMiceInteractive extends Interactive {
-  public setup: () => void;
-  public addInitialHawksPopulation: (num: number) => void;
-  public removeHawks: () => void;
-  public switchEnvironments: (includeNeutralEnvironment: boolean) => void;
-  public getData: () => any;
-  public removeAgent: (agent: Agent) => void;
-  public enterInspectMode: () => void;
-  public exitInspectMode: () => void;
-}
-
-export function createInteractive(model: MousePopulationsModelType) {
-  const mouseSpecies = getMouseSpecies(model);
-
-  environmentColor = model.environment;
-  const env = createEnvironment(environmentColor);
-
-  env.addRule(new Rule({
+  environment.addRule(new Rule({
     action: (agent: Agent) => {
         let brownness;
         if (agent.species === mouseSpecies) {
@@ -61,6 +37,39 @@ export function createInteractive(model: MousePopulationsModelType) {
       }
     }
   ));
+
+  return environment;
+}
+
+// all numbers below are floats representing percentages out of 100
+interface IInitialColorSpecs {
+  white: number;
+  tan: number;
+}
+
+export interface EnvironmentState {
+  agents: Agent[];
+  date: number;
+}
+
+export class HawksMiceInteractive extends Interactive {
+  public setup: () => void;
+  public addInitialHawksPopulation: (num: number) => void;
+  public removeHawks: () => void;
+  public switchEnvironments: (includeNeutralEnvironment: boolean) => void;
+  public getData: () => any;
+  public removeAgent: (agent: Agent) => void;
+  public enterInspectMode: () => void;
+  public exitInspectMode: () => void;
+  public saveAndDestroyEnvironment: () => EnvironmentState;
+  public loadEnvironment: (state: EnvironmentState) => void;
+}
+
+export function createInteractive(model: MousePopulationsModelType) {
+  const mouseSpecies = getMouseSpecies(model);
+
+  environmentColor = model.environment;
+  let env = createEnvironment(environmentColor, mouseSpecies);
 
   const interactive = new HawksMiceInteractive({
     environment: env,
@@ -367,5 +376,25 @@ export function createInteractive(model: MousePopulationsModelType) {
       });
     }
   });
+
+  interactive.saveAndDestroyEnvironment = () => {
+    const state = {
+      agents: interactive.environment.agents,
+      date: interactive.environment.date,
+    };
+    delete interactive.environment;
+    return state;
+  };
+
+  // When we re-create the environment, we will be using many of the properties from this
+  // model, such as the environment color, various flags, etc. So there are only a few things
+  // that need to be explicitly loaded back in.
+  interactive.loadEnvironment = (state: EnvironmentState) => {
+    env = createEnvironment(environmentColor, mouseSpecies);
+    interactive.environment = env;
+    interactive.environment.agents = state.agents;
+    interactive.environment.date = state.date;
+  };
+
   return interactive;
 }

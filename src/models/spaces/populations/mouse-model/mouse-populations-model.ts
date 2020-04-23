@@ -1,5 +1,5 @@
 import { types, Instance } from "mobx-state-tree";
-import { createInteractive, HawksMiceInteractive } from "./hawks-mice-interactive";
+import { createInteractive, HawksMiceInteractive, EnvironmentState } from "./hawks-mice-interactive";
 import { Events, Environment } from "populations.js";
 import { ToolbarButton } from "../populations";
 import { ChartDataModel } from "../../charts/chart-data";
@@ -168,6 +168,8 @@ export const EnvironmentColorNames = {
   brown: "Field"
 };
 
+let savedEnvironmentState: EnvironmentState | null = null;
+
 export const MousePopulationsModel = types
   .model("MousePopulations", {
     "environment": EnvironmentColorTypeEnum,
@@ -326,6 +328,10 @@ export const MousePopulationsModel = types
       views: {
         get interactive(): HawksMiceInteractive {
           if (interactive) {
+            if (savedEnvironmentState) {
+              interactive.loadEnvironment(savedEnvironmentState);
+              savedEnvironmentState = null;
+            }
             return interactive;
           } else {
             interactive = createInteractive(self as MousePopulationsModelType);
@@ -396,9 +402,10 @@ export const MousePopulationsModel = types
         setHawksAdded(val: boolean) {
           self.hawksAdded = val;
         },
-        destroyInteractive() {
-          interactive = undefined;
-          setupGraph();
+        saveInteractive() {
+          if (interactive) {
+            savedEnvironmentState = interactive.saveAndDestroyEnvironment();
+          }
         },
         setupGraph,
         addSettingsAnnotation,
