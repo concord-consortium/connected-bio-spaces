@@ -330,34 +330,22 @@ export function createInteractive(model: MousePopulationsModelType) {
 
     // If there are no specific selective pressures (ie there are no hawks, or the hawks eat
     // everything with equal probability), the population should be 'stabilized', so that no
-    // color of mouse dies out completely
-    if ((!addedHawks || environmentColor === "neutral")) {
-      // Make sure there are *some* white mice to ensure white mice are possible
-      if (numWhite > 0 && numWhite < 10) {
-        for (let i = 0; i < 3; i++) {
-          addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:C,b:C")]);
-        }
-      }
-
-      if (numBrown > 0 && numBrown < 10) {
-        for (let i = 0; i < 3; i++) {
-          addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:R,b:R")]);
-        }
-      }
-    }
-
-    // Insurance: Ensure there are always at least two rabbits of the correct color.
-    // We need to catch it before there are zero. Once there are zero, we can't create any out
-    // of thin air. (E.g. user eliminated one population then changed environment)
-    if (environmentColor === "white" && numWhite > 1 && numWhite < 3) {
+    // color of mouse dies out completely.
+    // Even if we have added hawks, if there are any of the "correct" color mice in an
+    // environment, we want to make sure they don't die out.
+    if ((!addedHawks || environmentColor === "white") && numWhite > 0 && numWhite < 2) {
       for (let i = 0; i < 2; i++) {
         addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:C,b:C")]);
       }
-    } else if (environmentColor === "neutral" && numTan > 1 && numTan < 3) {
+    }
+
+    if ((!addedHawks || environmentColor === "neutral") && numTan > 0 && numTan < 2) {
       for (let i = 0; i < 2; i++) {
         addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:C,b:R")]);
       }
-    } else if (environmentColor === "brown" && numBrown > 1 && numBrown < 3) {
+    }
+
+    if ((!addedHawks || environmentColor === "brown") && numBrown > 0 && numBrown < 2) {
       for (let i = 0; i < 2; i++) {
         addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:R,b:R")]);
       }
