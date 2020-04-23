@@ -110,8 +110,6 @@ export const ChartAnnotationModel = types
           self.setShowingExpandLabel(val);
           this.chartInstance.update();
         };
-        formatted.onMouseenter = () => self.setShowingExpandLabel(true);
-        formatted.onMouseleave = () => self.setShowingExpandLabel(false);
         formatted.onClick = () => self.setShowingExpandLabel(!self.showingExpandLabel);
       }
 
