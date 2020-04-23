@@ -258,14 +258,14 @@ export const MousePopulationsModel = types
     }
 
     function getModelDate() {
-      if (interactive) {
+      if (interactive && interactive.environment) {
         return interactive.environment.date / 10;
       }
       return 0;
     }
 
     Events.addEventListener(Environment.EVENTS.STEP, () => {
-      if (interactive) {
+      if (interactive && interactive.environment) {
         const date = interactive.environment.date;
         // add data every 5th step
         if (date % 5 === 0) {
@@ -364,7 +364,7 @@ export const MousePopulationsModel = types
         },
         setEnvironmentColor(color: EnvironmentColorType) {
           self.environment = color;
-          if (interactive) {
+          if (interactive && interactive.environment) {
             addEnvironmentAnnotation(interactive.environment.date, color);
           }
         },
