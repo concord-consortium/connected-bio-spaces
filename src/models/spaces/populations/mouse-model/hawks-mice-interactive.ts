@@ -392,7 +392,7 @@ export function createInteractive(model: MousePopulationsModelType) {
   interactive.loadEnvironment = (state: EnvironmentState) => {
     env = createEnvironment(environmentColor, mouseSpecies);
     interactive.environment = env;
-    interactive.environment.agents = state.agents;
+    state.agents.forEach(agent => env.addAgent(agent));
     interactive.environment.date = state.date;
   };
 
