@@ -348,24 +348,27 @@ export function createInteractive(model: MousePopulationsModelType) {
     // color of mouse dies out completely.
     // Even if we have added hawks, if there are any of the "correct" color mice in an
     // environment, we want to make sure they don't die out.
-    if ((!addedHawks || environmentColor === "white") && numWhite > 0 && numWhite < 2) {
-      for (let i = 0; i < 2; i++) {
-        addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:C,b:C")],
-          getLocationOfRandomMouse(allMice, "white"), 1);
+    // If there are mutations in the model, we ignore all this.
+    if (model.chanceOfMutation === 0) {
+      if ((!addedHawks || environmentColor === "white") && numWhite > 0 && numWhite < 2) {
+        for (let i = 0; i < 2; i++) {
+          addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:C,b:C")],
+            getLocationOfRandomMouse(allMice, "white"), 1);
+        }
       }
-    }
 
-    if ((!addedHawks || environmentColor === "neutral") && numTan > 0 && numTan < 2) {
-      for (let i = 0; i < 2; i++) {
-        addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:C,b:R")],
-          getLocationOfRandomMouse(allMice, "white"), 1);
+      if ((!addedHawks || environmentColor === "neutral") && numTan > 0 && numTan < 2) {
+        for (let i = 0; i < 2; i++) {
+          addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:C,b:R")],
+            getLocationOfRandomMouse(allMice, "white"), 1);
+        }
       }
-    }
 
-    if ((!addedHawks || environmentColor === "brown") && numBrown > 0 && numBrown < 2) {
-      for (let i = 0; i < 2; i++) {
-        addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:R,b:R")],
-          getLocationOfRandomMouse(allMice, "white"), 1);
+      if ((!addedHawks || environmentColor === "brown") && numBrown > 0 && numBrown < 2) {
+        for (let i = 0; i < 2; i++) {
+          addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:R,b:R")],
+            getLocationOfRandomMouse(allMice, "white"), 1);
+        }
       }
     }
 
