@@ -206,16 +206,6 @@ export function createInteractive(model: MousePopulationsModelType) {
     env.addAgent(agent);
   }
 
-  function copyColorTraitOfRandomMouse(allMice: Agent[]) {
-    const randomMouse = allMice[Math.floor(Math.random() * allMice.length)];
-    const alleleString = randomMouse.organism.alleles;
-    return new Trait({
-      name: "color",
-      default: alleleString,
-      isGenetic: true
-    });
-  }
-
   function createColorTraitByGenotype(alleleString: string) {
     return new Trait({
       name: "color",
@@ -242,6 +232,24 @@ export function createInteractive(model: MousePopulationsModelType) {
         break;
     }
     return createColorTraitByGenotype(alleleString);
+  }
+
+  function getLocationNearAgent(agent: Agent): Rect {
+    const loc = agent.getLocation();
+    return {
+      x: loc.x - 5,
+      y: loc.y - 5,
+      width: 10,
+      height: 10
+    };
+  }
+
+  function getLocationOfRandomMouse(allMice: Agent[], color?: MouseColors): Rect | undefined {
+    const miceOfColor = color ? allMice.filter(m => m.get("color") === color) : allMice;
+    if (miceOfColor) {
+      const randomMouse = miceOfColor[Math.floor(Math.random() * miceOfColor.length)];
+      return getLocationNearAgent(randomMouse);
+    }
   }
 
   function addInitialHawksPopulation(num: number) {
@@ -323,7 +331,14 @@ export function createInteractive(model: MousePopulationsModelType) {
     const numMice = allMice.length;
     if (numMice < 5) {
       for (let i = 0; i < 4; i++) {
-        addAgent(mouseSpecies, [], [copyColorTraitOfRandomMouse(allMice)], undefined, 1);
+        const randomMouse = allMice[Math.floor(Math.random() * allMice.length)];
+        const alleleString = randomMouse.organism.alleles;
+        const colorTrait = new Trait({
+          name: "color",
+          default: alleleString,
+          isGenetic: true
+        });
+        addAgent(mouseSpecies, [], [colorTrait], getLocationNearAgent(randomMouse), 1);
       }
     }
     countMice(allMice);
@@ -335,19 +350,22 @@ export function createInteractive(model: MousePopulationsModelType) {
     // environment, we want to make sure they don't die out.
     if ((!addedHawks || environmentColor === "white") && numWhite > 0 && numWhite < 2) {
       for (let i = 0; i < 2; i++) {
-        addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:C,b:C")], undefined, 1);
+        addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:C,b:C")],
+          getLocationOfRandomMouse(allMice, "white"), 1);
       }
     }
 
     if ((!addedHawks || environmentColor === "neutral") && numTan > 0 && numTan < 2) {
       for (let i = 0; i < 2; i++) {
-        addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:C,b:R")], undefined, 1);
+        addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:C,b:R")],
+          getLocationOfRandomMouse(allMice, "white"), 1);
       }
     }
 
     if ((!addedHawks || environmentColor === "brown") && numBrown > 0 && numBrown < 2) {
       for (let i = 0; i < 2; i++) {
-        addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:R,b:R")], undefined, 1);
+        addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:R,b:R")],
+          getLocationOfRandomMouse(allMice, "white"), 1);
       }
     }
 
