@@ -313,16 +313,16 @@ export const MousePopulationsModel = types
       lastSettingsAnnotationDate = timeSinceLastAnnotation > 30 ? now : now - 100;
     }
 
-    function setupGraph() {
+    function initializeGraph() {
       self.chartData.dataSets.forEach(d => d.clearDataPoints());
       self.chartData.clearAnnotations();
       addEnvironmentAnnotation(0, self.environment);
-      if (interactive) {
+      if (interactive && interactive.environment) {
         addData(getModelDate(), interactive.getData());
       }
     }
 
-    setupGraph();
+    initializeGraph();
 
     return {
       views: {
@@ -379,7 +379,7 @@ export const MousePopulationsModel = types
             interactive.reset();
           }
           this.setHawksAdded(false);
-          setupGraph();
+          initializeGraph();
         },
         toggleShowMaxPoints() {
           self.showMaxPoints = !self.showMaxPoints;
@@ -407,7 +407,7 @@ export const MousePopulationsModel = types
             savedEnvironmentState = interactive.saveAndDestroyEnvironment();
           }
         },
-        setupGraph,
+        initializeGraph,
         addSettingsAnnotation,
       }
     };

@@ -113,8 +113,8 @@ export const PopulationsModel = types
           self.model.interactive.stop();
           self.model.saveInteractive();
         },
-        setupGraph() {
-          self.model.setupGraph();
+        initializeGraph() {
+          self.model.initializeGraph();
         }
       }
     };
