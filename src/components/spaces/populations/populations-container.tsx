@@ -185,9 +185,10 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
 
   private handleAgentMouseEvent = (evt: AgentEnvironmentMouseEvent) => {
     const populations = this.stores.populations;
+    const evtType = evt.type === "touchstart" ? "click" : evt.type;   // merge touchstart and click
     if (populations) {
       if (evt.agents && evt.agents.mice) {
-        if ((evt.type === "click" || evt.type === "touchstart") && populations.interactionMode === "select") {
+        if (evtType === "click" && populations.interactionMode === "select") {
           const selectedMouse = evt.agents.mice;
           const backpack = this.stores.backpack;
           const backpackMouse = BackpackMouse.create({
@@ -198,7 +199,7 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
           if (added){
             this.stores.populations.removeAgent(selectedMouse);
           }
-        } else if (evt.type === "click" && populations.interactionMode === "inspect") {
+        } else if (evtType === "click" && populations.interactionMode === "inspect") {
           const selectedMouse = evt.agents.mice;
           const mouse = BackpackMouse.create({
             sex: selectedMouse.get("sex"),
@@ -206,7 +207,7 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
           });
           populations.model.setInspectedMouse(mouse);
           populations.setRightPanel("information");
-        } else if (evt.type === "mousemove" && populations.interactionMode !== "none") {
+        } else if (evtType === "mousemove" && populations.interactionMode !== "none") {
           if (currentHighlightMouse) {
             currentHighlightMouse.set("hover", "");
           }
