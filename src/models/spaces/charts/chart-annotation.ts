@@ -44,6 +44,7 @@ export const ChartAnnotationModel = types
   .actions(self => ({
     setShowingExpandLabel: (val: boolean) => {
       self.showingExpandLabel = val;
+      self.showingHighlight = val ? self.showingHighlight : false;
     },
     setHighlight: (val: boolean) => {
       self.showingHighlight = val;
