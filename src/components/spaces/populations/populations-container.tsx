@@ -17,6 +17,7 @@ interface IState {
 }
 
 let currentHighlightMouse: Agent | undefined;
+let firstMount = true;
 
 @inject("stores")
 @observer
@@ -27,7 +28,13 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
   }
 
   public componentDidMount() {
-    setTimeout(this.stores.populations.setupGraph, 1000);
+    if (firstMount) {
+      // only initialize the populations graph on the very first mount.
+      // from then on, the graph will only be re-initialized when the user
+      // explicitly resets the model
+      setTimeout(this.stores.populations.initializeGraph, 1000);
+    }
+    firstMount = false;
   }
 
   public componentWillUnmount() {

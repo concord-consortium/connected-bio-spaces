@@ -1,5 +1,5 @@
 import { types, Instance } from "mobx-state-tree";
-import { createInteractive, HawksMiceInteractive } from "./hawks-mice-interactive";
+import { createInteractive, HawksMiceInteractive, EnvironmentState } from "./hawks-mice-interactive";
 import { Events, Environment } from "populations.js";
 import { ToolbarButton } from "../populations";
 import { ChartDataModel } from "../../charts/chart-data";
@@ -168,6 +168,8 @@ export const EnvironmentColorNames = {
   brown: "Field"
 };
 
+let savedEnvironmentState: EnvironmentState | null = null;
+
 export const MousePopulationsModel = types
   .model("MousePopulations", {
     "environment": EnvironmentColorTypeEnum,
@@ -256,14 +258,14 @@ export const MousePopulationsModel = types
     }
 
     function getModelDate() {
-      if (interactive) {
+      if (interactive && interactive.environment) {
         return interactive.environment.date / 10;
       }
       return 0;
     }
 
     Events.addEventListener(Environment.EVENTS.STEP, () => {
-      if (interactive) {
+      if (interactive && interactive.environment) {
         const date = interactive.environment.date;
         // add data every 5th step
         if (date % 5 === 0) {
@@ -311,21 +313,25 @@ export const MousePopulationsModel = types
       lastSettingsAnnotationDate = timeSinceLastAnnotation > 30 ? now : now - 100;
     }
 
-    function setupGraph() {
+    function initializeGraph() {
       self.chartData.dataSets.forEach(d => d.clearDataPoints());
       self.chartData.clearAnnotations();
       addEnvironmentAnnotation(0, self.environment);
-      if (interactive) {
+      if (interactive && interactive.environment) {
         addData(getModelDate(), interactive.getData());
       }
     }
 
-    setupGraph();
+    initializeGraph();
 
     return {
       views: {
         get interactive(): HawksMiceInteractive {
           if (interactive) {
+            if (savedEnvironmentState) {
+              interactive.loadEnvironment(savedEnvironmentState);
+              savedEnvironmentState = null;
+            }
             return interactive;
           } else {
             interactive = createInteractive(self as MousePopulationsModelType);
@@ -358,7 +364,7 @@ export const MousePopulationsModel = types
         },
         setEnvironmentColor(color: EnvironmentColorType) {
           self.environment = color;
-          if (interactive) {
+          if (interactive && interactive.environment) {
             addEnvironmentAnnotation(interactive.environment.date, color);
           }
         },
@@ -373,7 +379,7 @@ export const MousePopulationsModel = types
             interactive.reset();
           }
           this.setHawksAdded(false);
-          setupGraph();
+          initializeGraph();
         },
         toggleShowMaxPoints() {
           self.showMaxPoints = !self.showMaxPoints;
@@ -396,11 +402,12 @@ export const MousePopulationsModel = types
         setHawksAdded(val: boolean) {
           self.hawksAdded = val;
         },
-        destroyInteractive() {
-          interactive = undefined;
-          setupGraph();
+        saveInteractive() {
+          if (interactive) {
+            savedEnvironmentState = interactive.saveAndDestroyEnvironment();
+          }
         },
-        setupGraph,
+        initializeGraph,
         addSettingsAnnotation,
       }
     };

@@ -2,7 +2,6 @@ import { types, Instance, detach } from "mobx-state-tree";
 import { MousePopulationsModel, MousePopulationsModelType } from "./mouse-model/mouse-populations-model";
 import { Interactive, Events, Environment, Agent } from "populations.js";
 import { ChartDataModelType } from "../charts/chart-data";
-import { type } from "os";
 import { RightPanelTypeEnum, RightPanelType } from "../../ui";
 import { Unit } from "../../../authoring";
 
@@ -112,10 +111,10 @@ export const PopulationsModel = types
         },
         close() {
           self.model.interactive.stop();
-          self.model.destroyInteractive();
+          self.model.saveInteractive();
         },
-        setupGraph() {
-          self.model.setupGraph();
+        initializeGraph() {
+          self.model.initializeGraph();
         }
       }
     };
