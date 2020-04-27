@@ -466,11 +466,21 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
         }
       } else {
         const clickTarget = this.getOrganelleFromMouseEvent(evt);
+        let offsetX = 0;
+        let offsetY = 0;
+        if (evt.e instanceof TouchEvent) {
+          const rect = evt.e.target.getBoundingClientRect();
+          offsetX = evt. e.changedTouches[0].clientX - rect.left;
+          offsetY = evt.e.changedTouches[0].clientY - rect.top;
+        } else if (evt.e instanceof MouseEvent) {
+          offsetX = evt.e.offsetX;
+          offsetY = evt.e.offsetY;
+        }
         if (clickTarget) {
           // Keep the dropper displayed for substance additions
           if (mode === "add") {
             const newCoords = this.state.dropperCoords.slice(0);
-            newCoords.push({x: evt.e.offsetX, y: evt.e.offsetY});
+            newCoords.push({x: offsetX, y: offsetY});
             this.setState({dropperCoords: newCoords});
             model.setTimeout(() => {
               const splicedCoords = this.state.dropperCoords.slice(0);
@@ -480,7 +490,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
           }
 
           // Handle the click in the Organelle model
-          const location = model.view.transformToWorldCoordinates({x: evt.e.offsetX, y: evt.e.offsetY});
+          const location = model.view.transformToWorldCoordinates({x: offsetX, y: offsetY});
           this.organelleClick(clickTarget, location);
         }
       }
