@@ -15,6 +15,7 @@ interface ILineProps {
   width?: number;
   height?: number;
   isPlaying: boolean;
+  hideTitle?: boolean;
 }
 
 interface ILineState { }
@@ -200,6 +201,9 @@ export class LineChart extends BaseComponent<ILineProps, ILineState> {
         }
       }
     });
+    if (this.props.hideTitle) {
+      options.title!.display = false;
+    }
     const w = width ? width : 400;
     const h = height ? height : 400;
     graphs.push(

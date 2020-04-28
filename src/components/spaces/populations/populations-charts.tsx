@@ -15,7 +15,7 @@ export class PopulationsCharts extends React.Component<IProps, IState> {
     const { chartData, isPlaying } = this.props;
     return (
       <div className="chart-container">
-        <Chart title="Population"
+        <Chart
           chartData={chartData}
           chartType={"line"}
           isPlaying={isPlaying}
