@@ -507,17 +507,6 @@ export const MousePopulationsModel = types
           const buttons = [];
 
           buttons.push({
-            title: "Scale",
-            type: "float-button",
-            value: self.showMaxPoints,
-            action: (val: boolean) => {
-              self.toggleShowMaxPoints();
-            },
-            floatCorner: "upper-right",
-            section: "data"
-          });
-
-          buttons.push({
             title: "Fur Colors",
             value: self.chartType === "color",
             action: (val: boolean) => {

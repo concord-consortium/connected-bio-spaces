@@ -3,10 +3,40 @@
 .chart-container
   width: 100%
   background-color: white
-  display: flex
 
   .line-chart-container
     display: flex
     flex-direction: column
     height: 100%
     width: 100%
+
+
+.populations .chart-container
+  .chart-header
+    width: 100%
+    display: flex
+    justify-content: space-between
+    align-items: center
+
+    div
+      flex: 1
+
+    .title
+      font-family: 'Arial'
+      font-size: 14
+      font-style: 'normal'
+      font-color: '#434e56'
+
+    .button-holder
+      width: 113px
+      height: 30px
+      box-sizing: border-box
+      background-color: $color-simdata-amber-light2
+      color: $color-simdata-amber-dark2
+      border-radius: 5px
+      border: 2px solid $color-simdata-amber
+      &:hover:not(.disabled)
+        background-color: $color-simdata-amber-light1
+      &:active:not(.disabled)
+        background-color: $color-simdata-amber-dark1
+        color: $color-white
