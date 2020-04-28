@@ -8,17 +8,17 @@ import { BackpackMouse, BackpackMouseType } from "../../../backpack-mouse";
 
 const dataColors = {
   white: {
-    mice: "#f4ce83",
+    mice: "#dfc39d",
     environment: "rgb(251,235,205)",
     environmentHighlight: "rgba(251,235,205,.7)"
   },
   neutral: {
-    mice: "#db9e26",
+    mice: "#bf8f53",
     environment: "rgb(241,216,168)",
     environmentHighlight: "rgba(241,216,168, .7)"
   },
   brown: {
-    mice: "#795423",
+    mice: "#5d3515",
     environment: "rgb(201,187,167)",
     environmentHighlight: "rgba(201,187,167,.7)"
   }
@@ -75,7 +75,7 @@ const chartData = {
     {
       name: "RᴸRᴸ Mice",
       dataPoints: [],
-      color: "#f4ce83",
+      color: dataColors.white.mice,
       maxPoints: 25,
       initialMaxA1: 12,
       fixedMinA2: 0,
@@ -89,7 +89,7 @@ const chartData = {
     {
       name: "RᴸRᴰ Mice",
       dataPoints: [],
-      color: "#db9e26",
+      color: dataColors.neutral.mice,
       maxPoints: 25,
       initialMaxA1: 12,
       fixedMinA2: 0,
@@ -103,7 +103,7 @@ const chartData = {
     {
       name: "RᴰRᴸ Mice",
       dataPoints: [],
-      color: "#db9e26",
+      color: dataColors.neutral.mice,
       maxPoints: 25,
       initialMaxA1: 12,
       fixedMinA2: 0,
@@ -117,7 +117,7 @@ const chartData = {
     {
       name: "RᴰRᴰ Mice",
       dataPoints: [],
-      color: "#795423",
+      color: dataColors.brown.mice,
       maxPoints: 25,
       initialMaxA1: 12,
       fixedMinA2: 0,
@@ -131,7 +131,7 @@ const chartData = {
     {
       name: "Rᴸ Alleles",
       dataPoints: [],
-      color: "#f4ce83",
+      color: dataColors.white.mice,
       maxPoints: 25,
       initialMaxA1: 12,
       fixedMinA2: 0,
@@ -145,7 +145,7 @@ const chartData = {
     {
       name: "Rᴰ Alleles",
       dataPoints: [],
-      color: "#795423",
+      color: dataColors.brown.mice,
       maxPoints: 25,
       initialMaxA1: 12,
       fixedMinA2: 0,
