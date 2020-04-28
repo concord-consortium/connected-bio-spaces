@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Chart } from "../../charts/chart";
+import { PieChart, PieChartData } from "../../charts/pie-chart";
 import { ChartDataModelType } from "../../../models/spaces/charts/chart-data";
 import { observer, inject } from "mobx-react";
 import { BaseComponent } from "../../base";
@@ -67,7 +68,8 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
         </div>
         <div className="charts">
           <div className={topChartClassName}>
-            <div>Pie chart</div>
+            { this.renderPieChart(true) }
+            { this.renderPieChart(false) }
           </div>
           <div className={bottomChartClassName}>
             <Chart
@@ -78,6 +80,35 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
               height={this.state.lineChartHeight}
             />
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  private renderPieChart = (initialData: boolean) => {
+    if (!this.props.chartData.dataSets.length || !this.props.chartData.dataSets[0].dataPoints.length) {
+      return (<div />);
+    }
+
+    let pointIdx = 0;
+    let date = 0;
+    if (!initialData && this.props.chartData.dataSets[0] && this.props.chartData.dataSets[0].dataPoints.length > 0) {
+      pointIdx = this.props.chartData.dataSets[0].dataPoints.length - 1;
+      date = Math.floor(this.props.chartData.dataSets[0].dataPoints[pointIdx].a1);
+    }
+    const text = initialData ? "Initial: 0 months" : `Current: ${date} months`;
+    // create single array of points, either the first of each dataset or the last
+    const data = this.props.chartData.dataSets.filter(ds => ds.display).map(ds => ({
+      label: ds.name,
+      value: ds.dataPoints[(initialData || !ds.dataPoints.length) ? 0 : ds.dataPoints.length - 1].a2,
+      color: ds.color as string
+    })) as PieChartData[];
+
+    return (
+      <div className="pie">
+        <div className="label">{ text }</div>
+        <div>
+          <PieChart data={data}/>
         </div>
       </div>
     );

@@ -26,9 +26,10 @@
 
     .title
       font-family: 'Arial'
-      font-size: 14
-      font-style: 'normal'
-      font-color: '#434e56'
+      font-size: 14px
+      font-style: normal
+      color: #434e56
+      text-align: center
 
     .button-holder
       width: 113px
@@ -68,6 +69,8 @@
     position: relative
 
     &>div
+      position: absolute
+      width: 100%
       flex-grow: 1
       transition: all 0.5s
 
@@ -83,8 +86,6 @@
           opacity: 0
     .bottom-chart
       height: 100%
-      width: 100%
-      position: absolute
       bottom: 0px
       overflow: hidden
       &.small
@@ -94,3 +95,28 @@
         position: absolute
         bottom: 59px
 
+    .top-chart
+      display: flex
+      justify-content: space-around
+
+      .pie
+        display: flex
+        align-items: center
+        .label
+          width: 48px
+          height: 48px
+          padding-right: 9px
+          font-family: 'Arial'
+          font-size: 14px
+          font-style: normal
+          color: #434e56
+          text-align: center
+
+        .pie-chart
+          border: 2px solid
+          border-radius: 100px
+
+        &:nth-of-type(1) .pie-chart
+          border-color: $color-simdata-amber-light1
+        &:nth-of-type(2) .pie-chart
+          border-color: $color-simdata-amber-dark1
