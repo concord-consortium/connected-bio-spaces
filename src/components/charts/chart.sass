@@ -54,3 +54,43 @@
         .icon
           width: 20px
           height: 20px
+
+      &.active, &.active icon
+        background-color: $color-simdata-amber-dark1
+        fill: $color-white
+        &:active:not(.disabled)
+          fill: $color-simdata-amber-dark2
+
+  .charts
+    display: flex
+    flex-direction: column
+    height: 100%
+    position: relative
+
+    &>div
+      flex-grow: 1
+      transition: all 0.5s
+
+    .top-chart
+      height: 30%
+      &>div
+        transition: all 0.5s
+        opacity: 1
+      &.hidden
+        flex-grow: 0
+        height: 0%
+        &>div
+          opacity: 0
+    .bottom-chart
+      height: 100%
+      width: 100%
+      position: absolute
+      bottom: 0px
+      overflow: hidden
+      &.small
+        height: 70%
+
+      .chart-container
+        position: absolute
+        bottom: 59px
+

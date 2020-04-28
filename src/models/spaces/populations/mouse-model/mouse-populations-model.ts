@@ -193,6 +193,7 @@ export const MousePopulationsModel = types
     "showHeteroStack": false,
     "chartData": types.optional(ChartDataModel, chartData),
     "showMaxPoints": false,
+    "showPieChart": false,
     "enableColorChart": true,
     "enableGenotypeChart": true,
     "enableAllelesChart": true,
@@ -392,6 +393,9 @@ export const MousePopulationsModel = types
           } else {
             displayRecentPoints();
           }
+        },
+        toggleShowPieChart() {
+          self.showPieChart = !self.showPieChart;
         },
         setShowSexStack(show: boolean) {
           self.showSexStack = show;
