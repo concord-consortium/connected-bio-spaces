@@ -20,6 +20,9 @@
 
     div
       flex: 1
+      padding: 5px
+      &:nth-of-type(3)>div
+        float: right
 
     .title
       font-family: 'Arial'
@@ -33,6 +36,7 @@
       box-sizing: border-box
       background-color: $color-simdata-amber-light2
       color: $color-simdata-amber-dark2
+      fill: $color-simdata-amber-dark2
       border-radius: 5px
       border: 2px solid $color-simdata-amber
       &:hover:not(.disabled)
@@ -40,3 +44,13 @@
       &:active:not(.disabled)
         background-color: $color-simdata-amber-dark1
         color: $color-white
+        fill: $color-white
+
+      &.small-icon
+        width: 30px
+        height: 30px
+        padding: 0
+
+        .icon
+          width: 20px
+          height: 20px

@@ -24,6 +24,13 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
     return (
       <div className="chart-container">
         <div className="chart-header">
+          <div>
+            <div className="button-holder small-icon">
+              <svg className="icon">
+                <use xlinkHref="#icon-pie-chart" />
+              </svg>
+            </div>
+          </div>
           <div className="title">
             { chartData.name }
           </div>
