@@ -6,6 +6,7 @@ import { observer, inject } from "mobx-react";
 import { BaseComponent } from "../../base";
 import { MousePopulationsModelType } from "../../../models/spaces/populations/mouse-model/mouse-populations-model";
 import { onAction } from "mobx-state-tree";
+import { IDisposer } from "mobx-state-tree/dist/utils";
 
 const MAX_LINE_CHART_HEIGHT = 400;
 const MIN_LINE_CHART_HEIGHT = 250;
@@ -25,19 +26,28 @@ interface IState {
 @observer
 export class PopulationsCharts extends BaseComponent<IProps, IState>  {
 
-  public state = {
-    lineChartHeight: MAX_LINE_CHART_HEIGHT
-  };
+  private disposer: IDisposer;
 
   public constructor(props: IProps) {
     super(props);
 
-    onAction(this.stores.populations.model, call => {
-        if (call.name === "toggleShowPieChart") {
-          lastAnimationTime = Date.now();
-          requestAnimationFrame(this.animateLineChartHeight);
-        }
+    const model = this.stores.populations.model as MousePopulationsModelType;
+    this.state = {
+      lineChartHeight: model.showPieChart ? MIN_LINE_CHART_HEIGHT : MAX_LINE_CHART_HEIGHT
+    };
+  }
+
+  public componentDidMount() {
+    this.disposer = onAction(this.stores.populations.model, call => {
+      if (call.name === "toggleShowPieChart") {
+        lastAnimationTime = Date.now();
+        requestAnimationFrame(this.animateLineChartHeight);
+      }
     });
+  }
+
+  public componentWillUnmount() {
+    if (this.disposer) this.disposer();
   }
 
   public render() {
