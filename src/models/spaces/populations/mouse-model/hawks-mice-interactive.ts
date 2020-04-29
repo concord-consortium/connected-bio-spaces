@@ -6,8 +6,8 @@ import { hawkSpecies } from "./hawks";
 
 let environmentColor: EnvironmentColorType;
 
-function createEnvironment(color: EnvironmentColorType) {
-  return new Environment({
+function createEnvironment(color: EnvironmentColorType, mouseSpecies: Species) {
+  const environment = new Environment({
     width: 450,
     height: 480,
     viewWidth: 900,
@@ -16,32 +16,8 @@ function createEnvironment(color: EnvironmentColorType) {
     wrapNorthSouth: false,
     depthPerception : true
   });
-}
 
-// all numbers below are floats representing percentages out of 100
-interface IInitialColorSpecs {
-  white: number;
-  tan: number;
-}
-
-export class HawksMiceInteractive extends Interactive {
-  public setup: () => void;
-  public addInitialHawksPopulation: (num: number) => void;
-  public removeHawks: () => void;
-  public switchEnvironments: (includeNeutralEnvironment: boolean) => void;
-  public getData: () => any;
-  public removeAgent: (agent: Agent) => void;
-  public enterInspectMode: () => void;
-  public exitInspectMode: () => void;
-}
-
-export function createInteractive(model: MousePopulationsModelType) {
-  const mouseSpecies = getMouseSpecies(model);
-
-  environmentColor = model.environment;
-  const env = createEnvironment(environmentColor);
-
-  env.addRule(new Rule({
+  environment.addRule(new Rule({
     action: (agent: Agent) => {
         let brownness;
         if (agent.species === mouseSpecies) {
@@ -61,6 +37,39 @@ export function createInteractive(model: MousePopulationsModelType) {
       }
     }
   ));
+
+  return environment;
+}
+
+// all numbers below are floats representing percentages out of 100
+interface IInitialColorSpecs {
+  white: number;
+  tan: number;
+}
+
+export interface EnvironmentState {
+  agents: Agent[];
+  date: number;
+}
+
+export class HawksMiceInteractive extends Interactive {
+  public setup: () => void;
+  public addInitialHawksPopulation: (num: number) => void;
+  public removeHawks: () => void;
+  public switchEnvironments: (includeNeutralEnvironment: boolean) => void;
+  public getData: () => any;
+  public removeAgent: (agent: Agent) => void;
+  public enterInspectMode: () => void;
+  public exitInspectMode: () => void;
+  public saveAndDestroyEnvironment: () => EnvironmentState;
+  public loadEnvironment: (state: EnvironmentState) => void;
+}
+
+export function createInteractive(model: MousePopulationsModelType) {
+  const mouseSpecies = getMouseSpecies(model);
+
+  environmentColor = model.environment;
+  let env = createEnvironment(environmentColor, mouseSpecies);
 
   const interactive = new HawksMiceInteractive({
     environment: env,
@@ -177,7 +186,7 @@ export function createInteractive(model: MousePopulationsModelType) {
 
   Events.addEventListener(Environment.EVENTS.RESET, interactive.setup);
 
-  function addAgent(species: Species, properties: [], traits: Trait[], location?: Rect) {
+  function addAgent(species: Species, properties: [], traits: Trait[], location?: Rect, age?: number) {
     const agent = species.createAgent(traits);
     if ((agent as any).setTypeDescription) {
       (agent as any).setTypeDescription();
@@ -193,18 +202,8 @@ export function createInteractive(model: MousePopulationsModelType) {
       agent.set(prop[0], prop[1]);
     }
 
-    agent.set("age", Math.round(Math.random() * 60) + 70);
+    agent.set("age", age || Math.round(Math.random() * 60) + 70);
     env.addAgent(agent);
-  }
-
-  function copyColorTraitOfRandomMouse(allMice: Agent[]) {
-    const randomMouse = allMice[Math.floor(Math.random() * allMice.length)];
-    const alleleString = randomMouse.organism.alleles;
-    return new Trait({
-      name: "color",
-      default: alleleString,
-      isGenetic: true
-    });
   }
 
   function createColorTraitByGenotype(alleleString: string) {
@@ -233,6 +232,24 @@ export function createInteractive(model: MousePopulationsModelType) {
         break;
     }
     return createColorTraitByGenotype(alleleString);
+  }
+
+  function getLocationNearAgent(agent: Agent): Rect {
+    const loc = agent.getLocation();
+    return {
+      x: loc.x - 5,
+      y: loc.y - 5,
+      width: 10,
+      height: 10
+    };
+  }
+
+  function getLocationOfRandomMouse(allMice: Agent[], color?: MouseColors): Rect | undefined {
+    const miceOfColor = color ? allMice.filter(m => m.get("color") === color) : allMice;
+    if (miceOfColor) {
+      const randomMouse = miceOfColor[Math.floor(Math.random() * miceOfColor.length)];
+      return getLocationNearAgent(randomMouse);
+    }
   }
 
   function addInitialHawksPopulation(num: number) {
@@ -314,43 +331,44 @@ export function createInteractive(model: MousePopulationsModelType) {
     const numMice = allMice.length;
     if (numMice < 5) {
       for (let i = 0; i < 4; i++) {
-        addAgent(mouseSpecies, [], [copyColorTraitOfRandomMouse(allMice)]);
+        const randomMouse = allMice[Math.floor(Math.random() * allMice.length)];
+        const alleleString = randomMouse.organism.alleles;
+        const colorTrait = new Trait({
+          name: "color",
+          default: alleleString,
+          isGenetic: true
+        });
+        addAgent(mouseSpecies, [], [colorTrait], getLocationNearAgent(randomMouse), 1);
       }
     }
     countMice(allMice);
 
     // If there are no specific selective pressures (ie there are no hawks, or the hawks eat
     // everything with equal probability), the population should be 'stabilized', so that no
-    // color of mouse dies out completely
-    if ((!addedHawks || environmentColor === "neutral")) {
-      // Make sure there are *some* white mice to ensure white mice are possible
-      if (numWhite > 0 && numWhite < 10) {
-        for (let i = 0; i < 3; i++) {
-          addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:C,b:C")]);
+    // color of mouse dies out completely.
+    // Even if we have added hawks, if there are any of the "correct" color mice in an
+    // environment, we want to make sure they don't die out.
+    // If there are mutations in the model, we ignore all this.
+    if (model.chanceOfMutation === 0) {
+      if ((!addedHawks || environmentColor === "white") && numWhite > 0 && numWhite < 2) {
+        for (let i = 0; i < 2; i++) {
+          addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:C,b:C")],
+            getLocationOfRandomMouse(allMice, "white"), 1);
         }
       }
 
-      if (numBrown > 0 && numBrown < 10) {
-        for (let i = 0; i < 3; i++) {
-          addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:R,b:R")]);
+      if ((!addedHawks || environmentColor === "neutral") && numTan > 0 && numTan < 2) {
+        for (let i = 0; i < 2; i++) {
+          addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:C,b:R")],
+            getLocationOfRandomMouse(allMice, "white"), 1);
         }
       }
-    }
 
-    // Insurance: Ensure there are always at least two rabbits of the correct color.
-    // We need to catch it before there are zero. Once there are zero, we can't create any out
-    // of thin air. (E.g. user eliminated one population then changed environment)
-    if (environmentColor === "white" && numWhite > 1 && numWhite < 3) {
-      for (let i = 0; i < 2; i++) {
-        addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:C,b:C")]);
-      }
-    } else if (environmentColor === "neutral" && numTan > 1 && numTan < 3) {
-      for (let i = 0; i < 2; i++) {
-        addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:C,b:R")]);
-      }
-    } else if (environmentColor === "brown" && numBrown > 1 && numBrown < 3) {
-      for (let i = 0; i < 2; i++) {
-        addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:R,b:R")]);
+      if ((!addedHawks || environmentColor === "brown") && numBrown > 0 && numBrown < 2) {
+        for (let i = 0; i < 2; i++) {
+          addAgent(mouseSpecies, [], [createColorTraitByGenotype("a:R,b:R")],
+            getLocationOfRandomMouse(allMice, "white"), 1);
+        }
       }
     }
 
@@ -367,5 +385,25 @@ export function createInteractive(model: MousePopulationsModelType) {
       });
     }
   });
+
+  interactive.saveAndDestroyEnvironment = () => {
+    const state = {
+      agents: interactive.environment.agents,
+      date: interactive.environment.date,
+    };
+    delete interactive.environment;
+    return state;
+  };
+
+  // When we re-create the environment, we will be using many of the properties from this
+  // model, such as the environment color, various flags, etc. So there are only a few things
+  // that need to be explicitly loaded back in.
+  interactive.loadEnvironment = (state: EnvironmentState) => {
+    env = createEnvironment(environmentColor, mouseSpecies);
+    interactive.environment = env;
+    state.agents.forEach(agent => env.addAgent(agent));
+    interactive.environment.date = state.date;
+  };
+
   return interactive;
 }

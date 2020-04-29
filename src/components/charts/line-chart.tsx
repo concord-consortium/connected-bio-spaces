@@ -41,6 +41,9 @@ const defaultOptions: ChartOptions = {
   legend: {
     display: true,
     position: "bottom",
+    labels: {
+      boxWidth: 29
+    }
   },
   maintainAspectRatio: false,
   scales: {

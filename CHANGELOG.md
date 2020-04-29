@@ -1,4 +1,18 @@
 # Changelog
+## Version 1.1.0 - released April 29, 2020
+
+- Add population level right panel inspection
+- Add genotype inspection visibility authoring
+- Fix signal protein getting stuck in receptor
+- Fix population label visibility
+- Improve signal protein visibility
+- Improve appearance of mice in population sim caused by mutation
+- Save population state within a single session
+- Fix substance addition on touch devices
+- Fix graph label interaction on touch devices
+- Fix mouse collection on touch devices
+- Fix layout issues on touch devices
+
 ## Version 1.0.12 - released April 17, 2020
 
 - Fix nucleus animation for same org in two windows

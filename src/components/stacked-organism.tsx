@@ -18,9 +18,6 @@ interface IProps {
 }
 
 const path = "assets/curriculum/mouse/populations/";
-const femaleSexImage =  path + "female-stack.png";
-const maleSexImage =    path + "male-stack.png";
-const heteroImage =     path + "heterozygous-stack.png";
 const selectionImage =  path + "select-stack.png";
 
 export const StackedOrganism: React.SFC<IProps> = (props) => {
@@ -28,8 +25,7 @@ export const StackedOrganism: React.SFC<IProps> = (props) => {
   const gameteViewClass = "gamete-view-stack " + (props.showGameteSelection ? "show" : "");
   const inspectClass = "inspect-stack";
   const heteroClass = "hetero-stack " + ((props.showHetero && props.organism.isHeterozygote) ? "show" : "");
-  const sexImage = props.organism.sex === "female" ? femaleSexImage : maleSexImage;
-  const sexClass = "sex-stack " + (props.showSex ? "show" : "");
+  const sexClass = "sex-stack " + props.organism.sex + (props.showSex ? " show" : "");
   const imgClasses = "organism-image " + (props.flipped ? "flip" : "");
   const label = genotypeHTMLLabel(props.organism.genotype);
   const labelClass = "genotype-label " + (props.isOffspring ? "child-mouse" : "parent-mouse");
@@ -40,6 +36,18 @@ export const StackedOrganism: React.SFC<IProps> = (props) => {
   };
   const innerSize = {
     height: props.height * 0.45,
+  };
+  const normalHeight = 150;
+  const normalBorderWidth = 4;
+  const sexSize = {
+    height: props.height * .9,
+    width: props.height * .9,
+    borderWidth: (normalBorderWidth * props.height / normalHeight)
+  };
+  const heteroSize = {
+    height: props.height * .78,
+    width: props.height * .78,
+    borderWidth: (normalBorderWidth * props.height / normalHeight)
   };
 
   return (
@@ -54,8 +62,8 @@ export const StackedOrganism: React.SFC<IProps> = (props) => {
             key={`org-image-${i}`} data-test={`org-image-${i}`} />
         )
       }
-      <img src={heteroImage} className={heteroClass} style={fullSize} data-test="hetero-image" />
-      <img src={sexImage} className={sexClass} style={fullSize} data-test="sex-image" />
+      <div className={sexClass} style={sexSize}/>
+      <div className={heteroClass} style={heteroSize}/>
     </div>
   );
 
