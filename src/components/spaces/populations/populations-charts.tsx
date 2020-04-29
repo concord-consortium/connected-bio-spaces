@@ -108,11 +108,15 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
     }
     const text = initialData ? "Initial: 0 months" : `Current: ${date} months`;
     // create single array of points, either the first of each dataset or the last
-    let data = this.props.chartData.dataSets.filter(ds => ds.display).map(ds => ({
-      label: ds.name,
-      value: ds.dataPoints[(initialData || !ds.dataPoints.length) ? 0 : ds.dataPoints.length - 1].a2,
-      color: ds.color as string
-    })) as PieChartData[];
+    let data = this.props.chartData.dataSets.filter(ds => ds.display).map(ds => {
+        const point = ds.dataPoints[(initialData || !ds.dataPoints.length) ? 0 : ds.dataPoints.length - 1];
+        const value = point && !isNaN(point.a2) ? point.a2 : 0;
+        return {
+          label: ds.name,
+          value,
+          color: ds.color as string
+        };
+    }) as PieChartData[];
     data = data.filter(d => d.value);
 
     return (
