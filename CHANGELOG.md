@@ -1,4 +1,18 @@
 # Changelog
+## Version 1.1.0 - released April 29, 2020
+
+- Fix nucleus animation for same org in two windows
+- Add mutations, inheritance labels; improve spacing
+- Show data panels by default if no instructions
+- Updates and improvements to populations graph
+- Disable zoom if either organism row is zooming
+- Finish zoom-in animation if user tabs away
+- Clear org image when org is removed from row
+- Keep right panel as-is when removing org from row
+- Fix simultaneous org zoom
+- Don't add g-proteins until view has loaded
+- Delay moving protein body for a half second
+
 ## Version 1.0.12 - released April 17, 2020
 
 - Fix nucleus animation for same org in two windows
