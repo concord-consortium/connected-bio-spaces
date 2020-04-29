@@ -24,6 +24,7 @@ export const ChartAnnotationModel = types
     label: types.maybe(types.string),
     labelColor: types.optional(types.string, "white"),
     labelBackgroundColor: types.optional(types.string, "rgba(0,0,0,0.8)"),
+    labelHighlightColor: types.optional(types.string, "rgba(0,0,0,0.8)"),
     labelXOffset: types.optional(types.number, 0),
     labelYOffset: types.optional(types.number, 0),
     // if present, will add mouse rollover and click handlers
@@ -37,11 +38,16 @@ export const ChartAnnotationModel = types
     yMin: types.maybe(types.number)
   })
   .volatile(self => ({
-    showingExpandLabel: false
+    showingExpandLabel: false,
+    showingHighlight: false
   }))
   .actions(self => ({
     setShowingExpandLabel: (val: boolean) => {
       self.showingExpandLabel = val;
+      self.showingHighlight = val ? self.showingHighlight : false;
+    },
+    setHighlight: (val: boolean) => {
+      self.showingHighlight = val;
     }
   }))
   .views(self => ({
@@ -97,7 +103,7 @@ export const ChartAnnotationModel = types
           xAdjust,
           yAdjust: 305 - self.labelYOffset,
           fontColor: self.labelColor,
-          backgroundColor: self.labelBackgroundColor
+          backgroundColor: self.showingHighlight ? self.labelHighlightColor : self.labelBackgroundColor,
         };
       }
 
@@ -110,8 +116,8 @@ export const ChartAnnotationModel = types
           self.setShowingExpandLabel(val);
           this.chartInstance.update();
         };
-        formatted.onMouseenter = () => self.setShowingExpandLabel(true);
-        formatted.onMouseleave = () => self.setShowingExpandLabel(false);
+        formatted.onMouseenter = () => self.setHighlight(true);
+        formatted.onMouseleave = () => self.setHighlight(false);
         formatted.onClick = () => self.setShowingExpandLabel(!self.showingExpandLabel);
       }
 

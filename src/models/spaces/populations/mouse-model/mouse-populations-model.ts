@@ -9,15 +9,18 @@ import { BackpackMouse, BackpackMouseType } from "../../../backpack-mouse";
 const dataColors = {
   white: {
     mice: "#f4ce83",
-    environment: "rgb(251,235,205)"
+    environment: "rgb(251,235,205)",
+    environmentHighlight: "rgba(251,235,205,.7)"
   },
   neutral: {
     mice: "#db9e26",
-    environment: "rgb(241,216,168)"
+    environment: "rgb(241,216,168)",
+    environmentHighlight: "rgba(241,216,168, .7)"
   },
   brown: {
     mice: "#795423",
-    environment: "rgb(201,187,167)"
+    environment: "rgb(201,187,167)",
+    environmentHighlight: "rgba(201,187,167,.7)"
   }
 };
 
@@ -290,7 +293,8 @@ export const MousePopulationsModel = types
         labelXOffset: -15,
         expandOffset: -27,
         labelColor: "black",
-        labelBackgroundColor: dataColors[color].environment
+        labelBackgroundColor: dataColors[color].environment,
+        labelHighlightColor: dataColors[color].environmentHighlight
       });
       self.chartData.addAnnotation(colorAnnotation);
       lastEnvironmentColorAnnotationDate = date;
