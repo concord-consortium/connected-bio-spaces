@@ -292,6 +292,7 @@ export const MousePopulationsModel = types
         label: "   ",
         expandLabel: EnvironmentColorNames[color],
         labelXOffset: -15,
+        labelYOffset: 120,
         expandOffset: -27,
         labelColor: "black",
         labelBackgroundColor: dataColors[color].environment,
@@ -305,7 +306,7 @@ export const MousePopulationsModel = types
     function addSettingsAnnotation(label: string, labelXOffset: number) {
       const now = interactive ? interactive.environment.date : 0;
       const timeSinceLastAnnotation = now - lastSettingsAnnotationDate;
-      const labelYOffset = timeSinceLastAnnotation < 30 ? 55 : 30;
+      const labelYOffset = timeSinceLastAnnotation < 30 ? 170 : 145;
 
       self.chartData.addAnnotation(ChartAnnotationModel.create({
         type: "verticalLine",

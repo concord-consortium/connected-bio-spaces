@@ -7,7 +7,8 @@ export const ChartDataModel = types
     name: types.string,
     dataSets: types.array(ChartDataSetModel),
     labels: types.array(types.array(types.string)),
-    annotations: types.array(ChartAnnotationModel)
+    annotations: types.array(ChartAnnotationModel),
+    viewHeight: 400,
   })
   .views(self => ({
     get visibleDataSets() {
@@ -105,6 +106,7 @@ export const ChartDataModel = types
     }
 
     function addAnnotation(annotation: ChartAnnotationType) {
+      annotation.setViewHeight(self.viewHeight);
       self.annotations.push(annotation);
     }
 
@@ -116,6 +118,12 @@ export const ChartDataModel = types
       self.annotations.clear();
     }
 
+    function setViewHeight(height: number) {
+      self.viewHeight = height;
+      // inform existing annotations of max height:
+      self.annotations.forEach(a => a.setViewHeight(height));
+    }
+
     return {
       actions: {
         allData,
@@ -123,7 +131,8 @@ export const ChartDataModel = types
         setDataSetSubset,
         addAnnotation,
         removeAnnotation,
-        clearAnnotations
+        clearAnnotations,
+        setViewHeight,
       }
     };
   });

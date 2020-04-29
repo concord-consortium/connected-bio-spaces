@@ -32,9 +32,12 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
     super(props);
 
     const model = this.stores.populations.model as MousePopulationsModelType;
+    const lineChartHeight = model.showPieChart ? MIN_LINE_CHART_HEIGHT : MAX_LINE_CHART_HEIGHT;
     this.state = {
-      lineChartHeight: model.showPieChart ? MIN_LINE_CHART_HEIGHT : MAX_LINE_CHART_HEIGHT
+      lineChartHeight
     };
+    setTimeout(() =>
+    props.chartData.setViewHeight(lineChartHeight), 2000);
   }
 
   public componentDidMount() {
@@ -129,6 +132,11 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
     );
   }
 
+  private setChartHeight(lineChartHeight: number) {
+    this.setState({lineChartHeight});
+    this.props.chartData.setViewHeight(lineChartHeight);
+  }
+
   private animateLineChartHeight = () => {
     const model = this.stores.populations.model as MousePopulationsModelType;
     const height = this.state.lineChartHeight;
@@ -141,10 +149,10 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
     lastAnimationTime = now;
 
     if (model.showPieChart && height > MIN_LINE_CHART_HEIGHT) {
-      this.setState({lineChartHeight: Math.max(height - sizeStep, MIN_LINE_CHART_HEIGHT)});
+      this.setChartHeight(Math.max(height - sizeStep, MIN_LINE_CHART_HEIGHT));
       requestAnimationFrame(this.animateLineChartHeight);
     } else if (!model.showPieChart && height < MAX_LINE_CHART_HEIGHT) {
-      this.setState({lineChartHeight: Math.min(height + sizeStep, MAX_LINE_CHART_HEIGHT)});
+      this.setChartHeight(Math.min(height + sizeStep, MAX_LINE_CHART_HEIGHT));
       requestAnimationFrame(this.animateLineChartHeight);
     }
   }
