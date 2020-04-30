@@ -35,7 +35,9 @@ export const ChartAnnotationModel = types
     xMin: types.maybe(types.number),
     xMax: types.maybe(types.number),
     yMax: types.maybe(types.number),
-    yMin: types.maybe(types.number)
+    yMin: types.maybe(types.number),
+    // max height for annotations
+    viewHeight: 400,
   })
   .volatile(self => ({
     showingExpandLabel: false,
@@ -48,7 +50,10 @@ export const ChartAnnotationModel = types
     },
     setHighlight: (val: boolean) => {
       self.showingHighlight = val;
-    }
+    },
+    setViewHeight: (height: number) => {
+      self.viewHeight = height;
+    },
   }))
   .views(self => ({
     get formatted() {
@@ -101,7 +106,7 @@ export const ChartAnnotationModel = types
           enabled: true,
           content,
           xAdjust,
-          yAdjust: 305 - self.labelYOffset,
+          yAdjust:  self.viewHeight - self.labelYOffset,
           fontColor: self.labelColor,
           backgroundColor: self.showingHighlight ? self.labelHighlightColor : self.labelBackgroundColor,
         };

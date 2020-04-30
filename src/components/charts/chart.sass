@@ -3,10 +3,121 @@
 .chart-container
   width: 100%
   background-color: white
-  display: flex
 
   .line-chart-container
     display: flex
     flex-direction: column
     height: 100%
     width: 100%
+
+
+.populations .chart-container
+  .chart-header
+    width: 100%
+    display: flex
+    justify-content: space-between
+    align-items: center
+
+    div
+      flex: 1
+      padding: 5px
+      &:nth-of-type(3)>div
+        float: right
+
+    .title
+      font-family: 'Arial'
+      font-size: 14px
+      font-style: normal
+      color: #434e56
+      text-align: center
+
+    .button-holder
+      width: 113px
+      height: 30px
+      box-sizing: border-box
+      background-color: $color-simdata-amber-light2
+      color: $color-simdata-amber-dark2
+      fill: $color-simdata-amber-dark2
+      border-radius: 5px
+      border: 2px solid $color-simdata-amber
+      &:hover:not(.disabled)
+        background-color: $color-simdata-amber-light1
+      &:active:not(.disabled)
+        background-color: $color-simdata-amber-dark1
+        color: $color-white
+        fill: $color-white
+
+      &.small-icon
+        width: 30px
+        height: 30px
+        padding: 0
+
+        .icon
+          width: 20px
+          height: 20px
+
+      &.active, &.active icon
+        background-color: $color-simdata-amber-dark1
+        fill: $color-white
+        &:active:not(.disabled)
+          fill: $color-simdata-amber-dark2
+
+  .charts
+    display: flex
+    flex-direction: column
+    height: 100%
+    position: relative
+
+    &>div
+      position: absolute
+      width: 100%
+      flex-grow: 1
+      transition: all 0.5s
+
+    .top-chart
+      height: 30%
+      &>div
+        transition: all 0.5s
+        opacity: 1
+      &.hidden
+        pointer-events: none
+        flex-grow: 0
+        height: 0%
+        &>div
+          opacity: 0
+    .bottom-chart
+      height: 100%
+      bottom: 0px
+      overflow: hidden
+      &.small
+        height: 70%
+
+      .chart-container
+        position: absolute
+        bottom: 59px
+
+    .top-chart
+      display: flex
+      justify-content: space-around
+
+      .pie
+        display: flex
+        align-items: center
+        .label
+          width: 48px
+          height: 48px
+          padding-right: 9px
+          font-family: 'Arial'
+          font-size: 14px
+          font-style: normal
+          color: #434e56
+          text-align: center
+
+        .pie-chart
+          border: 2px solid
+          border-radius: 100px
+
+        &:nth-of-type(1) .pie-chart
+          border-color: $color-simdata-amber-light1
+        &:nth-of-type(2) .pie-chart
+          border-color: $color-simdata-amber-dark1

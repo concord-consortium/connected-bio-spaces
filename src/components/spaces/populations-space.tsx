@@ -4,9 +4,9 @@ import { BaseComponent, IBaseProps } from "../base";
 import { TwoUpDisplayComponent } from "../two-up-display";
 import { PopulationsComponent } from "./populations/populations-container";
 import { InstructionsComponent } from "../instructions";
-import { Chart } from "../charts/chart";
 import { RightPanelType } from "../../models/ui";
 import { InspectPanel } from "../inspect-panel";
+import { PopulationsCharts } from "./populations/populations-charts";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -24,9 +24,8 @@ export class PopulationsSpaceComponent extends BaseComponent<IProps, IState> {
         case "instructions":
           return <InstructionsComponent content={populations.instructions}/>;
         case "data":
-          return <Chart title="Population"
+          return <PopulationsCharts
                   chartData={populations.currentData}
-                  chartType={"line"}
                   isPlaying={populations.isPlaying}
                  />;
         case "information":

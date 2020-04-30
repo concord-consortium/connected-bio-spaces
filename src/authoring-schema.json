@@ -222,6 +222,10 @@
         "enableAllelesChart": {
           "title": "Enable alleles chart",
           "type": "boolean"
+        },
+        "enablePieChart": {
+          "title": "Enable pie charts",
+          "type": "boolean"
         }
       }
     },

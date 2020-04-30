@@ -12,6 +12,7 @@ interface IBarProps {
   width?: number;
   height?: number;
   barChartType: ChartType;
+  hideTitle?: boolean;
 }
 
 const defaultOptions: ChartOptions = {
@@ -147,6 +148,9 @@ export class BarChart extends React.Component<IBarProps> {
         }]
       }
     });
+    if (this.props.hideTitle) {
+      options.title!.display = false;
+    }
     const w = width ? width : 400;
     const h = height ? height : 400;
     if (barChartType === "bar") {

@@ -15,6 +15,7 @@ interface ILineProps {
   width?: number;
   height?: number;
   isPlaying: boolean;
+  hideTitle?: boolean;
 }
 
 interface ILineState { }
@@ -146,7 +147,6 @@ export class LineChart extends BaseComponent<ILineProps, ILineState> {
   public render() {
     const { chartData, width, height, isPlaying } = this.props;
     const chartDisplay = lineData(chartData);
-    const graphs: JSX.Element[] = [];
     const minMaxValues = chartData.minMaxAll;
     const options: ChartOptions = merge({}, defaultOptions, {
       title: {
@@ -200,24 +200,24 @@ export class LineChart extends BaseComponent<ILineProps, ILineState> {
         }
       }
     });
+    if (this.props.hideTitle) {
+      options.title!.display = false;
+    }
     const w = width ? width : 400;
     const h = height ? height : 400;
-    graphs.push(
-      <Scatter
-        key={3}
-        data={chartDisplay}
-        options={options}
-        height={h}
-        width={w}
-        redraw={true}
-        plugins={[ChartAnnotation]}
-      />
-    );
 
     return (
       <div className="line-chart-container">
         <div className="line-chart-container" data-test="line-chart">
-          {graphs}
+          <Scatter
+            key={`line-chart-${height}-${width}`}         // force re-render on size change
+            data={chartDisplay}
+            options={options}
+            height={h}
+            width={w}
+            redraw={true}
+            plugins={[ChartAnnotation]}
+          />
         </div>
         <LineChartControls chartData={chartData} isPlaying={isPlaying} />
       </div>

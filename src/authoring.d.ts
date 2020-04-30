@@ -35,6 +35,7 @@ export type TimeToShowBodySteps = number;
 export type EnableColorChart = boolean;
 export type EnableGenotypeChart = boolean;
 export type EnableAllelesChart = boolean;
+export type EnablePieChart = boolean;
 export type InstructionsAsMarkdown1 = string;
 export type ShowMysteryLocationLabels = boolean;
 export type ShowMysterySubstanceLabels = boolean;
@@ -85,6 +86,7 @@ export interface PopulationsModel {
   enableColorChart?: EnableColorChart;
   enableGenotypeChart?: EnableGenotypeChart;
   enableAllelesChart?: EnableAllelesChart;
+  enablePieChart?: EnablePieChart;
   [k: string]: any;
 }
 export interface InitialMousePopulation {
