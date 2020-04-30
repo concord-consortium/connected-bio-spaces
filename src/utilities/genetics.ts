@@ -23,8 +23,14 @@ export function createGamete(org: Organism): Gamete {
   };
 }
 
-export function fertilize(motherGamete: Gamete, fatherGamete: Gamete): Organism {
-  const genotype = `${motherGamete.allele}${fatherGamete.allele}` as "RR" | "RC" | "CR" | "CC";
+export function fertilize(motherGamete: Gamete, fatherGamete: Gamete, chanceOfMutations: number): Organism {
+  const mAllele = (Math.random() < chanceOfMutations)
+                  ? motherGamete.allele === "R" ? "C" : "R"
+                  : motherGamete.allele;
+  const fAllele = (Math.random() < chanceOfMutations)
+                  ? fatherGamete.allele === "R" ? "C" : "R"
+                  : fatherGamete.allele;
+  const genotype = `${mAllele}${fAllele}` as "RR" | "RC" | "CR" | "CC";
   const sex = fatherGamete.sexChromosome === "X" ? "female" : "male";
 
   return {
@@ -33,11 +39,11 @@ export function fertilize(motherGamete: Gamete, fatherGamete: Gamete): Organism 
   };
 }
 
-export function breed(mother: Organism, father: Organism): Organism {
+export function breed(mother: Organism, father: Organism, chanceOfMutations: number): Organism {
   const motherGamete = createGamete(mother);
   const fatherGamete = createGamete(father);
 
-  return fertilize(motherGamete, fatherGamete);
+  return fertilize(motherGamete, fatherGamete, chanceOfMutations);
 }
 
 export function genotypeHTMLLabel(genotype: string): string {
