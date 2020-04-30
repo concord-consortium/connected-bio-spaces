@@ -197,6 +197,7 @@ export const MousePopulationsModel = types
     "enableColorChart": true,
     "enableGenotypeChart": true,
     "enableAllelesChart": true,
+    "enablePieChart": false,
     "deadMice.chanceOfShowingBody": types.number,
     "deadMice.timeToShowBody": types.number,
     "inspectedMouse": types.maybe(BackpackMouse)

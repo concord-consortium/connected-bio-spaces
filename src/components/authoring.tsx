@@ -55,7 +55,8 @@ export const defaultAuthoring: ConnectedBioAuthoring = {
     },
     enableColorChart: true,
     enableGenotypeChart: true,
-    enableAllelesChart: true
+    enableAllelesChart: true,
+    enablePieChart: true,
   },
   organisms: {
     instructions: "",

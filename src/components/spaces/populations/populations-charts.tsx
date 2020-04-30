@@ -56,7 +56,7 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
   public render() {
     const { chartData, isPlaying } = this.props;
     const model = this.stores.populations.model as MousePopulationsModelType;
-    const { showMaxPoints, toggleShowMaxPoints, showPieChart, toggleShowPieChart } = model;
+    const { showMaxPoints, toggleShowMaxPoints, enablePieChart, showPieChart, toggleShowPieChart } = model;
     const toggleButtonTitle = showMaxPoints ? "Show Recent Data" : "Show All Data";
     const topChartClassName = "top-chart" + (showPieChart ? "" : " hidden");
     const bottomChartClassName = "bottom-chart" + (showPieChart ? " small" : "");
@@ -64,11 +64,13 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
       <div className="chart-container">
         <div className="chart-header">
           <div>
+            { enablePieChart &&
             <div className={"button-holder small-icon" + (showPieChart ? " active" : "")}>
               <svg className="icon" onClick={toggleShowPieChart}>
                 <use xlinkHref="#icon-pie-chart" />
               </svg>
             </div>
+            }
           </div>
           <div className="title">
             { chartData.name }
@@ -80,10 +82,12 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
           </div>
         </div>
         <div className="charts">
+          { enablePieChart &&
           <div className={topChartClassName}>
             { this.renderPieChart(true) }
             { this.renderPieChart(false) }
           </div>
+          }
           <div className={bottomChartClassName}>
             <Chart
               chartData={chartData}
