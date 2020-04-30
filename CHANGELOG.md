@@ -1,4 +1,8 @@
 # Changelog
+## Version 1.1.1 - released April 30, 2020
+
+- Improve fullscreen handling on iPad
+
 ## Version 1.1.0 - released April 29, 2020
 
 - Add population level right panel inspection
