@@ -23,7 +23,7 @@ describe("chart annotations", () => {
         enabled: true,
         position: "bottom",
         xAdjust: 0,
-        yAdjust: 305,
+        yAdjust: 400,
         backgroundColor: "rgba(0,0,0,0.8)",
         fontColor: "white"
       },
@@ -53,7 +53,7 @@ describe("chart annotations", () => {
         enabled: true,
         position: "right",
         xAdjust: 10,
-        yAdjust: 305,
+        yAdjust: 400,
         backgroundColor: "rgba(0,0,0,0.8)",
         fontColor: "white"
       },
