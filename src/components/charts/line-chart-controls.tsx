@@ -13,6 +13,7 @@ import "rc-slider/assets/index.css";
 interface IChartControlProps {
   chartData: ChartDataModelType;
   isPlaying: boolean;
+  onDragChange: (value: number) => void;
 }
 
 interface IChartControlState {
@@ -78,20 +79,12 @@ export class LineChartControls extends BaseComponent<IChartControlProps, IChartC
   }
 
   private handleDragChange = (value: number) => {
-    const { chartData } = this.props;
+    const { chartData, onDragChange } = this.props;
 
-    // slider covers whole dataset
-    // retrieve maxPoints for subset based on percentage along of the slider
-    const sliderPercentage = value / chartData.pointCount;
-    const dataRangeMax = chartData.pointCount - chartData.maxPoints;
-
-    if (dataRangeMax > 0) {
-      const startIdx = Math.round(sliderPercentage * dataRangeMax);
-      chartData.setDataSetSubset(startIdx, chartData.maxPoints);
-      this.setState({
-        scrubberPosition: value,
-        scrubberMax: chartData.pointCount
-      });
-    }
+    this.setState({
+      scrubberPosition: value,
+      scrubberMax: chartData.pointCount
+    });
+    onDragChange(value);
   }
 }

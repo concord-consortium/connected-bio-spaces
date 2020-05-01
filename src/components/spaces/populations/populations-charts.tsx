@@ -95,6 +95,7 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
               isPlaying={isPlaying}
               hideTitle={true}
               height={this.state.lineChartHeight}
+              onLineChartSliderDragChange={this.handleSliderDragChange}
             />
           </div>
         </div>
@@ -159,5 +160,17 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
       this.setChartHeight(Math.min(height + sizeStep, MAX_LINE_CHART_HEIGHT));
       requestAnimationFrame(this.animateLineChartHeight);
     }
+  }
+
+  private handleSliderDragChange = (value: number) => {
+    const { chartData } = this.props;
+
+    // slider covers whole dataset
+    // retrieve maxPoints for subset based on percentage along of the slider
+    const dataRangeMax = chartData.pointCount - chartData.maxPoints;
+
+    const sliderPercentage = value / chartData.pointCount;
+    const startIdx = Math.round(sliderPercentage * dataRangeMax);
+    chartData.setDataSetSubset(startIdx, chartData.maxPoints);
   }
 }
