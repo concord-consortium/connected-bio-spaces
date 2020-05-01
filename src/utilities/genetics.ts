@@ -11,9 +11,12 @@ export interface Gamete {
   sexChromosome: "X" | "Y";
 }
 
-export function createGamete(org: Organism): Gamete {
+export function createGamete(org: Organism, chanceOfMutations: number): Gamete {
   const alleles = org.genotype.split("");
-  const allele = alleles[Math.round(Math.random())] as "R" | "C";
+  const orgAllele = alleles[Math.round(Math.random())] as "R" | "C";
+  const allele = (Math.random() < chanceOfMutations)
+                      ? orgAllele === "R" ? "C" : "R"
+                      : orgAllele;
   const sexChromosome = org.sex === "female"
     ? "X"
     : Math.random() < 0.5 ? "X" : "Y";
@@ -23,14 +26,8 @@ export function createGamete(org: Organism): Gamete {
   };
 }
 
-export function fertilize(motherGamete: Gamete, fatherGamete: Gamete, chanceOfMutations: number): Organism {
-  const mAllele = (Math.random() < chanceOfMutations)
-                  ? motherGamete.allele === "R" ? "C" : "R"
-                  : motherGamete.allele;
-  const fAllele = (Math.random() < chanceOfMutations)
-                  ? fatherGamete.allele === "R" ? "C" : "R"
-                  : fatherGamete.allele;
-  const genotype = `${mAllele}${fAllele}` as "RR" | "RC" | "CR" | "CC";
+export function fertilize(motherGamete: Gamete, fatherGamete: Gamete): Organism {
+  const genotype = `${motherGamete.allele}${fatherGamete.allele}` as "RR" | "RC" | "CR" | "CC";
   const sex = fatherGamete.sexChromosome === "X" ? "female" : "male";
 
   return {
@@ -40,10 +37,10 @@ export function fertilize(motherGamete: Gamete, fatherGamete: Gamete, chanceOfMu
 }
 
 export function breed(mother: Organism, father: Organism, chanceOfMutations: number): Organism {
-  const motherGamete = createGamete(mother);
-  const fatherGamete = createGamete(father);
+  const motherGamete = createGamete(mother, chanceOfMutations);
+  const fatherGamete = createGamete(father, chanceOfMutations);
 
-  return fertilize(motherGamete, fatherGamete, chanceOfMutations);
+  return fertilize(motherGamete, fatherGamete);
 }
 
 export function genotypeHTMLLabel(genotype: string): string {
