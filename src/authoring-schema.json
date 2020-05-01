@@ -264,6 +264,18 @@
           "title": "Instructions (as markdown)",
           "type": "string"
         },
+        "enableStudentControlOfMutations": {
+          "title": "Enable student mutation control",
+          "type": "boolean"
+        },
+        "breedWithMutations": {
+          "title": "Breed with mutations",
+          "type": "boolean"
+        },
+        "chanceOfMutations": {
+          "title": "Chance of mutations (%)",
+          "type": "number"
+        },
         "enableInspectGametes": {
           "title": "Enable inspect gametes button",
           "type": "boolean"

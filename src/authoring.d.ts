@@ -42,6 +42,9 @@ export type ShowMysterySubstanceLabels = boolean;
 export type AllowZoomingToReceptor = boolean;
 export type AllowZoomingToNucleus = boolean;
 export type InstructionsAsMarkdown2 = string;
+export type EnableStudentMutationControl1 = boolean;
+export type BreedWithMutations1 = boolean;
+export type ChanceOfMutations1 = number;
 export type EnableInspectGametesButton = boolean;
 export type EnableMouseFurColorPieChart = boolean;
 export type EnableMouseGenotypesPieChart = boolean;
@@ -123,6 +126,9 @@ export interface OrganismModel {
 }
 export interface BreedingModel {
   instructions?: InstructionsAsMarkdown2;
+  enableStudentControlOfMutations?: EnableStudentMutationControl1;
+  breedWithMutations?: BreedWithMutations1;
+  chanceOfMutations?: ChanceOfMutations1;
   enableInspectGametes?: EnableInspectGametesButton;
   enableColorChart?: EnableMouseFurColorPieChart;
   enableGenotypeChart?: EnableMouseGenotypesPieChart;

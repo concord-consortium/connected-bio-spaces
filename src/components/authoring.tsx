@@ -67,6 +67,9 @@ export const defaultAuthoring: ConnectedBioAuthoring = {
   },
   breeding: {
     instructions: "",
+    enableStudentControlOfMutations: false,
+    breedWithMutations: false,
+    chanceOfMutations: 2,
     enableInspectGametes: true,
     enableColorChart: true,
     enableGenotypeChart: true,

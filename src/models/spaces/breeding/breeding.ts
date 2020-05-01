@@ -130,11 +130,11 @@ export const NestPair = types.model({
       self.hasBeenVisited = true;     // can't be set false
     }
   },
-  breedLitter(litterSize: number) {
+  breedLitter(litterSize: number, chanceOfMutations: number) {
     const litter: BackpackMouseType[] = [];
     const positions: number[] = [];
     for (let i = 0; i < litterSize; i++) {
-      const child = breed(self.mother, self.father);
+      const child = breed(self.mother, self.father, chanceOfMutations);
       litter.push(BackpackMouse.create(child));
       positions.push(i);
     }
@@ -257,6 +257,9 @@ export const BreedingModel = types
     instructions: "",
     showSexStack: false,
     showHeteroStack: false,
+    breedWithMutations: false,
+    enableStudentControlOfMutations: false,
+    chanceOfMutations: types.number,
     interactionMode: types.optional(BreedingInteractionModeEnum, "breed"),
     backgroundType: types.optional(EnvironmentColorTypeEnum, "neutral"),
     nestPairs: types.array(NestPair),
@@ -282,7 +285,7 @@ export const BreedingModel = types
       const nestPair = self.nestPairs.find(pair => pair.id === self.breedingNestPairId);
       if (!nestPair) return;
       const litterSize = self.minLitterSize + Math.floor(Math.random() * (self.maxLitterSize - self.minLitterSize + 1));
-      nestPair.breedLitter(litterSize);
+      nestPair.breedLitter(litterSize, self.breedWithMutations ? self.chanceOfMutations / 100 : 0);
       self.rightPanel = "data";
     },
 
@@ -305,6 +308,10 @@ export const BreedingModel = types
 
     setShowHeteroStack(show: boolean) {
       self.showHeteroStack = show;
+    },
+
+    setBreedWithMutations(value: boolean) {
+      self.breedWithMutations = value;
     },
 
     toggleInteractionMode(mode: "select" | "inspect" | "breed" | "gametes") {
@@ -402,6 +409,16 @@ export const BreedingModel = types
           action: (val: boolean) => {
             self.setShowHeteroStack(val);
           }
+        });
+
+        buttons.push({
+          title: "Mutations",
+          type: "checkbox",
+          value: self.breedWithMutations,
+          action: (val: boolean) => {
+            self.setBreedWithMutations(val);
+          },
+          enabled: self.enableStudentControlOfMutations
         });
         return buttons;
       },
