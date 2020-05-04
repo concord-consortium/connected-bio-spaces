@@ -53,6 +53,13 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
     if (this.disposer) this.disposer();
   }
 
+  public componentWillReact() {
+    const { isPlaying, chartData } = this.props;
+    if (isPlaying && chartData.subsetIdx !== -1) {
+      chartData.setDataSetSubset(-1, chartData.maxPoints);
+    }
+  }
+
   public render() {
     const { chartData, isPlaying } = this.props;
     const model = this.stores.populations.model as MousePopulationsModelType;
