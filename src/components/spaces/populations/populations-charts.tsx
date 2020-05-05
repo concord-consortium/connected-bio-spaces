@@ -163,7 +163,7 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
       const point = ds.dataPoints[_pointIdx];
       const value = point && !isNaN(point.a2) ? point.a2 : 0;
       return {
-        label: ds.name,
+        label: ds.name.replace(/ .*/, ""),      // take only first word of label (e.g. "Dark brown" => "Dark")
         value,
         color: ds.color as string
       };
