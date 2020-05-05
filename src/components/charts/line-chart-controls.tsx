@@ -30,9 +30,10 @@ export class LineChartControls extends BaseComponent<IChartControlProps, IChartC
     const nextState: IChartControlState = {} as any;
 
     if (isPlaying) {
-      nextState.scrubberPosition = chartData.pointCount;
-      if (prevState.scrubberMax !== chartData.pointCount) {
-        nextState.scrubberMax = chartData.pointCount;
+      const lastPoint = chartData.pointCount - 1;
+      nextState.scrubberPosition = lastPoint;
+      if (prevState.scrubberMax !== lastPoint) {
+        nextState.scrubberMax = lastPoint;
       }
     }
     return nextState;
@@ -75,11 +76,10 @@ export class LineChartControls extends BaseComponent<IChartControlProps, IChartC
   }
 
   private handleDragChange = (value: number) => {
-    const { chartData, onDragChange } = this.props;
+    const { onDragChange } = this.props;
 
     this.setState({
-      scrubberPosition: value,
-      scrubberMax: chartData.pointCount
+      scrubberPosition: value
     });
     onDragChange(value);
   }
