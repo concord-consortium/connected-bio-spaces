@@ -7,7 +7,6 @@ import { ChartOptions } from "chart.js";
 import * as ChartAnnotation from "chartjs-plugin-annotation";
 import { ChartColors } from "../../models/spaces/charts/chart-data-set";
 import { hexToRGBValue } from "../../utilities/color-utils";
-import { LineChartControls } from "./line-chart-controls";
 import { BaseComponent } from "../base";
 
 interface ILineProps {
@@ -16,7 +15,6 @@ interface ILineProps {
   height?: number;
   isPlaying: boolean;
   hideTitle?: boolean;
-  onSliderDragChange: (value: number) => void;
 }
 
 interface ILineState { }
@@ -146,7 +144,7 @@ export class LineChart extends BaseComponent<ILineProps, ILineState> {
   }
 
   public render() {
-    const { chartData, width, height, isPlaying, onSliderDragChange } = this.props;
+    const { chartData, width, height } = this.props;
     const chartDisplay = lineData(chartData);
     const minMaxValues = chartData.minMaxAll;
     const options: ChartOptions = merge({}, defaultOptions, {
@@ -220,7 +218,6 @@ export class LineChart extends BaseComponent<ILineProps, ILineState> {
             plugins={[ChartAnnotation]}
           />
         </div>
-        <LineChartControls chartData={chartData} isPlaying={isPlaying} onDragChange={onSliderDragChange} />
       </div>
     );
   }

@@ -15,7 +15,6 @@ interface IChartProps {
   height?: number;
   isPlaying: boolean;
   hideTitle?: boolean;
-  onLineChartSliderDragChange?: (value: number) => void;
 }
 
 interface IChartState {}
@@ -24,10 +23,7 @@ interface IChartState {}
 export class Chart extends React.Component<IChartProps, IChartState> {
 
   public render() {
-    const { chartType, chartData, width, height, isPlaying, hideTitle, onLineChartSliderDragChange } = this.props;
-    if (chartType === "line" && !onLineChartSliderDragChange) {
-      throw Error("Slider drag change handler is required for line charts");
-    }
+    const { chartType, chartData, width, height, isPlaying, hideTitle } = this.props;
     const chart = chartType === "line" ?
       <LineChart
         chartData={chartData}
@@ -35,7 +31,6 @@ export class Chart extends React.Component<IChartProps, IChartState> {
         height={height}
         isPlaying={isPlaying}
         hideTitle={hideTitle}
-        onSliderDragChange={onLineChartSliderDragChange!}
         data-test="line-chart" />
       :
       <BarChart

@@ -7,6 +7,7 @@ import { BaseComponent } from "../../base";
 import { MousePopulationsModelType } from "../../../models/spaces/populations/mouse-model/mouse-populations-model";
 import { onAction } from "mobx-state-tree";
 import { IDisposer } from "mobx-state-tree/dist/utils";
+import { LineChartControls } from "../../charts/line-chart-controls";
 
 const MAX_LINE_CHART_HEIGHT = 400;
 const MIN_LINE_CHART_HEIGHT = 250;
@@ -67,6 +68,7 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
     const toggleButtonTitle = showMaxPoints ? "Show Recent Data" : "Show All Data";
     const topChartClassName = "top-chart" + (showPieChart ? "" : " hidden");
     const bottomChartClassName = "bottom-chart" + (showPieChart ? " small" : "");
+    const timelineVisible = chartData.maxPoints > 0 && chartData.pointCount > chartData.maxPoints;
     return (
       <div className="chart-container">
         <div className="chart-header">
@@ -102,8 +104,16 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
               isPlaying={isPlaying}
               hideTitle={true}
               height={this.state.lineChartHeight}
-              onLineChartSliderDragChange={this.handleSliderDragChange}
             />
+            <div className="line-chart-controls" id="line-chart-controls">
+              {timelineVisible &&
+              <LineChartControls
+                chartData={chartData}
+                isPlaying={isPlaying}
+                onDragChange={this.handleSliderDragChange}
+              />
+              }
+            </div>
           </div>
         </div>
       </div>

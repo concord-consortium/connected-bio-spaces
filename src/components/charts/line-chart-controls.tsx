@@ -47,7 +47,6 @@ export class LineChartControls extends BaseComponent<IChartControlProps, IChartC
     const { chartData, isPlaying } = this.props;
     const { scrubberPosition, scrubberMin, scrubberMax } = this.state;
     const pos = scrubberPosition ? scrubberPosition : 0;
-    const timelineVisible = chartData.maxPoints > 0 && chartData.pointCount > chartData.maxPoints;
 
     const trackStyle = { backgroundColor: colors.chartColor5, height: 10 };
     const handleStyle = {
@@ -58,20 +57,16 @@ export class LineChartControls extends BaseComponent<IChartControlProps, IChartC
     const railStyle = { backgroundColor: colors.chartColor7, height: 10 };
 
     return (
-      <div className="line-chart-controls" id="line-chart-controls">
-        {timelineVisible &&
-          <Slider className="scrubber"
-          trackStyle={trackStyle}
-          handleStyle={handleStyle}
-          railStyle={railStyle}
-          onChange={this.handleDragChange}
-          min={scrubberMin}
-          max={scrubberMax}
-          value={pos}
-          disabled={isPlaying}
-          />
-        }
-      </div>
+      <Slider className="scrubber"
+        trackStyle={trackStyle}
+        handleStyle={handleStyle}
+        railStyle={railStyle}
+        onChange={this.handleDragChange}
+        min={scrubberMin}
+        max={scrubberMax}
+        value={pos}
+        disabled={isPlaying}
+      />
     );
   }
 
