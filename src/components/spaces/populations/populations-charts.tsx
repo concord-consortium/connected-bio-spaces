@@ -144,13 +144,15 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
     const text = initialData ? "Initial: 0 months" : `Current: ${date} months`;
     // create single array of points, either the first of each dataset or the last
     let data = this.props.chartData.dataSets.filter(ds => ds.display).map(ds => {
-        const point = ds.dataPoints[pointIdx];
-        const value = point && !isNaN(point.a2) ? point.a2 : 0;
-        return {
-          label: ds.name,
-          value,
-          color: ds.color as string
-        };
+      // individual datasets may have fewer points
+      const _pointIdx = pointIdx === ds.dataPoints.length ? ds.dataPoints.length - 1 : pointIdx;
+      const point = ds.dataPoints[_pointIdx];
+      const value = point && !isNaN(point.a2) ? point.a2 : 0;
+      return {
+        label: ds.name,
+        value,
+        color: ds.color as string
+      };
     }) as PieChartData[];
     data = data.filter(d => d.value);
 
@@ -198,7 +200,7 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
     this.setState({pieChartComparisonIdx});
 
     if (!showMaxPoints) {
-      const startIdx = Math.max(pieChartComparisonIdx - chartData.maxPoints, 0);
+      const startIdx = Math.max((pieChartComparisonIdx + 1) - chartData.maxPoints, 0);
       chartData.setDataSetSubset(startIdx, chartData.maxPoints);
     }
   }
