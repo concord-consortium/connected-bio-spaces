@@ -75,6 +75,15 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
     const bottomChartClassName = "bottom-chart" + (showPieChart ? " small" : "");
     const sliderIsDisabled = isPlaying ||
       (!showPieChart && !(chartData.maxPoints > 0 && chartData.pointCount > chartData.maxPoints));
+
+    const { pieChartComparisonIdx } = this.state;
+    let pointerPercent = 0;
+    const pointIdx = pieChartComparisonIdx === -1 ? chartData.pointCount - 1 : pieChartComparisonIdx;
+    if (this.props.chartData.dataSets[0].dataPoints[pointIdx]) {
+      const pointerVal = this.props.chartData.dataSets[0].dataPoints[pointIdx].a1;
+      pointerPercent = (pointerVal / chartData.minMaxAll.maxA1) * 100;
+    }
+
     return (
       <div className="chart-container">
         <div className="chart-header">
@@ -111,6 +120,11 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
               hideTitle={true}
               height={this.state.lineChartHeight}
             />
+            { showPieChart &&
+            <div className="pointer-container">
+              <div className="pointer" style={{marginLeft: pointerPercent + "%"}} />
+            </div>
+            }
             <div className="line-chart-controls" id="line-chart-controls">
               <LineChartControls
                 chartData={chartData}
@@ -158,6 +172,9 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
 
     return (
       <div className="pie">
+        { !initialData &&
+        <div className="pointer" />
+        }
         <div className="label">{ text }</div>
         <div>
           <PieChart data={data}/>

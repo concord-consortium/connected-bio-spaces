@@ -100,6 +100,14 @@
         position: absolute
         bottom: 55px
 
+      .pointer-container
+        width: 352px
+        margin-left: 52px
+        height: 0px
+
+        .pointer
+          transform: translate(-50%, 6px)
+
     .top-chart
       display: flex
       justify-content: space-around
@@ -107,6 +115,13 @@
       .pie
         display: flex
         align-items: center
+        position: relative
+
+        .pointer
+          position: absolute
+          left: 13px
+          top: 28px
+
         .label
           width: 48px
           height: 48px
@@ -125,3 +140,11 @@
           border-color: $color-simdata-amber-light1
         &:nth-of-type(2) .pie-chart
           border-color: $color-simdata-amber-dark1
+
+
+  .pointer
+    width: 0
+    height: 0
+    border-left: 10px solid transparent
+    border-right: 10px solid transparent
+    border-top: 17px solid $color-simdata-amber-dark1
