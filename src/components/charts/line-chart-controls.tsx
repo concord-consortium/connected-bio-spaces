@@ -13,6 +13,7 @@ import "rc-slider/assets/index.css";
 interface IChartControlProps {
   chartData: ChartDataModelType;
   isPlaying: boolean;
+  isDisabled: boolean;
   onDragChange: (value: number) => void;
 }
 
@@ -44,11 +45,14 @@ export class LineChartControls extends BaseComponent<IChartControlProps, IChartC
   };
 
   public render() {
-    const { chartData, isPlaying } = this.props;
+    const { isDisabled } = this.props;
     const { scrubberPosition, scrubberMin, scrubberMax } = this.state;
     const pos = scrubberPosition ? scrubberPosition : 0;
 
-    const trackStyle = { backgroundColor: colors.chartColor5, height: 10 };
+    const trackStyle = {
+      backgroundColor: isDisabled ? colors.disabledColor5 :  colors.chartColor5,
+      height: 10
+    };
     const handleStyle = {
       borderColor: colors.chartColor6,
       height: 20,
@@ -65,7 +69,7 @@ export class LineChartControls extends BaseComponent<IChartControlProps, IChartC
         min={scrubberMin}
         max={scrubberMax}
         value={pos}
-        disabled={isPlaying}
+        disabled={isDisabled}
       />
     );
   }

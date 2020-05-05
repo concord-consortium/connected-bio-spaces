@@ -73,7 +73,8 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
     const toggleButtonTitle = showMaxPoints ? "Show Recent Data" : "Show All Data";
     const topChartClassName = "top-chart" + (showPieChart ? "" : " hidden");
     const bottomChartClassName = "bottom-chart" + (showPieChart ? " small" : "");
-    const timelineVisible = showPieChart || (chartData.maxPoints > 0 && chartData.pointCount > chartData.maxPoints);
+    const sliderIsDisabled = isPlaying ||
+      (!showPieChart && !(chartData.maxPoints > 0 && chartData.pointCount > chartData.maxPoints));
     return (
       <div className="chart-container">
         <div className="chart-header">
@@ -111,13 +112,12 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
               height={this.state.lineChartHeight}
             />
             <div className="line-chart-controls" id="line-chart-controls">
-              {timelineVisible &&
               <LineChartControls
                 chartData={chartData}
                 isPlaying={isPlaying}
+                isDisabled={sliderIsDisabled}
                 onDragChange={this.handleSliderDragChange}
               />
-              }
             </div>
           </div>
         </div>
