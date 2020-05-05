@@ -211,13 +211,20 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
   private handleSliderDragChange = (value: number) => {
     const { chartData } = this.props;
     const model = this.stores.populations.model as MousePopulationsModelType;
-    const { showMaxPoints } = model;
+    const { showMaxPoints, showPieChart } = model;
 
     const pieChartComparisonIdx = Math.min(value, chartData.pointCount - 1);
     this.setState({pieChartComparisonIdx});
 
     if (!showMaxPoints) {
-      const startIdx = Math.max((pieChartComparisonIdx + 1) - chartData.maxPoints, 0);
+      let startIdx;
+      if (showPieChart) {
+        startIdx = Math.max((pieChartComparisonIdx + 1) - chartData.maxPoints, 0);
+      } else {
+        const slidableRange = chartData.pointCount - chartData.maxPoints;
+        const sliderPercentage = value / chartData.pointCount;
+        startIdx = Math.round(sliderPercentage * slidableRange);
+      }
       chartData.setDataSetSubset(startIdx, chartData.maxPoints);
     }
   }
