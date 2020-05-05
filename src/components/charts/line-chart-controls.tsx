@@ -39,11 +39,16 @@ export class LineChartControls extends BaseComponent<IChartControlProps, IChartC
     return nextState;
   }
 
-  public state: IChartControlState = {
-    scrubberPosition: 0,
-    scrubberMin: 0,
-    scrubberMax: 0
-  };
+  public constructor(props: IChartControlProps) {
+    super(props);
+
+    const lastPoint = Math.max(0, this.props.chartData.pointCount - 1);
+    this.state = {
+      scrubberMin: 0,
+      scrubberMax: lastPoint,
+      scrubberPosition: lastPoint
+    };
+  }
 
   public render() {
     const { isDisabled } = this.props;
