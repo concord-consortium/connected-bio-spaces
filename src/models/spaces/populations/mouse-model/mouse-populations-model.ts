@@ -30,6 +30,8 @@ const chartNames = {
   alleles: "Alleles vs Time"
 };
 
+const kRecentDataMaxPoints = 25;
+
 const chartData = {
   name: chartNames.color,
   dataSets: [
@@ -37,7 +39,7 @@ const chartData = {
       name: "Light Brown",
       dataPoints: [],
       color: dataColors.white.mice,
-      maxPoints: 25,
+      maxPoints: kRecentDataMaxPoints,
       initialMaxA1: 12,
       fixedMinA2: 0,
       fixedMaxA2: 50,
@@ -50,7 +52,7 @@ const chartData = {
       name: "Medium Brown",
       dataPoints: [],
       color: dataColors.neutral.mice,
-      maxPoints: 25,
+      maxPoints: kRecentDataMaxPoints,
       initialMaxA1: 12,
       fixedMinA2: 0,
       fixedMaxA2: 50,
@@ -63,7 +65,7 @@ const chartData = {
       name: "Dark Brown",
       dataPoints: [],
       color: dataColors.brown.mice,
-      maxPoints: 25,
+      maxPoints: kRecentDataMaxPoints,
       initialMaxA1: 12,
       fixedMinA2: 0,
       fixedMaxA2: 50,
@@ -76,7 +78,7 @@ const chartData = {
       name: "RᴸRᴸ Mice",
       dataPoints: [],
       color: dataColors.white.mice,
-      maxPoints: 25,
+      maxPoints: kRecentDataMaxPoints,
       initialMaxA1: 12,
       fixedMinA2: 0,
       fixedMaxA2: 100,
@@ -90,7 +92,7 @@ const chartData = {
       name: "RᴸRᴰ Mice",
       dataPoints: [],
       color: dataColors.neutral.mice,
-      maxPoints: 25,
+      maxPoints: kRecentDataMaxPoints,
       initialMaxA1: 12,
       fixedMinA2: 0,
       fixedMaxA2: 100,
@@ -104,7 +106,7 @@ const chartData = {
       name: "RᴰRᴸ Mice",
       dataPoints: [],
       color: dataColors.neutral.mice,
-      maxPoints: 25,
+      maxPoints: kRecentDataMaxPoints,
       initialMaxA1: 12,
       fixedMinA2: 0,
       fixedMaxA2: 100,
@@ -118,7 +120,7 @@ const chartData = {
       name: "RᴰRᴰ Mice",
       dataPoints: [],
       color: dataColors.brown.mice,
-      maxPoints: 25,
+      maxPoints: kRecentDataMaxPoints,
       initialMaxA1: 12,
       fixedMinA2: 0,
       fixedMaxA2: 100,
@@ -132,7 +134,7 @@ const chartData = {
       name: "Rᴸ Alleles",
       dataPoints: [],
       color: dataColors.white.mice,
-      maxPoints: 25,
+      maxPoints: kRecentDataMaxPoints,
       initialMaxA1: 12,
       fixedMinA2: 0,
       fixedMaxA2: 100,
@@ -146,7 +148,7 @@ const chartData = {
       name: "Rᴰ Alleles",
       dataPoints: [],
       color: dataColors.brown.mice,
-      maxPoints: 25,
+      maxPoints: kRecentDataMaxPoints,
       initialMaxA1: 12,
       fixedMinA2: 0,
       fixedMaxA2: 100,
@@ -258,7 +260,7 @@ export const MousePopulationsModel = types
     }
     function displayRecentPoints() {
       self.chartData.dataSets.forEach((dataSet: any) => {
-        dataSet.setMaxDataPoints(20);
+        dataSet.setMaxDataPoints(kRecentDataMaxPoints);
       });
     }
 
