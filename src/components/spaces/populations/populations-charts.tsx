@@ -89,8 +89,8 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
         <div className="chart-header">
           <div>
             { enablePieChart &&
-            <div className={"button-holder small-icon" + (showPieChart ? " active" : "")}>
-              <svg className="icon" onClick={toggleShowPieChart}>
+            <div className={"button-holder small-icon" + (showPieChart ? " active" : "")} onClick={toggleShowPieChart}>
+              <svg className="icon">
                 <use xlinkHref="#icon-pie-chart" />
               </svg>
             </div>
