@@ -21,6 +21,7 @@ interface IProps {
 
 interface IState {
   lineChartHeight: number;
+  pieChartComparisonIdx: number;
 }
 
 @inject("stores")
@@ -35,7 +36,8 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
     const model = this.stores.populations.model as MousePopulationsModelType;
     const lineChartHeight = model.showPieChart ? MIN_LINE_CHART_HEIGHT : MAX_LINE_CHART_HEIGHT;
     this.state = {
-      lineChartHeight
+      lineChartHeight,
+      pieChartComparisonIdx: -1,
     };
     setTimeout(() =>
     props.chartData.setViewHeight(lineChartHeight), 2000);
@@ -59,6 +61,9 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
     if (isPlaying && chartData.subsetIdx !== -1) {
       chartData.setDataSetSubset(-1, chartData.maxPoints);
     }
+    if (isPlaying && this.state.pieChartComparisonIdx >= 0) {
+      this.setState({pieChartComparisonIdx: -1});
+    }
   }
 
   public render() {
@@ -68,7 +73,7 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
     const toggleButtonTitle = showMaxPoints ? "Show Recent Data" : "Show All Data";
     const topChartClassName = "top-chart" + (showPieChart ? "" : " hidden");
     const bottomChartClassName = "bottom-chart" + (showPieChart ? " small" : "");
-    const timelineVisible = chartData.maxPoints > 0 && chartData.pointCount > chartData.maxPoints;
+    const timelineVisible = showPieChart || (chartData.maxPoints > 0 && chartData.pointCount > chartData.maxPoints);
     return (
       <div className="chart-container">
         <div className="chart-header">
@@ -128,13 +133,18 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
     let pointIdx = 0;
     let date = 0;
     if (!initialData && this.props.chartData.dataSets[0] && this.props.chartData.dataSets[0].dataPoints.length > 0) {
-      pointIdx = this.props.chartData.dataSets[0].dataPoints.length - 1;
-      date = Math.floor(this.props.chartData.dataSets[0].dataPoints[pointIdx].a1);
+      if (this.state.pieChartComparisonIdx === -1) {
+        pointIdx = this.props.chartData.dataSets[0].dataPoints.length - 1;
+      } else {
+        pointIdx = this.state.pieChartComparisonIdx;
+      }
+      const datum = this.props.chartData.dataSets[0].dataPoints[pointIdx];
+      date = datum ? Math.floor(datum.a1) : 0;
     }
     const text = initialData ? "Initial: 0 months" : `Current: ${date} months`;
     // create single array of points, either the first of each dataset or the last
     let data = this.props.chartData.dataSets.filter(ds => ds.display).map(ds => {
-        const point = ds.dataPoints[(initialData || !ds.dataPoints.length) ? 0 : ds.dataPoints.length - 1];
+        const point = ds.dataPoints[pointIdx];
         const value = point && !isNaN(point.a2) ? point.a2 : 0;
         return {
           label: ds.name,
@@ -181,13 +191,15 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
 
   private handleSliderDragChange = (value: number) => {
     const { chartData } = this.props;
+    const model = this.stores.populations.model as MousePopulationsModelType;
+    const { showMaxPoints } = model;
 
-    // slider covers whole dataset
-    // retrieve maxPoints for subset based on percentage along of the slider
-    const dataRangeMax = chartData.pointCount - chartData.maxPoints;
+    const pieChartComparisonIdx = Math.min(value, chartData.pointCount - 1);
+    this.setState({pieChartComparisonIdx});
 
-    const sliderPercentage = value / chartData.pointCount;
-    const startIdx = Math.round(sliderPercentage * dataRangeMax);
-    chartData.setDataSetSubset(startIdx, chartData.maxPoints);
+    if (!showMaxPoints) {
+      const startIdx = Math.max(pieChartComparisonIdx - chartData.maxPoints, 0);
+      chartData.setDataSetSubset(startIdx, chartData.maxPoints);
+    }
   }
 }
