@@ -1,4 +1,11 @@
 # Changelog
+## Version 1.2.0 - released July 1, 2020
+
+- Add pie charts to population level
+- Add mutations to heredity level breeding
+- iOS improvements
+- Style loading text
+
 ## Version 1.1.1 - released April 30, 2020
 
 - Improve fullscreen handling on iPad
