@@ -13,6 +13,8 @@ import "rc-slider/assets/index.css";
 interface IChartControlProps {
   chartData: ChartDataModelType;
   isPlaying: boolean;
+  isDisabled: boolean;
+  onDragChange: (value: number) => void;
 }
 
 interface IChartControlState {
@@ -28,30 +30,35 @@ export class LineChartControls extends BaseComponent<IChartControlProps, IChartC
     const nextState: IChartControlState = {} as any;
 
     if (isPlaying) {
-      nextState.scrubberPosition = chartData.pointCount;
-      if (chartData.subsetIdx !== -1) {
-        chartData.setDataSetSubset(-1, chartData.maxPoints);
-      }
-      if (prevState.scrubberMax !== chartData.pointCount) {
-        nextState.scrubberMax = chartData.pointCount;
+      const lastPoint = chartData.pointCount - 1;
+      nextState.scrubberPosition = lastPoint;
+      if (prevState.scrubberMax !== lastPoint) {
+        nextState.scrubberMax = lastPoint;
       }
     }
     return nextState;
   }
 
-  public state: IChartControlState = {
-    scrubberPosition: 0,
-    scrubberMin: 0,
-    scrubberMax: 0
-  };
+  public constructor(props: IChartControlProps) {
+    super(props);
+
+    const lastPoint = Math.max(0, this.props.chartData.pointCount - 1);
+    this.state = {
+      scrubberMin: 0,
+      scrubberMax: lastPoint,
+      scrubberPosition: lastPoint
+    };
+  }
 
   public render() {
-    const { chartData, isPlaying } = this.props;
+    const { isDisabled } = this.props;
     const { scrubberPosition, scrubberMin, scrubberMax } = this.state;
     const pos = scrubberPosition ? scrubberPosition : 0;
-    const timelineVisible = chartData.maxPoints > 0 && chartData.pointCount > chartData.maxPoints;
 
-    const trackStyle = { backgroundColor: colors.chartColor5, height: 10 };
+    const trackStyle = {
+      backgroundColor: isDisabled ? colors.disabledColor5 :  colors.chartColor5,
+      height: 10
+    };
     const handleStyle = {
       borderColor: colors.chartColor6,
       height: 20,
@@ -60,38 +67,25 @@ export class LineChartControls extends BaseComponent<IChartControlProps, IChartC
     const railStyle = { backgroundColor: colors.chartColor7, height: 10 };
 
     return (
-      <div className="line-chart-controls" id="line-chart-controls">
-        {timelineVisible &&
-          <Slider className="scrubber"
-          trackStyle={trackStyle}
-          handleStyle={handleStyle}
-          railStyle={railStyle}
-          onChange={this.handleDragChange}
-          min={scrubberMin}
-          max={scrubberMax}
-          value={pos}
-          disabled={isPlaying}
-          />
-        }
-      </div>
+      <Slider className="scrubber"
+        trackStyle={trackStyle}
+        handleStyle={handleStyle}
+        railStyle={railStyle}
+        onChange={this.handleDragChange}
+        min={scrubberMin}
+        max={scrubberMax}
+        value={pos}
+        disabled={isDisabled}
+      />
     );
   }
 
   private handleDragChange = (value: number) => {
-    const { chartData } = this.props;
+    const { onDragChange } = this.props;
 
-    // slider covers whole dataset
-    // retrieve maxPoints for subset based on percentage along of the slider
-    const sliderPercentage = value / chartData.pointCount;
-    const dataRangeMax = chartData.pointCount - chartData.maxPoints;
-
-    if (dataRangeMax > 0) {
-      const startIdx = Math.round(sliderPercentage * dataRangeMax);
-      chartData.setDataSetSubset(startIdx, chartData.maxPoints);
-      this.setState({
-        scrubberPosition: value,
-        scrubberMax: chartData.pointCount
-      });
-    }
+    this.setState({
+      scrubberPosition: value
+    });
+    onDragChange(value);
   }
 }

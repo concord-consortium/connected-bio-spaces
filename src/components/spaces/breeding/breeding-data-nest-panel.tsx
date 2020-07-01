@@ -1,7 +1,7 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
 import { BaseComponent, IBaseProps } from "../../base";
-import { PieChart, PieChartData } from "./pie-chart";
+import { PieChart, PieChartData } from "../../charts/pie-chart";
 import { INestPair } from "../../../models/spaces/breeding/breeding";
 // @ts-ignore
 import * as colors from "../../../components/colors.scss";

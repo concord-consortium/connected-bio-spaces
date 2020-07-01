@@ -1,8 +1,9 @@
 import * as React from "react";
-import { BaseComponent, IBaseProps } from "../../base";
+import { BaseComponent, IBaseProps } from "../base";
 import { Pie } from "react-chartjs-2";
 import { ChartOptions } from "chart.js";
 import * as ChartDataLabels from "chartjs-plugin-datalabels";
+import { colorIsLight } from "../../utilities/color-utils";
 
 const CHART_HEIGHT = 90;
 const CHART_WIDTH = 90;
@@ -53,17 +54,8 @@ export class PieChart extends BaseComponent<IProps, IState> {
             return percentage;
           },
           color(ctx: any) {
-            let labelColor = "";
-            switch (ctx.dataset.backgroundColor[ctx.dataIndex]) {
-              case "#bf8f53":
-              case "#dfc39d":
-              case "#FEFF59":
-                labelColor = "#000000";
-                break;
-              default:
-                labelColor = "#ffffff";
-            }
-            return labelColor;
+            const backgroundColor = ctx.dataset.backgroundColor[ctx.dataIndex];
+            return colorIsLight(backgroundColor) ? "#000" : "#fff";
           },
           font: {
             size: 12

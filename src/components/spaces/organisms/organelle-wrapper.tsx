@@ -25,7 +25,7 @@ interface OrganelleWrapperState {
 }
 
 const SUBSTANCE_ADDITION_MS = 3500;
-const MODEL_HEIGHT = 362;
+const MODEL_HEIGHT = 320;
 const MODEL_WIDTH = 580;
 
 type SelectorInfo = {

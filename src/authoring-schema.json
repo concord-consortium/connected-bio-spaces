@@ -222,6 +222,10 @@
         "enableAllelesChart": {
           "title": "Enable alleles chart",
           "type": "boolean"
+        },
+        "enablePieChart": {
+          "title": "Enable pie charts",
+          "type": "boolean"
         }
       }
     },
@@ -259,6 +263,18 @@
         "instructions": {
           "title": "Instructions (as markdown)",
           "type": "string"
+        },
+        "enableStudentControlOfMutations": {
+          "title": "Enable student mutation control",
+          "type": "boolean"
+        },
+        "breedWithMutations": {
+          "title": "Breed with mutations",
+          "type": "boolean"
+        },
+        "chanceOfMutations": {
+          "title": "Chance of mutations (%)",
+          "type": "number"
         },
         "enableInspectGametes": {
           "title": "Enable inspect gametes button",

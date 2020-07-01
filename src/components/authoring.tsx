@@ -55,7 +55,8 @@ export const defaultAuthoring: ConnectedBioAuthoring = {
     },
     enableColorChart: true,
     enableGenotypeChart: true,
-    enableAllelesChart: true
+    enableAllelesChart: true,
+    enablePieChart: true,
   },
   organisms: {
     instructions: "",
@@ -66,6 +67,9 @@ export const defaultAuthoring: ConnectedBioAuthoring = {
   },
   breeding: {
     instructions: "",
+    enableStudentControlOfMutations: false,
+    breedWithMutations: false,
+    chanceOfMutations: 2,
     enableInspectGametes: true,
     enableColorChart: true,
     enableGenotypeChart: true,

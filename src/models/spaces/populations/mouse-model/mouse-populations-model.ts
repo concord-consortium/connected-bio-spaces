@@ -8,17 +8,17 @@ import { BackpackMouse, BackpackMouseType } from "../../../backpack-mouse";
 
 const dataColors = {
   white: {
-    mice: "#f4ce83",
+    mice: "#dfc39d",
     environment: "rgb(251,235,205)",
     environmentHighlight: "rgba(251,235,205,.7)"
   },
   neutral: {
-    mice: "#db9e26",
+    mice: "#bf8f53",
     environment: "rgb(241,216,168)",
     environmentHighlight: "rgba(241,216,168, .7)"
   },
   brown: {
-    mice: "#795423",
+    mice: "#5d3515",
     environment: "rgb(201,187,167)",
     environmentHighlight: "rgba(201,187,167,.7)"
   }
@@ -30,6 +30,8 @@ const chartNames = {
   alleles: "Alleles vs Time"
 };
 
+const kRecentDataMaxPoints = 25;
+
 const chartData = {
   name: chartNames.color,
   dataSets: [
@@ -37,7 +39,7 @@ const chartData = {
       name: "Light Brown",
       dataPoints: [],
       color: dataColors.white.mice,
-      maxPoints: 25,
+      maxPoints: kRecentDataMaxPoints,
       initialMaxA1: 12,
       fixedMinA2: 0,
       fixedMaxA2: 50,
@@ -50,7 +52,7 @@ const chartData = {
       name: "Medium Brown",
       dataPoints: [],
       color: dataColors.neutral.mice,
-      maxPoints: 25,
+      maxPoints: kRecentDataMaxPoints,
       initialMaxA1: 12,
       fixedMinA2: 0,
       fixedMaxA2: 50,
@@ -63,7 +65,7 @@ const chartData = {
       name: "Dark Brown",
       dataPoints: [],
       color: dataColors.brown.mice,
-      maxPoints: 25,
+      maxPoints: kRecentDataMaxPoints,
       initialMaxA1: 12,
       fixedMinA2: 0,
       fixedMaxA2: 50,
@@ -75,8 +77,8 @@ const chartData = {
     {
       name: "RᴸRᴸ Mice",
       dataPoints: [],
-      color: "#f4ce83",
-      maxPoints: 25,
+      color: dataColors.white.mice,
+      maxPoints: kRecentDataMaxPoints,
       initialMaxA1: 12,
       fixedMinA2: 0,
       fixedMaxA2: 100,
@@ -89,8 +91,8 @@ const chartData = {
     {
       name: "RᴸRᴰ Mice",
       dataPoints: [],
-      color: "#db9e26",
-      maxPoints: 25,
+      color: dataColors.neutral.mice,
+      maxPoints: kRecentDataMaxPoints,
       initialMaxA1: 12,
       fixedMinA2: 0,
       fixedMaxA2: 100,
@@ -103,8 +105,8 @@ const chartData = {
     {
       name: "RᴰRᴸ Mice",
       dataPoints: [],
-      color: "#db9e26",
-      maxPoints: 25,
+      color: dataColors.neutral.mice,
+      maxPoints: kRecentDataMaxPoints,
       initialMaxA1: 12,
       fixedMinA2: 0,
       fixedMaxA2: 100,
@@ -117,8 +119,8 @@ const chartData = {
     {
       name: "RᴰRᴰ Mice",
       dataPoints: [],
-      color: "#795423",
-      maxPoints: 25,
+      color: dataColors.brown.mice,
+      maxPoints: kRecentDataMaxPoints,
       initialMaxA1: 12,
       fixedMinA2: 0,
       fixedMaxA2: 100,
@@ -131,8 +133,8 @@ const chartData = {
     {
       name: "Rᴸ Alleles",
       dataPoints: [],
-      color: "#f4ce83",
-      maxPoints: 25,
+      color: dataColors.white.mice,
+      maxPoints: kRecentDataMaxPoints,
       initialMaxA1: 12,
       fixedMinA2: 0,
       fixedMaxA2: 100,
@@ -145,8 +147,8 @@ const chartData = {
     {
       name: "Rᴰ Alleles",
       dataPoints: [],
-      color: "#795423",
-      maxPoints: 25,
+      color: dataColors.brown.mice,
+      maxPoints: kRecentDataMaxPoints,
       initialMaxA1: 12,
       fixedMinA2: 0,
       fixedMaxA2: 100,
@@ -193,9 +195,11 @@ export const MousePopulationsModel = types
     "showHeteroStack": false,
     "chartData": types.optional(ChartDataModel, chartData),
     "showMaxPoints": false,
+    "showPieChart": false,
     "enableColorChart": true,
     "enableGenotypeChart": true,
     "enableAllelesChart": true,
+    "enablePieChart": false,
     "deadMice.chanceOfShowingBody": types.number,
     "deadMice.timeToShowBody": types.number,
     "inspectedMouse": types.maybe(BackpackMouse)
@@ -256,7 +260,7 @@ export const MousePopulationsModel = types
     }
     function displayRecentPoints() {
       self.chartData.dataSets.forEach((dataSet: any) => {
-        dataSet.setMaxDataPoints(20);
+        dataSet.setMaxDataPoints(kRecentDataMaxPoints);
       });
     }
 
@@ -291,6 +295,7 @@ export const MousePopulationsModel = types
         label: "   ",
         expandLabel: EnvironmentColorNames[color],
         labelXOffset: -15,
+        labelYOffset: 120,
         expandOffset: -27,
         labelColor: "black",
         labelBackgroundColor: dataColors[color].environment,
@@ -304,7 +309,7 @@ export const MousePopulationsModel = types
     function addSettingsAnnotation(label: string, labelXOffset: number) {
       const now = interactive ? interactive.environment.date : 0;
       const timeSinceLastAnnotation = now - lastSettingsAnnotationDate;
-      const labelYOffset = timeSinceLastAnnotation < 30 ? 55 : 30;
+      const labelYOffset = timeSinceLastAnnotation < 30 ? 170 : 145;
 
       self.chartData.addAnnotation(ChartAnnotationModel.create({
         type: "verticalLine",
@@ -392,6 +397,9 @@ export const MousePopulationsModel = types
           } else {
             displayRecentPoints();
           }
+        },
+        toggleShowPieChart() {
+          self.showPieChart = !self.showPieChart;
         },
         setShowSexStack(show: boolean) {
           self.showSexStack = show;
@@ -505,17 +513,6 @@ export const MousePopulationsModel = types
         },
         get graphButtons(): ToolbarButton[] {
           const buttons = [];
-
-          buttons.push({
-            title: "Scale",
-            type: "float-button",
-            value: self.showMaxPoints,
-            action: (val: boolean) => {
-              self.toggleShowMaxPoints();
-            },
-            floatCorner: "upper-right",
-            section: "data"
-          });
 
           buttons.push({
             title: "Fur Colors",

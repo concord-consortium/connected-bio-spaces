@@ -9,12 +9,12 @@ import "./chart.sass";
 export type ChartType = "line" | "bar" | "horizontalBar";
 
 interface IChartProps {
-  title: string;
   chartData: ChartDataModelType;
   chartType: ChartType;
   width?: number;
   height?: number;
   isPlaying: boolean;
+  hideTitle?: boolean;
 }
 
 interface IChartState {}
@@ -23,13 +23,14 @@ interface IChartState {}
 export class Chart extends React.Component<IChartProps, IChartState> {
 
   public render() {
-    const { chartType, chartData, width, height, isPlaying } = this.props;
+    const { chartType, chartData, width, height, isPlaying, hideTitle } = this.props;
     const chart = chartType === "line" ?
       <LineChart
         chartData={chartData}
-        width={this.props.width}
-        height={this.props.height}
+        width={width}
+        height={height}
         isPlaying={isPlaying}
+        hideTitle={hideTitle}
         data-test="line-chart" />
       :
       <BarChart
@@ -37,6 +38,7 @@ export class Chart extends React.Component<IChartProps, IChartState> {
         width={width}
         height={height}
         barChartType={chartType}
+        hideTitle={hideTitle}
         data-test="bar-chart"
       />;
     return (

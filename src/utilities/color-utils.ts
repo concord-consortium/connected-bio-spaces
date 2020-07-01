@@ -22,3 +22,10 @@ export function hexToRGB(hex: string) {
     b: parseInt(convertedHexValue[3], 16)
   } : null;
 }
+
+export function colorIsLight(hex: string) {
+  const rgb = hexToRGB(hex);
+  if (!rgb) return false;
+  const brightness = ((rgb.r * 299) + (rgb.g * 587) + (rgb.b * 114)) / 1000;
+  return brightness > 150;
+}

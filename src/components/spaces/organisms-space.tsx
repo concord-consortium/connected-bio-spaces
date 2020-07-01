@@ -101,7 +101,6 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
           return <InstructionsComponent content={organisms.instructions}/>;
         case "data":
           return <Chart
-            title="Chart Test"
             chartData={currentData}
             chartType={"horizontalBar"}
             isPlaying={false} />;
