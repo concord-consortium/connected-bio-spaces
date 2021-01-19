@@ -7,7 +7,7 @@ import * as Receptor from "./cell-models/receptor.json";
 import { BaseComponent } from "../../base";
 import "./organelle-wrapper.sass";
 import { ModeType, ZoomLevelType, ZoomTargetType } from "../../../models/spaces/organisms/organisms-row.js";
-import { OrganelleType } from "../../../models/spaces/organisms/organisms-mouse.js";
+import { OrganelleType } from "../../../models/spaces/organisms/mouse/organisms-mouse.js";
 
 interface OrganelleWrapperProps {
   zoomLevel: ZoomLevelType;

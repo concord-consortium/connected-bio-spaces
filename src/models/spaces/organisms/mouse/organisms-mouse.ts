@@ -1,6 +1,6 @@
 import { types, Instance } from "mobx-state-tree";
-import { BackpackMouse } from "../../backpack-mouse";
-import { kOrganelleInfo } from "./organisms-space";
+import { BackpackMouse } from "../../../backpack-mouse";
+import { kOrganelleInfo } from "./mouse-cell-data";
 import { v4 as uuid } from "uuid";
 
 export const Organelle = types.enumeration("Organelle", [

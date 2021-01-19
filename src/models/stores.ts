@@ -6,7 +6,7 @@ import { OrganismsSpaceModelType, createOrganismsModel } from "./spaces/organism
 import { BackpackMouseType } from "./backpack-mouse";
 import { ConnectedBioAuthoring } from "../authoring";
 import { QueryParams } from "../utilities/url-params";
-import { OrganismsMouseModelType } from "./spaces/organisms/organisms-mouse";
+import { OrganismsMouseModelType } from "./spaces/organisms/mouse/organisms-mouse";
 import { OrganismsRowModelType } from "./spaces/organisms/organisms-row";
 import { autorun } from "mobx";
 import { onAction } from "mobx-state-tree";

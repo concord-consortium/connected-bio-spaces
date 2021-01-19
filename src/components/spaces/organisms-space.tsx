@@ -9,7 +9,7 @@ import { InstructionsComponent } from "../instructions";
 import { OrganismsContainer } from "./organisms/organisms-container";
 import ProteinViewer from "./proteins/protein-viewer";
 import { RightPanelType } from "../../models/ui";
-import { kOrganelleInfo } from "../../models/spaces/organisms/organisms-space";
+import { kOrganelleInfo } from "../../models/spaces/organisms/mouse/mouse-cell-data";
 import { extractCodons } from "./proteins/util/dna-utils";
 import { getAminoAcidsFromCodons } from "./proteins/util/amino-acid-utils";
 import { CollectButtonComponent } from "../collect-button";
