@@ -28,7 +28,7 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
   }
 
   public componentDidMount() {
-    if (firstMount) {
+    if (this.stores.populations && firstMount) {
       // only initialize the populations graph on the very first mount.
       // from then on, the graph will only be re-initialized when the user
       // explicitly resets the model
@@ -38,7 +38,7 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
   }
 
   public componentWillUnmount() {
-    this.stores.populations.close();
+    if (this.stores.populations) this.stores.populations.close();
   }
 
   public render() {
@@ -168,15 +168,15 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
   }
 
   private handleClickRunButton = () => {
-    this.stores.populations.togglePlay();
+    this.stores.populations!.togglePlay();
   }
 
   private handleClickInspectButton = () => {
-    this.stores.populations.toggleInteractionMode("inspect");
+    this.stores.populations!.toggleInteractionMode("inspect");
   }
 
   private handleClickResetButton = () => {
-    this.stores.populations.reset();
+    this.stores.populations!.reset();
   }
 
   private handleClickToolbarCheckbox = (button: ToolbarButton) => {
@@ -187,7 +187,7 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
   }
 
   private handleClickSelect = () => {
-    this.stores.populations.toggleInteractionMode("select");
+    this.stores.populations!.toggleInteractionMode("select");
   }
 
   private handleAgentMouseEvent = (evt: AgentEnvironmentMouseEvent) => {
@@ -204,7 +204,7 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
           });
           const added = backpack.addCollectedMouse(backpackMouse);
           if (added){
-            this.stores.populations.removeAgent(selectedMouse);
+            this.stores.populations!.removeAgent(selectedMouse);
           }
         } else if (evtType === "click" && populations.interactionMode === "inspect") {
           const selectedMouse = evt.agents.mice;

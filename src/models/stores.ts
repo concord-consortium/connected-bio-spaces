@@ -20,7 +20,7 @@ const STUDENT_DATA_VERSION = 1;
 
 export interface IStores {
   ui: UIModelType;
-  populations: PopulationsModelType;
+  populations?: PopulationsModelType;
   backpack: BackpackModelType;
   organisms: OrganismsSpaceModelType;
   breeding: BreedingModelType;
@@ -62,13 +62,18 @@ export function createStores(initialModel: ConnectedBioModelCreationType): IStor
     }
   });
 
-  return {
+  const stores: IStores = {
     ui,
     backpack,
-    populations,
     organisms,
     breeding
   };
+
+  if (populations) {
+    stores.populations = populations;
+  }
+
+  return stores;
 }
 
 export interface UserSaveDataType {
