@@ -5,13 +5,13 @@
     "unit": {
       "title": "Unit",
       "type": "string",
-      "oneOf": [
-        {
-          "enum": [
-            "mouse"
-          ],
-          "title": "Mouse"
-        }
+      "enum": [
+        "mouse",
+        "pea"
+      ],
+      "enumNames": [
+        "Mouse",
+        "Pea"
       ]
     },
     "topBar": {
@@ -294,5 +294,8 @@
         }
       }
     }
-  }
+  },
+  "required": [
+    "unit"
+  ]
 }
