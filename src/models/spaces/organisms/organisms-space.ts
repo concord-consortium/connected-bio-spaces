@@ -7,6 +7,7 @@ import { OrganismsMouseModel, OrganelleType, SubstanceType } from "./mouse/organ
 import { OrganismsRowModel } from "./organisms-row";
 import { BackpackModelType } from "../../backpack";
 import { GraphPatternType } from "../charts/chart-data-set";
+import { Unit } from "../../../authoring";
 
 export type SubstanceInfo = {
   [substance in SubstanceType]: {
@@ -30,16 +31,22 @@ export type OrganelleInfo = {
   };
 };
 
-export function createOrganismsModel(organismsProps: any, backpack: BackpackModelType) {
-  if (organismsProps.organismsMice) {
-    organismsProps.organismsMice = organismsProps.organismsMice.map((organismMouse: any) => {
-      return {
-        ...organismMouse,
-        backpackMouse: resolveIdentifier(BackpackMouse, backpack, organismMouse.backpackMouse)
-      };
-    });
-  }
-  return OrganismsSpaceModel.create(organismsProps);
+export function createOrganismsModel(unit: Unit, organismsProps: any, backpack: BackpackModelType) {
+  switch (unit) {
+    case "pea":
+      return null;
+    case "mouse":
+    default:
+      if (organismsProps.organismsMice) {
+        organismsProps.organismsMice = organismsProps.organismsMice.map((organismMouse: any) => {
+          return {
+            ...organismMouse,
+            backpackMouse: resolveIdentifier(BackpackMouse, backpack, organismMouse.backpackMouse)
+          };
+        });
+      }
+      return OrganismsSpaceModel.create(organismsProps);
+    }
 }
 
 export const OrganismsSpaceModel = types

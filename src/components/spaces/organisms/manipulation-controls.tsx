@@ -18,6 +18,7 @@ export class ManipulationControls extends BaseComponent<IProps, IState> {
 
   public render() {
     const { organisms } = this.stores;
+    if (!organisms) return null;
     const row = this.getControlsRow();
     const hormoneClass = "hormone " + (row.selectedSubstance === "hormone" ? "active" : "");
     const signalProteinClass = "signal-protein " + (row.selectedSubstance === "signalProtein" ? "active" : "");
@@ -160,7 +161,7 @@ export class ManipulationControls extends BaseComponent<IProps, IState> {
   private getControlsRow = () => {
     const { organisms } = this.stores;
     const { rowIndex } = this.props;
-    return organisms.rows[rowIndex];
+    return organisms!.rows[rowIndex];
   }
 
   private handleAssayClick = () => {

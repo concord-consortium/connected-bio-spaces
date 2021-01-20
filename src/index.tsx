@@ -57,7 +57,9 @@ function initializeModel(studentData: UserSaveDataType) {
     };
     onSnapshot(stores.backpack, saveUserData);
     onSnapshot(stores.ui, saveUserData);
-    onSnapshot(stores.organisms, saveUserData);
+    if (stores.organisms) {
+      onSnapshot(stores.organisms, saveUserData);
+    }
     onSnapshot(stores.breeding, saveUserData);
 
     const outerWrapperStyle = { className: "outer-scale-wrapper" };

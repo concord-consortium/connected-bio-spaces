@@ -22,7 +22,7 @@ export interface IStores {
   ui: UIModelType;
   populations?: PopulationsModelType;
   backpack: BackpackModelType;
-  organisms: OrganismsSpaceModelType;
+  organisms?: OrganismsSpaceModelType;
   breeding: BreedingModelType;
 }
 
@@ -34,12 +34,12 @@ export function createStores(initialModel: ConnectedBioModelCreationType): IStor
   const populations = createPopulationsModel(initialModel.unit, flatten(initialModel.populations));
   // since organisms and breeding may contain references to backpack mice, yet are in different trees,
   // we need to pass them in explicitly so they can be found
-  const organisms = createOrganismsModel(initialModel.organisms, backpack);
+  const organisms = createOrganismsModel(initialModel.unit, initialModel.organisms, backpack);
   const breeding = createBreedingModel(initialModel.breeding);
 
   // inform organisms space if user selects a backpack mouse
   autorun(() => {
-    if (ui.investigationPanelSpace === "organism" && backpack.activeMouse) {
+    if (organisms && ui.investigationPanelSpace === "organism" && backpack.activeMouse) {
       const organismAdded = organisms.activeBackpackMouseUpdated(backpack.activeMouse);
       if (organismAdded) {
         backpack.deselectMouse();
@@ -56,22 +56,22 @@ export function createStores(initialModel: ConnectedBioModelCreationType): IStor
     }
   });
   // and when organism rows are cleared
-  onAction(organisms, call => {
-    if (call.name === "clearRowBackpackMouse") {
-      backpack.deselectMouse();
-    }
-  });
+  if (organisms) {
+    onAction(organisms, call => {
+      if (call.name === "clearRowBackpackMouse") {
+        backpack.deselectMouse();
+      }
+    });
+  }
 
   const stores: IStores = {
     ui,
     backpack,
-    organisms,
     breeding
   };
 
-  if (populations) {
-    stores.populations = populations;
-  }
+  if (populations) stores.populations = populations;
+  if (organisms) stores.organisms = organisms;
 
   return stores;
 }
@@ -95,8 +95,7 @@ export interface UserSaveDataType {
 }
 
 export function getUserSnapshot(stores: IStores): UserSaveDataType {
-  const {organismsMice, rows} = stores.organisms;
-  return {
+  const snapshot: UserSaveDataType = {
     version: STUDENT_DATA_VERSION,
     ui: {
       investigationPanelSpace: stores.ui.investigationPanelSpace
@@ -104,13 +103,19 @@ export function getUserSnapshot(stores: IStores): UserSaveDataType {
     backpack: {
       collectedMice: stores.backpack.collectedMice
     },
-    organisms: {
-      organismsMice,
-      rows
-    },
     breeding: {
       backgroundType: stores.breeding.backgroundType,
       nestPairs: stores.breeding.nestPairs
     }
   };
+
+  if (stores.organisms) {
+    const {organismsMice, rows} = stores.organisms;
+    snapshot.organisms = {
+      organismsMice,
+      rows
+    };
+  }
+
+  return snapshot;
 }

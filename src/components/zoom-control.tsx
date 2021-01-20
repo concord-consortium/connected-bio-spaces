@@ -4,6 +4,7 @@ import { BaseComponent, IBaseProps } from "./base";
 
 import "./zoom-control.sass";
 import { ZoomLevelType } from "../models/spaces/organisms/organisms-row";
+import { OrganismsSpaceModelType } from "../models/spaces/organisms/organisms-space";
 
 interface IProps extends IBaseProps {
   handleZoom: (zoomLevel: number) => void;
@@ -19,13 +20,15 @@ export class ZoomControl extends BaseComponent<IProps, IState> {
 
   public render() {
     const { showTargetZoom } = this.props;
+    const { organisms } = this.stores;
+    if (!organisms) return null;
 
     const row = this.getControlsRow();
     const targetClass = showTargetZoom ? " target sticky" : "";
     const activeClass = row.mode === "target-zoom" ? " active" : "";
 
-    const zoomInClass = "zoom-in" + this.getZoomClass(["organism", "cell"]) + targetClass + activeClass;
-    const zoomOutClass = "zoom-out" + this.getZoomClass(["cell", "receptor", "nucleus"]);
+    const zoomInClass = "zoom-in" + this.getZoomClass(["organism", "cell"], organisms) + targetClass + activeClass;
+    const zoomOutClass = "zoom-out" + this.getZoomClass(["cell", "receptor", "nucleus"], organisms);
     const zoomInIcon = "#icon-zoomin" + (showTargetZoom ? "-target" : "");
     return (
       <div className="zoom-container" data-test="zoom-container">
@@ -50,8 +53,7 @@ export class ZoomControl extends BaseComponent<IProps, IState> {
     );
   }
 
-  private getZoomClass = (enabledZooms: ZoomLevelType[]) => {
-    const { organisms } = this.stores;
+  private getZoomClass = (enabledZooms: ZoomLevelType[], organisms: OrganismsSpaceModelType) => {
     const { rowIndex, disable } = this.props;
     const row = organisms.rows[rowIndex];
     if (disable || row.zoomLevel === "cell" && !organisms.showZoomToNucleus && !organisms.showZoomToReceptor) {
@@ -85,6 +87,6 @@ export class ZoomControl extends BaseComponent<IProps, IState> {
   private getControlsRow = () => {
     const { organisms } = this.stores;
     const { rowIndex } = this.props;
-    return organisms.rows[rowIndex];
+    return organisms!.rows[rowIndex];
   }
 }

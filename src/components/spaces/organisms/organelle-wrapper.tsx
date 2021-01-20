@@ -131,7 +131,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
 
   public organelleClick(organelleType: OrganelleType, location: {x: number, y: number}) {
     const { organisms } = this.stores;
-    const row = organisms.rows[this.props.rowIndex];
+    const row = organisms!.rows[this.props.rowIndex];
     if (row.mode === "assay") {
       row.setActiveAssay(organelleType);
       row.setRightPanel("data");        // auto-switch to data
@@ -208,7 +208,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
   public addHormone(organelleType: OrganelleType, location: {x: number, y: number}) {
     const { rowIndex } = this.props;
     const { organisms } = this.stores;
-    const zoom = organisms.rows[rowIndex].zoomLevel;
+    const zoom = organisms!.rows[rowIndex].zoomLevel;
     const species = zoom === "cell" ? "hormoneDot" : "hexagon";
     const inIntercell = organelleType === "extracellular";
     const state = inIntercell ? "find_path_from_anywhere" : "diffuse";
@@ -225,7 +225,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     location.x -= 17;
     location.y += 3;
 
-    if (organisms.rows[rowIndex].zoomLevel === "receptor") {
+    if (organisms!.rows[rowIndex].zoomLevel === "receptor") {
       const inIntercell = organelleType === "extracellular";
       const species = "gProteinPart";
       const state = inIntercell ? "find_flowing_path" : "in_cell_from_click";
@@ -235,6 +235,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
 
   public render() {
     const {organisms} = this.stores;
+    if (!organisms) return  null;
     const {mode, zoomLevel} = this.props;
     const { getOrganelleLabel } = organisms;
     const hoveredOrganelle = organisms.rows[this.props.rowIndex].hoveredOrganelle;
@@ -317,6 +318,8 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     }
     const { zoomLevel } = this.props;
     const { organisms } = this.stores;
+    if (!organisms) return;
+
     const row = organisms.rows[this.props.rowIndex];
     const { organismsMouse } = row;
     const { modelProperties } = organismsMouse!;
@@ -392,6 +395,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
 
     model.on("model.step", () => {
       const { organisms } = this.stores;
+      if (!organisms) return;
       const { rowIndex } = this.props;
       const { organismsMouse } = organisms.rows[rowIndex];
       if (!organismsMouse) {
@@ -442,18 +446,18 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
     model.on("view.hover.enter", (evt: any) => {
       const {organisms} = this.stores;
       const hoveredOrganelle = this.getOrganelleFromMouseEvent(evt);
-      organisms.rows[this.props.rowIndex].setHoveredOrganelle(hoveredOrganelle);
+      organisms!.rows[this.props.rowIndex].setHoveredOrganelle(hoveredOrganelle);
 
       const target = this.getZoomTargetFromMouseEvent(evt);
       if (target) {
-        organisms.rows[this.props.rowIndex].setHoveredZoomTarget(target);
+        organisms!.rows[this.props.rowIndex].setHoveredZoomTarget(target);
       }
     });
 
     model.on("view.hover.exit", (evt: any) => {
       const {organisms} = this.stores;
       if (evt.target._organelle.matches({selector: ".zoom"})) {
-        organisms.rows[this.props.rowIndex].setHoveredZoomTarget();
+        organisms!.rows[this.props.rowIndex].setHoveredZoomTarget();
       }
     });
 
@@ -583,7 +587,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
       .filter(organelle => {
         const organelleInfo = this.organelleSelectorInfo[organelle];
         const visibleModes = organelleInfo.visibleModes;
-        return !visibleModes || visibleModes.indexOf(organisms.rows[this.props.rowIndex].mode) > -1;
+        return !visibleModes || visibleModes.indexOf(organisms!.rows[this.props.rowIndex].mode) > -1;
       });
     return possibleTargets.find((t) => {
       return evt.target._organelle.matches({selector: this.organelleSelectorInfo[t].selector});
@@ -593,7 +597,7 @@ export class OrganelleWrapper extends BaseComponent<OrganelleWrapperProps, Organ
   private resetHoveredOrganelle = () => {
     const {organisms} = this.stores;
     const {rowIndex} = this.props;
-    organisms.rows[rowIndex].setHoveredOrganelle(undefined);
+    organisms!.rows[rowIndex].setHoveredOrganelle(undefined);
   }
 
   private getOpaqueSelector(organelleType: OrganelleType) {
