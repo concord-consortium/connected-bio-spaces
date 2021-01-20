@@ -33,25 +33,29 @@ export class LeftNavPanelComponent extends BaseComponent<IProps, IState> {
   }
 
   private renderExploreButtons = () => {
-    const {ui} = this.stores;
+    const {ui, populations, organisms, breeding} = this.stores;
+    const showPopulationSpace = ui.showPopulationSpace && populations;
+    const showOrganismSpace = ui.showOrganismSpace && organisms;
+    const showBreedingSpace = ui.showBreedingSpace && breeding;
+    const showDNASpace = false;   // eventually use ui.showDNASpace && dna
     return (
       <div className="button-holder investigate" data-test="explore-options">
-        {ui.showPopulationSpace &&
+        {showPopulationSpace &&
         <ExploreButtonComponent
           space={"populations"}
           title={"Population"}
         /> }
-        {ui.showOrganismSpace &&
+        {showOrganismSpace &&
         <ExploreButtonComponent
           space={"organism"}
           title={"Organism"}
         /> }
-        {ui.showBreedingSpace &&
+        {showBreedingSpace &&
         <ExploreButtonComponent
           space={"breeding"}
           title={"Heredity"}
         /> }
-        {ui.showDNASpace &&
+        {showDNASpace &&
         <ExploreButtonComponent
           space={"dna"}
           title={"DNA"}
