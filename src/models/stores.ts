@@ -4,7 +4,7 @@ import { BackpackModel, BackpackModelType } from "./backpack";
 import { flatten } from "flat";
 import { OrganismsSpaceModelType, createOrganismsModel } from "./spaces/organisms/organisms-space";
 import { BackpackMouseType } from "./backpack-mouse";
-import { ConnectedBioAuthoring } from "../authoring";
+import { ConnectedBioAuthoring, Unit } from "../authoring";
 import { QueryParams } from "../utilities/url-params";
 import { OrganismsMouseModelType } from "./spaces/organisms/mouse/organisms-mouse";
 import { OrganismsRowModelType } from "./spaces/organisms/organisms-row";
@@ -13,12 +13,11 @@ import { onAction } from "mobx-state-tree";
 import { BreedingModelType, createBreedingModel, INestPair } from "./spaces/breeding/breeding";
 import { EnvironmentColorType } from "../models/spaces/breeding/breeding";
 
-export type Unit = "mouse";
-
 // allow for migration when needed
 const STUDENT_DATA_VERSION = 1;
 
 export interface IStores {
+  unit: Unit;
   ui: UIModelType;
   populations?: PopulationsModelType;
   backpack: BackpackModelType;
@@ -65,6 +64,7 @@ export function createStores(initialModel: ConnectedBioModelCreationType): IStor
   }
 
   const stores: IStores = {
+    unit: initialModel.unit,
     ui,
     backpack,
     breeding

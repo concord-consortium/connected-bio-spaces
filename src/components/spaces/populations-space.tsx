@@ -7,6 +7,7 @@ import { InstructionsComponent } from "../instructions";
 import { RightPanelType } from "../../models/ui";
 import { InspectPanel } from "../inspect-panel";
 import { PopulationsCharts } from "./populations/populations-charts";
+import { units } from "../../models/units";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -44,9 +45,12 @@ export class PopulationsSpaceComponent extends BaseComponent<IProps, IState> {
       }
     })();
 
+    const unitDef = units[this.stores.unit];
+    const title = unitDef.populations.title;
+
     return (
       <TwoUpDisplayComponent
-        leftTitle="Explore: Population"
+        leftTitle={title}
         leftPanel={<PopulationsComponent />}
         rightTitle={rightPanelTitle}
         rightPanel={rightPanelContent}

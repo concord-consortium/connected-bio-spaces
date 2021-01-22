@@ -15,6 +15,7 @@ import { getAminoAcidsFromCodons } from "./proteins/util/amino-acid-utils";
 import { CollectButtonComponent } from "../collect-button";
 import ChromosomeViewer from "./organisms/chromosome-viewer";
 import { OrganismsSpaceModelType } from "../../models/spaces/organisms/organisms-space";
+import { units } from "../../models/units";
 
 interface IProps extends IBaseProps {}
 interface IState {
@@ -163,6 +164,9 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
       });
     }
 
+    const unitDef = units[this.stores.unit];
+    const title = unitDef.organism.title;
+
     return (
       <div className="fullwidth">
         <CollectButtonComponent
@@ -171,7 +175,7 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
           placeable={activeMouse != null}
         />
         <TwoUpDisplayComponent
-          leftTitle="Explore: Organism"
+          leftTitle={title}
           leftPanel={<OrganismsContainer
             rowIndex={rowIndex}
             disableZoom={this.state.isZooming}
