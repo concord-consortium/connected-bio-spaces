@@ -15,7 +15,7 @@ interface IProps extends IBaseProps {
 interface IState {}
 
 export const defaultAuthoring: ConnectedBioAuthoring = {
-  curriculum: "mouse",
+  unit: "mouse",
   topBar: true,
   ui: {
     showPopulationSpace: true,

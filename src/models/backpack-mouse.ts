@@ -52,16 +52,16 @@ export const BackpackMouse = types
       }
     },
     get nestOutlineImage(): string {
-      return "assets/curriculum/mouse/breeding/nesting/nest_mouse_outline.png";
+      return "assets/unit/mouse/breeding/nesting/nest_mouse_outline.png";
     },
     get zoomImage(): string {
       switch (self.genotype) {
         case "RR":
-          return "assets/curriculum/mouse/zoom/mouse_field.gif";
+          return "assets/unit/mouse/zoom/mouse_field.gif";
         case "CC":
-          return "assets/curriculum/mouse/zoom/mouse_beach.gif";
+          return "assets/unit/mouse/zoom/mouse_beach.gif";
         default:
-          return "assets/curriculum/mouse/zoom/mouse_tan.gif";
+          return "assets/unit/mouse/zoom/mouse_tan.gif";
       }
     },
     get isHeterozygote(): boolean {

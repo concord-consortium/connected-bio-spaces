@@ -51,7 +51,7 @@ export type EnableMouseGenotypesPieChart = boolean;
 export type EnableMouseSexPieChart = boolean;
 
 export interface ConnectedBioAuthoring {
-  curriculum?: Unit;
+  unit?: Unit;
   topBar?: ShowTopBar;
   ui?: InvestigationSpaces;
   backpack?: InitialBackpack;

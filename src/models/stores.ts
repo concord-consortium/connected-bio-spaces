@@ -13,7 +13,7 @@ import { onAction } from "mobx-state-tree";
 import { BreedingModelType, createBreedingModel, INestPair } from "./spaces/breeding/breeding";
 import { EnvironmentColorType } from "../models/spaces/breeding/breeding";
 
-export type Curriculum = "mouse";
+export type Unit = "mouse";
 
 // allow for migration when needed
 const STUDENT_DATA_VERSION = 1;
@@ -31,7 +31,7 @@ export type ConnectedBioModelCreationType = ConnectedBioAuthoring & QueryParams 
 export function createStores(initialModel: ConnectedBioModelCreationType): IStores {
   const ui = createUIModel(initialModel.ui);
   const backpack = BackpackModel.create(initialModel.backpack);
-  const populations = createPopulationsModel(initialModel.curriculum, flatten(initialModel.populations));
+  const populations = createPopulationsModel(initialModel.unit, flatten(initialModel.populations));
   // since organisms and breeding may contain references to backpack mice, yet are in different trees,
   // we need to pass them in explicitly so they can be found
   const organisms = createOrganismsModel(initialModel.organisms, backpack);

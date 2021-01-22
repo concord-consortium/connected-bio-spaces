@@ -11,7 +11,7 @@ function createEnvironment(color: EnvironmentColorType, mouseSpecies: Species) {
     width: 450,
     height: 480,
     viewWidth: 900,
-    imgPath: `assets/curriculum/mouse/populations/${color}.png`,
+    imgPath: `assets/unit/mouse/populations/${color}.png`,
     wrapEastWest: false,
     wrapNorthSouth: false,
     depthPerception : true
@@ -82,9 +82,9 @@ export function createInteractive(model: MousePopulationsModelType) {
     ]
   });
 
-  const backgroundImages = ["assets/curriculum/mouse/populations/brown.png",
-                            "assets/curriculum/mouse/populations/neutral.png",
-                            "assets/curriculum/mouse/populations/white.png"];
+  const backgroundImages = ["assets/unit/mouse/populations/brown.png",
+                            "assets/unit/mouse/populations/neutral.png",
+                            "assets/unit/mouse/populations/white.png"];
 
   helpers.preload([mouseSpecies, {preload: backgroundImages}], () => {
     interactive.setup();
@@ -288,7 +288,7 @@ export function createInteractive(model: MousePopulationsModelType) {
       environmentColor = "white";
     }
     model.setEnvironmentColor(environmentColor);
-    interactive.environment.setBackground(`assets/curriculum/mouse/populations/${environmentColor}.png`);
+    interactive.environment.setBackground(`assets/unit/mouse/populations/${environmentColor}.png`);
   };
 
   interactive.getData = () => {
