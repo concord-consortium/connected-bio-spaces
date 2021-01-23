@@ -99,17 +99,17 @@ export class NestPair extends BaseComponent<IProps, IState> {
   private getNestHoverImage = () => {
     switch (this.props.positionIndex) {
       case 1:
-        return "assets/curriculum/mouse/breeding/nesting/left-top-hover.png";
+        return "assets/unit/mouse/breeding/nesting/left-top-hover.png";
       case 2:
-        return "assets/curriculum/mouse/breeding/nesting/right-top-hover.png";
+        return "assets/unit/mouse/breeding/nesting/right-top-hover.png";
       case 3:
-        return "assets/curriculum/mouse/breeding/nesting/left-middle-hover.png";
+        return "assets/unit/mouse/breeding/nesting/left-middle-hover.png";
       case 4:
-        return "assets/curriculum/mouse/breeding/nesting/right-middle-hover.png";
+        return "assets/unit/mouse/breeding/nesting/right-middle-hover.png";
       case 5:
-        return "assets/curriculum/mouse/breeding/nesting/left-bottom-hover.png";
+        return "assets/unit/mouse/breeding/nesting/left-bottom-hover.png";
       case 6:
-        return "assets/curriculum/mouse/breeding/nesting/right-bottom-hover.png";
+        return "assets/unit/mouse/breeding/nesting/right-bottom-hover.png";
       default:
         return "";
     }

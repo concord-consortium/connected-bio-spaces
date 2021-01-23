@@ -2,7 +2,7 @@
   "title": "Connected Bio Authoring",
   "type": "object",
   "properties": {
-    "curriculum": {
+    "unit": {
       "title": "Unit",
       "type": "string",
       "oneOf": [

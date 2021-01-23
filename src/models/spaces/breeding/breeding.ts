@@ -377,11 +377,11 @@ export const BreedingModel = types
       get backgroundImage() {
         switch (self.backgroundType) {
           case "brown":
-            return "assets/curriculum/mouse/breeding/nesting/environment-brown-nests.png";
+            return "assets/unit/mouse/breeding/nesting/environment-brown-nests.png";
           case "white":
-            return "assets/curriculum/mouse/breeding/nesting/environment-white-nests.png";
+            return "assets/unit/mouse/breeding/nesting/environment-white-nests.png";
           default:
-            return "assets/curriculum/mouse/breeding/nesting/environment-mixed-nests.png";
+            return "assets/unit/mouse/breeding/nesting/environment-mixed-nests.png";
         }
       },
       get activeBreedingPair(): INestPair | undefined {

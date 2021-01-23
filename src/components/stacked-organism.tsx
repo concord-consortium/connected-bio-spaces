@@ -17,7 +17,7 @@ interface IProps {
   isOffspring?: boolean;
 }
 
-const path = "assets/curriculum/mouse/populations/";
+const path = "assets/unit/mouse/populations/";
 const selectionImage =  path + "select-stack.png";
 
 export const StackedOrganism: React.SFC<IProps> = (props) => {

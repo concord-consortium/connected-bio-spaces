@@ -137,7 +137,7 @@ export class InspectPanel extends BaseComponent<IProps, IState> {
   }
 
   private renderGametePanel = (mouse: BackpackMouseType) => {
-    const arrowImage = "assets/curriculum/mouse/breeding/inspect/inspect-arrow.png";
+    const arrowImage = "assets/unit/mouse/breeding/inspect/inspect-arrow.png";
     const label1 = mouse.genotype.slice(0, 1);
     const label2 = mouse.genotype.slice(-1);
     return(

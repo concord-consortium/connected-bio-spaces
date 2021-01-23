@@ -101,7 +101,7 @@ export const hawkSpecies = new Species({
     contexts: ["environment"],
     rules: [{
       image: {
-        path: "assets/curriculum/mouse/populations/hawk.png",
+        path: "assets/unit/mouse/populations/hawk.png",
         // Annoying that we can't simply make scale a computed property.
         // Something for the next version of populations.js ...
         scale: 0.18,
@@ -113,7 +113,7 @@ export const hawkSpecies = new Species({
       useIf: (agent: Agent) => agent.get("height") <= 2
     }, {
       image: {
-        path: "assets/curriculum/mouse/populations/hawk.png",
+        path: "assets/unit/mouse/populations/hawk.png",
         scale: 0.185,
         anchor: {
           x: 0.5,
@@ -123,7 +123,7 @@ export const hawkSpecies = new Species({
       useIf: (agent: Agent) => agent.get("height") <= 3
     }, {
       image: {
-        path: "assets/curriculum/mouse/populations/hawk.png",
+        path: "assets/unit/mouse/populations/hawk.png",
         scale: 0.19,
         anchor: {
           x: 0.5,
@@ -133,7 +133,7 @@ export const hawkSpecies = new Species({
       useIf: (agent: Agent) => agent.get("height") <= 4
     }, {
       image: {
-        path: "assets/curriculum/mouse/populations/hawk.png",
+        path: "assets/unit/mouse/populations/hawk.png",
         scale: 0.195,
         anchor: {
           x: 0.5,
@@ -143,7 +143,7 @@ export const hawkSpecies = new Species({
       useIf: (agent: Agent) => agent.get("height") <= 5
     }, {
       image: {
-        path: "assets/curriculum/mouse/populations/hawk.png",
+        path: "assets/unit/mouse/populations/hawk.png",
         scale: 0.21,
         anchor: {
           x: 0.5,
@@ -153,7 +153,7 @@ export const hawkSpecies = new Species({
       useIf: (agent: Agent) => agent.get("height") <= 6
     }, {
       image: {
-        path: "assets/curriculum/mouse/populations/hawk.png",
+        path: "assets/unit/mouse/populations/hawk.png",
         scale: 0.215,
         anchor: {
           x: 0.5,
@@ -163,7 +163,7 @@ export const hawkSpecies = new Species({
       useIf: (agent: Agent) => agent.get("height") <= 7
     }, {
       image: {
-        path: "assets/curriculum/mouse/populations/hawk.png",
+        path: "assets/unit/mouse/populations/hawk.png",
         scale: 0.22,
         anchor: {
           x: 0.5,
@@ -173,7 +173,7 @@ export const hawkSpecies = new Species({
       useIf: (agent: Agent) => agent.get("height") <= 8
     }, {
       image: {
-        path: "assets/curriculum/mouse/populations/hawk.png",
+        path: "assets/unit/mouse/populations/hawk.png",
         scale: 0.225,
         anchor: {
           x: 0.5,
@@ -184,7 +184,7 @@ export const hawkSpecies = new Species({
     },
     {
       image: {
-        path: "assets/curriculum/mouse/populations/hawk.png",
+        path: "assets/unit/mouse/populations/hawk.png",
         scale: 0.23,
         anchor: {
           x: 0.5,

@@ -90,10 +90,10 @@ const ChromosomeViewer: React.StatelessComponent<IProps> = props => {
       </div>
       <div className="chromosome-details">
         <div className="chromosome-image">
-          <SVG src={`assets/curriculum/mouse/nucleus/chromosome-${chromosome}-inspect.svg`}
+          <SVG src={`assets/unit/mouse/nucleus/chromosome-${chromosome}-inspect.svg`}
             className={ colored ? chromoNumber : "" } />
           { chromosome !== "y" &&
-          <img src={`assets/curriculum/mouse/nucleus/chromosome-${chromosome}-inspect-markers.svg`} />
+          <img src={`assets/unit/mouse/nucleus/chromosome-${chromosome}-inspect-markers.svg`} />
           }
         </div>
         <div className={"chromosome-genes " + chromoNumber}>
