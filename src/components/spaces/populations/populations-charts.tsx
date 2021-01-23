@@ -33,6 +33,7 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
   public constructor(props: IProps) {
     super(props);
 
+    if (!this.stores.populations) return;
     const model = this.stores.populations.model as MousePopulationsModelType;
     const lineChartHeight = model.showPieChart ? MIN_LINE_CHART_HEIGHT : MAX_LINE_CHART_HEIGHT;
     this.state = {
@@ -44,6 +45,7 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
   }
 
   public componentDidMount() {
+    if (!this.stores.populations) return;
     this.disposer = onAction(this.stores.populations.model, call => {
       if (call.name === "toggleShowPieChart") {
         lastAnimationTime = Date.now();
@@ -67,6 +69,8 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
   }
 
   public render() {
+    if (!this.stores.populations) return null;
+
     const { chartData, isPlaying } = this.props;
     const model = this.stores.populations.model as MousePopulationsModelType;
     const { showMaxPoints, toggleShowMaxPoints, enablePieChart, showPieChart, toggleShowPieChart } = model;
@@ -189,7 +193,7 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
   }
 
   private animateLineChartHeight = () => {
-    const model = this.stores.populations.model as MousePopulationsModelType;
+    const model = this.stores.populations!.model as MousePopulationsModelType;
     const height = this.state.lineChartHeight;
     const now = Date.now();
     const timeStepPercent = (now - lastAnimationTime) / animationTime;
@@ -210,7 +214,7 @@ export class PopulationsCharts extends BaseComponent<IProps, IState>  {
 
   private handleSliderDragChange = (value: number) => {
     const { chartData } = this.props;
-    const model = this.stores.populations.model as MousePopulationsModelType;
+    const model = this.stores.populations!.model as MousePopulationsModelType;
     const { showMaxPoints, showPieChart } = model;
 
     const pieChartComparisonIdx = Math.min(value, chartData.pointCount - 1);

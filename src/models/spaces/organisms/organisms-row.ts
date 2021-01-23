@@ -3,8 +3,9 @@ import { ChartDataModelType, ChartDataModel } from "../charts/chart-data";
 import { RightPanelTypeEnum, RightPanelType } from "../../ui";
 import { DataPoint, ChartDataSetModel, DataPointType, ChartDataSetModelType } from "../charts/chart-data-set";
 import { OrganismsMouseModel, Organelle, Substance, kSubstanceNames,
-  OrganelleType, SubstanceType } from "./organisms-mouse";
-import { kSubstanceInfo, OrganismsSpaceModel } from "./organisms-space";
+  OrganelleType, SubstanceType } from "./mouse/organisms-mouse";
+import { kSubstanceInfo } from "./mouse/mouse-cell-data";
+import { OrganismsSpaceModel } from "./organisms-space";
 
 export const Mode = types.enumeration("type", ["add", "subtract", "assay", "inspect", "target-zoom", "normal"]);
 export type ModeType = typeof Mode.Type;

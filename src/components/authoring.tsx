@@ -78,9 +78,6 @@ export const defaultAuthoring: ConnectedBioAuthoring = {
 };
 
 const uiSchema = {
-  curriculum: {
-    "ui:readonly": true
-  },
   backpack: {
     "ui:options": {
       addable: true,

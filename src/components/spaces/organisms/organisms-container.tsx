@@ -10,6 +10,7 @@ import { OrganelleWrapper } from "./organelle-wrapper";
 import { ManipulationControls } from "./manipulation-controls";
 import { NucleusView } from "./nucleus-view";
 import { DEFAULT_MODEL_WIDTH } from "../../..";
+import { OrganismsSpaceModelType } from "../../../models/spaces/organisms/organisms-space";
 
 interface IProps extends IBaseProps {
   rowIndex: number;
@@ -39,6 +40,7 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
   public render() {
     const { rowIndex } = this.props;
     const { organisms } = this.stores;
+    if (!organisms) return null;
     const organismsRow = organisms.rows[rowIndex];
     const { zoomLevel, mode } = organismsRow;
     const showTargetZoom = zoomLevel === "cell";
@@ -46,10 +48,10 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
     return (
       <div className="organisms-container" data-test="organism-view-container">
         {
-          this.organismZoomedView(organismsRow, zoomLevel, rowIndex, mode)
+          this.organismZoomedView(organisms, organismsRow, zoomLevel, rowIndex, mode)
         }
         <div className="organism-controls">
-          <ZoomControl handleZoom={this.zoomChange} rowIndex={rowIndex} showTargetZoom={showTargetZoom}
+          <ZoomControl handleZoom={this.zoomChange(organisms)} rowIndex={rowIndex} showTargetZoom={showTargetZoom}
             disable={this.props.disableZoom} />
           <ManipulationControls rowIndex={rowIndex} disableNucleusControls={this.state.nucleusAnimating} />
         </div>
@@ -57,8 +59,7 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
     );
   }
 
-  private zoomChange = (zoomChange: number) => {
-    const { organisms } = this.stores;
+  private zoomChange = (organisms: OrganismsSpaceModelType) => (zoomChange: number) => {
     const { rowIndex } = this.props;
     const organismsRow = organisms.rows[rowIndex];
 
@@ -90,16 +91,15 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
     organismsRow.setZoomLevel(defaultZoomLevelByIndex[nextIdx]);
   }
 
-  private zoomToLevel = (level: ZoomLevelType) => {
-    const { organisms } = this.stores;
+  private zoomToLevel = (organisms: OrganismsSpaceModelType) => (level: ZoomLevelType) => {
     const { rowIndex } = this.props;
     const organismsRow = organisms.rows[rowIndex];
     organismsRow.setZoomLevel(level);
   }
 
   // We explicitly pass down organismsRow and zoomLevel separately
-  private organismZoomedView = (organismsRow: OrganismsRowModelType, zoomLevel: ZoomLevelType, rowIndex: number,
-                                mode: ModeType) => {
+  private organismZoomedView = (organisms: OrganismsSpaceModelType, organismsRow: OrganismsRowModelType,
+                                zoomLevel: ZoomLevelType, rowIndex: number, mode: ModeType) => {
     const { organismsMouse, previousZoomLevel } = organismsRow;
     const width = DEFAULT_MODEL_WIDTH;
     const { isZoomingIntoOrg, cellModelLoaded } = this.state;
@@ -121,7 +121,7 @@ export class OrganismsContainer extends BaseComponent<IProps, IState> {
             {
               organismsMouse != null &&
                 <OrganelleWrapper zoomLevel={zoomLevel} elementName={`organelle-wrapper-${rowIndex}`}
-                  rowIndex={rowIndex} width={width} mode={mode} handleZoomToLevel={this.zoomToLevel}
+                  rowIndex={rowIndex} width={width} mode={mode} handleZoomToLevel={this.zoomToLevel(organisms)}
                   onModelLoaded={this.cellModelLoaded}/>
             }
           </div>

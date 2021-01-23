@@ -92,7 +92,9 @@ export class NucleusView extends BaseComponent<IProps, IState> {
   }
 
   public componentWillMount() {
-    this.disposer = onAction(this.stores.organisms, this.updatingModel);
+    if (this.stores.organisms) {
+      this.disposer = onAction(this.stores.organisms, this.updatingModel);
+    }
   }
 
   public componentWillUnmount() {
@@ -262,7 +264,7 @@ export class NucleusView extends BaseComponent<IProps, IState> {
   get row() {
     const { organisms } = this.stores;
     const { rowIndex } = this.props;
-    return organisms.rows[rowIndex];
+    return organisms!.rows[rowIndex];
   }
 
   get mouseId() {

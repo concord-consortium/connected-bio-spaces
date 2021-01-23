@@ -1,5 +1,6 @@
 import { inject, observer } from "mobx-react";
 import * as React from "react";
+import { units } from "../models/units";
 import { BaseComponent, IBaseProps } from "./base";
 
 import "./top-bar.sass";
@@ -12,6 +13,7 @@ interface IState {}
 export class TopBarComponent extends BaseComponent<IProps, IState> {
 
   public render() {
+    const title = units[this.stores.unit].title;
 
     return (
       <div className="top-bar">
@@ -22,7 +24,7 @@ export class TopBarComponent extends BaseComponent<IProps, IState> {
             </svg>
           </div>
           <div className="title-holder" data-test="top-bar-title">
-            Deer Mice
+            { title }
           </div>
         </div>
       </div>

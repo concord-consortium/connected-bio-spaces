@@ -5,8 +5,7 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export type Unit = Mouse;
-export type Mouse = "mouse";
+export type Unit = "mouse" | "pea";
 export type ShowTopBar = boolean;
 export type ShowPopulationsSpace = boolean;
 export type ShowBreedingSpace = boolean;
@@ -35,7 +34,7 @@ export type TimeToShowBodySteps = number;
 export type EnableColorChart = boolean;
 export type EnableGenotypeChart = boolean;
 export type EnableAllelesChart = boolean;
-export type EnablePieChart = boolean;
+export type EnablePieCharts = boolean;
 export type InstructionsAsMarkdown1 = string;
 export type ShowMysteryLocationLabels = boolean;
 export type ShowMysterySubstanceLabels = boolean;
@@ -51,7 +50,7 @@ export type EnableMouseGenotypesPieChart = boolean;
 export type EnableMouseSexPieChart = boolean;
 
 export interface ConnectedBioAuthoring {
-  unit?: Unit;
+  unit: Unit;
   topBar?: ShowTopBar;
   ui?: InvestigationSpaces;
   backpack?: InitialBackpack;
@@ -89,7 +88,7 @@ export interface PopulationsModel {
   enableColorChart?: EnableColorChart;
   enableGenotypeChart?: EnableGenotypeChart;
   enableAllelesChart?: EnableAllelesChart;
-  enablePieChart?: EnablePieChart;
+  enablePieChart?: EnablePieCharts;
   [k: string]: any;
 }
 export interface InitialMousePopulation {

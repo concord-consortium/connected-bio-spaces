@@ -7,6 +7,7 @@ import { RightPanelType } from "../../models/ui";
 import { BreedingContainer } from "./breeding/breeding-container";
 import { BreedingData } from "./breeding/breeding-data";
 import { InspectPanel } from "../inspect-panel";
+import { units } from "../../models/units";
 
 interface InspectContent {
   title: string;
@@ -50,9 +51,12 @@ export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
       }
     })();
 
+    const unitDef = units[this.stores.unit];
+    const title = unitDef.breeding.title;
+
     return (
       <TwoUpDisplayComponent
-        leftTitle="Explore: Nesting Pairs"
+        leftTitle={title}
         leftPanel={<BreedingContainer />}
         rightTitle={rightPanelTitle}
         rightPanel={rightPanelContent}
