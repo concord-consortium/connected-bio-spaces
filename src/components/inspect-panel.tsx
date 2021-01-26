@@ -79,8 +79,8 @@ export class InspectPanel extends BaseComponent<IProps, IState> {
 
   private renderMouseInfo(mouse: BackpackMouseType) {
     const sexLabel = mouse.sex === "female" ? "Female" : "Male";
-    const colorLabel = mouse.baseColor === "white" ? "Light brown" :
-                       mouse.baseColor === "tan" ? "Medium brown" : "Dark brown";
+    const colorLabel = mouse.phenotype === "white" ? "Light brown" :
+                       mouse.phenotype === "tan" ? "Medium brown" : "Dark brown";
     const genotypeLabel = genotypeHTMLLabel(mouse.genotype);
     const rowClass = "info-row" + (this.props.mouse2 ? "" : " wide");
     const mouseInfoClass = "mouse-info" + (this.props.isPopulationInspect ? " no-header" : "");

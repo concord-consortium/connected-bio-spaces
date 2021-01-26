@@ -20,7 +20,7 @@ export const BackpackMouse = types
     originMouseRefId: types.maybe(types.string),
   })
   .views(self => ({
-    get baseColor(): ColorType {
+    get phenotype(): ColorType {
       switch (self.genotype) {
         case "RR":
           return "brown";

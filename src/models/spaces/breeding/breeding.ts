@@ -95,7 +95,7 @@ export const NestPair = types.model({
   },
   getData(chartType: BreedingChartType) {
     const data: {[key: string]: number} = {};
-    const prop = chartType === "color" ? "baseColor" : chartType;
+    const prop = chartType === "color" ? "phenotype" : chartType;
     self.litters.forEach(litter => {
       litter.forEach(org => {
         const val = org[prop];
