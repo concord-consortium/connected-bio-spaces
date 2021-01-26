@@ -15,7 +15,7 @@ export type BreedingInteractionModeType = typeof BreedingInteractionModeEnum.Typ
 export const EnvironmentColorTypeEnum = types.enumeration("environment", ["white", "neutral", "brown"]);
 export type EnvironmentColorType = typeof EnvironmentColorTypeEnum.Type;
 
-const BreedingChartTypeEnum = types.enumeration("chart", ["color", "genotype", "sex"]);
+const BreedingChartTypeEnum = types.enumeration("chart", ["phenotype", "genotype", "sex"]);
 export type BreedingChartType = typeof BreedingChartTypeEnum.Type;
 
 const ShuffledGametePositions = types.model({
@@ -95,10 +95,9 @@ export const NestPair = types.model({
   },
   getData(chartType: BreedingChartType) {
     const data: {[key: string]: number} = {};
-    const prop = chartType === "color" ? "phenotype" : chartType;
     self.litters.forEach(litter => {
       litter.forEach(org => {
-        const val = org[prop];
+        const val = org[chartType];
         if (!data[val]) data[val] = 0;
         data[val] = data[val] + 1;
       });
@@ -360,9 +359,9 @@ export const BreedingModel = types
     return {
       get chartType(): BreedingChartType {
         return self.userChartType ? self.userChartType :
-          self.enableColorChart ? "color" :
+          self.enableColorChart ? "phenotype" :
           self.enableGenotypeChart ? "genotype" :
-          self.enableSexChart ? "sex" : "color";
+          self.enableSexChart ? "sex" : "phenotype";
       },
     };
   })
@@ -418,11 +417,13 @@ export const BreedingModel = types
       },
       get graphButtons(): ToolbarButton[] {
         const buttons = [];
+        const chartSpecies = self.nestPairs[0].mother.species;
+        const phenotypeLabel = speciesDef(chartSpecies).phenotypeHeading;
         buttons.push({
-          title: "Fur Colors",
-          value: self.chartType === "color",
+          title: phenotypeLabel,
+          value: self.chartType === "phenotype",
           action: (val: boolean) => {
-            self.setChartType("color");
+            self.setChartType("phenotype");
           },
           section: "data",
           disabled: !self.enableColorChart,

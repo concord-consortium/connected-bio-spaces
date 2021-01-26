@@ -6,6 +6,7 @@ import { INestPair } from "../../../models/spaces/breeding/breeding";
 // @ts-ignore
 import * as colors from "../../../components/colors.scss";
 import "./breeding-data-nest-panel.sass";
+import { speciesDef } from "../../../models/units";
 
 interface IState {}
 
@@ -49,24 +50,13 @@ export class BreedingDataNestPanel extends BaseComponent<IProps, IState> {
   }
 
   private renderPieChart() {
-    let pieData: PieChartData[] = [];
     const { breeding } = this.stores;
     const { chartType  } = breeding;
     const data = this.props.nestPair.getData(chartType);
+    const species = speciesDef(this.props.nestPair.leftMouse.species);
 
-    if (chartType === "genotype") {
-      pieData = [{label: "RᴸRᴸ", value: data.CC, color: colors.colorDataMouseBrownLightRep},
-                 {label: "RᴸRᴰ", value: data.CR, color: colors.colorDataMouseBrownMediumRep},
-                 {label: "RᴰRᴸ", value: data.RC, color: colors.colorDataMouseBrownMediumRep},
-                 {label: "RᴰRᴰ", value: data.RR, color: colors.colorDataMouseBrownDarkRep}];
-    } else if (chartType === "sex") {
-      pieData = [{label: "Female", value: data.female, color: colors.colorChartYellow},
-                 {label: "Male", value: data.male, color: colors.colorChartRed}];
-    } else {
-      pieData = [{label: "Light", value: data.white, color: colors.colorDataMouseBrownLightRep},
-                 {label: "Medium", value: data.tan, color: colors.colorDataMouseBrownMediumRep},
-                 {label: "Dark", value: data.brown, color: colors.colorDataMouseBrownDarkRep}];
-    }
+    let pieData: PieChartData[] = species.getChartData(chartType, data);
+
     // remove missing values
     pieData = pieData.filter(datum => datum.value);
 

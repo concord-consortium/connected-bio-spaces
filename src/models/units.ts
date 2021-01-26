@@ -1,5 +1,9 @@
 import { types } from "mobx-state-tree";
 import { Unit } from "../authoring";
+import { LegendItem } from "../components/spaces/breeding/breeding-data";
+import { PieChartData } from "../components/charts/pie-chart";
+// @ts-ignore
+import * as colors from "../components/colors.scss";
 
 export const UnitTypeEnum = types.enumeration("unit", ["mouse", "pea"]);
 
@@ -12,6 +16,8 @@ export interface UnitSpecies {
   phenotypeHeading: string;
   getPhenotypeLabel: (phenotype: string) => string;
   getGenotypeHTMLLabel: (genotype: string) => string;
+  chartTypes: Record<string, {legend: LegendItem[], title: string}>;
+  getChartData: (chartType: string, data: Record<string, number>) => PieChartData[];
 }
 
 interface UnitDefinition {
@@ -100,7 +106,41 @@ export const units: Units = {
           default:
             return "";
         }
-      }
+      },
+      chartTypes: {
+        phenotype: {legend: [
+          {label: "Light Brown", color: colors.colorDataMouseBrownLightRep},
+          {label: "Medium Brown", color: colors.colorDataMouseBrownMediumRep},
+          {label: "Dark Brown", color: colors.colorDataMouseBrownDarkRep}
+        ], title: "Fur Colors" },
+        genotype: {legend: [
+          {label: "R<sup>L</sup>R<sup>L</sup> Mice", color: colors.colorDataMouseBrownLightRep},
+          {label: "R<sup>L</sup>R<sup>D</sup> Mice", color: colors.colorDataMouseBrownMediumRep},
+          {label: "R<sup>D</sup>R<sup>L</sup> Mice", color: colors.colorDataMouseBrownMediumRep},
+          {label: "R<sup>D</sup>R<sup>D</sup> Mice", color: colors.colorDataMouseBrownDarkRep}
+        ], title: "Genotypes" },
+        sex: {legend: [
+          {label: "Female", color: colors.colorChartYellow},
+          {label: "Male", color: colors.colorChartRed}
+        ], title: "Sex" }
+      },
+      getChartData: (chartType, data) => {
+        let pieData = [];
+        if (chartType === "genotype") {
+          pieData = [{label: "RᴸRᴸ", value: data.CC, color: colors.colorDataMouseBrownLightRep},
+                     {label: "RᴸRᴰ", value: data.CR, color: colors.colorDataMouseBrownMediumRep},
+                     {label: "RᴰRᴸ", value: data.RC, color: colors.colorDataMouseBrownMediumRep},
+                     {label: "RᴰRᴰ", value: data.RR, color: colors.colorDataMouseBrownDarkRep}];
+        } else if (chartType === "sex") {
+          pieData = [{label: "Female", value: data.female, color: colors.colorChartYellow},
+                     {label: "Male", value: data.male, color: colors.colorChartRed}];
+        } else {
+          pieData = [{label: "Light", value: data.white, color: colors.colorDataMouseBrownLightRep},
+                     {label: "Medium", value: data.tan, color: colors.colorDataMouseBrownMediumRep},
+                     {label: "Dark", value: data.brown, color: colors.colorDataMouseBrownDarkRep}];
+        }
+        return pieData;
+      },
     },
     populations: {
       title: "Explore: Population",
@@ -154,6 +194,31 @@ export const units: Units = {
         phenotypeHeading: "Pea type",
         getPhenotypeLabel: (phenotype) => phenotype.charAt(0).toUpperCase() + phenotype.slice(1),
         getGenotypeHTMLLabel: (genotype) => genotype,
+        chartTypes: {
+          phenotype: {legend: [
+            {label: "Smooth", color: colors.colorDataMouseBrownLightRep},
+            {label: "Wrinkled", color: colors.colorDataMouseBrownMediumRep}
+          ], title: "Pea Types" },
+          genotype: {legend: [
+            {label: "RR Peas", color: colors.colorDataMouseBrownLightRep},
+            {label: "Rr Peas", color: colors.colorDataMouseBrownMediumRep},
+            {label: "rR Peas", color: colors.colorDataMouseBrownMediumRep},
+            {label: "rr Peas", color: colors.colorDataMouseBrownDarkRep}
+          ], title: "Genotypes" }
+        },
+        getChartData: (chartType, data) => {
+          let pieData = [];
+          if (chartType === "genotype") {
+            pieData = [{label: "RR", value: data.RR, color: colors.colorDataMouseBrownLightRep},
+                       {label: "Rr", value: data.Rr, color: colors.colorDataMouseBrownMediumRep},
+                       {label: "rR", value: data.rR, color: colors.colorDataMouseBrownMediumRep},
+                       {label: "rr", value: data.rr, color: colors.colorDataMouseBrownDarkRep}];
+          } else {
+            pieData = [{label: "Smooth", value: data.smooth, color: colors.colorDataMouseBrownLightRep},
+                       {label: "Wrinkled", value: data.wrinkled, color: colors.colorDataMouseBrownMediumRep}];
+          }
+          return pieData;
+        },
       },
     populations: {
       title: "Explore: Population",
