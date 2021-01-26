@@ -4,6 +4,7 @@ import { LegendItem } from "../components/spaces/breeding/breeding-data";
 import { PieChartData } from "../components/charts/pie-chart";
 // @ts-ignore
 import * as colors from "../components/colors.scss";
+import { BreedingChartType } from "./spaces/breeding/breeding";
 
 export const UnitTypeEnum = types.enumeration("unit", ["mouse", "pea"]);
 
@@ -31,6 +32,7 @@ interface UnitDefinition {
   };
   breeding: {
     title: string;
+    availableChartTypes: BreedingChartType[];
   };
   dna: {
     title: string;
@@ -150,6 +152,7 @@ export const units: Units = {
     },
     breeding: {
       title: "Explore: Nesting Pairs",
+      availableChartTypes: ["genotype", "phenotype", "sex"],
     },
     dna: {
       title: "Explore: DNA",
@@ -228,6 +231,7 @@ export const units: Units = {
     },
     breeding: {
       title: "Greenhouse",
+      availableChartTypes: ["genotype", "phenotype"],
     },
     dna: {
       title: "Explore: DNA",

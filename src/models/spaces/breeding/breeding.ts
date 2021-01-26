@@ -6,7 +6,7 @@ import { ToolbarButton } from "../populations/populations";
 import uuid = require("uuid");
 import { RightPanelType } from "../../../models/ui";
 import { shuffle } from "lodash";
-import { speciesDef } from "../../units";
+import { speciesDef, units } from "../../units";
 import { Unit } from "../../../authoring";
 
 const BreedingInteractionModeEnum = types.enumeration("interaction", ["none", "breed", "select", "inspect", "gametes"]);
@@ -418,34 +418,41 @@ export const BreedingModel = types
       get graphButtons(): ToolbarButton[] {
         const buttons = [];
         const chartSpecies = self.nestPairs[0].mother.species;
-        const phenotypeLabel = speciesDef(chartSpecies).phenotypeHeading;
-        buttons.push({
-          title: phenotypeLabel,
-          value: self.chartType === "phenotype",
-          action: (val: boolean) => {
-            self.setChartType("phenotype");
-          },
-          section: "data",
-          disabled: !self.enableColorChart,
-        });
-        buttons.push({
-          title: "Genotypes",
-          value: self.chartType === "genotype",
-          action: (val: boolean) => {
-            self.setChartType("genotype");
-          },
-          section: "data",
-          disabled: !self.enableGenotypeChart,
-        });
-        buttons.push({
-          title: "Sex",
-          value: self.chartType === "sex",
-          action: (val: boolean) => {
-            self.setChartType("sex");
-          },
-          section: "data",
-          disabled: !self.enableSexChart,
-        });
+        const species = speciesDef(chartSpecies);
+        const phenotypeLabel = species.phenotypeHeading;
+        if (units[chartSpecies].breeding.availableChartTypes.includes("phenotype")) {
+          buttons.push({
+            title: phenotypeLabel,
+            value: self.chartType === "phenotype",
+            action: (val: boolean) => {
+              self.setChartType("phenotype");
+            },
+            section: "data",
+            disabled: !self.enableColorChart,
+          });
+        }
+        if (units[chartSpecies].breeding.availableChartTypes.includes("genotype")) {
+          buttons.push({
+            title: "Genotypes",
+            value: self.chartType === "genotype",
+            action: (val: boolean) => {
+              self.setChartType("genotype");
+            },
+            section: "data",
+            disabled: !self.enableGenotypeChart,
+          });
+        }
+        if (units[chartSpecies].breeding.availableChartTypes.includes("sex")) {
+          buttons.push({
+            title: "Sex",
+            value: self.chartType === "sex",
+            action: (val: boolean) => {
+              self.setChartType("sex");
+            },
+            section: "data",
+            disabled: !self.enableSexChart,
+          });
+        }
 
         return buttons;
       }
