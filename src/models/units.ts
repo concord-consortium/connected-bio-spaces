@@ -8,6 +8,10 @@ export interface UnitSpecies {
   breedingPairs: string[][];
   getBaseImage: (genotype: string) => string;
   getBreedingImage: (genotype: string) => string;
+  getPhenotype: (genotype: string) => string;
+  phenotypeHeading: string;
+  getPhenotypeLabel: (phenotype: string) => string;
+  getGenotypeHTMLLabel: (genotype: string) => string;
 }
 
 interface UnitDefinition {
@@ -62,6 +66,41 @@ export const units: Units = {
             return "assets/unit/mouse/mouse_tan_nest.png";
         }
       },
+      getPhenotype: (genotype) => {
+        switch (genotype) {
+          case "RR":
+            return "brown";
+          case "CC":
+            return "white";
+          default:
+            return "tan";
+        }
+      },
+      phenotypeHeading: "Fur Color",
+      getPhenotypeLabel: (phenotype) => {
+        switch (phenotype) {
+          case "white":
+            return "Light brown";
+          case "tan":
+            return "Medium brown";
+          default:
+            return "Dark brown";
+        }
+      },
+      getGenotypeHTMLLabel: (genotype) => {
+        switch (genotype) {
+          case "CC":
+            return "R<sup>L</sup>R<sup>L</sup>";
+          case "RR":
+            return "R<sup>D</sup>R<sup>D</sup>";
+          case "RC":
+            return "R<sup>D</sup>R<sup>L</sup>";
+          case "CR":
+            return "R<sup>L</sup>R<sup>D</sup>";
+          default:
+            return "";
+        }
+      }
     },
     populations: {
       title: "Explore: Population",
@@ -104,6 +143,17 @@ export const units: Units = {
               return "assets/unit/pea/pea_smooth.png";
           }
         },
+        getPhenotype: (genotype) => {
+          switch (genotype) {
+            case "rr":
+              return "wrinkled";
+            default:
+              return "smooth";
+          }
+        },
+        phenotypeHeading: "Pea type",
+        getPhenotypeLabel: (phenotype) => phenotype.charAt(0).toUpperCase() + phenotype.slice(1),
+        getGenotypeHTMLLabel: (genotype) => genotype,
       },
     populations: {
       title: "Explore: Population",

@@ -1,7 +1,7 @@
 import * as React from "react";
-import { genotypeHTMLLabel } from "../utilities/genetics";
 import "./stacked-organism.sass";
 import { BackpackMouseType } from "../models/backpack-mouse";
+import { speciesDef } from "../models/units";
 
 interface IProps {
   organism: BackpackMouseType;
@@ -27,7 +27,8 @@ export const StackedOrganism: React.SFC<IProps> = (props) => {
   const heteroClass = "hetero-stack " + ((props.showHetero && props.organism.isHeterozygote) ? "show" : "");
   const sexClass = "sex-stack " + props.organism.sex + (props.showSex ? " show" : "");
   const imgClasses = "organism-image " + (props.flipped ? "flip" : "");
-  const label = genotypeHTMLLabel(props.organism.genotype);
+  const species = speciesDef(props.organism.species);
+  const label = species.getGenotypeHTMLLabel(props.organism.genotype);
   const labelClass = "genotype-label " + (props.isOffspring ? "child-mouse" : "parent-mouse");
   // sizes defined here instead of in css so we can base width and left dimension off height dimension
   const fullSize = {

@@ -2,8 +2,9 @@ import * as React from "react";
 import { BaseComponent, IBaseProps } from "./base";
 import { BackpackMouseType } from "../models/backpack-mouse";
 import { StackedOrganism } from "./stacked-organism";
-import { genotypeHTMLLabel, gameteHTMLLabel } from "../utilities/genetics";
+import { gameteHTMLLabel } from "../utilities/genetics";
 import "./inspect-panel.sass";
+import { speciesDef } from "../models/units";
 
 interface IProps extends IBaseProps {
   mouse1?: BackpackMouseType;
@@ -78,10 +79,10 @@ export class InspectPanel extends BaseComponent<IProps, IState> {
   }
 
   private renderMouseInfo(mouse: BackpackMouseType) {
+    const species = speciesDef(mouse.species);
     const sexLabel = mouse.sex === "female" ? "Female" : "Male";
-    const colorLabel = mouse.phenotype === "white" ? "Light brown" :
-                       mouse.phenotype === "tan" ? "Medium brown" : "Dark brown";
-    const genotypeLabel = genotypeHTMLLabel(mouse.genotype);
+    const colorLabel = species.getPhenotypeLabel(mouse.phenotype);
+    const genotypeLabel = species.getGenotypeHTMLLabel(mouse.genotype);
     const rowClass = "info-row" + (this.props.mouse2 ? "" : " wide");
     const mouseInfoClass = "mouse-info" + (this.props.isPopulationInspect ? " no-header" : "");
     const infoTypeClass = "info-type" + (this.props.isPopulationInspect ? " population " : "");
@@ -89,7 +90,7 @@ export class InspectPanel extends BaseComponent<IProps, IState> {
       <div className={mouseInfoClass}>
         <div className={rowClass}>
           <div className={infoTypeClass}>
-            {"Fur Color: "}
+            {speciesDef(mouse.species).phenotypeHeading + ": "}
             <span className="info-data">{colorLabel}</span>
           </div>
         </div>

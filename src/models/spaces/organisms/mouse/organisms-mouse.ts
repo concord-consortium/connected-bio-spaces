@@ -1,5 +1,5 @@
 import { types, Instance } from "mobx-state-tree";
-import { BackpackMouse } from "../../../backpack-mouse";
+import { BackpackMouse, ColorType } from "../../../backpack-mouse";
 import { kOrganelleInfo } from "./mouse-cell-data";
 import { v4 as uuid } from "uuid";
 
@@ -62,7 +62,7 @@ export const OrganismsMouseModel = types
     });
 
     function getSubstanceBaseValue(organelle: OrganelleType, substance: SubstanceType) {
-      const color = self.backpackMouse.phenotype;
+      const color = self.backpackMouse.phenotype as ColorType;
       const substanceValues = kOrganelleInfo[organelle].substances[substance];
       return substanceValues ? substanceValues[color] : 0;
     }
