@@ -2,7 +2,6 @@ import * as React from "react";
 import SVG from "react-inlinesvg";
 import "./chromosome-viewer.sass";
 import { ChromIdType } from "../../../models/spaces/organisms/organisms-row";
-import { Genotype } from "../../../models/backpack-mouse";
 
 const chromoNames = {
   c2a: "2a",
@@ -71,7 +70,7 @@ const chomosomeInfoList: {[chNumber: string]: ChromosomeInfo} = {
 };
 
 interface IProps {
-  genotype: Genotype;
+  genotype: string;
   chromosome: ChromIdType;
   colored: boolean;
 }

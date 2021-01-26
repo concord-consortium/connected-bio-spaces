@@ -7,16 +7,13 @@ export type ColorType = typeof MouseColor.Type;
 export const SexTypeEnum = types.enumeration("type", ["male", "female"]);
 export type SexType = typeof SexTypeEnum.Type;
 
-export const GenotypeEnum = types.enumeration("type", ["RR", "RC", "CR", "CC"]);
-export type Genotype = typeof GenotypeEnum.Type;
-
 export const UNCOLLECTED_IMAGE = "assets/mouse_collect.png";
 
 export const BackpackMouse = types
   .model("Mouse", {
     id: types.optional(types.identifier, () => uuid()),
     sex: SexTypeEnum,
-    genotype: GenotypeEnum,
+    genotype: types.string,
     label: "",
     originMouseRefId: types.maybe(types.string),
   })
