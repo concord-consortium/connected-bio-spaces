@@ -6,6 +6,8 @@ export const UnitTypeEnum = types.enumeration("unit", ["mouse", "pea"]);
 export interface UnitSpecies {
   alleles: string[];
   breedingPairs: string[][];
+  getBaseImage: (genotype: string) => string;
+  getBreedingImage: (genotype: string) => string;
 }
 
 interface UnitDefinition {
@@ -40,6 +42,26 @@ export const units: Units = {
         ["RC", "RC"],
         ["CC", "RC"]
       ],
+      getBaseImage: (genotype) => {
+        switch (genotype) {
+          case "RR":
+            return "assets/unit/mouse/mouse_field.png";
+          case "CC":
+            return "assets/unit/mouse/mouse_beach.png";
+          default:
+            return "assets/unit/mouse/mouse_tan.png";
+        }
+      },
+      getBreedingImage: (genotype) => {
+        switch (genotype) {
+          case "RR":
+            return "assets/unit/mouse/mouse_field_nest.png";
+          case "CC":
+            return "assets/unit/mouse/mouse_beach_nest.png";
+          default:
+            return "assets/unit/mouse/mouse_tan_nest.png";
+        }
+      },
     },
     populations: {
       title: "Explore: Population",
@@ -66,6 +88,22 @@ export const units: Units = {
           ["Rr", "Rr"],
           ["rr", "Rr"]
         ],
+        getBaseImage: (genotype) => {
+          switch (genotype) {
+            case "rr":
+              return "assets/unit/pea/pea_wrinkled.png";
+            default:
+              return "assets/unit/pea/pea_smooth.png";
+          }
+        },
+        getBreedingImage: (genotype) => {
+          switch (genotype) {
+            case "rr":
+              return "assets/unit/pea/pea_wrinkled.png";
+            default:
+              return "assets/unit/pea/pea_smooth.png";
+          }
+        },
       },
     populations: {
       title: "Explore: Population",

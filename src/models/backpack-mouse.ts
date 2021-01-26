@@ -1,6 +1,6 @@
 import { types } from "mobx-state-tree";
 import uuid = require("uuid");
-import { UnitTypeEnum } from "./units";
+import { speciesDef, UnitTypeEnum } from "./units";
 
 export const MouseColor = types.enumeration("type", ["brown", "white", "tan"]);
 export type ColorType = typeof MouseColor.Type;
@@ -31,24 +31,10 @@ export const BackpackMouse = types
       }
     },
     get baseImage(): string {
-      switch (self.genotype) {
-        case "RR":
-          return "assets/mouse_field.png";
-        case "CC":
-          return "assets/mouse_beach.png";
-        default:
-          return "assets/mouse_tan.png";
-      }
+      return speciesDef(self.species).getBaseImage(self.genotype);
     },
     get nestImage(): string {
-      switch (self.genotype) {
-        case "RR":
-          return "assets/mouse_field_nest.png";
-        case "CC":
-          return "assets/mouse_beach_nest.png";
-        default:
-          return "assets/mouse_tan_nest.png";
-      }
+      return speciesDef(self.species).getBreedingImage(self.genotype);
     },
     get nestOutlineImage(): string {
       return "assets/unit/mouse/breeding/nesting/nest_mouse_outline.png";
