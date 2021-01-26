@@ -356,10 +356,13 @@ export class BreedingView extends BaseComponent<IProps, IState> {
     } else if (showGametes) {
       breeding.setInspectedGamete(mouse.id, pairId, litterIndex, isParent);
     } else if (selecting && !backpack.cloneExists(mouse.id)) {
-      const backpackMouse = BackpackMouse.create({sex: mouse.sex,
-                                                  genotype: mouse.genotype,
-                                                  label: mouse.label,
-                                                  originMouseRefId: mouse.id});
+      const backpackMouse = BackpackMouse.create({
+        species: mouse.species,
+        sex: mouse.sex,
+        genotype: mouse.genotype,
+        label: mouse.label,
+        originMouseRefId: mouse.id
+      });
       backpack.addCollectedMouse(backpackMouse);
     }
   }

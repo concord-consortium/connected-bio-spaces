@@ -14,8 +14,8 @@ describe("NestPair model", () => {
       }
     };
     const nestPair = NestPair.create({
-      leftMouse: {sex: "female", genotype: "CR"},
-      rightMouse: {sex: "male", genotype: "RC"},
+      leftMouse: {species: "mouse", sex: "female", genotype: "CR"},
+      rightMouse: {species: "mouse", sex: "male", genotype: "RC"},
       label: "Test",
       condensedLitterMeta: JSON.stringify(litterMeta)
     });

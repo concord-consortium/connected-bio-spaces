@@ -6,8 +6,7 @@ import { ToolbarButton } from "../populations/populations";
 import uuid = require("uuid");
 import { RightPanelType } from "../../../models/ui";
 import { shuffle } from "lodash";
-import { string } from "mobx-state-tree/dist/internal";
-import { speciesDef, UnitTypeEnum } from "../../units";
+import { speciesDef } from "../../units";
 import { Unit } from "../../../authoring";
 
 const BreedingInteractionModeEnum = types.enumeration("interaction", ["none", "breed", "select", "inspect", "gametes"]);
@@ -75,7 +74,6 @@ const InspectInfo = types.model({
 
 export const NestPair = types.model({
   id: types.optional(types.identifier, () => uuid()),
-  unit: types.optional(UnitTypeEnum, "mouse"),
   leftMouse: BackpackMouse,
   rightMouse: BackpackMouse,
   label: types.string,
@@ -132,11 +130,10 @@ export const NestPair = types.model({
     }
   },
   breedLitter(litterSize: number, chanceOfMutations: number) {
-    const species = speciesDef(self.unit);
     const litter: BackpackMouseType[] = [];
     const positions: number[] = [];
     for (let i = 0; i < litterSize; i++) {
-      const child = breed(self.mother, self.father, chanceOfMutations, species);
+      const child = breed(self.mother, self.father, chanceOfMutations, self.mother.species);
       litter.push(BackpackMouse.create(child));
       positions.push(i);
     }
@@ -205,6 +202,7 @@ export const NestPair = types.model({
         const litter: BackpackMouseType[] = [];
         for (let j = 0; j < litterSizes[i]; j++) {
           litter.push(BackpackMouse.create({
+            species: self.mother.species,
             sex: Math.random() < 0.5 ? "female" : "male",
             genotype: offspringGenotypes[currOffspring]
           }));
@@ -234,8 +232,8 @@ export function createBreedingModel(unit: Unit, breedingProps: any) {
       const leftSex = Math.random() < 0.5 ? "female" : "male";
       const rightSex = leftSex === "female" ? "male" : "female";
       return {
-        leftMouse: {sex: leftSex, genotype: pair[0]},
-        rightMouse: {sex: rightSex, genotype: pair[1]},
+        leftMouse: {species: unit, sex: leftSex, genotype: pair[0]},
+        rightMouse: {species: unit, sex: rightSex, genotype: pair[1]},
         label: `Pair ${i + 1}`
       };
     });

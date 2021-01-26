@@ -1,9 +1,11 @@
 // micro version of biologica.js
 // this is assuming one-gene, like the current mice
 
-import { UnitSpecies } from "../models/units";
+import { Unit } from "../authoring";
+import { speciesDef, UnitSpecies } from "../models/units";
 
 export interface Organism {
+  species: Unit;
   sex: "male" | "female";
   genotype: string;
 }
@@ -35,21 +37,23 @@ export function createGamete(org: Organism, chanceOfMutations: number, species: 
   };
 }
 
-export function fertilize(motherGamete: Gamete, fatherGamete: Gamete): Organism {
+export function fertilize(motherGamete: Gamete, fatherGamete: Gamete, speciesName: Unit): Organism {
   const genotype = `${motherGamete.allele}${fatherGamete.allele}`;
   const sex = fatherGamete.sexChromosome === "X" ? "female" : "male";
 
   return {
+    species: speciesName,
     sex,
     genotype
   };
 }
 
-export function breed(mother: Organism, father: Organism, chanceOfMutations: number, species: UnitSpecies): Organism {
+export function breed(mother: Organism, father: Organism, chanceOfMutations: number, speciesName: Unit): Organism {
+  const species = speciesDef(speciesName);
   const motherGamete = createGamete(mother, chanceOfMutations, species);
   const fatherGamete = createGamete(father, chanceOfMutations, species);
 
-  return fertilize(motherGamete, fatherGamete);
+  return fertilize(motherGamete, fatherGamete, speciesName);
 }
 
 export function genotypeHTMLLabel(genotype: string): string {

@@ -199,6 +199,7 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
           const selectedMouse = evt.agents.mice;
           const backpack = this.stores.backpack;
           const backpackMouse = BackpackMouse.create({
+            species: "mouse",
             sex: selectedMouse.get("sex"),
             genotype: (selectedMouse as any)._genomeButtonsString()
           });
@@ -209,6 +210,7 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
         } else if (evtType === "click" && populations.interactionMode === "inspect") {
           const selectedMouse = evt.agents.mice;
           const mouse = BackpackMouse.create({
+            species: "mouse",
             sex: selectedMouse.get("sex"),
             genotype: (selectedMouse as any)._genomeButtonsString()
           });

@@ -120,10 +120,13 @@ export class NestPair extends BaseComponent<IProps, IState> {
     const { backpack } = this.stores;
     const selecting = breeding.interactionMode === "select";
     if (selecting && !backpack.cloneExists(mouse.id)) {
-      const backpackMouse = BackpackMouse.create({sex: mouse.sex,
-                                                  genotype: mouse.genotype,
-                                                  label: mouse.label,
-                                                  originMouseRefId: mouse.id});
+      const backpackMouse = BackpackMouse.create({
+        species: mouse.species,
+        sex: mouse.sex,
+        genotype: mouse.genotype,
+        label: mouse.label,
+        originMouseRefId: mouse.id
+      });
       backpack.addCollectedMouse(backpackMouse);
     }
   }
