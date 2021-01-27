@@ -5,6 +5,7 @@ describe("mouse model", () => {
 
   beforeEach(() => {
     mouse = BackpackMouse.create({
+      species: "mouse",
       sex: "male",
       genotype: "RR",
       label: "lbl"
@@ -19,6 +20,7 @@ describe("mouse model", () => {
 
   it("uses override values", () => {
     mouse = BackpackMouse.create({
+      species: "mouse",
       sex: "female",
       genotype: "CC",
       label: "lbl"

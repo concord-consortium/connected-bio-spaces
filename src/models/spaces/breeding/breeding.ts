@@ -1,11 +1,13 @@
 import { types, Instance, cast } from "mobx-state-tree";
 import { RightPanelTypeEnum } from "../../ui";
 import { BackpackMouse, BackpackMouseType } from "../../backpack-mouse";
-import { breed, createGamete, fertilize } from "../../../utilities/genetics";
+import { breed } from "../../../utilities/genetics";
 import { ToolbarButton } from "../populations/populations";
 import uuid = require("uuid");
 import { RightPanelType } from "../../../models/ui";
 import { shuffle } from "lodash";
+import { speciesDef } from "../../units";
+import { Unit } from "../../../authoring";
 
 const BreedingInteractionModeEnum = types.enumeration("interaction", ["none", "breed", "select", "inspect", "gametes"]);
 export type BreedingInteractionModeType = typeof BreedingInteractionModeEnum.Type;
@@ -30,10 +32,7 @@ export type IShuffledGametePositions = Instance<typeof ShuffledGametePositions>;
 const MAX_VERBOSE_LITTERS = 20;
 interface LitterMeta {
   litters: number;
-  CC: number;
-  CR: number;
-  RC: number;
-  RR: number;
+  offspringByGenotype: Record<string, number>;
 }
 
 const BreedingInspectTypeEnum = types.enumeration("inspect", ["none", "nest", "organism", "gamete"]);
@@ -96,7 +95,7 @@ export const NestPair = types.model({
   },
   getData(chartType: BreedingChartType) {
     const data: {[key: string]: number} = {};
-    const prop = chartType === "color" ? "baseColor" : chartType;
+    const prop = chartType === "color" ? "phenotype" : chartType;
     self.litters.forEach(litter => {
       litter.forEach(org => {
         const val = org[prop];
@@ -134,7 +133,7 @@ export const NestPair = types.model({
     const litter: BackpackMouseType[] = [];
     const positions: number[] = [];
     for (let i = 0; i < litterSize; i++) {
-      const child = breed(self.mother, self.father, chanceOfMutations);
+      const child = breed(self.mother, self.father, chanceOfMutations, self.mother.species);
       litter.push(BackpackMouse.create(child));
       positions.push(i);
     }
@@ -153,19 +152,17 @@ export const NestPair = types.model({
     // remove raw litter data and save condensed meatadata version instead
     const meta: LitterMeta = {
       litters: snapshot.litters.length,
-      CC: 0,
-      CR: 0,
-      RC: 0,
-      RR: 0
+      offspringByGenotype: {}
     };
     snapshot.litters.forEach(litter => {
       litter.forEach(org => {
-        meta[org.genotype]++;
+        if (!meta.offspringByGenotype[org.genotype]) meta.offspringByGenotype[org.genotype] = 0;
+        meta.offspringByGenotype[org.genotype]++;
       });
     });
     snapshot.condensedLitterMeta = JSON.stringify(meta);
-    delete snapshot.litters;
-    delete snapshot.litterShuffledGametePositions;
+    snapshot.litters = [];
+    snapshot.litterShuffledGametePositions = [];
   } else {
     delete snapshot.condensedLitterMeta;
   }
@@ -178,13 +175,16 @@ export const NestPair = types.model({
       const meta = JSON.parse(self.condensedLitterMeta) as LitterMeta;
 
       // create random array of genotypes, with correct numbers;
-      const totalOffspring = meta.CC + meta.CR + meta.RC + meta.RR;
-      let  genotypes = new Array(totalOffspring);
-      genotypes.fill("CC", 0, meta.CC);
-      genotypes.fill("CR", meta.CC, meta.CC + meta.CR);
-      genotypes.fill("RC", meta.CC + meta.CR, meta.CC + meta.CR + meta.RC);
-      genotypes.fill("RR", meta.CC + meta.CR + meta.RC, totalOffspring);
-      genotypes = shuffle(genotypes);
+      const allGenotypes = Object.keys(meta.offspringByGenotype);
+      const totalOffspring = allGenotypes.reduce((t, genotype) => t + meta.offspringByGenotype[genotype], 0);
+      let  offspringGenotypes = new Array(totalOffspring);
+      let currentIndex = 0;
+      allGenotypes.forEach(genotype => {
+        const totalOffspringOfType = meta.offspringByGenotype[genotype];
+        offspringGenotypes.fill(genotype, currentIndex, currentIndex + totalOffspringOfType);
+        currentIndex += totalOffspringOfType;
+      });
+      offspringGenotypes = shuffle(offspringGenotypes);
 
       // create random array of litter sizes, each 3-5, adding up to corect number of offspring
       let litterSizes: number[] = new Array(meta.litters).fill(3);
@@ -202,8 +202,9 @@ export const NestPair = types.model({
         const litter: BackpackMouseType[] = [];
         for (let j = 0; j < litterSizes[i]; j++) {
           litter.push(BackpackMouse.create({
+            species: self.mother.species,
             sex: Math.random() < 0.5 ? "female" : "male",
-            genotype: genotypes[currOffspring]
+            genotype: offspringGenotypes[currOffspring]
           }));
           currOffspring++;
         }
@@ -220,26 +221,19 @@ export const NestPair = types.model({
 
 export type INestPair = Instance<typeof NestPair>;
 
-export function createBreedingModel(breedingProps: any) {
+export function createBreedingModel(unit: Unit, breedingProps: any) {
   if (!breedingProps.backgroundType) {
     const rand = Math.random();
     breedingProps.backgroundType = rand > .66 ? "neutral" : (rand > .33 ? "brown" : "white");
   }
   if (!breedingProps.nestPairs || breedingProps.nestPairs.length === 0) {
-    const breedingPairs = [
-      ["RC", "RR"],
-      ["CC", "RR"],
-      ["CC", "CC"],
-      ["RR", "RR"],
-      ["RC", "RC"],
-      ["CC", "RC"]
-    ];
+    const breedingPairs = speciesDef(unit).breedingPairs;
     breedingProps.nestPairs = breedingPairs.map((pair, i) => {
       const leftSex = Math.random() < 0.5 ? "female" : "male";
       const rightSex = leftSex === "female" ? "male" : "female";
       return {
-        leftMouse: {sex: leftSex, genotype: pair[0]},
-        rightMouse: {sex: rightSex, genotype: pair[1]},
+        leftMouse: {species: unit, sex: leftSex, genotype: pair[0]},
+        rightMouse: {species: unit, sex: rightSex, genotype: pair[1]},
         label: `Pair ${i + 1}`
       };
     });
