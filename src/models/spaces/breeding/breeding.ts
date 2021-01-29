@@ -6,7 +6,7 @@ import { ToolbarButton } from "../populations/populations";
 import uuid = require("uuid");
 import { RightPanelType } from "../../../models/ui";
 import { shuffle } from "lodash";
-import { speciesDef } from "../../units";
+import { speciesDef, units } from "../../units";
 import { Unit } from "../../../authoring";
 
 const BreedingInteractionModeEnum = types.enumeration("interaction", ["none", "breed", "select", "inspect", "gametes"]);
@@ -15,7 +15,7 @@ export type BreedingInteractionModeType = typeof BreedingInteractionModeEnum.Typ
 export const EnvironmentColorTypeEnum = types.enumeration("environment", ["white", "neutral", "brown"]);
 export type EnvironmentColorType = typeof EnvironmentColorTypeEnum.Type;
 
-const BreedingChartTypeEnum = types.enumeration("chart", ["color", "genotype", "sex"]);
+const BreedingChartTypeEnum = types.enumeration("chart", ["phenotype", "genotype", "sex"]);
 export type BreedingChartType = typeof BreedingChartTypeEnum.Type;
 
 const ShuffledGametePositions = types.model({
@@ -95,10 +95,9 @@ export const NestPair = types.model({
   },
   getData(chartType: BreedingChartType) {
     const data: {[key: string]: number} = {};
-    const prop = chartType === "color" ? "phenotype" : chartType;
     self.litters.forEach(litter => {
       litter.forEach(org => {
-        const val = org[prop];
+        const val = org[chartType];
         if (!data[val]) data[val] = 0;
         data[val] = data[val] + 1;
       });
@@ -360,9 +359,9 @@ export const BreedingModel = types
     return {
       get chartType(): BreedingChartType {
         return self.userChartType ? self.userChartType :
-          self.enableColorChart ? "color" :
+          self.enableColorChart ? "phenotype" :
           self.enableGenotypeChart ? "genotype" :
-          self.enableSexChart ? "sex" : "color";
+          self.enableSexChart ? "sex" : "phenotype";
       },
     };
   })
@@ -418,33 +417,42 @@ export const BreedingModel = types
       },
       get graphButtons(): ToolbarButton[] {
         const buttons = [];
-        buttons.push({
-          title: "Fur Colors",
-          value: self.chartType === "color",
-          action: (val: boolean) => {
-            self.setChartType("color");
-          },
-          section: "data",
-          disabled: !self.enableColorChart,
-        });
-        buttons.push({
-          title: "Genotypes",
-          value: self.chartType === "genotype",
-          action: (val: boolean) => {
-            self.setChartType("genotype");
-          },
-          section: "data",
-          disabled: !self.enableGenotypeChart,
-        });
-        buttons.push({
-          title: "Sex",
-          value: self.chartType === "sex",
-          action: (val: boolean) => {
-            self.setChartType("sex");
-          },
-          section: "data",
-          disabled: !self.enableSexChart,
-        });
+        const chartSpecies = self.nestPairs[0].mother.species;
+        const species = speciesDef(chartSpecies);
+        const phenotypeLabel = species.phenotypeHeading;
+        if (units[chartSpecies].breeding.availableChartTypes.includes("phenotype")) {
+          buttons.push({
+            title: phenotypeLabel,
+            value: self.chartType === "phenotype",
+            action: (val: boolean) => {
+              self.setChartType("phenotype");
+            },
+            section: "data",
+            disabled: !self.enableColorChart,
+          });
+        }
+        if (units[chartSpecies].breeding.availableChartTypes.includes("genotype")) {
+          buttons.push({
+            title: "Genotypes",
+            value: self.chartType === "genotype",
+            action: (val: boolean) => {
+              self.setChartType("genotype");
+            },
+            section: "data",
+            disabled: !self.enableGenotypeChart,
+          });
+        }
+        if (units[chartSpecies].breeding.availableChartTypes.includes("sex")) {
+          buttons.push({
+            title: "Sex",
+            value: self.chartType === "sex",
+            action: (val: boolean) => {
+              self.setChartType("sex");
+            },
+            section: "data",
+            disabled: !self.enableSexChart,
+          });
+        }
 
         return buttons;
       }
