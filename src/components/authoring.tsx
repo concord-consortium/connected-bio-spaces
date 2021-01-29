@@ -17,6 +17,7 @@ interface IState {}
 export const defaultAuthoring: ConnectedBioAuthoring = {
   unit: "mouse",
   topBar: true,
+  leftPanel: true,
   ui: {
     showPopulationSpace: true,
     showBreedingSpace: true,
