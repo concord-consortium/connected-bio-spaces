@@ -11,6 +11,7 @@ import { FullScreenButton } from "./fullscreen-button";
 
 interface IProps extends IBaseProps {
   showTopBar: boolean;
+  showLeftPanel: boolean;
   style?: any;
   scale?: number;
 }
@@ -41,7 +42,7 @@ export class AppComponent extends BaseComponent<IProps, IState> {
       <div className={className} style={this.props.style}>
         {this.state.showingTopBar && <TopBarComponent />}
         <div className="nav-and-content-container">
-          <LeftNavPanelComponent />
+          {this.props.showLeftPanel && <LeftNavPanelComponent />}
           <MainContentComponent />
         </div>
         <FullScreenButton

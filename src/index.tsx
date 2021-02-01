@@ -70,7 +70,7 @@ function initializeModel(studentData: UserSaveDataType) {
 
     ReactDOM.render(
       <Provider stores={stores}>
-        <ScaledAppContainer showTopBar={initialStore.topBar} />
+        <ScaledAppContainer showTopBar={initialStore.topBar} showLeftPanel={initialStore.leftPanel} />
       </Provider>,
       appRoot
     );
