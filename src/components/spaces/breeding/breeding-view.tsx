@@ -8,7 +8,9 @@ import { ArrowPanel, ArrowInfo } from "./arrow-panel";
 import { BackpackMouse, BackpackMouseType } from "../../../models/backpack-mouse";
 
 import "./breeding-view.sass";
+import "./breeding-view.pea.sass";
 import "rc-slider/assets/index.css";
+import { units } from "../../../models/units";
 
 interface IProps extends IBaseProps {}
 interface IState {
@@ -57,7 +59,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
     const fatherImages = [father.nestImage];
     if (fatherCollected) fatherImages.push(father.nestOutlineImage);
     return (
-      <div className="breeding-view">
+      <div className={`breeding-view ${unit}`}>
         <div className="parents">
           <div className="parent-label">
             { label }
