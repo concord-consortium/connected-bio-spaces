@@ -33,6 +33,7 @@ interface UnitDefinition {
   breeding: {
     title: string;
     availableChartTypes: BreedingChartType[];
+    offspringSize: number;
   };
   dna: {
     title: string;
@@ -153,6 +154,7 @@ export const units: Units = {
     breeding: {
       title: "Explore: Nesting Pairs",
       availableChartTypes: ["genotype", "phenotype", "sex"],
+      offspringSize: 60,
     },
     dna: {
       title: "Explore: DNA",
@@ -232,6 +234,7 @@ export const units: Units = {
     breeding: {
       title: "Greenhouse",
       availableChartTypes: ["genotype", "phenotype"],
+      offspringSize: 90,
     },
     dna: {
       title: "Explore: DNA",

@@ -1,5 +1,9 @@
 @import "../../vars"
 
+$high-pea: -4px
+$med-pea: 12px
+$low-pea: 18px
+
 .breeding-view.pea
   .offspring
     .litters-container
@@ -8,5 +12,32 @@
         margin: 17px 0 -11px 0
         background-image: url("../../../assets/unit/pea/pea_pod_transparent.png")
         background-size: cover
-        animation: pea-pod-push-down 0.8s ease
+        animation: pea-pod-push-down 0.6s ease
+        .offspring-container
+          margin: $high-pea -21px;
+        // some trickery to get the right curve depending on the number of peas
+        // nth-child(x):nth-last-child(y) precisely identifies a child depending on the number of siblings
+        .offspring-container:nth-child(1):nth-last-child(3),
+        .offspring-container:nth-child(1):nth-last-child(4),
+        .offspring-container:nth-child(2):nth-last-child(4),
+        .offspring-container:nth-child(3):nth-last-child(1),
+        .offspring-container:nth-child(4):nth-last-child(2),
+        .offspring-container:nth-child(4):nth-last-child(1)
+          margin-top: $med-pea
+        .offspring-container:nth-child(3):nth-last-child(3),
+        .offspring-container:nth-child(2):nth-last-child(3),
+        .offspring-container:nth-child(2):nth-last-child(2),
+        .offspring-container:nth-child(3):nth-last-child(2),
+          margin-top: $low-pea
 
+
+@keyframes pea-pod-push-down
+  0%
+    opacity: -1
+    height: 0
+  80%
+    opacity: 0
+    height: 88px
+  100%
+    opacity: 0.9
+    height: 88px

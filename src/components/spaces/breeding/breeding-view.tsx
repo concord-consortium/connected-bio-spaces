@@ -30,8 +30,9 @@ export class BreedingView extends BaseComponent<IProps, IState> {
   };
 
   public render() {
-    const { breeding } = this.stores;
+    const { breeding, unit } = this.stores;
     const { backpack } = this.stores;
+    const unitBreeding = units[unit].breeding;
     const activeBreedingPair = breeding.activeBreedingPair!;
     const { mother, father, litters, label, numOffspring, id } = activeBreedingPair;
     const numLitters = litters.length;
@@ -174,7 +175,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
                               key={"org" + j}
                               organism={org}
                               organismImages={orgImages}
-                              height={60}
+                              height={unitBreeding.offspringSize}
                               showSelection={breeding.interactionMode === "select"
                                             && !orgCollected
                                             && currentLitter === (litterNum - 1)}
