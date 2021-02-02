@@ -43,7 +43,8 @@ export const BackpackMouse = types
       }
     },
     get isHeterozygote(): boolean {
-      return (self.genotype === "RC" || self.genotype === "CR");
+      // assumes two-letter genotype
+      return self.genotype.charAt(0) !== self.genotype.charAt(1);
     },
   }))
   .actions(self => ({

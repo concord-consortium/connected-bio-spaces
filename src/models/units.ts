@@ -175,7 +175,7 @@ export const units: Units = {
             case "rr":
               return "assets/unit/pea/pea_wrinkled.png";
             default:
-              return "assets/unit/pea/pea_smooth.png";
+              return "assets/unit/pea/pea_round.png";
           }
         },
         getBreedingImage: (genotype) => {
@@ -183,7 +183,7 @@ export const units: Units = {
             case "rr":
               return "assets/unit/pea/pea_wrinkled.png";
             default:
-              return "assets/unit/pea/pea_smooth.png";
+              return "assets/unit/pea/pea_round.png";
           }
         },
         getPhenotype: (genotype) => {
@@ -191,7 +191,7 @@ export const units: Units = {
             case "rr":
               return "wrinkled";
             default:
-              return "smooth";
+              return "round";
           }
         },
         phenotypeHeading: "Pea type",
@@ -199,8 +199,8 @@ export const units: Units = {
         getGenotypeHTMLLabel: (genotype) => genotype,
         chartTypes: {
           phenotype: {legend: [
-            {label: "Smooth", color: colors.colorDataMouseBrownLightRep},
-            {label: "Wrinkled", color: colors.colorDataMouseBrownMediumRep}
+            {label: "Round", color: colors.colorDataPeaRound},
+            {label: "Wrinkled", color: colors.colorDataPeaWrinkled}
           ], title: "Pea Types" },
           genotype: {legend: [
             {label: "RR Peas", color: colors.colorDataMouseBrownLightRep},
@@ -212,13 +212,13 @@ export const units: Units = {
         getChartData: (chartType, data) => {
           let pieData = [];
           if (chartType === "genotype") {
-            pieData = [{label: "RR", value: data.RR, color: colors.colorDataMouseBrownLightRep},
-                       {label: "Rr", value: data.Rr, color: colors.colorDataMouseBrownMediumRep},
-                       {label: "rR", value: data.rR, color: colors.colorDataMouseBrownMediumRep},
-                       {label: "rr", value: data.rr, color: colors.colorDataMouseBrownDarkRep}];
+            pieData = [{label: "RR", value: data.RR, color: colors.colorDataPeaDark},
+                       {label: "Rr", value: data.Rr, color: colors.colorDataPeaRound},
+                       {label: "rR", value: data.rR, color: colors.colorDataPeaRound},
+                       {label: "rr", value: data.rr, color: colors.colorDataPeaWrinkled}];
           } else {
-            pieData = [{label: "Smooth", value: data.smooth, color: colors.colorDataMouseBrownLightRep},
-                       {label: "Wrinkled", value: data.wrinkled, color: colors.colorDataMouseBrownMediumRep}];
+            pieData = [{label: "Round", value: data.round, color: colors.colorDataPeaRound},
+                       {label: "Wrinkled", value: data.wrinkled, color: colors.colorDataPeaWrinkled}];
           }
           return pieData;
         },
