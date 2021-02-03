@@ -73,7 +73,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
             Gametes given to offspring
           </div>}
           <div className="parent mother">
-            Mother
+            {mother.label}
             <div className="parent-image"
                  onMouseEnter={this.handleParentHoverEnter(0)}
                  onMouseLeave={this.handleParentHoverExit}
@@ -105,7 +105,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
             </button>
           </div>
           <div className="parent father">
-            Father
+            {father.label}
             <div className="parent-image"
                  onMouseEnter={this.handleParentHoverEnter(1)}
                  onMouseLeave={this.handleParentHoverExit}

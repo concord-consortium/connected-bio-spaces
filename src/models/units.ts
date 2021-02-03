@@ -26,6 +26,7 @@ export interface UnitSpecies {
 
 interface BreedingParent {
   genotype: string;
+  label?: string;
 }
 
 interface BreedingPair {
@@ -256,12 +257,42 @@ export const units: Units = {
     breeding: {
       title: "Greenhouse",
       breedingPairs: [
-        {parents: [{genotype: "Rr"}, {genotype: "RR"}]},
-        {parents: [{genotype: "rr"}, {genotype: "RR"}]},
-        {parents: [{genotype: "rr"}, {genotype: "rr"}]},
-        {parents: [{genotype: "RR"}, {genotype: "RR"}]},
-        {parents: [{genotype: "Rr"}, {genotype: "Rr"}]},
-        {parents: [{genotype: "rr"}, {genotype: "Rr"}]}
+        {
+          parents: [
+            {genotype: "Rr", label: "Plant 1"},
+            {genotype: "Rr", label: "Plant 1"}
+          ],
+        },
+        {
+          parents: [
+            {genotype: "Rr", label: "Plant 1"},
+            {genotype: "RR", label: "Plant 2"}
+          ],
+        },
+        {
+          parents: [
+            {genotype: "RR", label: "Plant 2"},
+            {genotype: "RR", label: "Plant 2"}
+          ],
+        },
+        {
+          parents: [
+            {genotype: "RR", label: "Plant 2"},
+            {genotype: "rr", label: "Plant 3"}
+          ],
+        },
+        {
+          parents: [
+            {genotype: "rr", label: "Plant 3"},
+            {genotype: "rr", label: "Plant 3"}
+          ],
+        },
+        {
+          parents: [
+            {genotype: "rr", label: "Plant 3"},
+            {genotype: "Rr", label: "Plant 1"}
+          ],
+        }
       ],
       parentSize: 165,
       availableChartTypes: ["genotype", "phenotype"],

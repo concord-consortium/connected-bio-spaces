@@ -230,9 +230,11 @@ export function createBreedingModel(unit: Unit, breedingProps: any) {
     breedingProps.nestPairs = breedingPairs.map((pair, i) => {
       const leftSex = Math.random() < 0.5 ? "female" : "male";
       const rightSex = leftSex === "female" ? "male" : "female";
+      const leftLabel = pair.parents[0].label || (leftSex === "female" ? "Mother" : "Father");
+      const rightLabel = pair.parents[1].label || (rightSex === "female" ? "Mother" : "Father");
       return {
-        leftMouse: {species: unit, sex: leftSex, genotype: pair.parents[0].genotype},
-        rightMouse: {species: unit, sex: rightSex, genotype: pair.parents[1].genotype},
+        leftMouse: {species: unit, sex: leftSex, genotype: pair.parents[0].genotype, label: leftLabel},
+        rightMouse: {species: unit, sex: rightSex, genotype: pair.parents[1].genotype, label: rightLabel},
         label: `Pair ${i + 1}`
       };
     });
