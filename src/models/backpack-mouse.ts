@@ -39,6 +39,16 @@ export const BackpackMouse = types
       }
       return speciesDef(self.species).getBreedingImage(self as BackpackMouseType);
     },
+    get chartImage(): string {
+      const species = speciesDef(self.species);
+      if (species.getChartImage) {
+        return species.getChartImage(self as BackpackMouseType);
+      }
+      return species.getBaseImage(self.genotype);
+    },
+    get chartEmptyImage(): string {
+      return speciesDef(self.species).getChartEmptyImage(self as BackpackMouseType);
+    },
     get zoomImage(): string {
       switch (self.genotype) {
         case "RR":

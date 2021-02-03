@@ -16,6 +16,8 @@ export interface UnitSpecies {
   getNestOutlineImage: (genotype: string) => string;
   getZoomedInParentImage?: (parent: BackpackMouseType) => string;    // if not specified, base image is used
   getOffspringImage?: (parent: BackpackMouseType) => string;         // if not specified, nest image is used
+  getChartImage?: (parent: BackpackMouseType) => string;
+  getChartEmptyImage: (parent: BackpackMouseType) => string;
   getPhenotype: (genotype: string) => string;
   phenotypeHeading: string;
   getPhenotypeLabel: (phenotype: string) => string;
@@ -82,6 +84,7 @@ export const units: Units = {
         }
       },
       getNestOutlineImage: () => "assets/unit/mouse/breeding/nesting/nest_mouse_outline.png",
+      getChartEmptyImage: () => "assets/mouse_collect.png",
       getPhenotype: (genotype) => {
         switch (genotype) {
           case "RR":
@@ -209,6 +212,28 @@ export const units: Units = {
               return "assets/unit/pea/pea_wrinkled.png";
             default:
               return "assets/unit/pea/pea_round.png";
+          }
+        },
+        getChartImage: (parent) => {
+          switch (parent.label) {
+            case "Plant 1":
+              return "assets/unit/pea/plant_1.png";
+            case "Plant 2":
+              return "assets/unit/pea/plant_2.png";
+            case "Plant 3":
+            default:
+              return "assets/unit/pea/plant_3.png";
+          }
+        },
+        getChartEmptyImage: (parent) => {
+          switch (parent.label) {
+            case "Plant 1":
+              return "assets/unit/pea/plant_1_outline.png";
+            case "Plant 2":
+              return "assets/unit/pea/plant_2_outline.png";
+            case "Plant 3":
+            default:
+              return "assets/unit/pea/plant_3_outline.png";
           }
         },
         getPhenotype: (genotype) => {
