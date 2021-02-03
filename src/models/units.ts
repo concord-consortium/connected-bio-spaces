@@ -11,7 +11,6 @@ export const UnitTypeEnum = types.enumeration("unit", ["mouse", "pea"]);
 
 export interface UnitSpecies {
   alleles: string[];
-  breedingPairs: string[][];
   getBaseImage: (genotype: string) => string;
   getBreedingImage: (parent: BackpackMouseType) => string;
   getNestOutlineImage: (genotype: string) => string;
@@ -25,6 +24,14 @@ export interface UnitSpecies {
   getChartData: (chartType: string, data: Record<string, number>) => PieChartData[];
 }
 
+interface BreedingParent {
+  genotype: string;
+}
+
+interface BreedingPair {
+  parents: BreedingParent[];
+}
+
 interface UnitDefinition {
   title: string;
   species: UnitSpecies;
@@ -36,6 +43,7 @@ interface UnitDefinition {
   };
   breeding: {
     title: string;
+    breedingPairs: BreedingPair[];
     availableChartTypes: BreedingChartType[];
     parentSize: number;
     offspringSize: number;
@@ -52,14 +60,6 @@ export const units: Units = {
     title: "Deer Mice",
     species: {
       alleles: ["R", "C"],
-      breedingPairs: [
-        ["RC", "RR"],
-        ["CC", "RR"],
-        ["CC", "CC"],
-        ["RR", "RR"],
-        ["RC", "RC"],
-        ["CC", "RC"]
-      ],
       getBaseImage: (genotype) => {
         switch (genotype) {
           case "RR":
@@ -159,6 +159,14 @@ export const units: Units = {
     },
     breeding: {
       title: "Explore: Nesting Pairs",
+      breedingPairs: [
+        {parents: [{genotype: "RC"}, {genotype: "RR"}]},
+        {parents: [{genotype: "CC"}, {genotype: "RR"}]},
+        {parents: [{genotype: "CC"}, {genotype: "CC"}]},
+        {parents: [{genotype: "RR"}, {genotype: "RR"}]},
+        {parents: [{genotype: "RC"}, {genotype: "RC"}]},
+        {parents: [{genotype: "CC"}, {genotype: "RC"}]}
+      ],
       availableChartTypes: ["genotype", "phenotype", "sex"],
       parentSize: 90,
       offspringSize: 60,
@@ -171,14 +179,6 @@ export const units: Units = {
     title: "Peas",
     species: {
         alleles: ["R", "r"],
-        breedingPairs: [
-          ["Rr", "RR"],
-          ["rr", "RR"],
-          ["rr", "rr"],
-          ["RR", "RR"],
-          ["Rr", "Rr"],
-          ["rr", "Rr"]
-        ],
         getBaseImage: (genotype) => {
           switch (genotype) {
             case "rr":
@@ -255,6 +255,14 @@ export const units: Units = {
     },
     breeding: {
       title: "Greenhouse",
+      breedingPairs: [
+        {parents: [{genotype: "Rr"}, {genotype: "RR"}]},
+        {parents: [{genotype: "rr"}, {genotype: "RR"}]},
+        {parents: [{genotype: "rr"}, {genotype: "rr"}]},
+        {parents: [{genotype: "RR"}, {genotype: "RR"}]},
+        {parents: [{genotype: "Rr"}, {genotype: "Rr"}]},
+        {parents: [{genotype: "rr"}, {genotype: "Rr"}]}
+      ],
       parentSize: 165,
       availableChartTypes: ["genotype", "phenotype"],
       offspringSize: 90,

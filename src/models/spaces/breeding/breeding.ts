@@ -226,13 +226,13 @@ export function createBreedingModel(unit: Unit, breedingProps: any) {
     breedingProps.backgroundType = rand > .66 ? "neutral" : (rand > .33 ? "brown" : "white");
   }
   if (!breedingProps.nestPairs || breedingProps.nestPairs.length === 0) {
-    const breedingPairs = speciesDef(unit).breedingPairs;
+    const breedingPairs = units[unit].breeding.breedingPairs;
     breedingProps.nestPairs = breedingPairs.map((pair, i) => {
       const leftSex = Math.random() < 0.5 ? "female" : "male";
       const rightSex = leftSex === "female" ? "male" : "female";
       return {
-        leftMouse: {species: unit, sex: leftSex, genotype: pair[0]},
-        rightMouse: {species: unit, sex: rightSex, genotype: pair[1]},
+        leftMouse: {species: unit, sex: leftSex, genotype: pair.parents[0].genotype},
+        rightMouse: {species: unit, sex: rightSex, genotype: pair.parents[1].genotype},
         label: `Pair ${i + 1}`
       };
     });
