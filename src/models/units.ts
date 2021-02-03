@@ -14,6 +14,9 @@ export interface UnitSpecies {
   breedingPairs: string[][];
   getBaseImage: (genotype: string) => string;
   getBreedingImage: (parent: BackpackMouseType) => string;
+  getNestOutlineImage: (genotype: string) => string;
+  getZoomedInParentImage?: (parent: BackpackMouseType) => string;    // if not specified, base image is used
+  getOffspringImage?: (parent: BackpackMouseType) => string;         // if not specified, nest image is used
   getPhenotype: (genotype: string) => string;
   phenotypeHeading: string;
   getPhenotypeLabel: (phenotype: string) => string;
@@ -34,6 +37,7 @@ interface UnitDefinition {
   breeding: {
     title: string;
     availableChartTypes: BreedingChartType[];
+    parentSize: number;
     offspringSize: number;
   };
   dna: {
@@ -76,6 +80,7 @@ export const units: Units = {
             return "assets/unit/mouse/mouse_tan_nest.png";
         }
       },
+      getNestOutlineImage: () => "assets/unit/mouse/breeding/nesting/nest_mouse_outline.png",
       getPhenotype: (genotype) => {
         switch (genotype) {
           case "RR":
@@ -155,6 +160,7 @@ export const units: Units = {
     breeding: {
       title: "Explore: Nesting Pairs",
       availableChartTypes: ["genotype", "phenotype", "sex"],
+      parentSize: 90,
       offspringSize: 60,
     },
     dna: {
@@ -190,6 +196,18 @@ export const units: Units = {
             case "Plant 3":
             default:
               return "assets/unit/pea/plant_3.png";
+          }
+        },
+        getNestOutlineImage: () => "",
+        getZoomedInParentImage: (parent) => parent.sex === "female" ?
+          "assets/unit/pea/flower_female.png" :
+          "assets/unit/pea/flower_male.png",
+        getOffspringImage: (org) => {
+          switch (org.genotype) {
+            case "rr":
+              return "assets/unit/pea/pea_wrinkled.png";
+            default:
+              return "assets/unit/pea/pea_round.png";
           }
         },
         getPhenotype: (genotype) => {
@@ -237,6 +255,7 @@ export const units: Units = {
     },
     breeding: {
       title: "Greenhouse",
+      parentSize: 165,
       availableChartTypes: ["genotype", "phenotype"],
       offspringSize: 90,
     },

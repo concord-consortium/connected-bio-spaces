@@ -53,12 +53,14 @@ export class BreedingView extends BaseComponent<IProps, IState> {
       width: 24
     };
     const railStyle = { width: 10 };
+
     const motherCollected = backpack.cloneExists(mother.id);
     const fatherCollected = backpack.cloneExists(father.id);
-    const motherImages = [mother.nestImage];
+    const motherImages = [mother.zoomedInParentImage];
     if (motherCollected) motherImages.push(mother.nestOutlineImage);
-    const fatherImages = [father.nestImage];
+    const fatherImages = [father.zoomedInParentImage];
     if (fatherCollected) fatherImages.push(father.nestOutlineImage);
+
     return (
       <div className={`breeding-view ${unit}`}>
         <div className="parents">
@@ -79,7 +81,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
               <StackedOrganism
                 organism={mother}
                 organismImages={motherImages}
-                height={90}
+                height={unitBreeding.parentSize}
                 showSelection={breeding.interactionMode === "select" && !motherCollected}
                 showGameteSelection={showGametes && this.state.parentHightlightIndex === 0}
                 showInspect={breeding.interactionMode === "inspect"}
@@ -111,7 +113,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
               <StackedOrganism
                 organism={father}
                 organismImages={fatherImages}
-                height={90}
+                height={unitBreeding.parentSize}
                 flipped={true}
                 showSelection={breeding.interactionMode === "select" && !fatherCollected}
                 showGameteSelection={showGametes && this.state.parentHightlightIndex === 1}
@@ -156,7 +158,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
                       litter.map((org, j) => {
                         const litterNum = litters.length - i;
                         const orgCollected = backpack.cloneExists(org.id);
-                        const orgImages = [org.nestImage];
+                        const orgImages = [org.offspringImage];
                         if (orgCollected) orgImages.push(org.nestOutlineImage);
                         return (
                           <div

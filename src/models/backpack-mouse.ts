@@ -30,7 +30,14 @@ export const BackpackMouse = types
       return speciesDef(self.species).getBreedingImage(self as BackpackMouseType);
     },
     get nestOutlineImage(): string {
-      return "assets/unit/mouse/breeding/nesting/nest_mouse_outline.png";
+      return speciesDef(self.species).getNestOutlineImage(self.genotype);
+    },
+    get zoomedInParentImage(): string {
+      const species = speciesDef(self.species);
+      if (species.getZoomedInParentImage) {
+        return species.getZoomedInParentImage(self as BackpackMouseType);
+      }
+      return speciesDef(self.species).getBreedingImage(self as BackpackMouseType);
     },
     get zoomImage(): string {
       switch (self.genotype) {
@@ -45,6 +52,15 @@ export const BackpackMouse = types
     get isHeterozygote(): boolean {
       // assumes two-letter genotype
       return self.genotype.charAt(0) !== self.genotype.charAt(1);
+    },
+  }))
+  .views(self => ({
+    get offspringImage(): string {
+      const species = speciesDef(self.species);
+      if (species.getOffspringImage) {
+        return species.getOffspringImage(self as BackpackMouseType);
+      }
+      return self.nestImage;
     },
   }))
   .actions(self => ({
