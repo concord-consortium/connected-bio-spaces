@@ -27,7 +27,7 @@ export const BackpackMouse = types
       return speciesDef(self.species).getBaseImage(self.genotype);
     },
     get nestImage(): string {
-      return speciesDef(self.species).getBreedingImage(self.genotype);
+      return speciesDef(self.species).getBreedingImage(self as BackpackMouseType);
     },
     get nestOutlineImage(): string {
       return "assets/unit/mouse/breeding/nesting/nest_mouse_outline.png";

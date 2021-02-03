@@ -2,9 +2,10 @@ import { types } from "mobx-state-tree";
 import { Unit } from "../authoring";
 import { LegendItem } from "../components/spaces/breeding/breeding-data";
 import { PieChartData } from "../components/charts/pie-chart";
+import { BreedingChartType } from "./spaces/breeding/breeding";
+import { BackpackMouseType } from "./backpack-mouse";
 // @ts-ignore
 import * as colors from "../components/colors.scss";
-import { BreedingChartType } from "./spaces/breeding/breeding";
 
 export const UnitTypeEnum = types.enumeration("unit", ["mouse", "pea"]);
 
@@ -12,7 +13,7 @@ export interface UnitSpecies {
   alleles: string[];
   breedingPairs: string[][];
   getBaseImage: (genotype: string) => string;
-  getBreedingImage: (genotype: string) => string;
+  getBreedingImage: (parent: BackpackMouseType) => string;
   getPhenotype: (genotype: string) => string;
   phenotypeHeading: string;
   getPhenotypeLabel: (phenotype: string) => string;
@@ -65,8 +66,8 @@ export const units: Units = {
             return "assets/unit/mouse/mouse_tan.png";
         }
       },
-      getBreedingImage: (genotype) => {
-        switch (genotype) {
+      getBreedingImage: (parent) => {
+        switch (parent.genotype) {
           case "RR":
             return "assets/unit/mouse/mouse_field_nest.png";
           case "CC":
@@ -180,12 +181,15 @@ export const units: Units = {
               return "assets/unit/pea/pea_round.png";
           }
         },
-        getBreedingImage: (genotype) => {
-          switch (genotype) {
-            case "rr":
-              return "assets/unit/pea/pea_wrinkled.png";
+        getBreedingImage: (parent) => {
+          switch (parent.label) {
+            case "Plant 1":
+              return "assets/unit/pea/plant_1.png";
+            case "Plant 2":
+              return "assets/unit/pea/plant_2.png";
+            case "Plant 3":
             default:
-              return "assets/unit/pea/pea_round.png";
+              return "assets/unit/pea/plant_3.png";
           }
         },
         getPhenotype: (genotype) => {
