@@ -39,7 +39,7 @@ export class BreedingDataNestPanel extends BaseComponent<IProps, IState> {
               <img src={leftMouseImage} className={"left-mouse"}/>
               <img src={rightMouseImage} className={"right-mouse"}/>
             </div>
-            <div className={titleClass}>{nestPair.label}</div>
+            <div className={titleClass}>{nestPair.chartLabel}</div>
           </div>
           { hasBred
             ? this.renderPieChart()

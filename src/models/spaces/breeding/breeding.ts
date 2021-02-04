@@ -77,6 +77,7 @@ export const NestPair = types.model({
   leftMouse: BackpackMouse,
   rightMouse: BackpackMouse,
   label: types.string,
+  chartLabel: types.string,
   currentBreeding: false,
   hasBeenVisited: false,
   litters: types.array(types.array(BackpackMouse)),
@@ -226,7 +227,7 @@ export function createBreedingModel(unit: Unit, breedingProps: any) {
     breedingProps.backgroundType = rand > .66 ? "neutral" : (rand > .33 ? "brown" : "white");
   }
   if (!breedingProps.nestPairs || breedingProps.nestPairs.length === 0) {
-    const breedingPairs = units[unit].breeding.breedingPairs;
+    const { breedingPairs } = units[unit].breeding;
     breedingProps.nestPairs = breedingPairs.map((pair, i) => {
       const leftSex = Math.random() < 0.5 ? "female" : "male";
       const rightSex = leftSex === "female" ? "male" : "female";
@@ -235,7 +236,8 @@ export function createBreedingModel(unit: Unit, breedingProps: any) {
       return {
         leftMouse: {species: unit, sex: leftSex, genotype: pair.parents[0].genotype, label: leftLabel},
         rightMouse: {species: unit, sex: rightSex, genotype: pair.parents[1].genotype, label: rightLabel},
-        label: `Pair ${i + 1}`
+        label: pair.label,
+        chartLabel: pair.chartLabel || pair.label,
       };
     });
   }

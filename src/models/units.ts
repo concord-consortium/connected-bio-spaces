@@ -33,6 +33,8 @@ interface BreedingParent {
 
 interface BreedingPair {
   parents: BreedingParent[];
+  label: string;
+  chartLabel?: string;
 }
 
 interface UnitDefinition {
@@ -164,12 +166,12 @@ export const units: Units = {
     breeding: {
       title: "Explore: Nesting Pairs",
       breedingPairs: [
-        {parents: [{genotype: "RC"}, {genotype: "RR"}]},
-        {parents: [{genotype: "CC"}, {genotype: "RR"}]},
-        {parents: [{genotype: "CC"}, {genotype: "CC"}]},
-        {parents: [{genotype: "RR"}, {genotype: "RR"}]},
-        {parents: [{genotype: "RC"}, {genotype: "RC"}]},
-        {parents: [{genotype: "CC"}, {genotype: "RC"}]}
+        {parents: [{genotype: "RC"}, {genotype: "RR"}], label: "Pair 1"},
+        {parents: [{genotype: "CC"}, {genotype: "RR"}], label: "Pair 2"},
+        {parents: [{genotype: "CC"}, {genotype: "CC"}], label: "Pair 3"},
+        {parents: [{genotype: "RR"}, {genotype: "RR"}], label: "Pair 4"},
+        {parents: [{genotype: "RC"}, {genotype: "RC"}], label: "Pair 5"},
+        {parents: [{genotype: "CC"}, {genotype: "RC"}], label: "Pair 6"}
       ],
       availableChartTypes: ["genotype", "phenotype", "sex"],
       parentSize: 90,
@@ -287,36 +289,48 @@ export const units: Units = {
             {genotype: "Rr", label: "Plant 1"},
             {genotype: "Rr", label: "Plant 1"}
           ],
+          label: "Experiment A",
+          chartLabel: "Exp. A",
         },
         {
           parents: [
             {genotype: "Rr", label: "Plant 1"},
             {genotype: "RR", label: "Plant 2"}
           ],
+          label: "Experiment B",
+          chartLabel: "Exp. B",
         },
         {
           parents: [
             {genotype: "RR", label: "Plant 2"},
             {genotype: "RR", label: "Plant 2"}
           ],
+          label: "Experiment C",
+          chartLabel: "Exp. C",
         },
         {
           parents: [
             {genotype: "RR", label: "Plant 2"},
             {genotype: "rr", label: "Plant 3"}
           ],
+          label: "Experiment D",
+          chartLabel: "Exp. D",
         },
         {
           parents: [
             {genotype: "rr", label: "Plant 3"},
             {genotype: "rr", label: "Plant 3"}
           ],
+          label: "Experiment E",
+          chartLabel: "Exp. E",
         },
         {
           parents: [
             {genotype: "rr", label: "Plant 3"},
             {genotype: "Rr", label: "Plant 1"}
           ],
+          label: "Experiment F",
+          chartLabel: "Exp. F",
         }
       ],
       parentSize: 165,

@@ -73,8 +73,9 @@ export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
   }
 
   private getInspectedContent = () => {
-    const { breeding } = this.stores;
+    const { breeding, unit } = this.stores;
     const { inspectInfo, nestPairs } = breeding;
+    const unitBreeding = units[unit].breeding;
     const content: InspectContent = { title: "",
                                     mouse1: undefined,
                                     mouse2: undefined,
@@ -88,7 +89,7 @@ export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
       const nestPair = nestPairs.find(pair => pair.id === pairId);
       content.mouse1 = nestPair && nestPair.leftMouse;
       content.mouse2 = nestPair && nestPair.rightMouse;
-      content.label = nestPair ? nestPair.label : "Pair";
+      content.label = nestPair ? nestPair.label : "";
     } else if (inspectInfo && (inspectInfo.type === "organism" || inspectInfo.type === "gamete")) {
       const isGamete = inspectInfo.type === "gamete";
       const pairId = inspectInfo.nestPairId;
@@ -102,13 +103,13 @@ export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
             content.mouse1 = nestPair.rightMouse;
           }
           inspectedName = isGamete
-                          ? `${content.mouse1.sex === "female" ? "Mother" : "Father"} Gametes`
-                          : `Pair ${nestPairIndex + 1} ${content.mouse1.sex === "female" ? "Mother" : "Father"}`;
+            ? `${content.mouse1.sex === "female" ? "Mother" : "Father"} Gametes`
+            : `${nestPair.chartLabel} ${content.mouse1.sex === "female" ? "Mother" : "Father"}`;
         } else {
           content.mouse1 = nestPair.litters[inspectInfo.litterIndex].find(mouse => mouse.id === inspectInfo.organismId);
           inspectedName = isGamete
-                          ? "Offspring Gametes"
-                          : `Pair ${nestPairIndex + 1} Litter ${inspectInfo.litterIndex + 1} Offspring`;
+            ? "Offspring Gametes"
+            : `${nestPair.chartLabel} Litter ${inspectInfo.litterIndex + 1} Offspring`;
           content.isOffspring = true;
         }
         content.isGamete = isGamete;
