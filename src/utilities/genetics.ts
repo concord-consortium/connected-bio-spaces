@@ -55,14 +55,3 @@ export function breed(mother: Organism, father: Organism, chanceOfMutations: num
 
   return fertilize(motherGamete, fatherGamete, speciesName);
 }
-
-export function gameteHTMLLabel(gamete: string): string {
-  switch (gamete) {
-    case "C":
-      return "R<sup>L</sup>";
-    case "R":
-      return "R<sup>D</sup>";
-    default:
-      return "";
-  }
-}

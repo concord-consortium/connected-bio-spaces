@@ -2,7 +2,6 @@ import * as React from "react";
 import { BaseComponent, IBaseProps } from "./base";
 import { BackpackMouseType } from "../models/backpack-mouse";
 import { StackedOrganism } from "./stacked-organism";
-import { gameteHTMLLabel } from "../utilities/genetics";
 import "./inspect-panel.sass";
 import { speciesDef } from "../models/units";
 
@@ -168,22 +167,26 @@ export class InspectPanel extends BaseComponent<IProps, IState> {
   }
 
   private renderGameteIcon = (sex: string, label: string) => {
+    if (!this.props.mouse1) return null;
+    const species = speciesDef(this.props.mouse1.species);
     const iconClass = "gamete-icon " + (sex === "female" ? "egg" : "sperm");
     return(
       <div className="gamete-icon-container">
         <div className={iconClass} />
-        <div className="gamete-label" dangerouslySetInnerHTML={{ __html: gameteHTMLLabel(label) }}/>
+        <div className="gamete-label" dangerouslySetInnerHTML={{ __html: species.getGameteHTMLLabel(label) }}/>
       </div>
     );
   }
 
   private getGameteLabel = (mouse: BackpackMouseType) => {
+    const species = speciesDef(mouse.species);
+    const label = species.getGameteHTMLLabel;
     const producedLabel = mouse.sex === "female" ? "eggs" : "sperm";
     const allele1 = mouse.genotype.slice(0, 1);
     const allele2 = mouse.genotype.slice(-1);
     const alleleLabel = allele1 !== allele2
-                        ? `either the ${gameteHTMLLabel(allele1)} allele or the ${gameteHTMLLabel(allele2)} allele`
-                        : `the ${gameteHTMLLabel(allele1)} allele`;
+                        ? `either the ${label(allele1)} allele or the ${label(allele2)} allele`
+                        : `the ${label(allele1)} allele`;
     return `This ${mouse.sex} can produce ${producedLabel} with ${alleleLabel}.`;
   }
 

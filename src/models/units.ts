@@ -22,6 +22,7 @@ export interface UnitSpecies {
   phenotypeHeading: string;
   getPhenotypeLabel: (phenotype: string) => string;
   getGenotypeHTMLLabel: (genotype: string) => string;
+  getGameteHTMLLabel: (allele: string) => string;
   chartTypes: Record<string, {legend: LegendItem[], title: string}>;
   getChartData: (chartType: string, data: Record<string, number>) => PieChartData[];
 }
@@ -118,6 +119,16 @@ export const units: Units = {
             return "R<sup>D</sup>R<sup>L</sup>";
           case "CR":
             return "R<sup>L</sup>R<sup>D</sup>";
+          default:
+            return "";
+        }
+      },
+      getGameteHTMLLabel: (allele) => {
+        switch (allele) {
+          case "C":
+            return "R<sup>L</sup>";
+          case "R":
+            return "R<sup>D</sup>";
           default:
             return "";
         }
@@ -249,6 +260,7 @@ export const units: Units = {
         phenotypeHeading: "Pea type",
         getPhenotypeLabel: (phenotype) => phenotype.charAt(0).toUpperCase() + phenotype.slice(1),
         getGenotypeHTMLLabel: (genotype) => genotype,
+        getGameteHTMLLabel: (allele) => allele,
         chartTypes: {
           phenotype: {legend: [
             {label: "Round", color: colors.colorDataPeaRound},

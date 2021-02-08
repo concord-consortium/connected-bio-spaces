@@ -3,14 +3,13 @@ import * as React from "react";
 import Slider from "rc-slider";
 import { BaseComponent, IBaseProps } from "../../base";
 import { StackedOrganism } from "../../stacked-organism";
-import { gameteHTMLLabel } from "../../../utilities/genetics";
 import { ArrowPanel, ArrowInfo } from "./arrow-panel";
 import { BackpackMouse, BackpackMouseType } from "../../../models/backpack-mouse";
 
 import "./breeding-view.sass";
 import "./breeding-view.pea.sass";
 import "rc-slider/assets/index.css";
-import { units } from "../../../models/units";
+import { speciesDef, units } from "../../../models/units";
 
 interface IProps extends IBaseProps {}
 interface IState {
@@ -34,7 +33,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
     const { backpack } = this.stores;
     const unitBreeding = units[unit].breeding;
     const activeBreedingPair = breeding.activeBreedingPair!;
-    const { mother, father, litters, label, numOffspring, id } = activeBreedingPair;
+    const { mother, father, litters, chartLabel, numOffspring, id } = activeBreedingPair;
     const numLitters = litters.length;
     const offspringClass = "offspring" + (numOffspring === 0 ? " hide" : "");
     const showGametes = breeding.interactionMode === "gametes";
@@ -65,7 +64,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
       <div className={`breeding-view ${unit}`}>
         <div className="parents">
           <div className="parent-label">
-            { label }
+            { chartLabel }
           </div>
           {showGametes && <div className="gametes-box mother"/>}
           {showGametes && <div className="gametes-box father"/>}
@@ -153,7 +152,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
             <div className="litters" style={{top: -litterOffset}}>
               {
                 litters.slice().reverse().map((litter, i) => (
-                  <div className="litter" key={"litter" + label + (litters.length - i)}>
+                  <div className="litter" key={"litter" + chartLabel + (litters.length - i)}>
                     {
                       litter.map((org, j) => {
                         const litterNum = litters.length - i;
@@ -242,6 +241,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
   }
 
   private renderGametes = (gametes: string[], gametePositions: number[], mother: boolean) => {
+    const gameteLabel = speciesDef(this.stores.unit).getGameteHTMLLabel;
     const parentIndex = mother ? 0 : 1;
     const iconClass = mother ? "icon egg " : "icon sperm ";
     const { offspringHightlightIndex, parentHightlightIndex } = this.state;
@@ -261,7 +261,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
             <div className={gameteViewClass} />
             <div className={gameteIconClass} />
             <div className="info-data" dangerouslySetInnerHTML={{
-                __html: gameteHTMLLabel(gamete)
+                __html: gameteLabel(gamete)
             }} />
           </div>
         );
