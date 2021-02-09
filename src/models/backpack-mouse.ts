@@ -24,7 +24,7 @@ export const BackpackMouse = types
       return speciesDef(self.species).getPhenotype(self.genotype);
     },
     get baseImage(): string {
-      return speciesDef(self.species).getBaseImage(self.genotype);
+      return speciesDef(self.species).getBaseImage(self as BackpackMouseType);
     },
     get nestImage(): string {
       return speciesDef(self.species).getBreedingImage(self as BackpackMouseType);
@@ -44,7 +44,7 @@ export const BackpackMouse = types
       if (species.getChartImage) {
         return species.getChartImage(self as BackpackMouseType);
       }
-      return species.getBaseImage(self.genotype);
+      return species.getBaseImage(self as BackpackMouseType);
     },
     get chartEmptyImage(): string {
       return speciesDef(self.species).getChartEmptyImage(self as BackpackMouseType);

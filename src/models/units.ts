@@ -11,7 +11,7 @@ export const UnitTypeEnum = types.enumeration("unit", ["mouse", "pea"]);
 
 export interface UnitSpecies {
   alleles: string[];
-  getBaseImage: (genotype: string) => string;
+  getBaseImage: (org: BackpackMouseType) => string;
   getBreedingImage: (parent: BackpackMouseType) => string;
   getNestOutlineImage: (genotype: string) => string;
   getZoomedInParentImage?: (parent: BackpackMouseType) => string;    // if not specified, base image is used
@@ -68,31 +68,54 @@ interface UnitDefinition {
 
 type Units = Record<Unit, UnitDefinition>;
 
+// species image functions, which are used in different confgurations by the species defs
+const curledMouseImage = (org: BackpackMouseType) => {
+  switch (org.genotype) {
+    case "RR":
+      return "assets/unit/mouse/mouse_field.png";
+    case "CC":
+      return "assets/unit/mouse/mouse_beach.png";
+    default:
+      return "assets/unit/mouse/mouse_tan.png";
+  }
+};
+const longTailedMouseImage = (org: BackpackMouseType) => {
+  switch (org.genotype) {
+    case "RR":
+      return "assets/unit/mouse/mouse_field_nest.png";
+    case "CC":
+      return "assets/unit/mouse/mouse_beach_nest.png";
+    default:
+      return "assets/unit/mouse/mouse_tan_nest.png";
+  }
+};
+const peaImage = (org: BackpackMouseType) => {
+  switch (org.genotype) {
+    case "rr":
+      return "assets/unit/pea/pea_wrinkled.png";
+    default:
+      return "assets/unit/pea/pea_round.png";
+  }
+};
+const flowerPotImage = (org: BackpackMouseType) => {
+  switch (org.label) {
+    case "Plant 1":
+      return "assets/unit/pea/plant_1.png";
+    case "Plant 2":
+      return "assets/unit/pea/plant_2.png";
+    case "Plant 3":
+    default:
+      return "assets/unit/pea/plant_3.png";
+  }
+};
+
 export const units: Units = {
   mouse: {
     title: "Deer Mice",
     species: {
       alleles: ["R", "C"],
-      getBaseImage: (genotype) => {
-        switch (genotype) {
-          case "RR":
-            return "assets/unit/mouse/mouse_field.png";
-          case "CC":
-            return "assets/unit/mouse/mouse_beach.png";
-          default:
-            return "assets/unit/mouse/mouse_tan.png";
-        }
-      },
-      getBreedingImage: (parent) => {
-        switch (parent.genotype) {
-          case "RR":
-            return "assets/unit/mouse/mouse_field_nest.png";
-          case "CC":
-            return "assets/unit/mouse/mouse_beach_nest.png";
-          default:
-            return "assets/unit/mouse/mouse_tan_nest.png";
-        }
-      },
+      getBaseImage: curledMouseImage,
+      getBreedingImage: longTailedMouseImage,
       getNestOutlineImage: () => "assets/unit/mouse/breeding/nesting/nest_mouse_outline.png",
       getChartEmptyImage: () => "assets/mouse_collect.png",
       getPhenotype: (genotype) => {
@@ -235,48 +258,14 @@ export const units: Units = {
     title: "Peas",
     species: {
         alleles: ["R", "r"],
-        getBaseImage: (genotype) => {
-          switch (genotype) {
-            case "rr":
-              return "assets/unit/pea/pea_wrinkled.png";
-            default:
-              return "assets/unit/pea/pea_round.png";
-          }
-        },
-        getBreedingImage: (parent) => {
-          switch (parent.label) {
-            case "Plant 1":
-              return "assets/unit/pea/plant_1.png";
-            case "Plant 2":
-              return "assets/unit/pea/plant_2.png";
-            case "Plant 3":
-            default:
-              return "assets/unit/pea/plant_3.png";
-          }
-        },
+        getBaseImage: peaImage,
+        getBreedingImage: flowerPotImage,
         getNestOutlineImage: () => "",
         getZoomedInParentImage: (parent) => parent.sex === "female" ?
           "assets/unit/pea/flower_female.png" :
           "assets/unit/pea/flower_male.png",
-        getOffspringImage: (org) => {
-          switch (org.genotype) {
-            case "rr":
-              return "assets/unit/pea/pea_wrinkled.png";
-            default:
-              return "assets/unit/pea/pea_round.png";
-          }
-        },
-        getChartImage: (parent) => {
-          switch (parent.label) {
-            case "Plant 1":
-              return "assets/unit/pea/plant_1.png";
-            case "Plant 2":
-              return "assets/unit/pea/plant_2.png";
-            case "Plant 3":
-            default:
-              return "assets/unit/pea/plant_3.png";
-          }
-        },
+        getOffspringImage: peaImage,
+        getChartImage: flowerPotImage,
         getChartEmptyImage: (parent) => {
           switch (parent.label) {
             case "Plant 1":
