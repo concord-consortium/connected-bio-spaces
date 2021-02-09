@@ -1,9 +1,10 @@
 import * as React from "react";
 import { BaseComponent, IBaseProps } from "./base";
-import { BackpackMouseType } from "../models/backpack-mouse";
+import { BackpackMouseType, InspectContext } from "../models/backpack-mouse";
 import { StackedOrganism } from "./stacked-organism";
+import { speciesDef, units } from "../models/units";
 import "./inspect-panel.sass";
-import { speciesDef } from "../models/units";
+import "./inspect-panel.pea.sass";
 
 interface IProps extends IBaseProps {
   mouse1?: BackpackMouseType;
@@ -20,8 +21,12 @@ export class InspectPanel extends BaseComponent<IProps, IState> {
 
   public render() {
     const { mouse1, mouse2, pairLabel } = this.props;
+    let className = "inspect-panel";
+    if (mouse1) {
+      className += " " + mouse1.species;
+    }
     return(
-      <div className="inspect-panel">
+      <div className={className}>
         {(mouse1 && mouse2) && this.renderInspectedPair(mouse1, mouse2, pairLabel)}
         {(mouse1 && !mouse2) && this.renderInspectedMouse(mouse1)}
       </div>
@@ -29,13 +34,14 @@ export class InspectPanel extends BaseComponent<IProps, IState> {
   }
 
   private renderInspectedPair(leftMouse: BackpackMouseType, rightMouse: BackpackMouseType, label: string) {
+    const flipRight = units[rightMouse.species].breeding.flipRightNestParent;
     return(
       <div>
         <div className="inspect-title">{label}</div>
         <div className="pair-container">
           <div className="inspect-background" />
           {this.renderMouse(leftMouse, false)}
-          {this.renderMouse(rightMouse, true)}
+          {this.renderMouse(rightMouse, flipRight)}
         </div>
       </div>
     );
@@ -45,25 +51,31 @@ export class InspectPanel extends BaseComponent<IProps, IState> {
     const bgClass = "inspect-background single " + (this.props.isGamete ? "gamete " : "")
                     + (this.props.isPopulationInspect ? "population " : "")
                     + (this.props.isGamete && this.props.isOffspring ? "low" : "");
+    const allowFlip = units[mouse.species].breeding.flipRightNestParent;
+    const flipImage = allowFlip && !this.props.isPopulationInspect && !this.props.isOffspring && mouse.sex === "male";
     return(
       <div className="pair-container single">
         { (this.props.isGamete && this.props.isOffspring) && this.renderGametePanel(mouse) }
         <div className={bgClass} />
-        {this.renderMouse(mouse, !this.props.isPopulationInspect && !this.props.isOffspring && mouse.sex === "male")}
+        {this.renderMouse(mouse, flipImage)}
       </div>
     );
   }
 
   private renderMouse(mouse: BackpackMouseType, flip: boolean) {
-    const mouseImages = [mouse.baseImage];
+    const context: InspectContext =
+      this.props.mouse2 ? "nest" :
+      this.props.isOffspring ? "offspring" : "parent";
+    const mouseImage = mouse.getInspectImage(context);
+    const showSex = units[mouse.species].species.showSexStack;
     return (
       <div className="mouse-container">
         <StackedOrganism
           organism={mouse}
-          organismImages={mouseImages}
+          organismImages={[mouseImage]}
           height={170}
           showSelection={false}
-          showSex={true}
+          showSex={showSex}
           showHetero={true}
           flipped={flip}
         />

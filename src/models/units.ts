@@ -16,6 +16,8 @@ export interface UnitSpecies {
   getNestOutlineImage: (genotype: string) => string;
   getZoomedInParentImage?: (parent: BackpackMouseType) => string;    // if not specified, base image is used
   getOffspringImage?: (parent: BackpackMouseType) => string;         // if not specified, nest image is used
+  getInspectOffspringImage?: (org: BackpackMouseType) => string;
+  getInspectNestImage?: (org: BackpackMouseType) => string;
   getChartImage?: (parent: BackpackMouseType) => string;
   getChartEmptyImage: (parent: BackpackMouseType) => string;
   getPhenotype: (genotype: string) => string;
@@ -265,6 +267,7 @@ export const units: Units = {
           "assets/unit/pea/flower_female.png" :
           "assets/unit/pea/flower_male.png",
         getOffspringImage: peaImage,
+        getInspectNestImage: flowerPotImage,
         getChartImage: flowerPotImage,
         getChartEmptyImage: (parent) => {
           switch (parent.label) {

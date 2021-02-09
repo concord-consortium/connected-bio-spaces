@@ -8,6 +8,8 @@ export type ColorType = typeof MouseColor.Type;
 export const SexTypeEnum = types.enumeration("type", ["male", "female"]);
 export type SexType = typeof SexTypeEnum.Type;
 
+export type InspectContext = "nest" | "parent" | "offspring";
+
 export const UNCOLLECTED_IMAGE = "assets/mouse_collect.png";
 
 export const BackpackMouse = types
@@ -43,6 +45,13 @@ export const BackpackMouse = types
       const species = speciesDef(self.species);
       if (species.getChartImage) {
         return species.getChartImage(self as BackpackMouseType);
+      }
+      return species.getBaseImage(self as BackpackMouseType);
+    },
+    getInspectImage(context: InspectContext): string {
+      const species = speciesDef(self.species);
+      if (context === "nest" && species.getInspectNestImage) {
+        return species.getInspectNestImage(self as BackpackMouseType);
       }
       return species.getBaseImage(self as BackpackMouseType);
     },
