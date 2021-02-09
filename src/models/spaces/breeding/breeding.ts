@@ -372,14 +372,8 @@ export const BreedingModel = types
   .views((self) => {
     return {
       get backgroundImage() {
-        switch (self.backgroundType) {
-          case "brown":
-            return "assets/unit/mouse/breeding/nesting/environment-brown-nests.png";
-          case "white":
-            return "assets/unit/mouse/breeding/nesting/environment-white-nests.png";
-          default:
-            return "assets/unit/mouse/breeding/nesting/environment-mixed-nests.png";
-        }
+        const unitBreeding = units[self.nestPairs[0].mother.species].breeding;
+        return unitBreeding.getNestBackgroundImage(self.backgroundType);
       },
       get activeBreedingPair(): INestPair | undefined {
         return self.nestPairs.find(pair => pair.id === self.breedingNestPairId);

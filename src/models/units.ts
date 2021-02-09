@@ -2,7 +2,7 @@ import { types } from "mobx-state-tree";
 import { Unit } from "../authoring";
 import { LegendItem } from "../components/spaces/breeding/breeding-data";
 import { PieChartData } from "../components/charts/pie-chart";
-import { BreedingChartType } from "./spaces/breeding/breeding";
+import { BreedingChartType, EnvironmentColorType } from "./spaces/breeding/breeding";
 import { BackpackMouseType } from "./backpack-mouse";
 // @ts-ignore
 import * as colors from "../components/colors.scss";
@@ -53,6 +53,10 @@ interface UnitDefinition {
     availableChartTypes: BreedingChartType[];
     parentSize: number;
     offspringSize: number;
+    nestParentSize: number;
+    flipRightNestParent: boolean;
+    getNestBackgroundImage: (backgroundType: EnvironmentColorType) => string;
+    getNestHoverImage?: (nest: number) => string;
   };
   dna: {
     title: string;
@@ -187,6 +191,36 @@ export const units: Units = {
       availableChartTypes: ["genotype", "phenotype", "sex"],
       parentSize: 90,
       offspringSize: 60,
+      nestParentSize: 80,
+      flipRightNestParent: true,
+      getNestBackgroundImage: (backgroundType) => {
+        switch (backgroundType) {
+          case "brown":
+            return "assets/unit/mouse/breeding/nesting/environment-brown-nests.png";
+          case "white":
+            return "assets/unit/mouse/breeding/nesting/environment-white-nests.png";
+          default:
+            return "assets/unit/mouse/breeding/nesting/environment-mixed-nests.png";
+        }
+      },
+      getNestHoverImage: (nest) => {
+        switch (nest) {
+          case 1:
+            return "assets/unit/mouse/breeding/nesting/left-top-hover.png";
+          case 2:
+            return "assets/unit/mouse/breeding/nesting/right-top-hover.png";
+          case 3:
+            return "assets/unit/mouse/breeding/nesting/left-middle-hover.png";
+          case 4:
+            return "assets/unit/mouse/breeding/nesting/right-middle-hover.png";
+          case 5:
+            return "assets/unit/mouse/breeding/nesting/left-bottom-hover.png";
+          case 6:
+            return "assets/unit/mouse/breeding/nesting/right-bottom-hover.png";
+          default:
+            return "";
+        }
+      }
     },
     dna: {
       title: "Explore: DNA",
@@ -348,6 +382,9 @@ export const units: Units = {
       parentSize: 165,
       availableChartTypes: ["genotype", "phenotype"],
       offspringSize: 90,
+      nestParentSize: 210,
+      flipRightNestParent: false,
+      getNestBackgroundImage: () => "assets/unit/pea/environment_greenhouse_with_shelves.png",
     },
     dna: {
       title: "Explore: DNA",
