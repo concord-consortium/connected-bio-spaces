@@ -32,6 +32,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
     const { breeding, unit } = this.stores;
     const { backpack } = this.stores;
     const unitBreeding = units[unit].breeding;
+    const species = units[unit].species;
     const activeBreedingPair = breeding.activeBreedingPair!;
     const { mother, father, litters, chartLabel, numOffspring, id } = activeBreedingPair;
     const numLitters = litters.length;
@@ -136,7 +137,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
         { showGametes && this.renderArrowPanel(gametePositions.leftMouse, gametePositions.rightMouse) }
         <div className={offspringClass} onWheel={this.handleWheel}>
           <div className="litter-number">
-            Litter { currentLitter + 1 }
+            {species.offspringCollectionName} { currentLitter + 1 }
           </div>
           {showGametes && <div className="alleles-message">
             Alleles received from parents

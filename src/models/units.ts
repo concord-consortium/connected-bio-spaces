@@ -26,6 +26,7 @@ export interface UnitSpecies {
   chartTypes: Record<string, {legend: LegendItem[], title: string}>;
   getChartData: (chartType: string, data: Record<string, number>) => PieChartData[];
   showSexStack: boolean;
+  offspringCollectionName: string;
 }
 
 interface BreedingParent {
@@ -174,6 +175,7 @@ export const units: Units = {
         return pieData;
       },
       showSexStack: true,
+      offspringCollectionName: "Litter",
     },
     populations: {
       title: "Explore: Population",
@@ -324,6 +326,7 @@ export const units: Units = {
           return pieData;
         },
         showSexStack: false,
+        offspringCollectionName: "Pod",
       },
     populations: {
       title: "Explore: Population",
