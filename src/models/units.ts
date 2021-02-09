@@ -37,6 +37,7 @@ interface BreedingPair {
   parents: BreedingParent[];
   label: string;
   chartLabel?: string;
+  meta?: string;                          // is used by breed button, may be expanded
 }
 
 interface UnitDefinition {
@@ -340,6 +341,7 @@ export const units: Units = {
           ],
           label: "Experiment A",
           chartLabel: "Exp. A",
+          meta: "self-fertilization",
         },
         {
           parents: [
@@ -356,6 +358,7 @@ export const units: Units = {
           ],
           label: "Experiment C",
           chartLabel: "Exp. C",
+          meta: "self-fertilization",
         },
         {
           parents: [
@@ -372,6 +375,7 @@ export const units: Units = {
           ],
           label: "Experiment E",
           chartLabel: "Exp. E",
+          meta: "self-fertilization",
         },
         {
           parents: [

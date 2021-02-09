@@ -83,6 +83,7 @@ export const NestPair = types.model({
   litters: types.array(types.array(BackpackMouse)),
   litterShuffledGametePositions: types.array(ShuffledGametePositions),
   condensedLitterMeta: types.maybe(types.string),
+  meta: types.maybe(types.string),
 })
 .views((self) => ({
   get mother() {
@@ -238,6 +239,7 @@ export function createBreedingModel(unit: Unit, breedingProps: any) {
         rightMouse: {species: unit, sex: rightSex, genotype: pair.parents[1].genotype, label: rightLabel},
         label: pair.label,
         chartLabel: pair.chartLabel || pair.label,
+        meta: pair.meta,
       };
     });
   }

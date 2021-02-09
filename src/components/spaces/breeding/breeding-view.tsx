@@ -60,6 +60,11 @@ export class BreedingView extends BaseComponent<IProps, IState> {
     const fatherImages = [father.zoomedInParentImage];
     if (fatherCollected) fatherImages.push(father.nestOutlineImage);
 
+    let breedButtonIcon = `#icon-breed-button-${unit}`;
+    if (activeBreedingPair.meta) {
+      breedButtonIcon += "-" + activeBreedingPair.meta;
+    }
+
     return (
       <div className={`breeding-view ${unit}`}>
         <div className="parents">
@@ -98,7 +103,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
             <button className={"breeding-button breed-button"}
                       onClick={this.handleClickBreedButton} data-test="inspect-button">
               <svg className={"icon breed"}>
-                <use xlinkHref={`#icon-breed-button-${unit}`} />
+                <use xlinkHref={breedButtonIcon} />
               </svg>
               <div className="label">Breed</div>
             </button>
