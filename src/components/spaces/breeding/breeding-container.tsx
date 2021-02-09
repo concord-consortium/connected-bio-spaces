@@ -3,8 +3,9 @@ import * as React from "react";
 import { BaseComponent, IBaseProps } from "../../base";
 import { ToolbarButton } from "../../../models/spaces/populations/populations";
 import { NestingView } from "./nesting-view";
-import "./breeding-container.sass";
 import { BreedingView } from "./breeding-view";
+import "./breeding-container.sass";
+import "./breeding-container.pea.sass";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -14,7 +15,7 @@ interface IState {}
 export class BreedingContainer extends BaseComponent<IProps, IState> {
 
   public render() {
-    const { breeding } = this.stores;
+    const { breeding, unit } = this.stores;
 
     const checkboxes = breeding.toolbarButtons.map( (button, i) => {
       const type = button.type || "button";
@@ -62,17 +63,17 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
 
     return(
       <div>
-        <div className={containerClass}>
+        <div className={`${containerClass} ${unit}`}>
             { mainComponent }
           </div>
-        <div className="breeding-toolbar" data-test="breed-toolbar">
+        <div className={`breeding-toolbar ${unit}`} data-test="breed-toolbar">
             <div className="toolbar-row">
               <button className={"breeding-button " + breedButtonClass}
                       onClick={showingNesting ? this.handleClickBreedButton : this.handleClickNestingButton}
                       data-test="breed-button">
                 <div className="inner-box container">
                   <svg className={"icon " + breedButtonClass}>
-                    <use xlinkHref={`#icon-${switchLevelsIcon}`} />
+                    <use xlinkHref={`#icon-${switchLevelsIcon}-${unit}`} />
                   </svg>
                 </div>
                 <div className="label">{switchLevelsButtonLabel}</div>
@@ -94,7 +95,7 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
               <button className={"breeding-button " + inspectButtonClass}
                       onClick={this.handleClickInspectButton} data-test="inspect-button">
                 <svg className={"icon " + inspectButtonClass}>
-                  <use xlinkHref="#icon-inspect" />
+                  <use xlinkHref={`#icon-inspect-${unit}`} />
                 </svg>
                 <div className="label">Inspect</div>
               </button>

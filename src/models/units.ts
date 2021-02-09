@@ -25,6 +25,7 @@ export interface UnitSpecies {
   getGameteHTMLLabel: (allele: string) => string;
   chartTypes: Record<string, {legend: LegendItem[], title: string}>;
   getChartData: (chartType: string, data: Record<string, number>) => PieChartData[];
+  showSexStack: boolean;
 }
 
 interface BreedingParent {
@@ -171,6 +172,7 @@ export const units: Units = {
         }
         return pieData;
       },
+      showSexStack: true,
     },
     populations: {
       title: "Explore: Population",
@@ -320,6 +322,7 @@ export const units: Units = {
           }
           return pieData;
         },
+        showSexStack: false,
       },
     populations: {
       title: "Explore: Population",

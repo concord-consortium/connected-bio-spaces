@@ -380,17 +380,21 @@ export const BreedingModel = types
       },
       get toolbarButtons(): ToolbarButton[] {
         const buttons = [];
-        buttons.push({
-          title: "Females",
-          imageClass: "circle female",
-          secondaryTitle: "Males",
-          secondaryTitleImageClass: "circle male",
-          type: "checkbox",
-          value: self.showSexStack,
-          action: (val: boolean) => {
-            self.setShowSexStack(val);
-          }
-        });
+        const species = units[self.nestPairs[0].mother.species].species;
+
+        if (species.showSexStack) {
+          buttons.push({
+            title: "Females",
+            imageClass: "circle female",
+            secondaryTitle: "Males",
+            secondaryTitleImageClass: "circle male",
+            type: "checkbox",
+            value: self.showSexStack,
+            action: (val: boolean) => {
+              self.setShowSexStack(val);
+            }
+          });
+        }
 
         buttons.push({
           title: "Heterozygotes",
