@@ -1,7 +1,8 @@
 import * as React from "react";
-import "./stacked-organism.sass";
 import { BackpackMouseType } from "../models/backpack-mouse";
 import { speciesDef } from "../models/units";
+import "./stacked-organism.sass";
+import "./stacked-organism.pea.sass";
 
 interface IProps {
   organism: BackpackMouseType;
@@ -35,9 +36,7 @@ export const StackedOrganism: React.SFC<IProps> = (props) => {
     height: props.height,
     width: props.height
   };
-  const innerSize = {
-    height: props.height * 0.45,
-  };
+
   const normalHeight = 150;
   const normalBorderWidth = 4;
   const sexSize = {
@@ -52,14 +51,14 @@ export const StackedOrganism: React.SFC<IProps> = (props) => {
   };
 
   return (
-    <div className="stacked-organism" style={fullSize}>
+    <div className={`stacked-organism ${props.organism.species}`} style={fullSize}>
       { props.showGameteSelection && <div className={gameteViewClass} style={fullSize} data-test="gamete-view" /> }
       { props.showInspect && <div className={inspectClass} style={fullSize} data-test="inspect-view" /> }
       { props.showLabel && <div className={labelClass} dangerouslySetInnerHTML={{ __html: label }}/> }
       <img src={selectionImage} className={selectionClass} style={fullSize} data-test="selection-image" />
       {
         props.organismImages.map((image, i) =>
-          <img src={image} className={imgClasses} style={innerSize}
+          <img src={image} className={imgClasses}
             key={`org-image-${i}`} data-test={`org-image-${i}`} />
         )
       }

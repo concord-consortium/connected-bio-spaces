@@ -1,8 +1,8 @@
 @import "../../vars"
 
-$high-pea: -4px
-$med-pea: 12px
-$low-pea: 18px
+$high-pea: 20px
+$med-pea: 31px
+$low-pea: 37px
 
 .breeding-view.pea
   .offspring
@@ -14,7 +14,7 @@ $low-pea: 18px
         background-size: cover
         animation: pea-pod-push-down 0.6s ease
         .offspring-container
-          margin: $high-pea -21px;
+          margin: $high-pea -3px;
         // some trickery to get the right curve depending on the number of peas
         // nth-child(x):nth-last-child(y) precisely identifies a child depending on the number of siblings
         .offspring-container:nth-child(1):nth-last-child(3),

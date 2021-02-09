@@ -389,10 +389,10 @@ export const units: Units = {
           chartLabel: "Exp. F",
         }
       ],
-      parentSize: 165,
+      parentSize: 94,
       availableChartTypes: ["genotype", "phenotype"],
-      offspringSize: 90,
-      nestParentSize: 210,
+      offspringSize: 51,
+      nestParentSize: 118,
       flipRightNestParent: false,
       getNestBackgroundImage: () => "assets/unit/pea/environment_greenhouse_with_shelves.png",
     },
