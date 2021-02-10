@@ -3,10 +3,11 @@ import * as React from "react";
 import { BaseComponent, IBaseProps } from "../../base";
 import { PieChart, PieChartData } from "../../charts/pie-chart";
 import { INestPair } from "../../../models/spaces/breeding/breeding";
+import { speciesDef } from "../../../models/units";
 // @ts-ignore
 import * as colors from "../../../components/colors.scss";
 import "./breeding-data-nest-panel.sass";
-import { speciesDef } from "../../../models/units";
+import "./breeding-data-nest-panel.pea.sass";
 
 interface IState {}
 
@@ -18,26 +19,27 @@ interface IProps extends IBaseProps {
 @observer
 export class BreedingDataNestPanel extends BaseComponent<IProps, IState> {
   public render() {
+    const { unit } = this.stores;
     const { nestPair } = this.props;
     const currentBreeding = nestPair.currentBreeding;
     const hasBeenVisited = nestPair.hasBeenVisited;
     const hasBred = nestPair.numOffspring > 0;
-    const leftMouseImage = hasBeenVisited ? nestPair.leftMouse.baseImage : "assets/mouse_collect.png";
-    const rightMouseImage = hasBeenVisited ? nestPair.rightMouse.baseImage : "assets/mouse_collect.png";
+    const leftMouseImage = hasBeenVisited ? nestPair.leftMouse.chartImage : nestPair.leftMouse.chartEmptyImage;
+    const rightMouseImage = hasBeenVisited ? nestPair.rightMouse.chartImage : nestPair.rightMouse.chartEmptyImage;
     const nestClass = "nest-display " + (currentBreeding ? "current" : (hasBeenVisited ? "active" : ""));
     const titleClass = "title " + (currentBreeding ? "current" : (hasBeenVisited ? "active" : ""));
     const showLabel = nestPair.numOffspring > 0;
     const pieLabel = showLabel ? `${nestPair.numOffspring} offspring` : "";
 
     return(
-      <div className="nesting-pair-data-panel">
+      <div className={`nesting-pair-data-panel ${unit}`}>
         <div className="pair-data">
           <div className={nestClass} onClick={this.handleClickMouseButton}>
             <div className="mouse-holder">
               <img src={leftMouseImage} className={"left-mouse"}/>
               <img src={rightMouseImage} className={"right-mouse"}/>
             </div>
-            <div className={titleClass}>{nestPair.label}</div>
+            <div className={titleClass}>{nestPair.chartLabel}</div>
           </div>
           { hasBred
             ? this.renderPieChart()

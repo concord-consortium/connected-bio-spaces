@@ -77,11 +77,13 @@ export const NestPair = types.model({
   leftMouse: BackpackMouse,
   rightMouse: BackpackMouse,
   label: types.string,
+  chartLabel: types.string,
   currentBreeding: false,
   hasBeenVisited: false,
   litters: types.array(types.array(BackpackMouse)),
   litterShuffledGametePositions: types.array(ShuffledGametePositions),
   condensedLitterMeta: types.maybe(types.string),
+  meta: types.maybe(types.string),
 })
 .views((self) => ({
   get mother() {
@@ -226,14 +228,18 @@ export function createBreedingModel(unit: Unit, breedingProps: any) {
     breedingProps.backgroundType = rand > .66 ? "neutral" : (rand > .33 ? "brown" : "white");
   }
   if (!breedingProps.nestPairs || breedingProps.nestPairs.length === 0) {
-    const breedingPairs = speciesDef(unit).breedingPairs;
+    const { breedingPairs } = units[unit].breeding;
     breedingProps.nestPairs = breedingPairs.map((pair, i) => {
       const leftSex = Math.random() < 0.5 ? "female" : "male";
       const rightSex = leftSex === "female" ? "male" : "female";
+      const leftLabel = pair.parents[0].label || (leftSex === "female" ? "Mother" : "Father");
+      const rightLabel = pair.parents[1].label || (rightSex === "female" ? "Mother" : "Father");
       return {
-        leftMouse: {species: unit, sex: leftSex, genotype: pair[0]},
-        rightMouse: {species: unit, sex: rightSex, genotype: pair[1]},
-        label: `Pair ${i + 1}`
+        leftMouse: {species: unit, sex: leftSex, genotype: pair.parents[0].genotype, label: leftLabel},
+        rightMouse: {species: unit, sex: rightSex, genotype: pair.parents[1].genotype, label: rightLabel},
+        label: pair.label,
+        chartLabel: pair.chartLabel || pair.label,
+        meta: pair.meta,
       };
     });
   }
@@ -368,31 +374,29 @@ export const BreedingModel = types
   .views((self) => {
     return {
       get backgroundImage() {
-        switch (self.backgroundType) {
-          case "brown":
-            return "assets/unit/mouse/breeding/nesting/environment-brown-nests.png";
-          case "white":
-            return "assets/unit/mouse/breeding/nesting/environment-white-nests.png";
-          default:
-            return "assets/unit/mouse/breeding/nesting/environment-mixed-nests.png";
-        }
+        const unitBreeding = units[self.nestPairs[0].mother.species].breeding;
+        return unitBreeding.getNestBackgroundImage(self.backgroundType);
       },
       get activeBreedingPair(): INestPair | undefined {
         return self.nestPairs.find(pair => pair.id === self.breedingNestPairId);
       },
       get toolbarButtons(): ToolbarButton[] {
         const buttons = [];
-        buttons.push({
-          title: "Females",
-          imageClass: "circle female",
-          secondaryTitle: "Males",
-          secondaryTitleImageClass: "circle male",
-          type: "checkbox",
-          value: self.showSexStack,
-          action: (val: boolean) => {
-            self.setShowSexStack(val);
-          }
-        });
+        const species = units[self.nestPairs[0].mother.species].species;
+
+        if (species.showSexStack) {
+          buttons.push({
+            title: "Females",
+            imageClass: "circle female",
+            secondaryTitle: "Males",
+            secondaryTitleImageClass: "circle male",
+            type: "checkbox",
+            value: self.showSexStack,
+            action: (val: boolean) => {
+              self.setShowSexStack(val);
+            }
+          });
+        }
 
         buttons.push({
           title: "Heterozygotes",

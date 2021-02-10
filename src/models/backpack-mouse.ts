@@ -8,6 +8,8 @@ export type ColorType = typeof MouseColor.Type;
 export const SexTypeEnum = types.enumeration("type", ["male", "female"]);
 export type SexType = typeof SexTypeEnum.Type;
 
+export type InspectContext = "nest" | "parent" | "offspring";
+
 export const UNCOLLECTED_IMAGE = "assets/mouse_collect.png";
 
 export const BackpackMouse = types
@@ -24,13 +26,37 @@ export const BackpackMouse = types
       return speciesDef(self.species).getPhenotype(self.genotype);
     },
     get baseImage(): string {
-      return speciesDef(self.species).getBaseImage(self.genotype);
+      return speciesDef(self.species).getBaseImage(self as BackpackMouseType);
     },
     get nestImage(): string {
-      return speciesDef(self.species).getBreedingImage(self.genotype);
+      return speciesDef(self.species).getBreedingImage(self as BackpackMouseType);
     },
     get nestOutlineImage(): string {
-      return "assets/unit/mouse/breeding/nesting/nest_mouse_outline.png";
+      return speciesDef(self.species).getNestOutlineImage(self.genotype);
+    },
+    get zoomedInParentImage(): string {
+      const species = speciesDef(self.species);
+      if (species.getZoomedInParentImage) {
+        return species.getZoomedInParentImage(self as BackpackMouseType);
+      }
+      return speciesDef(self.species).getBreedingImage(self as BackpackMouseType);
+    },
+    get chartImage(): string {
+      const species = speciesDef(self.species);
+      if (species.getChartImage) {
+        return species.getChartImage(self as BackpackMouseType);
+      }
+      return species.getBaseImage(self as BackpackMouseType);
+    },
+    getInspectImage(context: InspectContext): string {
+      const species = speciesDef(self.species);
+      if (context === "nest" && species.getInspectNestImage) {
+        return species.getInspectNestImage(self as BackpackMouseType);
+      }
+      return species.getBaseImage(self as BackpackMouseType);
+    },
+    get chartEmptyImage(): string {
+      return speciesDef(self.species).getChartEmptyImage(self as BackpackMouseType);
     },
     get zoomImage(): string {
       switch (self.genotype) {
@@ -43,7 +69,17 @@ export const BackpackMouse = types
       }
     },
     get isHeterozygote(): boolean {
-      return (self.genotype === "RC" || self.genotype === "CR");
+      // assumes two-letter genotype
+      return self.genotype.charAt(0) !== self.genotype.charAt(1);
+    },
+  }))
+  .views(self => ({
+    get offspringImage(): string {
+      const species = speciesDef(self.species);
+      if (species.getOffspringImage) {
+        return species.getOffspringImage(self as BackpackMouseType);
+      }
+      return self.nestImage;
     },
   }))
   .actions(self => ({

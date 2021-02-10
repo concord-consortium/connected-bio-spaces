@@ -3,12 +3,13 @@ import * as React from "react";
 import Slider from "rc-slider";
 import { BaseComponent, IBaseProps } from "../../base";
 import { StackedOrganism } from "../../stacked-organism";
-import { gameteHTMLLabel } from "../../../utilities/genetics";
 import { ArrowPanel, ArrowInfo } from "./arrow-panel";
 import { BackpackMouse, BackpackMouseType } from "../../../models/backpack-mouse";
 
 import "./breeding-view.sass";
+import "./breeding-view.pea.sass";
 import "rc-slider/assets/index.css";
+import { speciesDef, units } from "../../../models/units";
 
 interface IProps extends IBaseProps {}
 interface IState {
@@ -28,10 +29,12 @@ export class BreedingView extends BaseComponent<IProps, IState> {
   };
 
   public render() {
-    const { breeding } = this.stores;
+    const { breeding, unit } = this.stores;
     const { backpack } = this.stores;
+    const unitBreeding = units[unit].breeding;
+    const species = units[unit].species;
     const activeBreedingPair = breeding.activeBreedingPair!;
-    const { mother, father, litters, label, numOffspring, id } = activeBreedingPair;
+    const { mother, father, litters, chartLabel, numOffspring, id } = activeBreedingPair;
     const numLitters = litters.length;
     const offspringClass = "offspring" + (numOffspring === 0 ? " hide" : "");
     const showGametes = breeding.interactionMode === "gametes";
@@ -50,17 +53,24 @@ export class BreedingView extends BaseComponent<IProps, IState> {
       width: 24
     };
     const railStyle = { width: 10 };
+
     const motherCollected = backpack.cloneExists(mother.id);
     const fatherCollected = backpack.cloneExists(father.id);
-    const motherImages = [mother.nestImage];
+    const motherImages = [mother.zoomedInParentImage];
     if (motherCollected) motherImages.push(mother.nestOutlineImage);
-    const fatherImages = [father.nestImage];
+    const fatherImages = [father.zoomedInParentImage];
     if (fatherCollected) fatherImages.push(father.nestOutlineImage);
+
+    let breedButtonIcon = `#icon-breed-button-${unit}`;
+    if (activeBreedingPair.meta) {
+      breedButtonIcon += "-" + activeBreedingPair.meta;
+    }
+
     return (
-      <div className="breeding-view">
+      <div className={`breeding-view ${unit}`}>
         <div className="parents">
           <div className="parent-label">
-            { label }
+            { chartLabel }
           </div>
           {showGametes && <div className="gametes-box mother"/>}
           {showGametes && <div className="gametes-box father"/>}
@@ -68,7 +78,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
             Gametes given to offspring
           </div>}
           <div className="parent mother">
-            Mother
+            {mother.label}
             <div className="parent-image"
                  onMouseEnter={this.handleParentHoverEnter(0)}
                  onMouseLeave={this.handleParentHoverExit}
@@ -76,7 +86,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
               <StackedOrganism
                 organism={mother}
                 organismImages={motherImages}
-                height={90}
+                height={unitBreeding.parentSize}
                 showSelection={breeding.interactionMode === "select" && !motherCollected}
                 showGameteSelection={showGametes && this.state.parentHightlightIndex === 0}
                 showInspect={breeding.interactionMode === "inspect"}
@@ -94,13 +104,13 @@ export class BreedingView extends BaseComponent<IProps, IState> {
             <button className={"breeding-button breed-button"}
                       onClick={this.handleClickBreedButton} data-test="inspect-button">
               <svg className={"icon breed"}>
-                <use xlinkHref="#icon-breed" />
+                <use xlinkHref={breedButtonIcon} />
               </svg>
               <div className="label">Breed</div>
             </button>
           </div>
           <div className="parent father">
-            Father
+            {father.label}
             <div className="parent-image"
                  onMouseEnter={this.handleParentHoverEnter(1)}
                  onMouseLeave={this.handleParentHoverExit}
@@ -108,7 +118,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
               <StackedOrganism
                 organism={father}
                 organismImages={fatherImages}
-                height={90}
+                height={unitBreeding.parentSize}
                 flipped={true}
                 showSelection={breeding.interactionMode === "select" && !fatherCollected}
                 showGameteSelection={showGametes && this.state.parentHightlightIndex === 1}
@@ -127,7 +137,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
         { showGametes && this.renderArrowPanel(gametePositions.leftMouse, gametePositions.rightMouse) }
         <div className={offspringClass} onWheel={this.handleWheel}>
           <div className="litter-number">
-            Litter { currentLitter + 1 }
+            {species.offspringCollectionName} { currentLitter + 1 }
           </div>
           {showGametes && <div className="alleles-message">
             Alleles received from parents
@@ -148,12 +158,12 @@ export class BreedingView extends BaseComponent<IProps, IState> {
             <div className="litters" style={{top: -litterOffset}}>
               {
                 litters.slice().reverse().map((litter, i) => (
-                  <div className="litter" key={"litter" + label + (litters.length - i)}>
+                  <div className="litter" key={"litter" + chartLabel + (litters.length - i)}>
                     {
                       litter.map((org, j) => {
                         const litterNum = litters.length - i;
                         const orgCollected = backpack.cloneExists(org.id);
-                        const orgImages = [org.nestImage];
+                        const orgImages = [org.offspringImage];
                         if (orgCollected) orgImages.push(org.nestOutlineImage);
                         return (
                           <div
@@ -172,7 +182,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
                               key={"org" + j}
                               organism={org}
                               organismImages={orgImages}
-                              height={60}
+                              height={unitBreeding.offspringSize}
                               showSelection={breeding.interactionMode === "select"
                                             && !orgCollected
                                             && currentLitter === (litterNum - 1)}
@@ -237,6 +247,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
   }
 
   private renderGametes = (gametes: string[], gametePositions: number[], mother: boolean) => {
+    const gameteLabel = speciesDef(this.stores.unit).getGameteHTMLLabel;
     const parentIndex = mother ? 0 : 1;
     const iconClass = mother ? "icon egg " : "icon sperm ";
     const { offspringHightlightIndex, parentHightlightIndex } = this.state;
@@ -256,7 +267,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
             <div className={gameteViewClass} />
             <div className={gameteIconClass} />
             <div className="info-data" dangerouslySetInnerHTML={{
-                __html: gameteHTMLLabel(gamete)
+                __html: gameteLabel(gamete)
             }} />
           </div>
         );
