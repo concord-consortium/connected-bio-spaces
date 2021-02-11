@@ -38,7 +38,7 @@ export class InspectPanel extends BaseComponent<IProps, IState> {
     return(
       <div>
         <div className="inspect-title">{label}</div>
-        <div className="pair-container">
+        <div className="pair-container pair">
           <div className="inspect-background" />
           {this.renderMouse(leftMouse, false)}
           {this.renderMouse(rightMouse, flipRight)}
@@ -48,13 +48,17 @@ export class InspectPanel extends BaseComponent<IProps, IState> {
   }
 
   private renderInspectedMouse(mouse: BackpackMouseType) {
-    const bgClass = "inspect-background single " + (this.props.isGamete ? "gamete " : "")
-                    + (this.props.isPopulationInspect ? "population " : "")
-                    + (this.props.isGamete && this.props.isOffspring ? "low" : "");
+    const classModifiers = "single " + (this.props.isGamete ? "gamete " : "")
+    + (this.props.isPopulationInspect ? "population " : "")
+    + (this.props.isGamete && this.props.isOffspring ? "low " : "")
+    + (this.props.isOffspring ? "offspring " : "parent ")
+    + mouse.sex;
+    const containerClass = "pair-container " + classModifiers;
+    const bgClass = "inspect-background " + classModifiers;
     const allowFlip = units[mouse.species].breeding.flipRightNestParent;
     const flipImage = allowFlip && !this.props.isPopulationInspect && !this.props.isOffspring && mouse.sex === "male";
     return(
-      <div className="pair-container single">
+      <div className={containerClass}>
         { (this.props.isGamete && this.props.isOffspring) && this.renderGametePanel(mouse) }
         <div className={bgClass} />
         {this.renderMouse(mouse, flipImage)}

@@ -52,6 +52,10 @@ export const BackpackMouse = types
       const species = speciesDef(self.species);
       if (context === "nest" && species.getInspectNestImage) {
         return species.getInspectNestImage(self as BackpackMouseType);
+      } else if (context === "parent" && species.getInspectParentImage) {
+        return species.getInspectParentImage(self as BackpackMouseType);
+      } else if (context === "offspring" && species.getInspectOffspringImage) {
+        return species.getInspectOffspringImage(self as BackpackMouseType);
       }
       return species.getBaseImage(self as BackpackMouseType);
     },
