@@ -8,7 +8,7 @@ export type ColorType = typeof MouseColor.Type;
 export const SexTypeEnum = types.enumeration("type", ["male", "female"]);
 export type SexType = typeof SexTypeEnum.Type;
 
-export type InspectContext = "nest" | "parent" | "offspring";
+export type InspectContext = "nest" | "parent" | "offspring" | "population";
 
 export const UNCOLLECTED_IMAGE = "assets/mouse_collect.png";
 

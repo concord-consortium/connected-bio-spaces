@@ -6,6 +6,9 @@ import { BreedingChartType, EnvironmentColorType } from "./spaces/breeding/breed
 import { BackpackMouseType } from "./backpack-mouse";
 // @ts-ignore
 import * as colors from "../components/colors.scss";
+import { OrganismInfoProvider } from "../components/inspect-panel";
+import { renderAnimalInfo } from "../components/inspect-panel-info.animal";
+import { renderPlantInfo } from "../components/inspect-panel-info.plant";
 
 export const UnitTypeEnum = types.enumeration("unit", ["mouse", "pea"]);
 
@@ -30,6 +33,7 @@ export interface UnitSpecies {
   getChartData: (chartType: string, data: Record<string, number>) => PieChartData[];
   showSexStack: boolean;
   offspringCollectionName: string;
+  inspectInfoProvider: OrganismInfoProvider;
 }
 
 interface BreedingParent {
@@ -210,6 +214,7 @@ export const units: Units = {
       },
       showSexStack: true,
       offspringCollectionName: "Litter",
+      inspectInfoProvider: renderAnimalInfo,
     },
     populations: {
       title: "Explore: Population",
@@ -299,7 +304,7 @@ export const units: Units = {
               return "round";
           }
         },
-        phenotypeHeading: "Pea type",
+        phenotypeHeading: "Pea shape",
         getPhenotypeLabel: (phenotype) => phenotype.charAt(0).toUpperCase() + phenotype.slice(1),
         getGenotypeHTMLLabel: (genotype) => genotype,
         getGameteHTMLLabel: (allele) => allele,
@@ -330,6 +335,7 @@ export const units: Units = {
         },
         showSexStack: false,
         offspringCollectionName: "Pod",
+        inspectInfoProvider: renderPlantInfo,
       },
     populations: {
       title: "Explore: Population",
