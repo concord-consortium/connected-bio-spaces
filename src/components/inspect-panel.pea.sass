@@ -4,15 +4,25 @@
   .pair-container
     &.pair
       .inspect-background
-        top: 40px
-        left: 41px
-        width: 338px
+        top: 50px
+        left: 56px
+        width: 300px
         height: 175px
         border-radius: 18px
 
-      .mouse-container .stacked-organism .hetero-stack
-        transform: scaleX(0.7) scaleY(1.1)
-        border-radius: 25px
+      .mouse-container
+        margin: 20px -8px
+
+        .stacked-organism .hetero-stack
+          transform: scaleX(0.7) scaleY(1.1)
+          border-radius: 25px
+
+    &.self-fertilization
+      .inspect-background
+        width: 117px
+        left: 147px
+      .mouse-container:nth-of-type(2)
+        display: none
 
     &.parent
       .inspect-background

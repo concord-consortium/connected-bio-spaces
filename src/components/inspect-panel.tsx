@@ -10,6 +10,7 @@ interface IProps extends IBaseProps {
   mouse1?: BackpackMouseType;
   mouse2?: BackpackMouseType;
   pairLabel: string;
+  pairMeta?: string;
   isOffspring: boolean;
   isGamete: boolean;
   isPopulationInspect?: boolean;
@@ -20,25 +21,26 @@ interface IState {}
 export class InspectPanel extends BaseComponent<IProps, IState> {
 
   public render() {
-    const { mouse1, mouse2, pairLabel } = this.props;
+    const { mouse1, mouse2, pairLabel, pairMeta } = this.props;
     let className = "inspect-panel";
     if (mouse1) {
       className += " " + mouse1.species;
     }
     return(
       <div className={className}>
-        {(mouse1 && mouse2) && this.renderInspectedPair(mouse1, mouse2, pairLabel)}
+        {(mouse1 && mouse2) && this.renderInspectedPair(mouse1, mouse2, pairLabel, pairMeta)}
         {(mouse1 && !mouse2) && this.renderInspectedMouse(mouse1)}
       </div>
     );
   }
 
-  private renderInspectedPair(leftMouse: BackpackMouseType, rightMouse: BackpackMouseType, label: string) {
+  private renderInspectedPair(leftMouse: BackpackMouseType, rightMouse: BackpackMouseType,
+                              label: string, meta?: string) {
     const flipRight = units[rightMouse.species].breeding.flipRightNestParent;
     return(
       <div>
         <div className="inspect-title">{label}</div>
-        <div className="pair-container pair">
+        <div className={`pair-container pair ${meta ? meta : ""}`}>
           <div className="inspect-background" />
           {this.renderMouse(leftMouse, false)}
           {this.renderMouse(rightMouse, flipRight)}

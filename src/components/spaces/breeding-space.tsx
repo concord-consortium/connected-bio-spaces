@@ -14,6 +14,7 @@ interface InspectContent {
   mouse1: any;
   mouse2: any;
   label: string;
+  pairMeta?: string;
   isOffspring: boolean;
   isGamete: boolean;
 }
@@ -42,6 +43,7 @@ export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
                   mouse1={content.mouse1}
                   mouse2={content.mouse2}
                   pairLabel={content.label}
+                  pairMeta={content.pairMeta}
                   isOffspring={content.isOffspring}
                   isGamete={content.isGamete}
                   showGenotype={true}
@@ -80,6 +82,7 @@ export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
                                     mouse1: undefined,
                                     mouse2: undefined,
                                     label: "",
+                                    pairMeta: undefined,
                                     isOffspring: false,
                                     isGamete: false,
                                   };
