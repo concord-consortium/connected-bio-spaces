@@ -86,13 +86,14 @@ export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
                                     isOffspring: false,
                                     isGamete: false,
                                   };
-    let inspectedName = "Nesting Pairs";
+    let inspectedName = unitBreeding.inspectPairsPaneTitle;
     if (inspectInfo && inspectInfo.type === "nest") {
       const pairId = inspectInfo.nestPairId;
       const nestPair = nestPairs.find(pair => pair.id === pairId);
       content.mouse1 = nestPair && nestPair.leftMouse;
       content.mouse2 = nestPair && nestPair.rightMouse;
       content.label = nestPair ? nestPair.label : "";
+      content.pairMeta = nestPair && nestPair.meta ? nestPair.meta : undefined;
     } else if (inspectInfo && (inspectInfo.type === "organism" || inspectInfo.type === "gamete")) {
       const isGamete = inspectInfo.type === "gamete";
       const pairId = inspectInfo.nestPairId;
@@ -105,14 +106,24 @@ export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
           } else if (nestPair.rightMouse.id === inspectInfo.organismId) {
             content.mouse1 = nestPair.rightMouse;
           }
-          inspectedName = isGamete
+          if (unitBreeding.inspectParentPaneTitle) {
+            inspectedName = unitBreeding.inspectParentPaneTitle;
+            if (isGamete) inspectedName += " Gametes";
+          } else {
+            inspectedName = isGamete
             ? `${content.mouse1.sex === "female" ? "Mother" : "Father"} Gametes`
             : `${nestPair.chartLabel} ${content.mouse1.sex === "female" ? "Mother" : "Father"}`;
+          }
         } else {
           content.mouse1 = nestPair.litters[inspectInfo.litterIndex].find(mouse => mouse.id === inspectInfo.organismId);
-          inspectedName = isGamete
+          if (unitBreeding.inspectOffspringPaneTitle) {
+            inspectedName = unitBreeding.inspectOffspringPaneTitle;
+            if (isGamete) inspectedName += " Gametes";
+          } else {
+            inspectedName = isGamete
             ? "Offspring Gametes"
             : `${nestPair.chartLabel} Litter ${inspectInfo.litterIndex + 1} Offspring`;
+          }
           content.isOffspring = true;
         }
         content.isGamete = isGamete;

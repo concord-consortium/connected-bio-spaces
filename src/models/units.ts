@@ -61,6 +61,9 @@ interface UnitDefinition {
     offspringSize: number;
     nestParentSize: number;
     flipRightNestParent: boolean;
+    inspectPairsPaneTitle: string;
+    inspectParentPaneTitle?: string;        // if not specified we generate based on pair's chartLabel and parent sex
+    inspectOffspringPaneTitle?: string;     // if not specified we generate based on pair's chartLabel and litter number
     getNestBackgroundImage: (backgroundType: EnvironmentColorType) => string;
     getNestHoverImage?: (nest: number) => string;
   };
@@ -229,6 +232,7 @@ export const units: Units = {
       offspringSize: 60,
       nestParentSize: 80,
       flipRightNestParent: true,
+      inspectPairsPaneTitle: "Nesting Pairs",
       getNestBackgroundImage: (backgroundType) => {
         switch (backgroundType) {
           case "brown":
@@ -393,6 +397,9 @@ export const units: Units = {
       offspringSize: 51,
       nestParentSize: 118,
       flipRightNestParent: false,
+      inspectPairsPaneTitle: "Experiment",
+      inspectParentPaneTitle: "Flower",
+      inspectOffspringPaneTitle: "Offspring",
       getNestBackgroundImage: () => "assets/unit/pea/environment_greenhouse_with_shelves.png",
     },
     dna: {
