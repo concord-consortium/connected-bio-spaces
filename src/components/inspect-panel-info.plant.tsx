@@ -180,3 +180,24 @@ function getGameteOffspringLabel(org: BackpackMouseType) {
   const producedLabel = org.sex === "female" ? "eggs" : "sperm";
   return `For the selected pea pod, these were the ${producedLabel} from this plant's ${organLabel}.`;
 }
+
+export function getPairFooter(context: InspectContext, org1: BackpackMouseType, org2?: BackpackMouseType) {
+  if (context !== "nest" || !org2) return null;
+  const selfPollinate = org1.label === org2.label;
+
+  return (
+    <div className="inspect-footer">
+      <div className="footer-title">
+        {
+          selfPollinate ?
+          `${org1.label} will self-pollinate.` :
+          `${org1.label} and ${org2.label} will cross-pollinate.`
+        }
+      </div>
+      <div className="footer-body">
+        Pollen from a {org1.label} flower will be used to fertilize
+        a {org2.label} flower
+      </div>
+    </div>
+  );
+}

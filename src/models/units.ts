@@ -6,9 +6,9 @@ import { BreedingChartType, EnvironmentColorType } from "./spaces/breeding/breed
 import { BackpackMouseType } from "./backpack-mouse";
 // @ts-ignore
 import * as colors from "../components/colors.scss";
-import { OrganismInfoProvider } from "../components/inspect-panel";
+import { InspectFooterInfoProvider, OrganismInfoProvider } from "../components/inspect-panel";
 import { renderAnimalInfo } from "../components/inspect-panel-info.animal";
-import { renderPlantInfo } from "../components/inspect-panel-info.plant";
+import { getPairFooter, renderPlantInfo } from "../components/inspect-panel-info.plant";
 
 export const UnitTypeEnum = types.enumeration("unit", ["mouse", "pea"]);
 
@@ -34,6 +34,7 @@ export interface UnitSpecies {
   showSexStack: boolean;
   offspringCollectionName: string;
   inspectInfoProvider: OrganismInfoProvider;
+  inspectFooterProvider?: InspectFooterInfoProvider;
 }
 
 interface BreedingParent {
@@ -312,12 +313,12 @@ export const units: Units = {
           phenotype: {legend: [
             {label: "Round", color: colors.colorDataPeaRound},
             {label: "Wrinkled", color: colors.colorDataPeaWrinkled}
-          ], title: "Pea Types" },
+          ], title: "Pea Shape" },
           genotype: {legend: [
-            {label: "RR Peas", color: colors.colorDataMouseBrownLightRep},
-            {label: "Rr Peas", color: colors.colorDataMouseBrownMediumRep},
-            {label: "rR Peas", color: colors.colorDataMouseBrownMediumRep},
-            {label: "rr Peas", color: colors.colorDataMouseBrownDarkRep}
+            {label: "RR Peas", color: colors.colorDataPeaDark},
+            {label: "Rr Peas", color: colors.colorDataPeaRound},
+            {label: "rR Peas", color: colors.colorDataPeaRound},
+            {label: "rr Peas", color: colors.colorDataPeaWrinkled}
           ], title: "Genotypes" }
         },
         getChartData: (chartType, data) => {
@@ -336,6 +337,7 @@ export const units: Units = {
         showSexStack: false,
         offspringCollectionName: "Pod",
         inspectInfoProvider: renderPlantInfo,
+        inspectFooterProvider: getPairFooter,
       },
     populations: {
       title: "Explore: Population",

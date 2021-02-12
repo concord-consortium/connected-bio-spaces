@@ -8,6 +8,8 @@ import "./inspect-panel.pea.sass";
 
 export type OrganismInfoProvider =
   (org: BackpackMouseType, context: InspectContext, isGamete: boolean, showGenotype: boolean) => JSX.Element;
+export type InspectFooterInfoProvider =
+  (context: InspectContext, org1: BackpackMouseType, org2?: BackpackMouseType) => JSX.Element | null;
 
 interface IProps extends IBaseProps {
   mouse1?: BackpackMouseType;
@@ -25,6 +27,7 @@ export class InspectPanel extends BaseComponent<IProps, IState> {
 
   public render() {
     const { mouse1, mouse2, pairLabel, pairMeta } = this.props;
+    const species = mouse1 && speciesDef(mouse1.species);
     let className = "inspect-panel";
     if (mouse1) {
       className += " " + mouse1.species;
@@ -33,6 +36,10 @@ export class InspectPanel extends BaseComponent<IProps, IState> {
       <div className={className}>
         {(mouse1 && mouse2) && this.renderInspectedPair(mouse1, mouse2, pairLabel, pairMeta)}
         {(mouse1 && !mouse2) && this.renderInspectedMouse(mouse1)}
+        {
+          (species && species.inspectFooterProvider && mouse1) &&
+          species.inspectFooterProvider(this.getContext(), mouse1, mouse2)
+        }
       </div>
     );
   }
