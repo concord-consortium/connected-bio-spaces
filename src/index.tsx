@@ -24,6 +24,8 @@ const DEFAULT_WIDTH = 1000;     // scale = 1.0. All font sizes etc. will be resp
 const MINIMUM_WIDTH = 300;
 export const DEFAULT_MODEL_WIDTH = DEFAULT_WIDTH * 0.414;
 
+const NARROW_WIDTH = 870;       // if we remove left panel, we use this width but keep all other calcs. the same
+
 const SAVE_STATE_KEY = "cbioSaveState";
 const localStorage = (window as any).localStorage;
 
@@ -64,7 +66,8 @@ function initializeModel(studentData: UserSaveDataType) {
 
     const outerWrapperStyle = { className: "outer-scale-wrapper" };
     const aspectRatio = initialStore.topBar ? ASPECT_RATIO_TOP_BAR : ASPECT_RATIO;
-    const contentFn = () => { return { width: DEFAULT_WIDTH, height: DEFAULT_WIDTH / aspectRatio,
+    const width = initialStore.leftPanel ? DEFAULT_WIDTH : NARROW_WIDTH;
+    const contentFn = () => { return { width, height: DEFAULT_WIDTH / aspectRatio,
                                         minWidth: MINIMUM_WIDTH, minHeight: MINIMUM_WIDTH / aspectRatio }; };
     const ScaledAppContainer = scaleToFit(outerWrapperStyle, true, contentFn)(AppComponent);
 
