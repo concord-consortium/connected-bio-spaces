@@ -6,10 +6,16 @@ import { speciesDef, units } from "../models/units";
 import "./inspect-panel.sass";
 import "./inspect-panel.pea.sass";
 
+export type OrganismInfoProvider =
+  (org: BackpackMouseType, context: InspectContext, isGamete: boolean, showGenotype: boolean) => JSX.Element;
+export type InspectFooterInfoProvider =
+  (context: InspectContext, org1: BackpackMouseType, org2?: BackpackMouseType) => JSX.Element | null;
+
 interface IProps extends IBaseProps {
   mouse1?: BackpackMouseType;
   mouse2?: BackpackMouseType;
   pairLabel: string;
+  pairMeta?: string;
   isOffspring: boolean;
   isGamete: boolean;
   isPopulationInspect?: boolean;
@@ -20,25 +26,31 @@ interface IState {}
 export class InspectPanel extends BaseComponent<IProps, IState> {
 
   public render() {
-    const { mouse1, mouse2, pairLabel } = this.props;
+    const { mouse1, mouse2, pairLabel, pairMeta } = this.props;
+    const species = mouse1 && speciesDef(mouse1.species);
     let className = "inspect-panel";
     if (mouse1) {
       className += " " + mouse1.species;
     }
     return(
       <div className={className}>
-        {(mouse1 && mouse2) && this.renderInspectedPair(mouse1, mouse2, pairLabel)}
+        {(mouse1 && mouse2) && this.renderInspectedPair(mouse1, mouse2, pairLabel, pairMeta)}
         {(mouse1 && !mouse2) && this.renderInspectedMouse(mouse1)}
+        {
+          (species && species.inspectFooterProvider && mouse1) &&
+          species.inspectFooterProvider(this.getContext(), mouse1, mouse2)
+        }
       </div>
     );
   }
 
-  private renderInspectedPair(leftMouse: BackpackMouseType, rightMouse: BackpackMouseType, label: string) {
+  private renderInspectedPair(leftMouse: BackpackMouseType, rightMouse: BackpackMouseType,
+                              label: string, meta?: string) {
     const flipRight = units[rightMouse.species].breeding.flipRightNestParent;
     return(
       <div>
         <div className="inspect-title">{label}</div>
-        <div className="pair-container">
+        <div className={`pair-container pair ${meta || ""}`}>
           <div className="inspect-background" />
           {this.renderMouse(leftMouse, false)}
           {this.renderMouse(rightMouse, flipRight)}
@@ -48,13 +60,17 @@ export class InspectPanel extends BaseComponent<IProps, IState> {
   }
 
   private renderInspectedMouse(mouse: BackpackMouseType) {
-    const bgClass = "inspect-background single " + (this.props.isGamete ? "gamete " : "")
-                    + (this.props.isPopulationInspect ? "population " : "")
-                    + (this.props.isGamete && this.props.isOffspring ? "low" : "");
+    const classModifiers = "single " + (this.props.isGamete ? "gamete " : "")
+    + (this.props.isPopulationInspect ? "population " : "")
+    + (this.props.isGamete && this.props.isOffspring ? "low " : "")
+    + (this.props.isOffspring ? "offspring " : "parent ")
+    + mouse.sex;
+    const containerClass = "pair-container " + classModifiers;
+    const bgClass = "inspect-background " + classModifiers;
     const allowFlip = units[mouse.species].breeding.flipRightNestParent;
     const flipImage = allowFlip && !this.props.isPopulationInspect && !this.props.isOffspring && mouse.sex === "male";
     return(
-      <div className="pair-container single">
+      <div className={containerClass}>
         { (this.props.isGamete && this.props.isOffspring) && this.renderGametePanel(mouse) }
         <div className={bgClass} />
         {this.renderMouse(mouse, flipImage)}
@@ -63,10 +79,7 @@ export class InspectPanel extends BaseComponent<IProps, IState> {
   }
 
   private renderMouse(mouse: BackpackMouseType, flip: boolean) {
-    const context: InspectContext =
-      this.props.mouse2 ? "nest" :
-      this.props.isOffspring ? "offspring" : "parent";
-    const mouseImage = mouse.getInspectImage(context);
+    const mouseImage = mouse.getInspectImage(this.getContext());
     const showSex = units[mouse.species].species.showSexStack;
     return (
       <div className="mouse-container">
@@ -79,73 +92,16 @@ export class InspectPanel extends BaseComponent<IProps, IState> {
           showHetero={true}
           flipped={flip}
         />
-        { !this.props.isPopulationInspect &&
-          <div className="mouse-label">
-            {this.props.isOffspring ? "Offspring" : (mouse.sex === "female" ? "Mother" : "Father")}
-          </div>
-        }
-        {this.renderMouseInfo(mouse)}
+        {this.renderOrganismInfo(mouse)}
       </div>
     );
   }
 
-  private renderMouseInfo(mouse: BackpackMouseType) {
-    const species = speciesDef(mouse.species);
-    const sexLabel = mouse.sex === "female" ? "Female" : "Male";
-    const colorLabel = species.getPhenotypeLabel(mouse.phenotype);
-    const genotypeLabel = species.getGenotypeHTMLLabel(mouse.genotype);
-    const rowClass = "info-row" + (this.props.mouse2 ? "" : " wide");
-    const mouseInfoClass = "mouse-info" + (this.props.isPopulationInspect ? " no-header" : "");
-    const infoTypeClass = "info-type" + (this.props.isPopulationInspect ? " population " : "");
-    return (
-      <div className={mouseInfoClass}>
-        <div className={rowClass}>
-          <div className={infoTypeClass}>
-            {speciesDef(mouse.species).phenotypeHeading + ": "}
-            <span className="info-data">{colorLabel}</span>
-          </div>
-        </div>
-        { (!this.props.isGamete || this.props.isOffspring) &&
-          <div className={rowClass}>
-            <div className={infoTypeClass}>
-              {"Sex: "}
-              <span className="info-data">{sexLabel}</span>
-            </div>
-          </div>
-        }
-        { this.props.showGenotype &&
-          <div className={rowClass}>
-            <div className={infoTypeClass}>
-              {"Genotype: "}
-              <span className="info-data"
-                dangerouslySetInnerHTML={{ __html: genotypeLabel }}
-              />
-            </div>
-          </div>
-        }
-        { (this.props.isGamete && !this.props.isOffspring) &&
-          <div className={rowClass}>
-            <div className={infoTypeClass}>
-              {"Gametes: "}
-              <span className="info-data"
-               dangerouslySetInnerHTML={{ __html: this.getGameteLabel(mouse) }}
-              />
-            </div>
-          </div>
-        }
-        { (this.props.isGamete && !this.props.isOffspring) &&
-          <div className={rowClass}>
-            <div className={infoTypeClass}>
-              {"Gametes given to offspring: "}
-              <span className="info-data">{this.getGameteOffspringLabel(mouse)}</span>
-            </div>
-          </div>
-        }
-        { (this.props.isGamete && !this.props.isOffspring) &&
-           this.renderGameteIcons(mouse)
-        }
-      </div>
-    );
+  private renderOrganismInfo(org: BackpackMouseType) {
+    const species = speciesDef(org.species);
+    const context = this.getContext();
+
+    return species.inspectInfoProvider(org, context, this.props.isGamete, this.props.showGenotype);
   }
 
   private renderGametePanel = (mouse: BackpackMouseType) => {
@@ -156,55 +112,44 @@ export class InspectPanel extends BaseComponent<IProps, IState> {
       <div className="gamete-panel">
         <div className="gamete-panel-container">
           <div className="gamete-panel-title">Egg from mother</div>
-          { this.renderGameteIcon("female", label1) }
+          { renderGameteIcon(mouse, "female", label1) }
         </div>
         <div className="gamete-panel-container">
           <div className="gamete-panel-title">Sperm from father</div>
-          { this.renderGameteIcon("male", label2) }
+          { renderGameteIcon(mouse, "male", label2) }
         </div>
         <img src={arrowImage} className="arrow" />
       </div>
     );
   }
 
-  private renderGameteIcons = (mouse: BackpackMouseType) => {
-    const label1 = mouse.genotype.slice(0, 1);
-    const label2 = mouse.genotype.slice(-1);
-    return(
-      <div className="gamete-icons">
-        { this.renderGameteIcon(mouse.sex, label1) }
-        { label2 !== label1 && this.renderGameteIcon(mouse.sex, label2) }
-      </div>
-    );
-  }
-
-  private renderGameteIcon = (sex: string, label: string) => {
-    if (!this.props.mouse1) return null;
-    const species = speciesDef(this.props.mouse1.species);
-    const iconClass = "gamete-icon " + (sex === "female" ? "egg" : "sperm");
-    return(
-      <div className="gamete-icon-container">
-        <div className={iconClass} />
-        <div className="gamete-label" dangerouslySetInnerHTML={{ __html: species.getGameteHTMLLabel(label) }}/>
-      </div>
-    );
-  }
-
-  private getGameteLabel = (mouse: BackpackMouseType) => {
-    const species = speciesDef(mouse.species);
-    const label = species.getGameteHTMLLabel;
-    const producedLabel = mouse.sex === "female" ? "eggs" : "sperm";
-    const allele1 = mouse.genotype.slice(0, 1);
-    const allele2 = mouse.genotype.slice(-1);
-    const alleleLabel = allele1 !== allele2
-                        ? `either the ${label(allele1)} allele or the ${label(allele2)} allele`
-                        : `the ${label(allele1)} allele`;
-    return `This ${mouse.sex} can produce ${producedLabel} with ${alleleLabel}.`;
-  }
-
-  private getGameteOffspringLabel = (mouse: BackpackMouseType) => {
-    const parentLabel = mouse.sex === "female" ? "mother" : "father";
-    const producedLabel = mouse.sex === "female" ? "eggs" : "sperm";
-    return `For the selected litter, these were the ${producedLabel} that came from the ${parentLabel}.`;
+  private getContext = () => {
+    const context: InspectContext =
+      this.props.isPopulationInspect ? "population" :
+      this.props.mouse2 ? "nest" :
+      this.props.isOffspring ? "offspring" : "parent";
+    return context;
   }
 }
+
+export const renderGameteIcons = (mouse: BackpackMouseType) => {
+  const label1 = mouse.genotype.slice(0, 1);
+  const label2 = mouse.genotype.slice(-1);
+  return(
+    <div className="gamete-icons">
+      { renderGameteIcon(mouse, mouse.sex, label1) }
+      { label2 !== label1 && renderGameteIcon(mouse, mouse.sex, label2) }
+    </div>
+  );
+};
+
+export const renderGameteIcon = (mouse: BackpackMouseType, sex: string, label: string) => {
+  const species = speciesDef(mouse.species);
+  const iconClass = "gamete-icon " + (sex === "female" ? "egg" : "sperm");
+  return(
+    <div className="gamete-icon-container">
+      <div className={iconClass} />
+      <div className="gamete-label" dangerouslySetInnerHTML={{ __html: species.getGameteHTMLLabel(label) }}/>
+    </div>
+  );
+};

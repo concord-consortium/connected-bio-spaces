@@ -6,6 +6,9 @@ import { BreedingChartType, EnvironmentColorType } from "./spaces/breeding/breed
 import { BackpackMouseType } from "./backpack-mouse";
 // @ts-ignore
 import * as colors from "../components/colors.scss";
+import { InspectFooterInfoProvider, OrganismInfoProvider } from "../components/inspect-panel";
+import { renderAnimalInfo } from "../components/inspect-panel-info.animal";
+import { getPairFooter, renderPlantInfo } from "../components/inspect-panel-info.plant";
 
 export const UnitTypeEnum = types.enumeration("unit", ["mouse", "pea"]);
 
@@ -16,7 +19,8 @@ export interface UnitSpecies {
   getNestOutlineImage: (genotype: string) => string;
   getZoomedInParentImage?: (parent: BackpackMouseType) => string;    // if not specified, base image is used
   getOffspringImage?: (parent: BackpackMouseType) => string;         // if not specified, nest image is used
-  getInspectOffspringImage?: (org: BackpackMouseType) => string;
+  getInspectOffspringImage?: (org: BackpackMouseType) => string;     // if not specified, base image is used
+  getInspectParentImage?: (org: BackpackMouseType) => string;
   getInspectNestImage?: (org: BackpackMouseType) => string;
   getChartImage?: (parent: BackpackMouseType) => string;
   getChartEmptyImage: (parent: BackpackMouseType) => string;
@@ -29,6 +33,8 @@ export interface UnitSpecies {
   getChartData: (chartType: string, data: Record<string, number>) => PieChartData[];
   showSexStack: boolean;
   offspringCollectionName: string;
+  inspectInfoProvider: OrganismInfoProvider;
+  inspectFooterProvider?: InspectFooterInfoProvider;
 }
 
 interface BreedingParent {
@@ -60,6 +66,9 @@ interface UnitDefinition {
     offspringSize: number;
     nestParentSize: number;
     flipRightNestParent: boolean;
+    inspectPairsPaneTitle: string;
+    inspectParentPaneTitle?: string;        // if not specified we generate based on pair's chartLabel and parent sex
+    inspectOffspringPaneTitle?: string;     // if not specified we generate based on pair's chartLabel and litter number
     getNestBackgroundImage: (backgroundType: EnvironmentColorType) => string;
     getNestHoverImage?: (nest: number) => string;
   };
@@ -109,6 +118,11 @@ const flowerPotImage = (org: BackpackMouseType) => {
     default:
       return "assets/unit/pea/plant_3.png";
   }
+};
+const flowerPotZoomImage = (org: BackpackMouseType) => {
+  const lowerSnakeLabel = org.label.toLowerCase().replace(" ", "_");
+  // e.g. "assets/unit/pea/plant_1_female_zoom.png"
+  return `assets/unit/pea/${lowerSnakeLabel}_${org.sex}_zoom.png`;
 };
 
 export const units: Units = {
@@ -201,6 +215,7 @@ export const units: Units = {
       },
       showSexStack: true,
       offspringCollectionName: "Litter",
+      inspectInfoProvider: renderAnimalInfo,
     },
     populations: {
       title: "Explore: Population",
@@ -223,6 +238,7 @@ export const units: Units = {
       offspringSize: 60,
       nestParentSize: 80,
       flipRightNestParent: true,
+      inspectPairsPaneTitle: "Nesting Pairs",
       getNestBackgroundImage: (backgroundType) => {
         switch (backgroundType) {
           case "brown":
@@ -267,6 +283,7 @@ export const units: Units = {
           "assets/unit/pea/flower_female.png" :
           "assets/unit/pea/flower_male.png",
         getOffspringImage: peaImage,
+        getInspectParentImage: flowerPotZoomImage,
         getInspectNestImage: flowerPotImage,
         getChartImage: flowerPotImage,
         getChartEmptyImage: (parent) => {
@@ -288,7 +305,7 @@ export const units: Units = {
               return "round";
           }
         },
-        phenotypeHeading: "Pea type",
+        phenotypeHeading: "Pea shape",
         getPhenotypeLabel: (phenotype) => phenotype.charAt(0).toUpperCase() + phenotype.slice(1),
         getGenotypeHTMLLabel: (genotype) => genotype,
         getGameteHTMLLabel: (allele) => allele,
@@ -296,12 +313,12 @@ export const units: Units = {
           phenotype: {legend: [
             {label: "Round", color: colors.colorDataPeaRound},
             {label: "Wrinkled", color: colors.colorDataPeaWrinkled}
-          ], title: "Pea Types" },
+          ], title: "Pea Shape" },
           genotype: {legend: [
-            {label: "RR Peas", color: colors.colorDataMouseBrownLightRep},
-            {label: "Rr Peas", color: colors.colorDataMouseBrownMediumRep},
-            {label: "rR Peas", color: colors.colorDataMouseBrownMediumRep},
-            {label: "rr Peas", color: colors.colorDataMouseBrownDarkRep}
+            {label: "RR Peas", color: colors.colorDataPeaDark},
+            {label: "Rr Peas", color: colors.colorDataPeaRound},
+            {label: "rR Peas", color: colors.colorDataPeaRound},
+            {label: "rr Peas", color: colors.colorDataPeaWrinkled}
           ], title: "Genotypes" }
         },
         getChartData: (chartType, data) => {
@@ -319,6 +336,8 @@ export const units: Units = {
         },
         showSexStack: false,
         offspringCollectionName: "Pod",
+        inspectInfoProvider: renderPlantInfo,
+        inspectFooterProvider: getPairFooter,
       },
     populations: {
       title: "Explore: Population",
@@ -386,6 +405,9 @@ export const units: Units = {
       offspringSize: 51,
       nestParentSize: 118,
       flipRightNestParent: false,
+      inspectPairsPaneTitle: "Experiment",
+      inspectParentPaneTitle: "Flower",
+      inspectOffspringPaneTitle: "Offspring",
       getNestBackgroundImage: () => "assets/unit/pea/environment_greenhouse_with_shelves.png",
     },
     dna: {
