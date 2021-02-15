@@ -144,7 +144,7 @@ function renderParentInfo(org: BackpackMouseType, showGenotype: boolean, isGamet
               <div className="info-type">
                 {"Gametes: "}
                 <span className="info-data"
-                dangerouslySetInnerHTML={{ __html: getGameteLabel(org) }}
+                  dangerouslySetInnerHTML={{ __html: getGameteLabel(org) }}
                 />
               </div>
             </div>
@@ -196,7 +196,7 @@ export function getPairFooter(context: InspectContext, org1: BackpackMouseType, 
       </div>
       <div className="footer-body">
         Pollen from a {org1.label} flower will be used to fertilize
-        a {org2.label} flower
+        a {org2.label} flower.
       </div>
     </div>
   );

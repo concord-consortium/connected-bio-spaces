@@ -47,7 +47,7 @@ export function renderAnimalInfo(
             <div className={infoTypeClass}>
               {"Gametes: "}
               <span className="info-data"
-              dangerouslySetInnerHTML={{ __html: getGameteLabel(org) }}
+                dangerouslySetInnerHTML={{ __html: getGameteLabel(org) }}
               />
             </div>
           </div>
