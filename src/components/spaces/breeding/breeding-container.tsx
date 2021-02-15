@@ -15,7 +15,7 @@ interface IState {}
 export class BreedingContainer extends BaseComponent<IProps, IState> {
 
   public render() {
-    const { breeding, unit } = this.stores;
+    const { ui, breeding, unit } = this.stores;
 
     const checkboxes = breeding.toolbarButtons.map( (button, i) => {
       const type = button.type || "button";
@@ -67,7 +67,7 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
             { mainComponent }
           </div>
         <div className={`breeding-toolbar ${unit}`} data-test="breed-toolbar">
-            <div className="toolbar-row">
+            <div className="toolbar-row" data-test="breed-toolbar-main-buttons">
               <button className={"breeding-button " + breedButtonClass}
                       onClick={showingNesting ? this.handleClickBreedButton : this.handleClickNestingButton}
                       data-test="breed-button">
@@ -99,13 +99,15 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
                 </svg>
                 <div className="label">Inspect</div>
               </button>
-              <button className={"breeding-button " + collectButtonClass}
-                      onClick={this.handleClickSelect} data-test="collect-button">
-                <svg className={"icon " + collectButtonClass}>
-                  <use xlinkHref="#icon-collect" />
-                </svg>
-                <div className="label">Collect</div>
-              </button>
+              { ui.showLeftPanel &&
+                <button className={"breeding-button " + collectButtonClass}
+                        onClick={this.handleClickSelect} data-test="collect-button">
+                  <svg className={"icon " + collectButtonClass}>
+                    <use xlinkHref="#icon-collect" />
+                  </svg>
+                  <div className="label">Collect</div>
+                </button>
+              }
            </div>
             <div className="toolbar-row align-left">
               { checkboxes }

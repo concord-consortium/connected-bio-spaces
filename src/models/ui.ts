@@ -19,7 +19,8 @@ export function createUIModel(authoring: any): UIModelType {
     showPopulationSpace: authoring.showPopulationSpace,
     showBreedingSpace: authoring.showBreedingSpace,
     showOrganismSpace: authoring.showOrganismSpace,
-    showDNASpace: authoring.showDNASpace
+    showDNASpace: authoring.showDNASpace,
+    showLeftPanel: authoring.showLeftPanel,
   });
 }
 
@@ -30,7 +31,8 @@ export const UIModel = types
     showPopulationSpace: true,
     showBreedingSpace: false,
     showOrganismSpace: true,
-    showDNASpace: false
+    showDNASpace: false,
+    showLeftPanel: true,
   })
   .actions((self) => {
     return {
