@@ -35,5 +35,41 @@ context("Test URL parameters", () => {
       cy.visit(`/?${showParams}`);
       cy.get(".left-nav-panel").should("be.visible");
     });
+
+    it("is hidden makes Collect button visible", () => {
+      const hideParamsBreeding = encodeURIComponent(JSON.stringify({
+        leftPanel: true,
+        ui: {investigationPanelSpace: "breeding"}
+      }));
+      cy.visit(`/?${hideParamsBreeding}`);
+      cy.get("[data-test=breed-toolbar-main-buttons")
+        .find(".breeding-button").should("have.length", 4);
+
+      const hideParamsPopulations = encodeURIComponent(JSON.stringify({
+        leftPanel: true,
+        ui: {investigationPanelSpace: "populations"}
+      }));
+      cy.visit(`/?${hideParamsPopulations}`);
+      cy.get("[data-test=pop-toolbar-main-buttons")
+        .find(".population-button").should("have.length", 6);
+    });
+
+    it("is hidden makes Collect button hidden", () => {
+      const hideParams = encodeURIComponent(JSON.stringify({
+        leftPanel: false,
+        ui: {investigationPanelSpace: "breeding"}
+      }));
+      cy.visit(`/?${hideParams}`);
+      cy.get("[data-test=breed-toolbar-main-buttons")
+        .find(".breeding-button").should("have.length", 3);
+
+      const hideParamsPopulations = encodeURIComponent(JSON.stringify({
+        leftPanel: false,
+        ui: {investigationPanelSpace: "populations"}
+      }));
+      cy.visit(`/?${hideParamsPopulations}`);
+      cy.get("[data-test=pop-toolbar-main-buttons")
+        .find(".population-button").should("have.length", 5);
+    });
   });
 });
