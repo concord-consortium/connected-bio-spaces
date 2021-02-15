@@ -26,6 +26,8 @@ export class BreedingDataNestPanel extends BaseComponent<IProps, IState> {
     const hasBred = nestPair.numOffspring > 0;
     const leftMouseImage = hasBeenVisited ? nestPair.leftMouse.chartImage : nestPair.leftMouse.chartEmptyImage;
     const rightMouseImage = hasBeenVisited ? nestPair.rightMouse.chartImage : nestPair.rightMouse.chartEmptyImage;
+    const leftMouseSecondaryImage = hasBeenVisited ? nestPair.leftMouse.secondaryChartImage : null;
+    const rightMouseSecondaryImage = hasBeenVisited ? nestPair.rightMouse.secondaryChartImage : null;
     const nestClass = "nest-display " + (currentBreeding ? "current" : (hasBeenVisited ? "active" : ""));
     const titleClass = "title " + (currentBreeding ? "current" : (hasBeenVisited ? "active" : ""));
     const showLabel = nestPair.numOffspring > 0;
@@ -40,6 +42,14 @@ export class BreedingDataNestPanel extends BaseComponent<IProps, IState> {
               <img src={rightMouseImage} className={"right-mouse"}/>
             </div>
             <div className={titleClass}>{nestPair.chartLabel}</div>
+          </div>
+          <div className="label-footer">
+            { (leftMouseSecondaryImage && rightMouseSecondaryImage) &&
+              <div className="secondary-images">
+                <img src={leftMouseSecondaryImage} className="left-mouse"/>
+                <img src={rightMouseSecondaryImage} className="right-mouse"/>
+              </div>
+            }
           </div>
           { hasBred
             ? this.renderPieChart()

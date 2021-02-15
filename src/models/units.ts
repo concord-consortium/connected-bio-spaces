@@ -23,6 +23,7 @@ export interface UnitSpecies {
   getInspectParentImage?: (org: BackpackMouseType) => string;
   getInspectNestImage?: (org: BackpackMouseType) => string;
   getChartImage?: (parent: BackpackMouseType) => string;
+  getChartSecondaryImage?: (parent: BackpackMouseType) => string;   // optional image below the label
   getChartEmptyImage: (parent: BackpackMouseType) => string;
   getPhenotype: (genotype: string) => string;
   phenotypeHeading: string;
@@ -288,6 +289,7 @@ export const units: Units = {
         getInspectParentImage: flowerPotZoomImage,
         getInspectNestImage: flowerPotImage,
         getChartImage: flowerPotImage,
+        getChartSecondaryImage: peaImage,
         getChartEmptyImage: (parent) => {
           switch (parent.label) {
             case "Plant 1":
