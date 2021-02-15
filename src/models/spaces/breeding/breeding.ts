@@ -407,7 +407,8 @@ export const BreedingModel = types
           value: self.showHeteroStack,
           action: (val: boolean) => {
             self.setShowHeteroStack(val);
-          }
+          },
+          enabled: self.showParentGenotype && self.showOffspringGenotype
         });
 
         buttons.push({
