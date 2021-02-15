@@ -130,7 +130,7 @@ function renderParentInfo(org: BackpackMouseType, showGenotype: boolean, isGamet
               <span className="info-data">
                 {
                   org.sex === "female" ?
-                    " This flower's ovary receives the pollen of the other flower" :
+                    " This flower's ovary receives the pollen of the other flower." :
                     " This flower's pollen fertilizes the ovary of the other flower."
                 }
               </span>

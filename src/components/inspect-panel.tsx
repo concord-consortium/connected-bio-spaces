@@ -50,7 +50,7 @@ export class InspectPanel extends BaseComponent<IProps, IState> {
     return(
       <div>
         <div className="inspect-title">{label}</div>
-        <div className={`pair-container pair ${meta ? meta : ""}`}>
+        <div className={`pair-container pair ${meta || ""}`}>
           <div className="inspect-background" />
           {this.renderMouse(leftMouse, false)}
           {this.renderMouse(rightMouse, flipRight)}
