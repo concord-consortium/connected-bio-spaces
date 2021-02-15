@@ -46,6 +46,8 @@ export type EnableStudentMutationControl1 = boolean;
 export type BreedWithMutations1 = boolean;
 export type ChanceOfMutations1 = number;
 export type EnableInspectGametesButton = boolean;
+export type ShowParentGenotype = boolean;
+export type ShowOffspringGenotype = boolean;
 export type EnableMouseFurColorPieChart = boolean;
 export type EnableMouseGenotypesPieChart = boolean;
 export type EnableMouseSexPieChart = boolean;
@@ -131,6 +133,8 @@ export interface BreedingModel {
   breedWithMutations?: BreedWithMutations1;
   chanceOfMutations?: ChanceOfMutations1;
   enableInspectGametes?: EnableInspectGametesButton;
+  showParentGenotype?: ShowParentGenotype;
+  showOffspringGenotype?: ShowOffspringGenotype;
   enableColorChart?: EnableMouseFurColorPieChart;
   enableGenotypeChart?: EnableMouseGenotypesPieChart;
   enableSexChart?: EnableMouseSexPieChart;
