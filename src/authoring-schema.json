@@ -284,16 +284,24 @@
           "title": "Enable inspect gametes button",
           "type": "boolean"
         },
+        "showParentGenotype": {
+          "type": "boolean",
+          "title": "Show Parent Genotype"
+        },
+        "showOffspringGenotype": {
+          "type": "boolean",
+          "title": "Show Offspring Genotype"
+        },
         "enableColorChart": {
-          "title": "Enable mouse fur color pie chart",
+          "title": "Enable phenotype pie chart",
           "type": "boolean"
         },
         "enableGenotypeChart": {
-          "title": "Enable mouse genotypes pie chart",
+          "title": "Enable genotype pie chart",
           "type": "boolean"
         },
         "enableSexChart": {
-          "title": "Enable mouse sex pie chart",
+          "title": "Enable sex pie chart",
           "type": "boolean"
         }
       }

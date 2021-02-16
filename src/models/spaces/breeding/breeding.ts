@@ -257,6 +257,8 @@ export const BreedingModel = types
     showSexStack: false,
     showHeteroStack: false,
     breedWithMutations: false,
+    showParentGenotype: true,
+    showOffspringGenotype: true,
     enableStudentControlOfMutations: false,
     chanceOfMutations: types.number,
     interactionMode: types.optional(BreedingInteractionModeEnum, "breed"),
@@ -405,7 +407,8 @@ export const BreedingModel = types
           value: self.showHeteroStack,
           action: (val: boolean) => {
             self.setShowHeteroStack(val);
-          }
+          },
+          enabled: self.showParentGenotype && self.showOffspringGenotype
         });
 
         buttons.push({

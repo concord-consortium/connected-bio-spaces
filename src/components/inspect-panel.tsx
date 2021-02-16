@@ -81,6 +81,7 @@ export class InspectPanel extends BaseComponent<IProps, IState> {
   private renderMouse(mouse: BackpackMouseType, flip: boolean) {
     const mouseImage = mouse.getInspectImage(this.getContext());
     const showSex = units[mouse.species].species.showSexStack;
+    const showHetero = this.props.showGenotype;
     return (
       <div className="mouse-container">
         <StackedOrganism
@@ -89,7 +90,7 @@ export class InspectPanel extends BaseComponent<IProps, IState> {
           height={170}
           showSelection={false}
           showSex={showSex}
-          showHetero={true}
+          showHetero={showHetero}
           flipped={flip}
         />
         {this.renderOrganismInfo(mouse)}

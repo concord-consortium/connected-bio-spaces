@@ -28,7 +28,7 @@ export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
 
   public render() {
     const { breeding } = this.stores;
-    const { rightPanel } = breeding;
+    const { rightPanel, showParentGenotype, showOffspringGenotype } = breeding;
     let rightPanelTitle = "";
     const rightPanelContent = (() => {
       switch (rightPanel) {
@@ -39,6 +39,7 @@ export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
         case "information":
           const content: InspectContent = this.getInspectedContent();
           rightPanelTitle = content.title;
+          const showGenotype = content.isOffspring ? showOffspringGenotype : showParentGenotype;
           return <InspectPanel
                   mouse1={content.mouse1}
                   mouse2={content.mouse2}
@@ -46,7 +47,7 @@ export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
                   pairMeta={content.pairMeta}
                   isOffspring={content.isOffspring}
                   isGamete={content.isGamete}
-                  showGenotype={true}
+                  showGenotype={showGenotype}
                  />;
         default:
           return null;
