@@ -28,7 +28,8 @@ export interface IStores {
 export type ConnectedBioModelCreationType = ConnectedBioAuthoring & QueryParams & UserSaveDataType;
 
 export function createStores(initialModel: ConnectedBioModelCreationType): IStores {
-  const ui = createUIModel(initialModel.ui);
+  const initialUIModel = {...initialModel.ui, showLeftPanel: initialModel.leftPanel};
+  const ui = createUIModel(initialUIModel);
   const backpack = BackpackModel.create(initialModel.backpack);
   const populations = createPopulationsModel(initialModel.unit, flatten(initialModel.populations));
   // since organisms and breeding may contain references to backpack mice, yet are in different trees,

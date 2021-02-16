@@ -7,6 +7,7 @@
 
 export type Unit = "mouse" | "pea";
 export type ShowTopBar = boolean;
+export type ShowleftPanel = boolean;
 export type ShowPopulationsSpace = boolean;
 export type ShowBreedingSpace = boolean;
 export type ShowOrganismSpace = boolean;
@@ -52,6 +53,7 @@ export type EnableMouseSexPieChart = boolean;
 export interface ConnectedBioAuthoring {
   unit: Unit;
   topBar?: ShowTopBar;
+  leftPanel?: ShowleftPanel;
   ui?: InvestigationSpaces;
   backpack?: InitialBackpack;
   populations?: PopulationsModel;

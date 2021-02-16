@@ -42,7 +42,7 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
   }
 
   public render() {
-    const populations = this.stores.populations;
+    const {populations, ui} = this.stores;
 
     if (populations && populations.interactive) {
       const buttons = populations.toolbarButtons.map( (button, i) => {
@@ -107,7 +107,7 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
               onAgentMouseEvent={this.handleAgentMouseEvent} />
           </div>
           <div className="populations-toolbar" data-test="pop-toolbar">
-            <div className="toolbar-row">
+            <div className="toolbar-row" data-test="pop-toolbar-main-buttons">
               <button className={"population-button " + runButtonClass}
                       onClick={this.handleClickRunButton} data-test="run-button">
                 <svg className={"icon " + runButtonClass}>
@@ -123,13 +123,15 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
                 </svg>
                 <div className="label">Inspect</div>
               </button>
-              <button className={"population-button " + collectButtonClass}
-                      onClick={this.handleClickSelect} data-test="collect-button">
-                <svg className={"icon " + collectButtonClass}>
-                  <use xlinkHref="#icon-collect" />
-                </svg>
-                <div className="label">Collect</div>
-              </button>
+              { ui.showLeftPanel &&
+                <button className={"population-button " + collectButtonClass}
+                        onClick={this.handleClickSelect} data-test="collect-button">
+                  <svg className={"icon " + collectButtonClass}>
+                    <use xlinkHref="#icon-collect" />
+                  </svg>
+                  <div className="label">Collect</div>
+                </button>
+              }
               <button className="population-button" onClick={this.handleClickResetButton} data-test="reset-button">
                 <svg className="icon">
                   <use xlinkHref="#icon-reset" />

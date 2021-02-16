@@ -18,6 +18,10 @@
       "type": "boolean",
       "title": "Show Top Bar"
     },
+    "leftPanel": {
+      "type": "boolean",
+      "title": "Show Left Column"
+    },
     "ui": {
       "title": "Investigation Spaces",
       "type": "object",
