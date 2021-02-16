@@ -317,11 +317,7 @@ export const BreedingModel = types
     },
 
     toggleInteractionMode(mode: "select" | "inspect" | "breed") {
-      if (self.interactionMode === mode) {
-        self.interactionMode = "none";
-      } else {
-        self.interactionMode = mode;
-      }
+      self.interactionMode = mode;
     },
 
     showGametes() {
@@ -347,6 +343,7 @@ export const BreedingModel = types
         });
         nestPair.setCurrentBreeding(true);
         self.rightPanel = "data";   // auto-switch to data when we go to breeding
+        self.interactionMode = "inspect";   // auto-switch to inspect mode
       }
     },
     setInspectedMouse(mouseId: string, pairId: string, litterIndex: number, isParent: boolean) {
