@@ -37,7 +37,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
     const { mother, father, litters, chartLabel, numOffspring, id } = activeBreedingPair;
     const numLitters = litters.length;
     const offspringClass = "offspring" + (numOffspring === 0 ? " hide" : "");
-    const showGametes = breeding.interactionMode === "gametes";
+    const showGametes = breeding.showingGametes;
     const { litterSliderVal } = this.state;
     const maxLitter = numLitters - 1;
     const sliderMax = this.getSliderMax(numLitters);
@@ -352,12 +352,12 @@ export class BreedingView extends BaseComponent<IProps, IState> {
     const { breeding } = this.stores;
     const { backpack } = this.stores;
     const inspecting = breeding.interactionMode === "inspect";
-    const showGametes = breeding.interactionMode === "gametes";
+    const showGametes = breeding.showingGametes;
     const selecting = breeding.interactionMode === "select";
     if (inspecting) {
       breeding.setInspectedMouse(mouse.id, pairId, litterIndex, isParent);
     } else if (showGametes) {
-      breeding.setInspectedGamete(mouse.id, pairId, litterIndex, isParent);
+      // breeding.setInspectedGamete(mouse.id, pairId, litterIndex, isParent);
     } else if (selecting && !backpack.cloneExists(mouse.id)) {
       const backpackMouse = BackpackMouse.create({
         species: mouse.species,
