@@ -6,6 +6,7 @@ import { NestingView } from "./nesting-view";
 import { BreedingView } from "./breeding-view";
 import "./breeding-container.sass";
 import "./breeding-container.pea.sass";
+import { units } from "../../../models/units";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -16,6 +17,7 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
 
   public render() {
     const { ui, breeding, unit } = this.stores;
+    const breedingUnit = units[unit].breeding;
 
     const checkboxes = breeding.toolbarButtons.map( (button, i) => {
       const type = button.type || "button";
@@ -55,7 +57,7 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
                     + ((breeding.interactionMode === "gametes" && !showingNesting) ? " gametes" : "");
 
     const mainComponent = showingNesting ? <NestingView /> : <BreedingView />;
-    const switchLevelsButtonLabel = showingNesting ? "Breeding" : "Nesting";
+    const switchLevelsButtonLabel = showingNesting ? "Breeding" : breedingUnit.nestButtonTitle;
     const switchLevelsIcon = showingNesting ? "breed" : "nests";
     const showGametes = breeding.interactionMode === "gametes";
     const hideGametesClass = "inner-box inner-button left" + (!showGametes ? " selected" : " unselected");

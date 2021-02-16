@@ -48,6 +48,13 @@ export const BackpackMouse = types
       }
       return species.getBaseImage(self as BackpackMouseType);
     },
+    get secondaryChartImage(): string | null {
+      const species = speciesDef(self.species);
+      if (species.getChartSecondaryImage) {
+        return species.getChartSecondaryImage(self as BackpackMouseType);
+      }
+      return null;
+    },
     getInspectImage(context: InspectContext): string {
       const species = speciesDef(self.species);
       if (context === "nest" && species.getInspectNestImage) {

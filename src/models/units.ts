@@ -23,6 +23,7 @@ export interface UnitSpecies {
   getInspectParentImage?: (org: BackpackMouseType) => string;
   getInspectNestImage?: (org: BackpackMouseType) => string;
   getChartImage?: (parent: BackpackMouseType) => string;
+  getChartSecondaryImage?: (parent: BackpackMouseType) => string;   // optional image below the label
   getChartEmptyImage: (parent: BackpackMouseType) => string;
   getPhenotype: (genotype: string) => string;
   phenotypeHeading: string;
@@ -59,16 +60,20 @@ interface UnitDefinition {
     title: string;
   };
   breeding: {
-    title: string;
+    nestingTitle: string;
+    breedingTitle: string;
     breedingPairs: BreedingPair[];
     availableChartTypes: BreedingChartType[];
     parentSize: number;
     offspringSize: number;
     nestParentSize: number;
     flipRightNestParent: boolean;
+    showMaleOnLeft: boolean;
     inspectPairsPaneTitle: string;
     inspectParentPaneTitle?: string;        // if not specified we generate based on pair's chartLabel and parent sex
     inspectOffspringPaneTitle?: string;     // if not specified we generate based on pair's chartLabel and litter number
+    nestButtonTitle: string;
+    showGenotypeUnderChartImage: boolean;
     getNestBackgroundImage: (backgroundType: EnvironmentColorType) => string;
     getNestHoverImage?: (nest: number) => string;
   };
@@ -224,7 +229,8 @@ export const units: Units = {
       title: "Explore: Organism",
     },
     breeding: {
-      title: "Explore: Nesting Pairs",
+      nestingTitle: "Explore: Nesting Pairs",
+      breedingTitle: "Explore: Nesting Pairs",
       breedingPairs: [
         {parents: [{genotype: "RC"}, {genotype: "RR"}], label: "Pair 1"},
         {parents: [{genotype: "CC"}, {genotype: "RR"}], label: "Pair 2"},
@@ -238,7 +244,10 @@ export const units: Units = {
       offspringSize: 60,
       nestParentSize: 80,
       flipRightNestParent: true,
+      showMaleOnLeft: false,
       inspectPairsPaneTitle: "Nesting Pairs",
+      nestButtonTitle: "Nesting",
+      showGenotypeUnderChartImage: false,
       getNestBackgroundImage: (backgroundType) => {
         switch (backgroundType) {
           case "brown":
@@ -286,6 +295,7 @@ export const units: Units = {
         getInspectParentImage: flowerPotZoomImage,
         getInspectNestImage: flowerPotImage,
         getChartImage: flowerPotImage,
+        getChartSecondaryImage: peaImage,
         getChartEmptyImage: (parent) => {
           switch (parent.label) {
             case "Plant 1":
@@ -346,7 +356,8 @@ export const units: Units = {
       title: "Explore: Organism",
     },
     breeding: {
-      title: "Greenhouse",
+      nestingTitle: "Explore: Greenhouse Experiments",
+      breedingTitle: "Explore: Breeding",
       breedingPairs: [
         {
           parents: [
@@ -405,9 +416,12 @@ export const units: Units = {
       offspringSize: 51,
       nestParentSize: 118,
       flipRightNestParent: false,
+      showMaleOnLeft: true,
       inspectPairsPaneTitle: "Experiment",
       inspectParentPaneTitle: "Flower",
       inspectOffspringPaneTitle: "Offspring",
+      nestButtonTitle: "Greenhouse",
+      showGenotypeUnderChartImage: true,
       getNestBackgroundImage: () => "assets/unit/pea/environment_greenhouse_with_shelves.png",
     },
     dna: {
