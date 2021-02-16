@@ -60,7 +60,8 @@ interface UnitDefinition {
     title: string;
   };
   breeding: {
-    title: string;
+    nestingTitle: string;
+    breedingTitle: string;
     breedingPairs: BreedingPair[];
     availableChartTypes: BreedingChartType[];
     parentSize: number;
@@ -227,7 +228,8 @@ export const units: Units = {
       title: "Explore: Organism",
     },
     breeding: {
-      title: "Explore: Nesting Pairs",
+      nestingTitle: "Explore: Nesting Pairs",
+      breedingTitle: "Explore: Nesting Pairs",
       breedingPairs: [
         {parents: [{genotype: "RC"}, {genotype: "RR"}], label: "Pair 1"},
         {parents: [{genotype: "CC"}, {genotype: "RR"}], label: "Pair 2"},
@@ -352,7 +354,8 @@ export const units: Units = {
       title: "Explore: Organism",
     },
     breeding: {
-      title: "Greenhouse",
+      nestingTitle: "Explore: Greenhouse Experiments",
+      breedingTitle: "Explore: Breeding",
       breedingPairs: [
         {
           parents: [

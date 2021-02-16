@@ -54,8 +54,10 @@ export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
       }
     })();
 
-    const unitDef = units[this.stores.unit];
-    const title = unitDef.breeding.title;
+    const unitBreeding = units[this.stores.unit].breeding;
+
+    const isShowingNestingView = breeding.breedingNestPairId === undefined;
+    const title = isShowingNestingView ? unitBreeding.nestingTitle : unitBreeding.breedingTitle;
 
     return (
       <TwoUpDisplayComponent
