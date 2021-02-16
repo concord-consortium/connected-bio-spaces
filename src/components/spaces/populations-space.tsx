@@ -35,9 +35,9 @@ export class PopulationsSpaceComponent extends BaseComponent<IProps, IState> {
           return <InspectPanel
                   mouse1={populations.model.inspectedMouse}
                   pairLabel={""}
-                  isGamete={false}
+                  context="population"
+                  showGametes={false}
                   isOffspring={false}
-                  isPopulationInspect={true}
                   showGenotype={populations.model.showInspectGenotype}
                  />;
         default:

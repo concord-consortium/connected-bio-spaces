@@ -356,8 +356,6 @@ export class BreedingView extends BaseComponent<IProps, IState> {
     const selecting = breeding.interactionMode === "select";
     if (inspecting) {
       breeding.setInspectedMouse(mouse.id, pairId, litterIndex, isParent);
-    } else if (showGametes) {
-      // breeding.setInspectedGamete(mouse.id, pairId, litterIndex, isParent);
     } else if (selecting && !backpack.cloneExists(mouse.id)) {
       const backpackMouse = BackpackMouse.create({
         species: mouse.species,
