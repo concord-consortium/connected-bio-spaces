@@ -68,6 +68,7 @@ interface UnitDefinition {
     offspringSize: number;
     nestParentSize: number;
     flipRightNestParent: boolean;
+    showMaleOnLeft: boolean;
     inspectPairsPaneTitle: string;
     inspectParentPaneTitle?: string;        // if not specified we generate based on pair's chartLabel and parent sex
     inspectOffspringPaneTitle?: string;     // if not specified we generate based on pair's chartLabel and litter number
@@ -243,6 +244,7 @@ export const units: Units = {
       offspringSize: 60,
       nestParentSize: 80,
       flipRightNestParent: true,
+      showMaleOnLeft: false,
       inspectPairsPaneTitle: "Nesting Pairs",
       nestButtonTitle: "Nesting",
       showGenotypeUnderChartImage: false,
@@ -414,6 +416,7 @@ export const units: Units = {
       offspringSize: 51,
       nestParentSize: 118,
       flipRightNestParent: false,
+      showMaleOnLeft: true,
       inspectPairsPaneTitle: "Experiment",
       inspectParentPaneTitle: "Flower",
       inspectOffspringPaneTitle: "Offspring",
