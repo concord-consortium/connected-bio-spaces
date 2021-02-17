@@ -80,7 +80,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
               showInspect={breeding.interactionMode === "inspect"}
               showSex={breeding.showSexStack}
               showHetero={breeding.showHeteroStack}
-              showLabel={showGametes}
+              showLabel={showGametes && breeding.showParentGenotype}
               isOffspring={false}
               flipped={flipped}
             />

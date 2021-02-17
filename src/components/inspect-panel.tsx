@@ -24,6 +24,7 @@ interface IProps extends IBaseProps {
   context: InspectContext;
   showGenotype: boolean;
   showGametes: boolean;
+  showParentGenotype: boolean;
 }
 interface IState {}
 
@@ -113,8 +114,8 @@ export class InspectPanel extends BaseComponent<IProps, IState> {
   private renderGametePanel = (mouse: BackpackMouseType) => {
     const species = speciesDef(mouse.species);
     const arrowImage = "assets/unit/mouse/breeding/inspect/inspect-arrow.png";
-    const label1 = mouse.genotype.slice(0, 1);
-    const label2 = mouse.genotype.slice(-1);
+    const label1 = this.props.showParentGenotype ? mouse.genotype.slice(0, 1) : undefined;
+    const label2 = this.props.showParentGenotype ? mouse.genotype.slice(-1) : undefined;
     return(
       <div className="gamete-panel">
         <div className="gamete-panel-container">
@@ -142,13 +143,15 @@ export const renderGameteIcons = (mouse: BackpackMouseType) => {
   );
 };
 
-export const renderGameteIcon = (mouse: BackpackMouseType, sex: string, label: string) => {
+export const renderGameteIcon = (mouse: BackpackMouseType, sex: string, label?: string) => {
   const species = speciesDef(mouse.species);
   const iconClass = "gamete-icon " + (sex === "female" ? "egg" : "sperm");
   return(
     <div className="gamete-icon-container">
       <div className={iconClass} />
-      <div className="gamete-label" dangerouslySetInnerHTML={{ __html: species.getGameteHTMLLabel(label) }}/>
+      { label &&
+        <div className="gamete-label" dangerouslySetInnerHTML={{ __html: species.getGameteHTMLLabel(label) }}/>
+      }
     </div>
   );
 };
