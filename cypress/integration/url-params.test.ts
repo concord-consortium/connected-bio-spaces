@@ -8,7 +8,7 @@ context("Test URL parameters", () => {
     it("is hidden when specified", () => {
       const hideParams = encodeURIComponent(JSON.stringify({topBar: false}));
       cy.visit(`/?${hideParams}`);
-      cy.get(".top-bar").should("not.be.visible");
+      cy.get(".top-bar").should("not.exist");
     });
 
     it("is visible when specified", () => {
@@ -27,7 +27,7 @@ context("Test URL parameters", () => {
     it("is hidden when specified", () => {
       const hideParams = encodeURIComponent(JSON.stringify({leftPanel: false}));
       cy.visit(`/?${hideParams}`);
-      cy.get(".left-nav-panel").should("not.be.visible");
+      cy.get(".left-nav-panel").should("not.exist");
     });
 
     it("is visible when specified", () => {
@@ -36,7 +36,7 @@ context("Test URL parameters", () => {
       cy.get(".left-nav-panel").should("be.visible");
     });
 
-    it("is hidden makes Collect button visible", () => {
+    it("is visible makes Collect button visible", () => {
       const hideParamsBreeding = encodeURIComponent(JSON.stringify({
         leftPanel: true,
         ui: {investigationPanelSpace: "breeding"}
