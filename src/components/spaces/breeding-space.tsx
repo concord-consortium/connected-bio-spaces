@@ -8,6 +8,7 @@ import { BreedingContainer } from "./breeding/breeding-container";
 import { BreedingData } from "./breeding/breeding-data";
 import { InspectPanel } from "../inspect-panel";
 import { units } from "../../models/units";
+import { InspectContext } from "../../models/backpack-mouse";
 
 interface InspectContent {
   title: string;
@@ -39,14 +40,18 @@ export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
         case "information":
           const content: InspectContent = this.getInspectedContent();
           rightPanelTitle = content.title;
+          const context: InspectContext = content.mouse2 ? "nest" :
+            content.isOffspring ? "offspring" : "parent";
           const showGenotype = content.isOffspring ? showOffspringGenotype : showParentGenotype;
+
           return <InspectPanel
                   mouse1={content.mouse1}
                   mouse2={content.mouse2}
                   pairLabel={content.label}
+                  context={context}
                   pairMeta={content.pairMeta}
                   isOffspring={content.isOffspring}
-                  isGamete={content.isGamete}
+                  showGametes={breeding.showingGametes}
                   showGenotype={showGenotype}
                  />;
         default:

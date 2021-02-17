@@ -9,7 +9,7 @@ import { shuffle } from "lodash";
 import { speciesDef, units } from "../../units";
 import { Unit } from "../../../authoring";
 
-const BreedingInteractionModeEnum = types.enumeration("interaction", ["none", "breed", "select", "inspect", "gametes"]);
+const BreedingInteractionModeEnum = types.enumeration("interaction", ["none", "breed", "select", "inspect"]);
 export type BreedingInteractionModeType = typeof BreedingInteractionModeEnum.Type;
 
 export const EnvironmentColorTypeEnum = types.enumeration("environment", ["white", "neutral", "brown"]);
@@ -262,6 +262,7 @@ export const BreedingModel = types
     enableStudentControlOfMutations: false,
     chanceOfMutations: types.number,
     interactionMode: types.optional(BreedingInteractionModeEnum, "breed"),
+    showingGametes: false,
     backgroundType: types.optional(EnvironmentColorTypeEnum, "neutral"),
     nestPairs: types.array(NestPair),
     inspectInfo: InspectInfo,
@@ -315,13 +316,17 @@ export const BreedingModel = types
       self.breedWithMutations = value;
     },
 
-    toggleInteractionMode(mode: "select" | "inspect" | "breed" | "gametes") {
-      if (self.interactionMode === mode) {
-        self.interactionMode = "none";
-      } else {
-        self.interactionMode = mode;
-      }
+    toggleInteractionMode(mode: "select" | "inspect" | "breed") {
+      self.interactionMode = mode;
     },
+
+    showGametes() {
+      self.showingGametes = true;
+    },
+    hideGametes() {
+      self.showingGametes = false;
+    },
+
     clearNestPairActiveBreeding() {
       self.nestPairs.forEach(pair => {
         pair.setCurrentBreeding(false);
@@ -338,6 +343,7 @@ export const BreedingModel = types
         });
         nestPair.setCurrentBreeding(true);
         self.rightPanel = "data";   // auto-switch to data when we go to breeding
+        self.interactionMode = "inspect";   // auto-switch to inspect mode
       }
     },
     setInspectedMouse(mouseId: string, pairId: string, litterIndex: number, isParent: boolean) {

@@ -60,7 +60,7 @@ export class BreedingDataNestPanel extends BaseComponent<IProps, IState> {
                   {species.getGenotypeHTMLLabel(nestPair.leftMouse.genotype)}
                 </span>
                 <span className="right-mouse">
-                  {species.getGenotypeHTMLLabel(nestPair.leftMouse.genotype)}
+                  {species.getGenotypeHTMLLabel(nestPair.rightMouse.genotype)}
                 </span>
               </div>
             }

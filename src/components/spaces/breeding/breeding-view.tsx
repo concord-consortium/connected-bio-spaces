@@ -37,7 +37,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
     const { mother, father, litters, chartLabel, numOffspring, id } = activeBreedingPair;
     const numLitters = litters.length;
     const offspringClass = "offspring" + (numOffspring === 0 ? " hide" : "");
-    const showGametes = breeding.interactionMode === "gametes";
+    const showGametes = breeding.showingGametes;
     const { litterSliderVal } = this.state;
     const maxLitter = numLitters - 1;
     const sliderMax = this.getSliderMax(numLitters);
@@ -86,7 +86,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
             />
           </div>
           { showGametes && <div className="gametes">
-              { this.renderGametes(parentGametes, parentGametePositions, parent === "mother") }
+            {this.renderGametes(parentGametes, parentGametePositions, parent === "mother", breeding.showParentGenotype)}
           </div> }
         </div>
       );
@@ -157,6 +157,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
                         const orgCollected = backpack.cloneExists(org.id);
                         const orgImages = [org.offspringImage];
                         if (orgCollected) orgImages.push(org.nestOutlineImage);
+                        const showGenotype = breeding.showOffspringGenotype && showGametes;
                         return (
                           <div
                             className="offspring-container"
@@ -185,7 +186,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
                                           && currentLitter === (litterNum - 1)}
                               showSex={breeding.showSexStack}
                               showHetero={breeding.showHeteroStack}
-                              showLabel={showGametes}
+                              showLabel={showGenotype}
                               isOffspring={true}
                             />
                           </div>
@@ -238,7 +239,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
     return sliderMax;
   }
 
-  private renderGametes = (gametes: string[], gametePositions: number[], mother: boolean) => {
+  private renderGametes = (gametes: string[], gametePositions: number[], mother: boolean, showGenotype: boolean) => {
     const gameteLabel = speciesDef(this.stores.unit).getGameteHTMLLabel;
     const parentIndex = mother ? 0 : 1;
     const iconClass = mother ? "icon egg " : "icon sperm ";
@@ -249,18 +250,21 @@ export class BreedingView extends BaseComponent<IProps, IState> {
         const gamete = gametes[position];
         const highlightMouse = offspringHightlightIndex === position;
         const highlightParent = parentHightlightIndex === parentIndex;
+        const className = "gamete" + (showGenotype ? "" : " no-label");
         const gameteViewClass = "hover-view " + (highlightMouse || highlightParent ? "show " : "")
                                 + (highlightMouse ? "tall" : "");
         const gameteIconClass = iconClass + (highlightMouse ? "highlight" : "");
         return(
-          <div className="gamete" key={i} style={{marginTop: offset}}
+          <div className={className} key={i} style={{marginTop: offset}}
                onMouseEnter={this.handleOffspringHoverEnter(position)}
                onMouseLeave={this.handleOffspringHoverExit}>
             <div className={gameteViewClass} />
             <div className={gameteIconClass} />
-            <div className="info-data" dangerouslySetInnerHTML={{
+            { showGenotype &&
+              <div className="info-data" dangerouslySetInnerHTML={{
                 __html: gameteLabel(gamete)
-            }} />
+              }} />
+            }
           </div>
         );
       })
@@ -352,12 +356,9 @@ export class BreedingView extends BaseComponent<IProps, IState> {
     const { breeding } = this.stores;
     const { backpack } = this.stores;
     const inspecting = breeding.interactionMode === "inspect";
-    const showGametes = breeding.interactionMode === "gametes";
     const selecting = breeding.interactionMode === "select";
     if (inspecting) {
       breeding.setInspectedMouse(mouse.id, pairId, litterIndex, isParent);
-    } else if (showGametes) {
-      breeding.setInspectedGamete(mouse.id, pairId, litterIndex, isParent);
     } else if (selecting && !backpack.cloneExists(mouse.id)) {
       const backpackMouse = BackpackMouse.create({
         species: mouse.species,

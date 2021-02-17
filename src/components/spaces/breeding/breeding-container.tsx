@@ -54,12 +54,12 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
                     + (breeding.interactionMode === "inspect" ? " inspect" : "")
                     + (breeding.interactionMode === "select" ? " select" : "")
                     + ((breeding.interactionMode === "breed" && showingNesting) ? " breed" : "")
-                    + ((breeding.interactionMode === "gametes" && !showingNesting) ? " gametes" : "");
+                    + ((breeding.showGametes && !showingNesting) ? " gametes" : "");
 
     const mainComponent = showingNesting ? <NestingView /> : <BreedingView />;
     const switchLevelsButtonLabel = showingNesting ? "Breeding" : breedingUnit.nestButtonTitle;
     const switchLevelsIcon = showingNesting ? "breed" : "nests";
-    const showGametes = breeding.interactionMode === "gametes";
+    const showGametes = breeding.showingGametes;
     const hideGametesClass = "inner-box inner-button left" + (!showGametes ? " selected" : " unselected");
     const showGametesClass = "inner-box inner-button right" + (showGametes ? " selected" : " unselected");
 
@@ -92,7 +92,7 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
                     <div className="label">Show</div>
                   </div>
                 </div>
-                <div className="label">Inspect Gametes</div>
+                <div className="label">Gametes</div>
               </button>
               <button className={"breeding-button " + inspectButtonClass}
                       onClick={this.handleClickInspectButton} data-test="inspect-button">
@@ -158,10 +158,10 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
   }
 
   private handleClickHideGametesButton = () => {
-    this.stores.breeding.toggleInteractionMode("gametes");
+    this.stores.breeding.hideGametes();
   }
 
   private handleClickShowGametesButton = () => {
-    this.stores.breeding.toggleInteractionMode("gametes");
+    this.stores.breeding.showGametes();
   }
 }
