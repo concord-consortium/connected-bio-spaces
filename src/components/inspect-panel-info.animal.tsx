@@ -85,3 +85,8 @@ function getGameteOffspringLabel(mouse: BackpackMouseType) {
   const producedLabel = mouse.sex === "female" ? "eggs" : "sperm";
   return `For the selected litter, these were the ${producedLabel} that came from the ${parentLabel}.`;
 }
+
+export const animalInspectPanelStrings = {
+  motherGameteLabel: "Egg from mother",
+  fatherGameteLabel: "Sperm from father",
+};

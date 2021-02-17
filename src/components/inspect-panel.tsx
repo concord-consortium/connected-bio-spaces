@@ -10,6 +10,10 @@ export type OrganismInfoProvider =
   (org: BackpackMouseType, context: InspectContext, isGamete: boolean, showGenotype: boolean) => JSX.Element;
 export type InspectFooterInfoProvider =
   (context: InspectContext, org1: BackpackMouseType, org2?: BackpackMouseType) => JSX.Element | null;
+export interface InspectStrings {
+  motherGameteLabel: string;
+  fatherGameteLabel: string;
+}
 
 interface IProps extends IBaseProps {
   mouse1?: BackpackMouseType;
@@ -107,17 +111,18 @@ export class InspectPanel extends BaseComponent<IProps, IState> {
   }
 
   private renderGametePanel = (mouse: BackpackMouseType) => {
+    const species = speciesDef(mouse.species);
     const arrowImage = "assets/unit/mouse/breeding/inspect/inspect-arrow.png";
     const label1 = mouse.genotype.slice(0, 1);
     const label2 = mouse.genotype.slice(-1);
     return(
       <div className="gamete-panel">
         <div className="gamete-panel-container">
-          <div className="gamete-panel-title">Egg from mother</div>
+          <div className="gamete-panel-title">{species.inspectStrings.motherGameteLabel}</div>
           { renderGameteIcon(mouse, "female", label1) }
         </div>
         <div className="gamete-panel-container">
-          <div className="gamete-panel-title">Sperm from father</div>
+          <div className="gamete-panel-title">{species.inspectStrings.fatherGameteLabel}</div>
           { renderGameteIcon(mouse, "male", label2) }
         </div>
         <img src={arrowImage} className="arrow" />
