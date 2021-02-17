@@ -201,3 +201,8 @@ export function getPairFooter(context: InspectContext, org1: BackpackMouseType, 
     </div>
   );
 }
+
+export const plantInspectPanelStrings = {
+  motherGameteLabel: "Egg cell",
+  fatherGameteLabel: "Sperm cell",
+};

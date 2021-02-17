@@ -6,9 +6,9 @@ import { BreedingChartType, EnvironmentColorType } from "./spaces/breeding/breed
 import { BackpackMouseType } from "./backpack-mouse";
 // @ts-ignore
 import * as colors from "../components/colors.scss";
-import { InspectFooterInfoProvider, OrganismInfoProvider } from "../components/inspect-panel";
-import { renderAnimalInfo } from "../components/inspect-panel-info.animal";
-import { getPairFooter, renderPlantInfo } from "../components/inspect-panel-info.plant";
+import { InspectFooterInfoProvider, OrganismInfoProvider, InspectStrings } from "../components/inspect-panel";
+import { animalInspectPanelStrings, renderAnimalInfo } from "../components/inspect-panel-info.animal";
+import { getPairFooter, plantInspectPanelStrings, renderPlantInfo } from "../components/inspect-panel-info.plant";
 
 export const UnitTypeEnum = types.enumeration("unit", ["mouse", "pea"]);
 
@@ -36,6 +36,7 @@ export interface UnitSpecies {
   offspringCollectionName: string;
   inspectInfoProvider: OrganismInfoProvider;
   inspectFooterProvider?: InspectFooterInfoProvider;
+  inspectStrings: InspectStrings;
 }
 
 interface BreedingParent {
@@ -221,6 +222,7 @@ export const units: Units = {
       showSexStack: true,
       offspringCollectionName: "Litter",
       inspectInfoProvider: renderAnimalInfo,
+      inspectStrings: animalInspectPanelStrings,
     },
     populations: {
       title: "Explore: Population",
@@ -348,6 +350,7 @@ export const units: Units = {
         offspringCollectionName: "Pod",
         inspectInfoProvider: renderPlantInfo,
         inspectFooterProvider: getPairFooter,
+        inspectStrings: plantInspectPanelStrings,
       },
     populations: {
       title: "Explore: Population",
