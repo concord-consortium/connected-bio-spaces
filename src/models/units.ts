@@ -319,7 +319,7 @@ export const units: Units = {
         },
         phenotypeHeading: "Pea shape",
         getPhenotypeLabel: (phenotype) => phenotype.charAt(0).toUpperCase() + phenotype.slice(1),
-        getGenotypeHTMLLabel: (genotype) => genotype,
+        getGenotypeHTMLLabel: (genotype) => genotype.charAt(1) + genotype.charAt(0),
         getGameteHTMLLabel: (allele) => allele,
         chartTypes: {
           phenotype: {legend: [
