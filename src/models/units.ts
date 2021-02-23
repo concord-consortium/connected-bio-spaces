@@ -364,8 +364,8 @@ export const units: Units = {
       breedingPairs: [
         {
           parents: [
-            {genotype: "Rr", label: "Plant 1"},
-            {genotype: "Rr", label: "Plant 1"}
+            {genotype: "rR", label: "Plant 1"},
+            {genotype: "rR", label: "Plant 1"}
           ],
           label: "Experiment A",
           chartLabel: "Exp. A",
@@ -373,7 +373,7 @@ export const units: Units = {
         },
         {
           parents: [
-            {genotype: "Rr", label: "Plant 1"},
+            {genotype: "rR", label: "Plant 1"},
             {genotype: "RR", label: "Plant 2"}
           ],
           label: "Experiment B",
@@ -408,7 +408,7 @@ export const units: Units = {
         {
           parents: [
             {genotype: "rr", label: "Plant 3"},
-            {genotype: "Rr", label: "Plant 1"}
+            {genotype: "rR", label: "Plant 1"}
           ],
           label: "Experiment F",
           chartLabel: "Exp. F",
