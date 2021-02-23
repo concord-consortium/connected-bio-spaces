@@ -337,8 +337,8 @@ export const units: Units = {
           let pieData = [];
           if (chartType === "genotype") {
             pieData = [{label: "RR", value: data.RR, color: colors.colorDataPeaDark},
-                       {label: "Rr", value: data.Rr, color: colors.colorDataPeaRound},
-                       {label: "rR", value: data.rR, color: colors.colorDataPeaRound},
+                       {label: "Rr", value: data.rR, color: colors.colorDataPeaRound},
+                       {label: "rR", value: data.Rr, color: colors.colorDataPeaRound},
                        {label: "rr", value: data.rr, color: colors.colorDataPeaWrinkled}];
           } else {
             pieData = [{label: "Round", value: data.round, color: colors.colorDataPeaRound},
