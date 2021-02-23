@@ -113,19 +113,28 @@ export class InspectPanel extends BaseComponent<IProps, IState> {
 
   private renderGametePanel = (mouse: BackpackMouseType) => {
     const species = speciesDef(mouse.species);
+    const unitBreeding = units[mouse.species].breeding;
     const arrowImage = "assets/unit/mouse/breeding/inspect/inspect-arrow.png";
     const label1 = this.props.showParentGenotype ? mouse.genotype.slice(0, 1) : undefined;
     const label2 = this.props.showParentGenotype ? mouse.genotype.slice(-1) : undefined;
+    const motherGamete = (
+      <div className="gamete-panel-container">
+        <div className="gamete-panel-title">{species.inspectStrings.motherGameteLabel}</div>
+        { renderGameteIcon(mouse, "female", label1) }
+      </div>
+    );
+    const fatherGamete = (
+      <div className="gamete-panel-container">
+        <div className="gamete-panel-title">{species.inspectStrings.fatherGameteLabel}</div>
+        { renderGameteIcon(mouse, "male", label2) }
+      </div>
+    );
+    const leftGamete = unitBreeding.showMaleOnLeft ? fatherGamete : motherGamete;
+    const rightGamete = unitBreeding.showMaleOnLeft ? motherGamete : fatherGamete;
     return(
       <div className="gamete-panel">
-        <div className="gamete-panel-container">
-          <div className="gamete-panel-title">{species.inspectStrings.motherGameteLabel}</div>
-          { renderGameteIcon(mouse, "female", label1) }
-        </div>
-        <div className="gamete-panel-container">
-          <div className="gamete-panel-title">{species.inspectStrings.fatherGameteLabel}</div>
-          { renderGameteIcon(mouse, "male", label2) }
-        </div>
+        { leftGamete }
+        { rightGamete }
         <img src={arrowImage} className="arrow" />
       </div>
     );

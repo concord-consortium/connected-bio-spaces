@@ -319,7 +319,7 @@ export const units: Units = {
         },
         phenotypeHeading: "Pea shape",
         getPhenotypeLabel: (phenotype) => phenotype.charAt(0).toUpperCase() + phenotype.slice(1),
-        getGenotypeHTMLLabel: (genotype) => genotype,
+        getGenotypeHTMLLabel: (genotype) => genotype.charAt(1) + genotype.charAt(0),
         getGameteHTMLLabel: (allele) => allele,
         chartTypes: {
           phenotype: {legend: [
@@ -337,8 +337,8 @@ export const units: Units = {
           let pieData = [];
           if (chartType === "genotype") {
             pieData = [{label: "RR", value: data.RR, color: colors.colorDataPeaDark},
-                       {label: "Rr", value: data.Rr, color: colors.colorDataPeaRound},
-                       {label: "rR", value: data.rR, color: colors.colorDataPeaRound},
+                       {label: "Rr", value: data.rR, color: colors.colorDataPeaRound},
+                       {label: "rR", value: data.Rr, color: colors.colorDataPeaRound},
                        {label: "rr", value: data.rr, color: colors.colorDataPeaWrinkled}];
           } else {
             pieData = [{label: "Round", value: data.round, color: colors.colorDataPeaRound},
@@ -364,8 +364,8 @@ export const units: Units = {
       breedingPairs: [
         {
           parents: [
-            {genotype: "Rr", label: "Plant 1"},
-            {genotype: "Rr", label: "Plant 1"}
+            {genotype: "rR", label: "Plant 1"},
+            {genotype: "rR", label: "Plant 1"}
           ],
           label: "Experiment A",
           chartLabel: "Exp. A",
@@ -373,7 +373,7 @@ export const units: Units = {
         },
         {
           parents: [
-            {genotype: "Rr", label: "Plant 1"},
+            {genotype: "rR", label: "Plant 1"},
             {genotype: "RR", label: "Plant 2"}
           ],
           label: "Experiment B",
@@ -408,7 +408,7 @@ export const units: Units = {
         {
           parents: [
             {genotype: "rr", label: "Plant 3"},
-            {genotype: "Rr", label: "Plant 1"}
+            {genotype: "rR", label: "Plant 1"}
           ],
           label: "Experiment F",
           chartLabel: "Exp. F",
