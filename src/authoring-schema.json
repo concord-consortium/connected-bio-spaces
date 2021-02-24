@@ -2,21 +2,25 @@
   "title": "Connected Bio Authoring",
   "type": "object",
   "properties": {
-    "curriculum": {
+    "unit": {
       "title": "Unit",
       "type": "string",
-      "oneOf": [
-        {
-          "enum": [
-            "mouse"
-          ],
-          "title": "Mouse"
-        }
+      "enum": [
+        "mouse",
+        "pea"
+      ],
+      "enumNames": [
+        "Mouse",
+        "Pea"
       ]
     },
     "topBar": {
       "type": "boolean",
       "title": "Show Top Bar"
+    },
+    "leftPanel": {
+      "type": "boolean",
+      "title": "Show Left Column"
     },
     "ui": {
       "title": "Investigation Spaces",
@@ -280,19 +284,30 @@
           "title": "Enable inspect gametes button",
           "type": "boolean"
         },
+        "showParentGenotype": {
+          "type": "boolean",
+          "title": "Show Parent Genotype"
+        },
+        "showOffspringGenotype": {
+          "type": "boolean",
+          "title": "Show Offspring Genotype"
+        },
         "enableColorChart": {
-          "title": "Enable mouse fur color pie chart",
+          "title": "Enable phenotype pie chart",
           "type": "boolean"
         },
         "enableGenotypeChart": {
-          "title": "Enable mouse genotypes pie chart",
+          "title": "Enable genotype pie chart",
           "type": "boolean"
         },
         "enableSexChart": {
-          "title": "Enable mouse sex pie chart",
+          "title": "Enable sex pie chart",
           "type": "boolean"
         }
       }
     }
-  }
+  },
+  "required": [
+    "unit"
+  ]
 }

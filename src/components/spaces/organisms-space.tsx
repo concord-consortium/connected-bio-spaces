@@ -9,11 +9,13 @@ import { InstructionsComponent } from "../instructions";
 import { OrganismsContainer } from "./organisms/organisms-container";
 import ProteinViewer from "./proteins/protein-viewer";
 import { RightPanelType } from "../../models/ui";
-import { kOrganelleInfo } from "../../models/spaces/organisms/organisms-space";
+import { kOrganelleInfo } from "../../models/spaces/organisms/mouse/mouse-cell-data";
 import { extractCodons } from "./proteins/util/dna-utils";
 import { getAminoAcidsFromCodons } from "./proteins/util/amino-acid-utils";
 import { CollectButtonComponent } from "../collect-button";
 import ChromosomeViewer from "./organisms/chromosome-viewer";
+import { OrganismsSpaceModelType } from "../../models/spaces/organisms/organisms-space";
+import { units } from "../../models/units";
 
 interface IProps extends IBaseProps {}
 interface IState {
@@ -32,46 +34,44 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
   }
 
   public render() {
-    const organismsComponent1 = this.getOrganismsRow(0);
-    const organismsComponent2 = this.getOrganismsRow(1);
+    const { organisms } = this.stores;
+    if (!organisms) return null;
+    const organismsComponent1 = this.getOrganismsRow(0, organisms);
+    const organismsComponent2 = this.getOrganismsRow(1, organisms);
 
     return (
       <FourUpDisplayComponent topRow={organismsComponent1} bottomRow={organismsComponent2} />
     );
   }
 
-  private toggleShowingAminoAcidsOnViewer = (rowIndex: number) => {
-    const { organisms } = this.stores;
+  private toggleShowingAminoAcidsOnViewer = (rowIndex: number, organisms: OrganismsSpaceModelType) => {
     const row = organisms.rows[rowIndex];
     return () =>
       row.setShowProteinAminoAcidsOnProtein(!row.showProteinAminoAcidsOnProtein);
   }
 
-  private toggleShowDNA = (rowIndex: number) => {
-    const { organisms } = this.stores;
+  private toggleShowDNA = (rowIndex: number, organisms: OrganismsSpaceModelType) => {
     const row = organisms.rows[rowIndex];
     return () =>
       row.setShowProteinDNA(!row.showProteinDNA);
   }
 
-  private handleSetSelectStartPercent = (percent: number) => {
-    const { organisms } = this.stores;
+  private handleSetSelectStartPercent = (percent: number, organisms: OrganismsSpaceModelType) => {
     // set on both simultaneously
-    organisms.setProteinSliderStartPercent(percent);
+    return () => organisms.setProteinSliderStartPercent(percent);
   }
 
-  private handleUpdateSelectedAminoAcidIndex = (selectedAminoAcidIndex: number) => {
-    const { organisms } = this.stores;
-    organisms.setProteinSliderSelectedAminoAcidIndex(Math.round(selectedAminoAcidIndex));
+  private handleUpdateSelectedAminoAcidIndex = (organisms: OrganismsSpaceModelType) => {
+    return (selectedAminoAcidIndex: number) =>
+      organisms.setProteinSliderSelectedAminoAcidIndex(Math.round(selectedAminoAcidIndex));
   }
 
-  private toggleShowInfoBox = () => {
-    const { organisms } = this.stores;
-    organisms.setShowInfoBox(!organisms.showProteinInfoBox);
+  private toggleShowInfoBox = (organisms: OrganismsSpaceModelType) => {
+    return () => organisms.setShowInfoBox(!organisms.showProteinInfoBox);
   }
 
-  private getOrganismsRow(rowIndex: number) {
-    const { backpack, organisms } = this.stores;
+  private getOrganismsRow(rowIndex: number, organisms: OrganismsSpaceModelType) {
+    const { backpack } = this.stores;
     const { activeMouse } = backpack;
     const { proteinSliderSelectedAminoAcidIndex, showProteinInfoBox } = organisms;
     const row = organisms.rows[rowIndex];
@@ -114,10 +114,10 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
               showInfoBox={showProteinInfoBox}
               showAminoAcidsOnProtein={showProteinAminoAcidsOnProtein}
               showDNA={showProteinDNA}
-              toggleShowDNA={this.toggleShowDNA(rowIndex)}
-              toggleShowingAminoAcidsOnProtein={this.toggleShowingAminoAcidsOnViewer(rowIndex)}
-              setSelectedAminoAcidIndex={this.handleUpdateSelectedAminoAcidIndex}
-              toggleShowInfoBox={this.toggleShowInfoBox}
+              toggleShowDNA={this.toggleShowDNA(rowIndex, organisms)}
+              toggleShowingAminoAcidsOnProtein={this.toggleShowingAminoAcidsOnViewer(rowIndex, organisms)}
+              setSelectedAminoAcidIndex={this.handleUpdateSelectedAminoAcidIndex(organisms)}
+              toggleShowInfoBox={this.toggleShowInfoBox(organisms)}
             />;
             } else {
               return (
@@ -164,15 +164,18 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
       });
     }
 
+    const unitDef = units[this.stores.unit];
+    const title = unitDef.organism.title;
+
     return (
       <div className="fullwidth">
         <CollectButtonComponent
           backpackMouse={organismsMouse && organismsMouse.backpackMouse}
-          clickClose={this.clickClose(rowIndex)}
+          clickClose={this.clickClose(rowIndex, organisms)}
           placeable={activeMouse != null}
         />
         <TwoUpDisplayComponent
-          leftTitle="Explore: Organism"
+          leftTitle={title}
           leftPanel={<OrganismsContainer
             rowIndex={rowIndex}
             disableZoom={this.state.isZooming}
@@ -182,7 +185,7 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
           dataIconEnabled={true}
           informationIconEnabled={true}
           selectedRightPanel={rightPanel}
-          onClickRightIcon={this.setRightPanel(rowIndex)}
+          onClickRightIcon={this.setRightPanel(rowIndex, organisms)}
           spaceClass="organism"
           rowNumber={rowIndex}
           rightPanelButtons={buttons}
@@ -191,13 +194,11 @@ export class OrganismsSpaceComponent extends BaseComponent<IProps, IState> {
     );
   }
 
-  private setRightPanel = (rowIndex: number) => (panelType: RightPanelType) => {
-    const { organisms } = this.stores;
+  private setRightPanel = (rowIndex: number, organisms: OrganismsSpaceModelType) => (panelType: RightPanelType) => {
     organisms.rows[rowIndex].setRightPanel(panelType);
   }
 
-  private clickClose = (rowIndex: number) => () => {
-    const { organisms } = this.stores;
+  private clickClose = (rowIndex: number, organisms: OrganismsSpaceModelType) => () => {
     organisms.clearRowBackpackMouse(rowIndex);
   }
 

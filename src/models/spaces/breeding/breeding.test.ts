@@ -6,15 +6,18 @@ describe("NestPair model", () => {
   describe("that is created using metadata", () => {
     const litterMeta = {
       litters: 5,
-      CC: 10,
-      CR: 6,
-      RC: 4,
-      RR: 0
+      offspringByGenotype: {
+        CC: 10,
+        CR: 6,
+        RC: 4,
+        RR: 0
+      }
     };
     const nestPair = NestPair.create({
-      leftMouse: {sex: "female", genotype: "CR"},
-      rightMouse: {sex: "male", genotype: "RC"},
-      label: "Test",
+      leftMouse: {species: "mouse", sex: "female", genotype: "CR"},
+      rightMouse: {species: "mouse", sex: "male", genotype: "RC"},
+      label: "Test Label",
+      chartLabel: "Chart Label",
       condensedLitterMeta: JSON.stringify(litterMeta)
     });
 
@@ -34,7 +37,7 @@ describe("NestPair model", () => {
     });
 
     it ("will have the right number of offspring of each genotype", () => {
-      const counts = {
+      const counts: Record<string, number> = {
         CC: 0,
         CR: 0,
         RC: 0,
@@ -45,10 +48,10 @@ describe("NestPair model", () => {
           counts[mouse.genotype]++;
         });
       });
-      expect(counts.CC).toBe(litterMeta.CC);
-      expect(counts.CR).toBe(litterMeta.CR);
-      expect(counts.RC).toBe(litterMeta.RC);
-      expect(counts.RR).toBe(litterMeta.RR);
+      expect(counts.CC).toBe(litterMeta.offspringByGenotype.CC);
+      expect(counts.CR).toBe(litterMeta.offspringByGenotype.CR);
+      expect(counts.RC).toBe(litterMeta.offspringByGenotype.RC);
+      expect(counts.RR).toBe(litterMeta.offspringByGenotype.RR);
     });
   });
 });

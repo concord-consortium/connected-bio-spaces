@@ -7,12 +7,15 @@ import { RightPanelType } from "../../models/ui";
 import { BreedingContainer } from "./breeding/breeding-container";
 import { BreedingData } from "./breeding/breeding-data";
 import { InspectPanel } from "../inspect-panel";
+import { units } from "../../models/units";
+import { InspectContext } from "../../models/backpack-mouse";
 
 interface InspectContent {
   title: string;
   mouse1: any;
   mouse2: any;
   label: string;
+  pairMeta?: string;
   isOffspring: boolean;
   isGamete: boolean;
 }
@@ -26,7 +29,7 @@ export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
 
   public render() {
     const { breeding } = this.stores;
-    const { rightPanel } = breeding;
+    const { rightPanel, showParentGenotype, showOffspringGenotype } = breeding;
     let rightPanelTitle = "";
     const rightPanelContent = (() => {
       switch (rightPanel) {
@@ -37,22 +40,34 @@ export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
         case "information":
           const content: InspectContent = this.getInspectedContent();
           rightPanelTitle = content.title;
+          const context: InspectContext = content.mouse2 ? "nest" :
+            content.isOffspring ? "offspring" : "parent";
+          const showGenotype = content.isOffspring ? showOffspringGenotype : showParentGenotype;
+
           return <InspectPanel
                   mouse1={content.mouse1}
                   mouse2={content.mouse2}
                   pairLabel={content.label}
+                  context={context}
+                  pairMeta={content.pairMeta}
                   isOffspring={content.isOffspring}
-                  isGamete={content.isGamete}
-                  showGenotype={true}
+                  showGametes={breeding.showingGametes}
+                  showGenotype={showGenotype}
+                  showParentGenotype={breeding.showParentGenotype}
                  />;
         default:
           return null;
       }
     })();
 
+    const unitBreeding = units[this.stores.unit].breeding;
+
+    const isShowingNestingView = breeding.breedingNestPairId === undefined;
+    const title = isShowingNestingView ? unitBreeding.nestingTitle : unitBreeding.breedingTitle;
+
     return (
       <TwoUpDisplayComponent
-        leftTitle="Explore: Nesting Pairs"
+        leftTitle={title}
         leftPanel={<BreedingContainer />}
         rightTitle={rightPanelTitle}
         rightPanel={rightPanelContent}
@@ -69,22 +84,25 @@ export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
   }
 
   private getInspectedContent = () => {
-    const { breeding } = this.stores;
+    const { breeding, unit } = this.stores;
     const { inspectInfo, nestPairs } = breeding;
+    const unitBreeding = units[unit].breeding;
     const content: InspectContent = { title: "",
                                     mouse1: undefined,
                                     mouse2: undefined,
                                     label: "",
+                                    pairMeta: undefined,
                                     isOffspring: false,
                                     isGamete: false,
                                   };
-    let inspectedName = "Nesting Pairs";
+    let inspectedName = unitBreeding.inspectPairsPaneTitle;
     if (inspectInfo && inspectInfo.type === "nest") {
       const pairId = inspectInfo.nestPairId;
       const nestPair = nestPairs.find(pair => pair.id === pairId);
       content.mouse1 = nestPair && nestPair.leftMouse;
       content.mouse2 = nestPair && nestPair.rightMouse;
-      content.label = nestPair ? nestPair.label : "Pair";
+      content.label = nestPair ? nestPair.label : "";
+      content.pairMeta = nestPair && nestPair.meta ? nestPair.meta : undefined;
     } else if (inspectInfo && (inspectInfo.type === "organism" || inspectInfo.type === "gamete")) {
       const isGamete = inspectInfo.type === "gamete";
       const pairId = inspectInfo.nestPairId;
@@ -97,14 +115,24 @@ export class BreedingSpaceComponent extends BaseComponent<IProps, IState> {
           } else if (nestPair.rightMouse.id === inspectInfo.organismId) {
             content.mouse1 = nestPair.rightMouse;
           }
-          inspectedName = isGamete
-                          ? `${content.mouse1.sex === "female" ? "Mother" : "Father"} Gametes`
-                          : `Pair ${nestPairIndex + 1} ${content.mouse1.sex === "female" ? "Mother" : "Father"}`;
+          if (unitBreeding.inspectParentPaneTitle) {
+            inspectedName = unitBreeding.inspectParentPaneTitle;
+            if (isGamete) inspectedName += " Gametes";
+          } else {
+            inspectedName = isGamete
+            ? `${content.mouse1.sex === "female" ? "Mother" : "Father"} Gametes`
+            : `${nestPair.chartLabel} ${content.mouse1.sex === "female" ? "Mother" : "Father"}`;
+          }
         } else {
           content.mouse1 = nestPair.litters[inspectInfo.litterIndex].find(mouse => mouse.id === inspectInfo.organismId);
-          inspectedName = isGamete
-                          ? "Offspring Gametes"
-                          : `Pair ${nestPairIndex + 1} Litter ${inspectInfo.litterIndex + 1} Offspring`;
+          if (unitBreeding.inspectOffspringPaneTitle) {
+            inspectedName = unitBreeding.inspectOffspringPaneTitle;
+            if (isGamete) inspectedName += " Gametes";
+          } else {
+            inspectedName = isGamete
+            ? "Offspring Gametes"
+            : `${nestPair.chartLabel} Litter ${inspectInfo.litterIndex + 1} Offspring`;
+          }
           content.isOffspring = true;
         }
         content.isGamete = isGamete;

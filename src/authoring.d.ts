@@ -5,9 +5,9 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export type Unit = Mouse;
-export type Mouse = "mouse";
+export type Unit = "mouse" | "pea";
 export type ShowTopBar = boolean;
+export type ShowleftPanel = boolean;
 export type ShowPopulationsSpace = boolean;
 export type ShowBreedingSpace = boolean;
 export type ShowOrganismSpace = boolean;
@@ -35,7 +35,7 @@ export type TimeToShowBodySteps = number;
 export type EnableColorChart = boolean;
 export type EnableGenotypeChart = boolean;
 export type EnableAllelesChart = boolean;
-export type EnablePieChart = boolean;
+export type EnablePieCharts = boolean;
 export type InstructionsAsMarkdown1 = string;
 export type ShowMysteryLocationLabels = boolean;
 export type ShowMysterySubstanceLabels = boolean;
@@ -46,13 +46,16 @@ export type EnableStudentMutationControl1 = boolean;
 export type BreedWithMutations1 = boolean;
 export type ChanceOfMutations1 = number;
 export type EnableInspectGametesButton = boolean;
+export type ShowParentGenotype = boolean;
+export type ShowOffspringGenotype = boolean;
 export type EnableMouseFurColorPieChart = boolean;
 export type EnableMouseGenotypesPieChart = boolean;
 export type EnableMouseSexPieChart = boolean;
 
 export interface ConnectedBioAuthoring {
-  curriculum?: Unit;
+  unit: Unit;
   topBar?: ShowTopBar;
+  leftPanel?: ShowleftPanel;
   ui?: InvestigationSpaces;
   backpack?: InitialBackpack;
   populations?: PopulationsModel;
@@ -89,7 +92,7 @@ export interface PopulationsModel {
   enableColorChart?: EnableColorChart;
   enableGenotypeChart?: EnableGenotypeChart;
   enableAllelesChart?: EnableAllelesChart;
-  enablePieChart?: EnablePieChart;
+  enablePieChart?: EnablePieCharts;
   [k: string]: any;
 }
 export interface InitialMousePopulation {
@@ -130,6 +133,8 @@ export interface BreedingModel {
   breedWithMutations?: BreedWithMutations1;
   chanceOfMutations?: ChanceOfMutations1;
   enableInspectGametes?: EnableInspectGametesButton;
+  showParentGenotype?: ShowParentGenotype;
+  showOffspringGenotype?: ShowOffspringGenotype;
   enableColorChart?: EnableMouseFurColorPieChart;
   enableGenotypeChart?: EnableMouseGenotypesPieChart;
   enableSexChart?: EnableMouseSexPieChart;

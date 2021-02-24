@@ -1,0 +1,23 @@
+@import "../../vars"
+
+.nesting-pair-data-panel.pea
+  .pair-data
+    .nest-display
+      height: 87px
+      .mouse-holder
+        display: flex
+        justify-content: space-around
+        height: 65px
+        img
+          margin: 0 0 0 4px
+          width: 30px
+          transform: none
+    .label-footer
+      transform: translateX(-47px) translateY(52px)
+    .label-footer.with-genotype
+      transform: translateX(-47px) translateY(60px)
+
+  &:nth-of-type(1), &:nth-of-type(3), &:nth-of-type(5),
+    .pair-data
+      .right-mouse
+        display: none

@@ -28,7 +28,7 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
   }
 
   public componentDidMount() {
-    if (firstMount) {
+    if (this.stores.populations && firstMount) {
       // only initialize the populations graph on the very first mount.
       // from then on, the graph will only be re-initialized when the user
       // explicitly resets the model
@@ -38,11 +38,11 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
   }
 
   public componentWillUnmount() {
-    this.stores.populations.close();
+    if (this.stores.populations) this.stores.populations.close();
   }
 
   public render() {
-    const populations = this.stores.populations;
+    const {populations, ui} = this.stores;
 
     if (populations && populations.interactive) {
       const buttons = populations.toolbarButtons.map( (button, i) => {
@@ -107,7 +107,7 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
               onAgentMouseEvent={this.handleAgentMouseEvent} />
           </div>
           <div className="populations-toolbar" data-test="pop-toolbar">
-            <div className="toolbar-row">
+            <div className="toolbar-row" data-test="pop-toolbar-main-buttons">
               <button className={"population-button " + runButtonClass}
                       onClick={this.handleClickRunButton} data-test="run-button">
                 <svg className={"icon " + runButtonClass}>
@@ -123,13 +123,15 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
                 </svg>
                 <div className="label">Inspect</div>
               </button>
-              <button className={"population-button " + collectButtonClass}
-                      onClick={this.handleClickSelect} data-test="collect-button">
-                <svg className={"icon " + collectButtonClass}>
-                  <use xlinkHref="#icon-collect" />
-                </svg>
-                <div className="label">Collect</div>
-              </button>
+              { ui.showLeftPanel &&
+                <button className={"population-button " + collectButtonClass}
+                        onClick={this.handleClickSelect} data-test="collect-button">
+                  <svg className={"icon " + collectButtonClass}>
+                    <use xlinkHref="#icon-collect" />
+                  </svg>
+                  <div className="label">Collect</div>
+                </button>
+              }
               <button className="population-button" onClick={this.handleClickResetButton} data-test="reset-button">
                 <svg className="icon">
                   <use xlinkHref="#icon-reset" />
@@ -168,15 +170,15 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
   }
 
   private handleClickRunButton = () => {
-    this.stores.populations.togglePlay();
+    this.stores.populations!.togglePlay();
   }
 
   private handleClickInspectButton = () => {
-    this.stores.populations.toggleInteractionMode("inspect");
+    this.stores.populations!.toggleInteractionMode("inspect");
   }
 
   private handleClickResetButton = () => {
-    this.stores.populations.reset();
+    this.stores.populations!.reset();
   }
 
   private handleClickToolbarCheckbox = (button: ToolbarButton) => {
@@ -187,7 +189,7 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
   }
 
   private handleClickSelect = () => {
-    this.stores.populations.toggleInteractionMode("select");
+    this.stores.populations!.toggleInteractionMode("select");
   }
 
   private handleAgentMouseEvent = (evt: AgentEnvironmentMouseEvent) => {
@@ -199,16 +201,18 @@ export class PopulationsComponent extends BaseComponent<IProps, IState> {
           const selectedMouse = evt.agents.mice;
           const backpack = this.stores.backpack;
           const backpackMouse = BackpackMouse.create({
+            species: "mouse",
             sex: selectedMouse.get("sex"),
             genotype: (selectedMouse as any)._genomeButtonsString()
           });
           const added = backpack.addCollectedMouse(backpackMouse);
           if (added){
-            this.stores.populations.removeAgent(selectedMouse);
+            this.stores.populations!.removeAgent(selectedMouse);
           }
         } else if (evtType === "click" && populations.interactionMode === "inspect") {
           const selectedMouse = evt.agents.mice;
           const mouse = BackpackMouse.create({
+            species: "mouse",
             sex: selectedMouse.get("sex"),
             genotype: (selectedMouse as any)._genomeButtonsString()
           });

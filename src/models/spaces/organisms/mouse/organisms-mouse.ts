@@ -1,6 +1,6 @@
 import { types, Instance } from "mobx-state-tree";
-import { BackpackMouse } from "../../backpack-mouse";
-import { kOrganelleInfo } from "./organisms-space";
+import { BackpackMouse, ColorType } from "../../../backpack-mouse";
+import { kOrganelleInfo } from "./mouse-cell-data";
 import { v4 as uuid } from "uuid";
 
 export const Organelle = types.enumeration("Organelle", [
@@ -62,7 +62,7 @@ export const OrganismsMouseModel = types
     });
 
     function getSubstanceBaseValue(organelle: OrganelleType, substance: SubstanceType) {
-      const color = self.backpackMouse.baseColor;
+      const color = self.backpackMouse.phenotype as ColorType;
       const substanceValues = kOrganelleInfo[organelle].substances[substance];
       return substanceValues ? substanceValues[color] : 0;
     }
@@ -112,7 +112,7 @@ export const OrganismsMouseModel = types
       const melanosomeEumelanin = getSubstanceValue("melanosome", "eumelanin");
       const melanosomePheomelanin = getSubstanceValue("melanosome", "pheomelanin");
 
-      const organismColor = self.backpackMouse.baseColor;
+      const organismColor = self.backpackMouse.phenotype;
 
       kAssayableOrganelles.forEach((organelle: OrganelleType) => {
         kSubstanceNames.forEach((substance: SubstanceType) => {
@@ -181,9 +181,9 @@ export const OrganismsMouseModel = types
         getSubstanceValue,
         getPercentDarkness,
         get modelProperties() {
-          const darkness = self.backpackMouse.baseColor === "white"
+          const darkness = self.backpackMouse.phenotype === "white"
             ? 0
-            : self.backpackMouse.baseColor === "tan"
+            : self.backpackMouse.phenotype === "tan"
               ? 1
               : 2;
           return {

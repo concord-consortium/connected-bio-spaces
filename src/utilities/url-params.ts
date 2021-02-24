@@ -10,10 +10,12 @@ let params: QueryParams;
 try {
   const queryString = location.search.length > 1
     ? decodeURIComponent(location.search.substring(1).replace("authoring", ""))
-    : "{}";
+    : `{unit: "mouse"}`;
   params = JSON.parse(queryString);
 } catch (e) {
-  params = {};
+  params = {
+    unit: "mouse"
+  };
 }
 
 if (location.search.indexOf("authoring") === 1) {

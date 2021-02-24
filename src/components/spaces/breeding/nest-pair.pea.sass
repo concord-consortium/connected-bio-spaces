@@ -1,0 +1,85 @@
+@import "../../vars"
+
+.nest-pair.pea
+  position: absolute
+  width: 170px
+  height: 90px
+  &:hover .nest-pair-background-hover.show
+    opacity: .75
+  &:hover .nest-inspect.show
+    opacity: .75
+  &.left-top
+    left: 19px
+    top: 20px
+  &.left-middle
+    left: 24px
+    top: 163px
+  &.left-bottom
+    left: 21px
+    top: 307px
+  &.right-top
+    left: 217px
+    top: 20px
+  &.right-middle
+    left: 215px
+    top: 163px
+  &.right-bottom
+    left: 215px
+    top: 307px
+
+  .nest-pair-background-hover
+    position: absolute
+    background-color: $color-nav-shamrock-light1
+    height: 110px
+    width: 125px
+    left: 23px
+    top: -16px
+    opacity: 0
+    border-radius: 15px
+    transform: none
+    &.left-top, &.left-middle, &.left-bottom
+      left: 52px
+      width: 68px
+
+  .nest-inspect
+    height: 110px
+    width: 125px
+    left: 23px
+    top: -16px
+    opacity: 0
+    border-radius: 15px
+    transform: none
+    &.left-top, &.left-middle, &.left-bottom
+      left: 52px
+      width: 68px
+
+  .mouse
+    position: absolute
+    pointer-events: none
+    &:hover .selection-stack.show
+      opacity: 1
+    &.left
+      top: -22px
+      left: 2px
+    &.right
+      top: -22px
+      left: 54px
+    &.left-top, &.left-middle, &.left-bottom
+      &.left
+        left: 27px
+      &.right
+        display: none
+    .stacked-organism.pea
+      .hetero-stack
+        transform: scaleX(0.7) scaleY(1.1)
+        border-radius: 25px
+        top: 12px
+
+  .pair-label
+    opacity: 0.7
+    width: 100px
+    left: 41px
+    top: 103px
+    color: $color-black
+    &.white
+      color: $color-black

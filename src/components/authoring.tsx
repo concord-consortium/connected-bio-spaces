@@ -15,8 +15,9 @@ interface IProps extends IBaseProps {
 interface IState {}
 
 export const defaultAuthoring: ConnectedBioAuthoring = {
-  curriculum: "mouse",
+  unit: "mouse",
   topBar: true,
+  leftPanel: true,
   ui: {
     showPopulationSpace: true,
     showBreedingSpace: true,
@@ -71,6 +72,8 @@ export const defaultAuthoring: ConnectedBioAuthoring = {
     breedWithMutations: false,
     chanceOfMutations: 2,
     enableInspectGametes: true,
+    showParentGenotype: true,
+    showOffspringGenotype: true,
     enableColorChart: true,
     enableGenotypeChart: true,
     enableSexChart: true
@@ -78,9 +81,6 @@ export const defaultAuthoring: ConnectedBioAuthoring = {
 };
 
 const uiSchema = {
-  curriculum: {
-    "ui:readonly": true
-  },
   backpack: {
     "ui:options": {
       addable: true,

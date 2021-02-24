@@ -3,8 +3,10 @@ import * as React from "react";
 import { BaseComponent, IBaseProps } from "../../base";
 import { ToolbarButton } from "../../../models/spaces/populations/populations";
 import { NestingView } from "./nesting-view";
-import "./breeding-container.sass";
 import { BreedingView } from "./breeding-view";
+import "./breeding-container.sass";
+import "./breeding-container.pea.sass";
+import { units } from "../../../models/units";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -14,7 +16,8 @@ interface IState {}
 export class BreedingContainer extends BaseComponent<IProps, IState> {
 
   public render() {
-    const { breeding } = this.stores;
+    const { ui, breeding, unit } = this.stores;
+    const breedingUnit = units[unit].breeding;
 
     const checkboxes = breeding.toolbarButtons.map( (button, i) => {
       const type = button.type || "button";
@@ -51,28 +54,28 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
                     + (breeding.interactionMode === "inspect" ? " inspect" : "")
                     + (breeding.interactionMode === "select" ? " select" : "")
                     + ((breeding.interactionMode === "breed" && showingNesting) ? " breed" : "")
-                    + ((breeding.interactionMode === "gametes" && !showingNesting) ? " gametes" : "");
+                    + ((breeding.showGametes && !showingNesting) ? " gametes" : "");
 
     const mainComponent = showingNesting ? <NestingView /> : <BreedingView />;
-    const switchLevelsButtonLabel = showingNesting ? "Breeding" : "Nesting";
+    const switchLevelsButtonLabel = showingNesting ? "Breeding" : breedingUnit.nestButtonTitle;
     const switchLevelsIcon = showingNesting ? "breed" : "nests";
-    const showGametes = breeding.interactionMode === "gametes";
+    const showGametes = breeding.showingGametes;
     const hideGametesClass = "inner-box inner-button left" + (!showGametes ? " selected" : " unselected");
     const showGametesClass = "inner-box inner-button right" + (showGametes ? " selected" : " unselected");
 
     return(
       <div>
-        <div className={containerClass}>
+        <div className={`${containerClass} ${unit}`}>
             { mainComponent }
           </div>
-        <div className="breeding-toolbar" data-test="breed-toolbar">
-            <div className="toolbar-row">
+        <div className={`breeding-toolbar ${unit}`} data-test="breed-toolbar">
+            <div className="toolbar-row" data-test="breed-toolbar-main-buttons">
               <button className={"breeding-button " + breedButtonClass}
                       onClick={showingNesting ? this.handleClickBreedButton : this.handleClickNestingButton}
                       data-test="breed-button">
                 <div className="inner-box container">
                   <svg className={"icon " + breedButtonClass}>
-                    <use xlinkHref={`#icon-${switchLevelsIcon}`} />
+                    <use xlinkHref={`#icon-${switchLevelsIcon}-${unit}`} />
                   </svg>
                 </div>
                 <div className="label">{switchLevelsButtonLabel}</div>
@@ -89,22 +92,24 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
                     <div className="label">Show</div>
                   </div>
                 </div>
-                <div className="label">Inspect Gametes</div>
+                <div className="label">Gametes</div>
               </button>
               <button className={"breeding-button " + inspectButtonClass}
                       onClick={this.handleClickInspectButton} data-test="inspect-button">
                 <svg className={"icon " + inspectButtonClass}>
-                  <use xlinkHref="#icon-inspect" />
+                  <use xlinkHref={`#icon-inspect-${unit}`} />
                 </svg>
                 <div className="label">Inspect</div>
               </button>
-              <button className={"breeding-button " + collectButtonClass}
-                      onClick={this.handleClickSelect} data-test="collect-button">
-                <svg className={"icon " + collectButtonClass}>
-                  <use xlinkHref="#icon-collect" />
-                </svg>
-                <div className="label">Collect</div>
-              </button>
+              { ui.showLeftPanel &&
+                <button className={"breeding-button " + collectButtonClass}
+                        onClick={this.handleClickSelect} data-test="collect-button">
+                  <svg className={"icon " + collectButtonClass}>
+                    <use xlinkHref="#icon-collect" />
+                  </svg>
+                  <div className="label">Collect</div>
+                </button>
+              }
            </div>
             <div className="toolbar-row align-left">
               { checkboxes }
@@ -153,10 +158,10 @@ export class BreedingContainer extends BaseComponent<IProps, IState> {
   }
 
   private handleClickHideGametesButton = () => {
-    this.stores.breeding.toggleInteractionMode("gametes");
+    this.stores.breeding.hideGametes();
   }
 
   private handleClickShowGametesButton = () => {
-    this.stores.breeding.toggleInteractionMode("gametes");
+    this.stores.breeding.showGametes();
   }
 }

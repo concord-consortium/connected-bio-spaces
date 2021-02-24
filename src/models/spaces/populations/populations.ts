@@ -8,8 +8,10 @@ import { Unit } from "../../../authoring";
 const ModelsUnion = types.union(MousePopulationsModel);
 type ModelsUnionType = MousePopulationsModelType;
 
-export function createPopulationsModel(curriculumName: Unit = "mouse", authoring: any): PopulationsModelType {
-  switch (curriculumName) {
+export function createPopulationsModel(unit: Unit, authoring: any): PopulationsModelType | null {
+  switch (unit) {
+    case "pea":
+      return null;
     case "mouse":
     default:
       return PopulationsModel.create({

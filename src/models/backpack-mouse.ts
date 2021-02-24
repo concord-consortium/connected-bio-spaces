@@ -1,5 +1,6 @@
 import { types } from "mobx-state-tree";
 import uuid = require("uuid");
+import { speciesDef, UnitTypeEnum } from "./units";
 
 export const MouseColor = types.enumeration("type", ["brown", "white", "tan"]);
 export type ColorType = typeof MouseColor.Type;
@@ -7,65 +8,89 @@ export type ColorType = typeof MouseColor.Type;
 export const SexTypeEnum = types.enumeration("type", ["male", "female"]);
 export type SexType = typeof SexTypeEnum.Type;
 
-export const GenotypeEnum = types.enumeration("type", ["RR", "RC", "CR", "CC"]);
-export type Genotype = typeof GenotypeEnum.Type;
+export type InspectContext = "nest" | "parent" | "offspring" | "population";
 
 export const UNCOLLECTED_IMAGE = "assets/mouse_collect.png";
 
 export const BackpackMouse = types
   .model("Mouse", {
+    species: UnitTypeEnum,
     id: types.optional(types.identifier, () => uuid()),
     sex: SexTypeEnum,
-    genotype: GenotypeEnum,
+    genotype: types.string,
     label: "",
     originMouseRefId: types.maybe(types.string),
   })
   .views(self => ({
-    get baseColor(): ColorType {
-      switch (self.genotype) {
-        case "RR":
-          return "brown";
-        case "CC":
-          return "white";
-        default:
-          return "tan";
-      }
+    get phenotype(): string {
+      return speciesDef(self.species).getPhenotype(self.genotype);
     },
     get baseImage(): string {
-      switch (self.genotype) {
-        case "RR":
-          return "assets/mouse_field.png";
-        case "CC":
-          return "assets/mouse_beach.png";
-        default:
-          return "assets/mouse_tan.png";
-      }
+      return speciesDef(self.species).getBaseImage(self as BackpackMouseType);
     },
     get nestImage(): string {
-      switch (self.genotype) {
-        case "RR":
-          return "assets/mouse_field_nest.png";
-        case "CC":
-          return "assets/mouse_beach_nest.png";
-        default:
-          return "assets/mouse_tan_nest.png";
-      }
+      return speciesDef(self.species).getBreedingImage(self as BackpackMouseType);
     },
     get nestOutlineImage(): string {
-      return "assets/curriculum/mouse/breeding/nesting/nest_mouse_outline.png";
+      return speciesDef(self.species).getNestOutlineImage(self.genotype);
+    },
+    get zoomedInParentImage(): string {
+      const species = speciesDef(self.species);
+      if (species.getZoomedInParentImage) {
+        return species.getZoomedInParentImage(self as BackpackMouseType);
+      }
+      return speciesDef(self.species).getBreedingImage(self as BackpackMouseType);
+    },
+    get chartImage(): string {
+      const species = speciesDef(self.species);
+      if (species.getChartImage) {
+        return species.getChartImage(self as BackpackMouseType);
+      }
+      return species.getBaseImage(self as BackpackMouseType);
+    },
+    get secondaryChartImage(): string | null {
+      const species = speciesDef(self.species);
+      if (species.getChartSecondaryImage) {
+        return species.getChartSecondaryImage(self as BackpackMouseType);
+      }
+      return null;
+    },
+    getInspectImage(context: InspectContext): string {
+      const species = speciesDef(self.species);
+      if (context === "nest" && species.getInspectNestImage) {
+        return species.getInspectNestImage(self as BackpackMouseType);
+      } else if (context === "parent" && species.getInspectParentImage) {
+        return species.getInspectParentImage(self as BackpackMouseType);
+      } else if (context === "offspring" && species.getInspectOffspringImage) {
+        return species.getInspectOffspringImage(self as BackpackMouseType);
+      }
+      return species.getBaseImage(self as BackpackMouseType);
+    },
+    get chartEmptyImage(): string {
+      return speciesDef(self.species).getChartEmptyImage(self as BackpackMouseType);
     },
     get zoomImage(): string {
       switch (self.genotype) {
         case "RR":
-          return "assets/curriculum/mouse/zoom/mouse_field.gif";
+          return "assets/unit/mouse/zoom/mouse_field.gif";
         case "CC":
-          return "assets/curriculum/mouse/zoom/mouse_beach.gif";
+          return "assets/unit/mouse/zoom/mouse_beach.gif";
         default:
-          return "assets/curriculum/mouse/zoom/mouse_tan.gif";
+          return "assets/unit/mouse/zoom/mouse_tan.gif";
       }
     },
     get isHeterozygote(): boolean {
-      return (self.genotype === "RC" || self.genotype === "CR");
+      // assumes two-letter genotype
+      return self.genotype.charAt(0) !== self.genotype.charAt(1);
+    },
+  }))
+  .views(self => ({
+    get offspringImage(): string {
+      const species = speciesDef(self.species);
+      if (species.getOffspringImage) {
+        return species.getOffspringImage(self as BackpackMouseType);
+      }
+      return self.nestImage;
     },
   }))
   .actions(self => ({

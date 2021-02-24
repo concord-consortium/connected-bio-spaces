@@ -4,7 +4,9 @@ import { BaseComponent, IBaseProps } from "../../base";
 import { INestPair } from "../../../models/spaces/breeding/breeding";
 import { BackpackMouse, BackpackMouseType } from "../../../models/backpack-mouse";
 import { StackedOrganism } from "../../stacked-organism";
+import { units } from "../../../models/units";
 import "./nest-pair.sass";
+import "./nest-pair.pea.sass";
 
 interface IProps extends IBaseProps {}
 interface IState {}
@@ -26,9 +28,11 @@ export class NestPair extends BaseComponent<IProps, IState> {
   public render() {
     const { backpack } = this.stores;
     const { backgroundType } = this.stores.breeding;
-    const { showNestHighlight, showPairHighlight } = this.props;
+    const { showNestHighlight, showPairHighlight, positionIndex } = this.props;
+    const unit = this.props.nestPair.leftMouse.species;
+    const unitBreeding = units[unit].breeding;
+
     const positionClass = this.getPositionClass();
-    const nestHoverImage = this.getNestHoverImage();
     const leftMouse = this.props.nestPair.leftMouse;
     const rightMouse = this.props.nestPair.rightMouse;
     const leftMouseCollected = backpack.cloneExists(leftMouse.id);
@@ -43,19 +47,26 @@ export class NestPair extends BaseComponent<IProps, IState> {
     if (leftMouseCollected) leftMouseImages.push(leftMouse.nestOutlineImage);
     const rightMouseImages = [rightMouse.nestImage];
     if (rightMouseCollected) rightMouseImages.push(rightMouse.nestOutlineImage);
+    const nestHoverImage = unitBreeding.getNestHoverImage ? unitBreeding.getNestHoverImage(positionIndex) : null;
+
     return(
-      <div className={nestClass} onClick={this.handleClickNest}>
-        <img
-          src={nestHoverImage}
-          className={nestBackgroundHoverClass}
-          data-test="nest-pair-background-image"
-        />
+      <div className={`${nestClass} ${unit}`} onClick={this.handleClickNest}>
+        { nestHoverImage &&
+          <img
+            src={nestHoverImage}
+            className={nestBackgroundHoverClass}
+            data-test="nest-pair-background-image"
+          />
+        }
+        { !nestHoverImage &&
+          <div className={nestBackgroundHoverClass} />
+        }
         <div className={nestInspectClass} />
         <div className={`mouse left ${positionClass}`} onClick={this.handleClickMouse(leftMouse)}>
           <StackedOrganism
             organism={leftMouse}
             organismImages={leftMouseImages}
-            height={80}
+            height={unitBreeding.nestParentSize}
             showSelection={this.props.showSelectionStack && !leftMouseCollected}
             showSex={this.props.showSexStack}
             showHetero={this.props.showHeteroStack}
@@ -65,8 +76,8 @@ export class NestPair extends BaseComponent<IProps, IState> {
           <StackedOrganism
             organism={rightMouse}
             organismImages={rightMouseImages}
-            height={80}
-            flipped={true}
+            height={unitBreeding.nestParentSize}
+            flipped={unitBreeding.flipRightNestParent}
             showSelection={this.props.showSelectionStack && !rightMouseCollected}
             showSex={this.props.showSexStack}
             showHetero={this.props.showHeteroStack}
@@ -96,34 +107,18 @@ export class NestPair extends BaseComponent<IProps, IState> {
     }
   }
 
-  private getNestHoverImage = () => {
-    switch (this.props.positionIndex) {
-      case 1:
-        return "assets/curriculum/mouse/breeding/nesting/left-top-hover.png";
-      case 2:
-        return "assets/curriculum/mouse/breeding/nesting/right-top-hover.png";
-      case 3:
-        return "assets/curriculum/mouse/breeding/nesting/left-middle-hover.png";
-      case 4:
-        return "assets/curriculum/mouse/breeding/nesting/right-middle-hover.png";
-      case 5:
-        return "assets/curriculum/mouse/breeding/nesting/left-bottom-hover.png";
-      case 6:
-        return "assets/curriculum/mouse/breeding/nesting/right-bottom-hover.png";
-      default:
-        return "";
-    }
-  }
-
   private handleClickMouse = (mouse: BackpackMouseType) => () => {
     const { breeding } = this.stores;
     const { backpack } = this.stores;
     const selecting = breeding.interactionMode === "select";
     if (selecting && !backpack.cloneExists(mouse.id)) {
-      const backpackMouse = BackpackMouse.create({sex: mouse.sex,
-                                                  genotype: mouse.genotype,
-                                                  label: mouse.label,
-                                                  originMouseRefId: mouse.id});
+      const backpackMouse = BackpackMouse.create({
+        species: mouse.species,
+        sex: mouse.sex,
+        genotype: mouse.genotype,
+        label: mouse.label,
+        originMouseRefId: mouse.id
+      });
       backpack.addCollectedMouse(backpackMouse);
     }
   }

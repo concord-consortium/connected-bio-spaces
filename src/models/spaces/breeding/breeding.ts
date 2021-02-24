@@ -1,19 +1,21 @@
 import { types, Instance, cast } from "mobx-state-tree";
 import { RightPanelTypeEnum } from "../../ui";
 import { BackpackMouse, BackpackMouseType } from "../../backpack-mouse";
-import { breed, createGamete, fertilize } from "../../../utilities/genetics";
+import { breed } from "../../../utilities/genetics";
 import { ToolbarButton } from "../populations/populations";
 import uuid = require("uuid");
 import { RightPanelType } from "../../../models/ui";
 import { shuffle } from "lodash";
+import { speciesDef, units } from "../../units";
+import { Unit } from "../../../authoring";
 
-const BreedingInteractionModeEnum = types.enumeration("interaction", ["none", "breed", "select", "inspect", "gametes"]);
+const BreedingInteractionModeEnum = types.enumeration("interaction", ["none", "breed", "select", "inspect"]);
 export type BreedingInteractionModeType = typeof BreedingInteractionModeEnum.Type;
 
 export const EnvironmentColorTypeEnum = types.enumeration("environment", ["white", "neutral", "brown"]);
 export type EnvironmentColorType = typeof EnvironmentColorTypeEnum.Type;
 
-const BreedingChartTypeEnum = types.enumeration("chart", ["color", "genotype", "sex"]);
+const BreedingChartTypeEnum = types.enumeration("chart", ["phenotype", "genotype", "sex"]);
 export type BreedingChartType = typeof BreedingChartTypeEnum.Type;
 
 const ShuffledGametePositions = types.model({
@@ -30,10 +32,7 @@ export type IShuffledGametePositions = Instance<typeof ShuffledGametePositions>;
 const MAX_VERBOSE_LITTERS = 20;
 interface LitterMeta {
   litters: number;
-  CC: number;
-  CR: number;
-  RC: number;
-  RR: number;
+  offspringByGenotype: Record<string, number>;
 }
 
 const BreedingInspectTypeEnum = types.enumeration("inspect", ["none", "nest", "organism", "gamete"]);
@@ -78,11 +77,13 @@ export const NestPair = types.model({
   leftMouse: BackpackMouse,
   rightMouse: BackpackMouse,
   label: types.string,
+  chartLabel: types.string,
   currentBreeding: false,
   hasBeenVisited: false,
   litters: types.array(types.array(BackpackMouse)),
   litterShuffledGametePositions: types.array(ShuffledGametePositions),
   condensedLitterMeta: types.maybe(types.string),
+  meta: types.maybe(types.string),
 })
 .views((self) => ({
   get mother() {
@@ -96,10 +97,9 @@ export const NestPair = types.model({
   },
   getData(chartType: BreedingChartType) {
     const data: {[key: string]: number} = {};
-    const prop = chartType === "color" ? "baseColor" : chartType;
     self.litters.forEach(litter => {
       litter.forEach(org => {
-        const val = org[prop];
+        const val = org[chartType];
         if (!data[val]) data[val] = 0;
         data[val] = data[val] + 1;
       });
@@ -134,7 +134,7 @@ export const NestPair = types.model({
     const litter: BackpackMouseType[] = [];
     const positions: number[] = [];
     for (let i = 0; i < litterSize; i++) {
-      const child = breed(self.mother, self.father, chanceOfMutations);
+      const child = breed(self.mother, self.father, chanceOfMutations, self.mother.species);
       litter.push(BackpackMouse.create(child));
       positions.push(i);
     }
@@ -153,19 +153,17 @@ export const NestPair = types.model({
     // remove raw litter data and save condensed meatadata version instead
     const meta: LitterMeta = {
       litters: snapshot.litters.length,
-      CC: 0,
-      CR: 0,
-      RC: 0,
-      RR: 0
+      offspringByGenotype: {}
     };
     snapshot.litters.forEach(litter => {
       litter.forEach(org => {
-        meta[org.genotype]++;
+        if (!meta.offspringByGenotype[org.genotype]) meta.offspringByGenotype[org.genotype] = 0;
+        meta.offspringByGenotype[org.genotype]++;
       });
     });
     snapshot.condensedLitterMeta = JSON.stringify(meta);
-    delete snapshot.litters;
-    delete snapshot.litterShuffledGametePositions;
+    snapshot.litters = [];
+    snapshot.litterShuffledGametePositions = [];
   } else {
     delete snapshot.condensedLitterMeta;
   }
@@ -178,13 +176,16 @@ export const NestPair = types.model({
       const meta = JSON.parse(self.condensedLitterMeta) as LitterMeta;
 
       // create random array of genotypes, with correct numbers;
-      const totalOffspring = meta.CC + meta.CR + meta.RC + meta.RR;
-      let  genotypes = new Array(totalOffspring);
-      genotypes.fill("CC", 0, meta.CC);
-      genotypes.fill("CR", meta.CC, meta.CC + meta.CR);
-      genotypes.fill("RC", meta.CC + meta.CR, meta.CC + meta.CR + meta.RC);
-      genotypes.fill("RR", meta.CC + meta.CR + meta.RC, totalOffspring);
-      genotypes = shuffle(genotypes);
+      const allGenotypes = Object.keys(meta.offspringByGenotype);
+      const totalOffspring = allGenotypes.reduce((t, genotype) => t + meta.offspringByGenotype[genotype], 0);
+      let  offspringGenotypes = new Array(totalOffspring);
+      let currentIndex = 0;
+      allGenotypes.forEach(genotype => {
+        const totalOffspringOfType = meta.offspringByGenotype[genotype];
+        offspringGenotypes.fill(genotype, currentIndex, currentIndex + totalOffspringOfType);
+        currentIndex += totalOffspringOfType;
+      });
+      offspringGenotypes = shuffle(offspringGenotypes);
 
       // create random array of litter sizes, each 3-5, adding up to corect number of offspring
       let litterSizes: number[] = new Array(meta.litters).fill(3);
@@ -202,8 +203,9 @@ export const NestPair = types.model({
         const litter: BackpackMouseType[] = [];
         for (let j = 0; j < litterSizes[i]; j++) {
           litter.push(BackpackMouse.create({
+            species: self.mother.species,
             sex: Math.random() < 0.5 ? "female" : "male",
-            genotype: genotypes[currOffspring]
+            genotype: offspringGenotypes[currOffspring]
           }));
           currOffspring++;
         }
@@ -220,27 +222,24 @@ export const NestPair = types.model({
 
 export type INestPair = Instance<typeof NestPair>;
 
-export function createBreedingModel(breedingProps: any) {
+export function createBreedingModel(unit: Unit, breedingProps: any) {
   if (!breedingProps.backgroundType) {
     const rand = Math.random();
     breedingProps.backgroundType = rand > .66 ? "neutral" : (rand > .33 ? "brown" : "white");
   }
   if (!breedingProps.nestPairs || breedingProps.nestPairs.length === 0) {
-    const breedingPairs = [
-      ["RC", "RR"],
-      ["CC", "RR"],
-      ["CC", "CC"],
-      ["RR", "RR"],
-      ["RC", "RC"],
-      ["CC", "RC"]
-    ];
+    const { breedingPairs } = units[unit].breeding;
     breedingProps.nestPairs = breedingPairs.map((pair, i) => {
       const leftSex = Math.random() < 0.5 ? "female" : "male";
       const rightSex = leftSex === "female" ? "male" : "female";
+      const leftLabel = pair.parents[0].label || (leftSex === "female" ? "Mother" : "Father");
+      const rightLabel = pair.parents[1].label || (rightSex === "female" ? "Mother" : "Father");
       return {
-        leftMouse: {sex: leftSex, genotype: pair[0]},
-        rightMouse: {sex: rightSex, genotype: pair[1]},
-        label: `Pair ${i + 1}`
+        leftMouse: {species: unit, sex: leftSex, genotype: pair.parents[0].genotype, label: leftLabel},
+        rightMouse: {species: unit, sex: rightSex, genotype: pair.parents[1].genotype, label: rightLabel},
+        label: pair.label,
+        chartLabel: pair.chartLabel || pair.label,
+        meta: pair.meta,
       };
     });
   }
@@ -258,9 +257,12 @@ export const BreedingModel = types
     showSexStack: false,
     showHeteroStack: false,
     breedWithMutations: false,
+    showParentGenotype: true,
+    showOffspringGenotype: true,
     enableStudentControlOfMutations: false,
     chanceOfMutations: types.number,
     interactionMode: types.optional(BreedingInteractionModeEnum, "breed"),
+    showingGametes: false,
     backgroundType: types.optional(EnvironmentColorTypeEnum, "neutral"),
     nestPairs: types.array(NestPair),
     inspectInfo: InspectInfo,
@@ -314,13 +316,17 @@ export const BreedingModel = types
       self.breedWithMutations = value;
     },
 
-    toggleInteractionMode(mode: "select" | "inspect" | "breed" | "gametes") {
-      if (self.interactionMode === mode) {
-        self.interactionMode = "none";
-      } else {
-        self.interactionMode = mode;
-      }
+    toggleInteractionMode(mode: "select" | "inspect" | "breed") {
+      self.interactionMode = mode;
     },
+
+    showGametes() {
+      self.showingGametes = true;
+    },
+    hideGametes() {
+      self.showingGametes = false;
+    },
+
     clearNestPairActiveBreeding() {
       self.nestPairs.forEach(pair => {
         pair.setCurrentBreeding(false);
@@ -337,6 +343,7 @@ export const BreedingModel = types
         });
         nestPair.setCurrentBreeding(true);
         self.rightPanel = "data";   // auto-switch to data when we go to breeding
+        self.interactionMode = "inspect";   // auto-switch to inspect mode
       }
     },
     setInspectedMouse(mouseId: string, pairId: string, litterIndex: number, isParent: boolean) {
@@ -366,40 +373,38 @@ export const BreedingModel = types
     return {
       get chartType(): BreedingChartType {
         return self.userChartType ? self.userChartType :
-          self.enableColorChart ? "color" :
+          self.enableColorChart ? "phenotype" :
           self.enableGenotypeChart ? "genotype" :
-          self.enableSexChart ? "sex" : "color";
+          self.enableSexChart ? "sex" : "phenotype";
       },
     };
   })
   .views((self) => {
     return {
       get backgroundImage() {
-        switch (self.backgroundType) {
-          case "brown":
-            return "assets/curriculum/mouse/breeding/nesting/environment-brown-nests.png";
-          case "white":
-            return "assets/curriculum/mouse/breeding/nesting/environment-white-nests.png";
-          default:
-            return "assets/curriculum/mouse/breeding/nesting/environment-mixed-nests.png";
-        }
+        const unitBreeding = units[self.nestPairs[0].mother.species].breeding;
+        return unitBreeding.getNestBackgroundImage(self.backgroundType);
       },
       get activeBreedingPair(): INestPair | undefined {
         return self.nestPairs.find(pair => pair.id === self.breedingNestPairId);
       },
       get toolbarButtons(): ToolbarButton[] {
         const buttons = [];
-        buttons.push({
-          title: "Females",
-          imageClass: "circle female",
-          secondaryTitle: "Males",
-          secondaryTitleImageClass: "circle male",
-          type: "checkbox",
-          value: self.showSexStack,
-          action: (val: boolean) => {
-            self.setShowSexStack(val);
-          }
-        });
+        const species = units[self.nestPairs[0].mother.species].species;
+
+        if (species.showSexStack) {
+          buttons.push({
+            title: "Females",
+            imageClass: "circle female",
+            secondaryTitle: "Males",
+            secondaryTitleImageClass: "circle male",
+            type: "checkbox",
+            value: self.showSexStack,
+            action: (val: boolean) => {
+              self.setShowSexStack(val);
+            }
+          });
+        }
 
         buttons.push({
           title: "Heterozygotes",
@@ -408,7 +413,8 @@ export const BreedingModel = types
           value: self.showHeteroStack,
           action: (val: boolean) => {
             self.setShowHeteroStack(val);
-          }
+          },
+          enabled: self.showParentGenotype && self.showOffspringGenotype
         });
 
         buttons.push({
@@ -424,33 +430,42 @@ export const BreedingModel = types
       },
       get graphButtons(): ToolbarButton[] {
         const buttons = [];
-        buttons.push({
-          title: "Fur Colors",
-          value: self.chartType === "color",
-          action: (val: boolean) => {
-            self.setChartType("color");
-          },
-          section: "data",
-          disabled: !self.enableColorChart,
-        });
-        buttons.push({
-          title: "Genotypes",
-          value: self.chartType === "genotype",
-          action: (val: boolean) => {
-            self.setChartType("genotype");
-          },
-          section: "data",
-          disabled: !self.enableGenotypeChart,
-        });
-        buttons.push({
-          title: "Sex",
-          value: self.chartType === "sex",
-          action: (val: boolean) => {
-            self.setChartType("sex");
-          },
-          section: "data",
-          disabled: !self.enableSexChart,
-        });
+        const chartSpecies = self.nestPairs[0].mother.species;
+        const species = speciesDef(chartSpecies);
+        const phenotypeLabel = species.phenotypeHeading;
+        if (units[chartSpecies].breeding.availableChartTypes.includes("phenotype")) {
+          buttons.push({
+            title: phenotypeLabel,
+            value: self.chartType === "phenotype",
+            action: (val: boolean) => {
+              self.setChartType("phenotype");
+            },
+            section: "data",
+            disabled: !self.enableColorChart,
+          });
+        }
+        if (units[chartSpecies].breeding.availableChartTypes.includes("genotype")) {
+          buttons.push({
+            title: "Genotypes",
+            value: self.chartType === "genotype",
+            action: (val: boolean) => {
+              self.setChartType("genotype");
+            },
+            section: "data",
+            disabled: !self.enableGenotypeChart,
+          });
+        }
+        if (units[chartSpecies].breeding.availableChartTypes.includes("sex")) {
+          buttons.push({
+            title: "Sex",
+            value: self.chartType === "sex",
+            action: (val: boolean) => {
+              self.setChartType("sex");
+            },
+            section: "data",
+            disabled: !self.enableSexChart,
+          });
+        }
 
         return buttons;
       }

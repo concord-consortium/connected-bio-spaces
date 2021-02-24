@@ -1,7 +1,8 @@
 import * as React from "react";
-import { genotypeHTMLLabel } from "../utilities/genetics";
-import "./stacked-organism.sass";
 import { BackpackMouseType } from "../models/backpack-mouse";
+import { speciesDef } from "../models/units";
+import "./stacked-organism.sass";
+import "./stacked-organism.pea.sass";
 
 interface IProps {
   organism: BackpackMouseType;
@@ -17,7 +18,7 @@ interface IProps {
   isOffspring?: boolean;
 }
 
-const path = "assets/curriculum/mouse/populations/";
+const path = "assets/unit/mouse/populations/";
 const selectionImage =  path + "select-stack.png";
 
 export const StackedOrganism: React.SFC<IProps> = (props) => {
@@ -27,16 +28,15 @@ export const StackedOrganism: React.SFC<IProps> = (props) => {
   const heteroClass = "hetero-stack " + ((props.showHetero && props.organism.isHeterozygote) ? "show" : "");
   const sexClass = "sex-stack " + props.organism.sex + (props.showSex ? " show" : "");
   const imgClasses = "organism-image " + (props.flipped ? "flip" : "");
-  const label = genotypeHTMLLabel(props.organism.genotype);
+  const species = speciesDef(props.organism.species);
+  const label = species.getGenotypeHTMLLabel(props.organism.genotype);
   const labelClass = "genotype-label " + (props.isOffspring ? "child-mouse" : "parent-mouse");
   // sizes defined here instead of in css so we can base width and left dimension off height dimension
   const fullSize = {
     height: props.height,
     width: props.height
   };
-  const innerSize = {
-    height: props.height * 0.45,
-  };
+
   const normalHeight = 150;
   const normalBorderWidth = 4;
   const sexSize = {
@@ -51,14 +51,14 @@ export const StackedOrganism: React.SFC<IProps> = (props) => {
   };
 
   return (
-    <div className="stacked-organism" style={fullSize}>
+    <div className={`stacked-organism ${props.organism.species}`} style={fullSize}>
       { props.showGameteSelection && <div className={gameteViewClass} style={fullSize} data-test="gamete-view" /> }
       { props.showInspect && <div className={inspectClass} style={fullSize} data-test="inspect-view" /> }
       { props.showLabel && <div className={labelClass} dangerouslySetInnerHTML={{ __html: label }}/> }
       <img src={selectionImage} className={selectionClass} style={fullSize} data-test="selection-image" />
       {
         props.organismImages.map((image, i) =>
-          <img src={image} className={imgClasses} style={innerSize}
+          <img src={image} className={imgClasses}
             key={`org-image-${i}`} data-test={`org-image-${i}`} />
         )
       }

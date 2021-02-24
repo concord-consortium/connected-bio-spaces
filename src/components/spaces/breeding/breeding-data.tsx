@@ -5,34 +5,15 @@ import { BreedingDataNestPanel } from "./breeding-data-nest-panel";
 // @ts-ignore
 import * as colors from "../../../components/colors.scss";
 import "./breeding-data.sass";
+import { speciesDef } from "../../../models/units";
 
 interface IProps extends IBaseProps {}
 interface IState {}
 
-interface LegendItem {
+export interface LegendItem {
   label: string;
   color: string;
 }
-const sexLegend: LegendItem[] = [
-  {label: "Female", color: colors.colorChartYellow},
-  {label: "Male", color: colors.colorChartRed}
-];
-const colorLegend: LegendItem[] = [
-  {label: "Light Brown", color: colors.colorDataMouseBrownLightRep},
-  {label: "Medium Brown", color: colors.colorDataMouseBrownMediumRep},
-  {label: "Dark Brown", color: colors.colorDataMouseBrownDarkRep}
-];
-const genotypeLegend: LegendItem[] = [
-  {label: "R<sup>L</sup>R<sup>L</sup> Mice", color: colors.colorDataMouseBrownLightRep},
-  {label: "R<sup>L</sup>R<sup>D</sup> Mice", color: colors.colorDataMouseBrownMediumRep},
-  {label: "R<sup>D</sup>R<sup>L</sup> Mice", color: colors.colorDataMouseBrownMediumRep},
-  {label: "R<sup>D</sup>R<sup>D</sup> Mice", color: colors.colorDataMouseBrownDarkRep}
-];
-const chartInfo = {
-  color: {legend: colorLegend, title: "Fur Colors" },
-  genotype: {legend: genotypeLegend, title: "Genotypes" },
-  sex: {legend: sexLegend, title: "Sex" }
-};
 
 @inject("stores")
 @observer
@@ -40,13 +21,15 @@ export class BreedingData extends BaseComponent<IProps, IState> {
 
   public render() {
     const { breeding } = this.stores;
-    const { chartType } = breeding;
+    const { chartType, nestPairs } = breeding;
+    const species = speciesDef(nestPairs[0].leftMouse.species);
+    const chartInfo = species.chartTypes[chartType];
     return(
       <div className="breeding-data">
-        <div className="data-title">{chartInfo[chartType].title}</div>
+        <div className="data-title">{chartInfo.title}</div>
         <div className="nest-pair-container">
           {
-            breeding.nestPairs.map((pair, i) =>
+            nestPairs.map((pair, i) =>
               <BreedingDataNestPanel
                 nestPair={pair}
                 key={i}
@@ -54,7 +37,7 @@ export class BreedingData extends BaseComponent<IProps, IState> {
             )
           }
         </div>
-        <div className="data-legend">{this.renderLegend(chartInfo[chartType].legend)}</div>
+        <div className="data-legend">{this.renderLegend(chartInfo.legend)}</div>
       </div>
     );
   }

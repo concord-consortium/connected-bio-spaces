@@ -1,0 +1,61 @@
+@import vars
+
+.inspect-panel.pea
+  .pair-container
+    &.pair
+      .inspect-background
+        top: 50px
+        left: 56px
+        width: 300px
+        height: 175px
+        border-radius: 18px
+
+      .mouse-container
+        margin: 20px -8px
+
+        .stacked-organism .hetero-stack
+          transform: scaleX(0.7) scaleY(1.1)
+          border-radius: 25px
+
+        .info-row
+          justify-content: center
+
+    &.self-fertilization
+      .inspect-background
+        width: 117px
+        left: 147px
+      .mouse-container:nth-of-type(2)
+        display: none
+
+    &.parent
+      .inspect-background
+        display: none
+      .mouse-container
+        .mouse-label
+          margin-top: 35px
+        .stacked-organism
+          transform: scale(1.5)
+          .hetero-stack
+            top: 15px
+            transform: scale(0.85)
+            border-radius: 50%
+
+      &.female .hetero-stack
+          left: -15px
+      &.male .hetero-stack
+          left: 46px
+
+  .pair-container .mouse-container
+    .mouse-label
+      font-size: 18px
+      margin-top: 25px
+
+    .info-row.wide
+      width: 230px
+
+    .seed-image
+      height: 20px
+      padding-right: 6px
+    .gamete-icons
+      top: 340px
+      right: 329px
