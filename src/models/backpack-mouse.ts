@@ -14,7 +14,7 @@ export const UNCOLLECTED_IMAGE = "assets/mouse_collect.png";
 
 export const BackpackMouse = types
   .model("Mouse", {
-    species: UnitTypeEnum,
+    species: types.optional(UnitTypeEnum, "mouse"),
     id: types.optional(types.identifier, () => uuid()),
     sex: SexTypeEnum,
     genotype: types.string,

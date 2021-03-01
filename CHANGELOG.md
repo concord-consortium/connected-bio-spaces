@@ -1,4 +1,12 @@
 # Changelog
+
+## Version 2.0.0 - released February 24 2020
+
+- New Peas breeding unit
+- Many changes to support having multiple units
+- New authoring options to hide genotypes
+- New gamete switch behavior in breeding view
+
 ## Version 1.2.0 - released July 1, 2020
 
 - Add pie charts to population level
