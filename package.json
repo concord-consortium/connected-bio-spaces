@@ -118,7 +118,7 @@
     "gifler": "^0.1.0",
     "iframe-phone": "^1.2.0",
     "immutable": "^3.8.2",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "markdown-to-jsx": "^6.9.0",
     "mobx": "^5.5.0",
     "mobx-react": "^5.2.8",
