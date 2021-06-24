@@ -48,9 +48,19 @@ export class NestPair extends BaseComponent<IProps, IState> {
     const rightMouseImages = [rightMouse.nestImage];
     if (rightMouseCollected) rightMouseImages.push(rightMouse.nestOutlineImage);
     const nestHoverImage = unitBreeding.getNestHoverImage ? unitBreeding.getNestHoverImage(positionIndex) : null;
+    const nestPlatformImage = unitBreeding.getNestPlatformImage
+      ? unitBreeding.getNestPlatformImage(positionIndex) : null;
 
     return(
       <div className={`${nestClass} ${unit}`} onClick={this.handleClickNest}>
+        <div className={nestInspectClass} />
+        { nestPlatformImage &&
+          <img
+            src={nestPlatformImage}
+            className={"nest-platform"}
+            data-test="nest-platform-image"
+          />
+        }
         { nestHoverImage &&
           <img
             src={nestHoverImage}
@@ -61,7 +71,6 @@ export class NestPair extends BaseComponent<IProps, IState> {
         { !nestHoverImage &&
           <div className={nestBackgroundHoverClass} />
         }
-        <div className={nestInspectClass} />
         <div className={`mouse left ${positionClass}`} onClick={this.handleClickMouse(leftMouse)}>
           <StackedOrganism
             organism={leftMouse}
