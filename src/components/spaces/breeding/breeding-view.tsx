@@ -42,7 +42,7 @@ export class BreedingView extends BaseComponent<IProps, IState> {
     const maxLitter = numLitters - 1;
     const sliderMax = this.getSliderMax(numLitters);
     const sliderPercent = sliderMax ? litterSliderVal / sliderMax : 0;
-    const litterOffset = 85 * maxLitter * sliderPercent;
+    const litterOffset = (unit === "mouse" ? 85 : 94) * maxLitter * sliderPercent;
     const currentLitter = maxLitter - Math.round(maxLitter * sliderPercent);
     const gametes = activeBreedingPair.getLitterGametes(currentLitter);
     const gametePositions = activeBreedingPair.getLitterShuffledGametePositions(currentLitter);
@@ -287,7 +287,8 @@ export class BreedingView extends BaseComponent<IProps, IState> {
   private renderArrowPanel = (gameteLeftPositions: number[], gameteRightPositions: number[], flip: boolean) => {
     const hoverArrows: ArrowInfo[] = [];
     // calculate arrow offset due to scrolling
-    const { breeding } = this.stores;
+    const { breeding, unit } = this.stores;
+    const isMouse = unit === "mouse";
     const { litterSliderVal, offspringHightlightIndex } = this.state;
     const activeBreedingPair = breeding.activeBreedingPair!;
     const numLitters = activeBreedingPair.litters.length;
@@ -297,35 +298,39 @@ export class BreedingView extends BaseComponent<IProps, IState> {
     const scrollAmount = numLitters > 1
                          ? (sliderOffset < sliderInterval / 2 ? -1 * sliderOffset : sliderInterval - sliderOffset)
                          : 0;
-    const scrollYAdjustment = 82 * (scrollAmount / sliderInterval);
+    const scrollYAdjustment = (isMouse ? 82 : 94) * (scrollAmount / sliderInterval);
 
     const maxGametes = 5;
     const gameteCount = gameteLeftPositions.length;
-    const baseEndY = 46 + scrollYAdjustment;
-    const yStagger = 16;
+    const baseEndY = (isMouse ? 46 : 72) + scrollYAdjustment;
+    const yStagger = isMouse ? 16 : 8;
     const leftGameteXStart = flip ? 201 : 18;
     const rightGameteXStart = flip ? 18 : 201;
     const gameteXOffset = (maxGametes - gameteCount) * 10;
     const gameteYStagger = 6;
     const gameteDelta = 20;
-    const mouseXStart = 48;
-    const mouseXOffset = (maxGametes - gameteCount) * 24;
-    const mouseXIncrement = 48;
+    const organismXStart = (isMouse ? 48 : 52) + (flip ? 15 : 0);
+    const organismXOffset = (maxGametes - gameteCount) * (isMouse ? 24 : 22);
+    const organismXIncrement = isMouse ? 48 : 46;
     const arrowGap = flip ? -15 : 15;
     gameteLeftPositions.forEach((position, i) => {
       const startY = i % 2 === 1 ? gameteYStagger : 0;
-      const endY = baseEndY + (position % 2 === 1 ? yStagger : 0);
+      const endY = baseEndY + (isMouse
+        ? (position % 2 === 1 ? yStagger : 0)
+        : Math.floor(Math.abs(position - (gameteCount - 1) / 2)) * yStagger * -1);
       const startX = leftGameteXStart + gameteXOffset + i * gameteDelta;
-      const endX = mouseXStart + mouseXOffset + position * mouseXIncrement;
+      const endX = organismXStart + organismXOffset + position * organismXIncrement;
       const visible = offspringHightlightIndex === position;
       const arrow: ArrowInfo = { startX, endX, startY, endY, headRotation: (flip ? 10 : -10), visible };
       hoverArrows.push(arrow);
     });
     gameteRightPositions.forEach((position, i) => {
       const startY = i % 2 === 1 ? gameteYStagger : 0;
-      const endY = baseEndY + (position % 2 === 1 ? yStagger : 0);
+      const endY = baseEndY + (isMouse
+        ? (position % 2 === 1 ? yStagger : 0)
+        : Math.floor(Math.abs(position - (gameteCount - 1) / 2)) * yStagger * -1);
       const startX = rightGameteXStart + gameteXOffset + i * gameteDelta;
-      const endX = mouseXStart + mouseXOffset + position * mouseXIncrement + arrowGap;
+      const endX = organismXStart + organismXOffset + position * organismXIncrement + arrowGap;
       const visible = offspringHightlightIndex === position;
       const arrow: ArrowInfo = { startX, endX, startY, endY, headRotation: (flip ? -10 : 10), visible };
       hoverArrows.push(arrow);
