@@ -318,7 +318,7 @@ export const units: Units = {
               return "round";
           }
         },
-        phenotypeHeading: "Pea shape",
+        phenotypeHeading: "Pea Shape",
         getPhenotypeLabel: (phenotype) => phenotype.charAt(0).toUpperCase() + phenotype.slice(1),
         getGenotypeHTMLLabel: (genotype) => genotype.charAt(1) + genotype.charAt(0),
         getGameteHTMLLabel: (allele) => allele,
