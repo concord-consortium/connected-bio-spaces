@@ -53,7 +53,6 @@ export class NestPair extends BaseComponent<IProps, IState> {
 
     return(
       <div className={`${nestClass} ${unit}`} onClick={this.handleClickNest}>
-        <div className={nestInspectClass} />
         { nestPlatformImage &&
           <img
             src={nestPlatformImage}
@@ -61,6 +60,7 @@ export class NestPair extends BaseComponent<IProps, IState> {
             data-test="nest-platform-image"
           />
         }
+        <div className={nestInspectClass} />
         { nestHoverImage &&
           <img
             src={nestHoverImage}
