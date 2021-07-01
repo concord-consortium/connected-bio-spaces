@@ -151,7 +151,7 @@ export const units: Units = {
             return "tan";
         }
       },
-      phenotypeHeading: "Fur Color",
+      phenotypeHeading: "Fur Colors",
       getPhenotypeLabel: (phenotype) => {
         switch (phenotype) {
           case "white":
