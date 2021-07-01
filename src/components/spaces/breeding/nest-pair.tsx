@@ -79,6 +79,7 @@ export class NestPair extends BaseComponent<IProps, IState> {
             showSelection={this.props.showSelectionStack && !leftMouseCollected}
             showSex={this.props.showSexStack}
             showHetero={this.props.showHeteroStack}
+            ignoreHeteroStyleAdjustment={unit === "pea"}
           />
         </div>
         <div className={`mouse right ${positionClass}`} onClick={this.handleClickMouse(rightMouse)}>
@@ -90,6 +91,7 @@ export class NestPair extends BaseComponent<IProps, IState> {
             showSelection={this.props.showSelectionStack && !rightMouseCollected}
             showSex={this.props.showSexStack}
             showHetero={this.props.showHeteroStack}
+            ignoreHeteroStyleAdjustment={unit === "pea"}
           />
         </div>
         <div className={pairLabelClass}>{this.props.nestPair.label}</div>
