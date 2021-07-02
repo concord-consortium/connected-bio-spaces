@@ -56,7 +56,7 @@ export class NestPair extends BaseComponent<IProps, IState> {
         { nestPlatformImage &&
           <img
             src={nestPlatformImage}
-            className={"nest-platform"}
+            className="nest-platform"
             data-test="nest-platform-image"
           />
         }
