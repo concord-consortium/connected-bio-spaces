@@ -55,12 +55,12 @@ export const BackpackMouse = types
       }
       return null;
     },
-    getInspectImage(context: InspectContext): string {
+    getInspectImage(context: InspectContext, showGametes: boolean): string {
       const species = speciesDef(self.species);
       if (context === "nest" && species.getInspectNestImage) {
         return species.getInspectNestImage(self as BackpackMouseType);
       } else if (context === "parent" && species.getInspectParentImage) {
-        return species.getInspectParentImage(self as BackpackMouseType);
+        return species.getInspectParentImage(self as BackpackMouseType, showGametes);
       } else if (context === "offspring" && species.getInspectOffspringImage) {
         return species.getInspectOffspringImage(self as BackpackMouseType);
       }

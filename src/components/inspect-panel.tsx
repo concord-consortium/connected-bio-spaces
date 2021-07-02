@@ -85,7 +85,7 @@ export class InspectPanel extends BaseComponent<IProps, IState> {
   }
 
   private renderMouse(mouse: BackpackMouseType, flip: boolean) {
-    const mouseImage = mouse.getInspectImage(this.props.context);
+    const mouseImage = mouse.getInspectImage(this.props.context, this.props.showGametes);
     const showSex = units[mouse.species].species.showSexStack;
     const showHetero = this.props.showGenotype;
     return (
@@ -107,7 +107,6 @@ export class InspectPanel extends BaseComponent<IProps, IState> {
   private renderOrganismInfo(org: BackpackMouseType) {
     const species = speciesDef(org.species);
     const context = this.props.context;
-
     return species.inspectInfoProvider(org, context, this.props.showGametes, this.props.showGenotype);
   }
 
