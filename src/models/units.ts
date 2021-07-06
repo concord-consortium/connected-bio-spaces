@@ -20,7 +20,7 @@ export interface UnitSpecies {
   getZoomedInParentImage?: (parent: BackpackMouseType) => string;    // if not specified, base image is used
   getOffspringImage?: (parent: BackpackMouseType) => string;         // if not specified, nest image is used
   getInspectOffspringImage?: (org: BackpackMouseType) => string;     // if not specified, base image is used
-  getInspectParentImage?: (org: BackpackMouseType) => string;
+  getInspectParentImage?: (org: BackpackMouseType, showGametes: boolean) => string;
   getInspectNestImage?: (org: BackpackMouseType) => string;
   getChartImage?: (parent: BackpackMouseType) => string;
   getChartSecondaryImage?: (parent: BackpackMouseType) => string;   // optional image below the label
@@ -126,10 +126,10 @@ const flowerPotImage = (org: BackpackMouseType) => {
       return "assets/unit/pea/plant_3.png";
   }
 };
-const flowerPotZoomImage = (org: BackpackMouseType) => {
+const flowerPotZoomImage = (org: BackpackMouseType, showGametes: boolean) => {
   const lowerSnakeLabel = org.label.toLowerCase().replace(" ", "_");
   // e.g. "assets/unit/pea/plant_1_female_zoom.png"
-  return `assets/unit/pea/${lowerSnakeLabel}_${org.sex}_zoom.png`;
+  return `assets/unit/pea/${lowerSnakeLabel}_${org.sex}_${showGametes ? "gamete_" : ""}zoom.png`;
 };
 
 export const units: Units = {
