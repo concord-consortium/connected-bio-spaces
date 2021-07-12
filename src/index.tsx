@@ -14,6 +14,8 @@ import { AuthoringComponent } from "./components/authoring";
 import "./index.sass";
 import { onSnapshot } from "mobx-state-tree";
 import scaleToFit from "./components/hoc/scaleToFit";
+import { MiceAuthoringComponent } from "./components/authoring-mice";
+import { PeasAuthoringComponent } from "./components/authoring-peas";
 
 let modelInitialized = false;
 
@@ -37,10 +39,23 @@ function initializeModel(studentData: UserSaveDataType) {
 
   const appRoot = document.getElementById("app");
 
-  if (urlParams.authoring) {
+  if (urlParams.authoring || window.location.pathname.indexOf("authoring") >= 0) {
     appRoot!.classList.add("authoring");
+  }
+
+  if (urlParams.authoring) {
     ReactDOM.render((
       <AuthoringComponent initialAuthoring={initialStore} />
+      ), appRoot
+    );
+  } else if (window.location.pathname.indexOf("mice-authoring") >= 0) {
+    ReactDOM.render((
+      <MiceAuthoringComponent/>
+      ), appRoot
+    );
+  } else if (window.location.pathname.indexOf("peas-authoring") >= 0) {
+    ReactDOM.render((
+      <PeasAuthoringComponent/>
       ), appRoot
     );
   } else {
