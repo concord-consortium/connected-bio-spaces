@@ -50,7 +50,7 @@ function initializeModel(studentData: UserSaveDataType) {
     );
   } else if (window.location.pathname.indexOf("mice-authoring") >= 0) {
     ReactDOM.render((
-      <MiceAuthoringComponent/>
+      <MiceAuthoringComponent initialAuthoring={initialStore} />
       ), appRoot
     );
   } else if (window.location.pathname.indexOf("peas-authoring") >= 0) {
