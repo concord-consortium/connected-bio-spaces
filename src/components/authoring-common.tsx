@@ -5,7 +5,7 @@ import { ConnectedBioModelCreationType } from "../models/stores";
 export const onSubmit = (setModelUrl: (url: string) => void) => (values: ConnectedBioModelCreationType) => {
   delete values.authoring;
   const encodedParams = encodeURIComponent(JSON.stringify(values));
-  setModelUrl(`${location.origin}/index.html?${encodedParams}`);
+  setModelUrl(`${location.href.replace(/\/\w*-authoring.html/, "/index.html")}?${encodedParams}`);
 };
 
 export const allowHideLeftPanel = (values: ConnectedBioAuthoring) => {
