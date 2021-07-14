@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import { Formik, Form, Field, FormikProps } from "formik";
 import { ConnectedBioModelCreationType } from "../models/stores";
-import { allowHideLeftPanel, error, handleResetForm, onSubmit, validate } from "./authoring-common";
+import { allowHideLeftPanel, error, formattingHelp, handleResetForm, onSubmit, validate } from "./authoring-common";
 
 import "./formik-authoring.sass";
 
@@ -13,6 +13,7 @@ interface IProps {
 export const PeasAuthoringComponent: React.FC<IProps> = ({initialAuthoring}) => {
   const [modelUrl, setModelUrl] = useState("");
   const [showingLinkCopied, setShowingLinkCopied] = useState(false);
+  const [showingFormattingHelp, setShowingFormattingHelp] = useState(false);
 
   const handleCopyUrl = () => {
     if (!modelUrl) return;
@@ -25,6 +26,8 @@ export const PeasAuthoringComponent: React.FC<IProps> = ({initialAuthoring}) => 
     if (!modelUrl) return;
     window.open(modelUrl, "connected-bio-spaces");
   };
+
+  const handleToggleFormatting = () => setShowingFormattingHelp(!showingFormattingHelp);
 
   return (
     <div className="formik-authoring peas">
@@ -63,6 +66,12 @@ export const PeasAuthoringComponent: React.FC<IProps> = ({initialAuthoring}) => 
                   <Field name="breeding.instructions" as="textarea"
                     placeholder="Add instructions..."
                   />
+                  <div className="formatting-help">
+                    <div className="toggle-help" onClick={handleToggleFormatting}>
+                      { showingFormattingHelp ? "Hide formatting help" : "Formatting help" }
+                    </div>
+                    { showingFormattingHelp && formattingHelp() }
+                  </div>
                   <h3>Offspring: Mutations</h3>
                   <label>
                     <Field type="checkbox" name="breeding.breedWithMutations" />

@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import { Formik, Form, Field, FieldArray, FormikProps } from "formik";
 import { ConnectedBioModelCreationType } from "../models/stores";
-import { allowHideLeftPanel, error, handleResetForm, onSubmit, validate } from "./authoring-common";
+import { allowHideLeftPanel, error, formattingHelp, handleResetForm, onSubmit, validate } from "./authoring-common";
 
 import "./formik-authoring.sass";
 
@@ -13,6 +13,7 @@ interface IProps {
 export const MiceAuthoringComponent: React.FC<IProps> = ({initialAuthoring}) => {
   const [modelUrl, setModelUrl] = useState("");
   const [showingLinkCopied, setShowingLinkCopied] = useState(false);
+  const [showingFormattingHelp, setShowingFormattingHelp] = useState([false, false, false]);
 
   const handleCopyUrl = () => {
     if (!modelUrl) return;
@@ -24,6 +25,12 @@ export const MiceAuthoringComponent: React.FC<IProps> = ({initialAuthoring}) => 
   const handleOpenUrl = () => {
     if (!modelUrl) return;
     window.open(modelUrl, "connected-bio-spaces");
+  };
+
+  const handleToggleFormatting = (index: number) => () => {
+    const newShowingFormattingHelp = [...showingFormattingHelp];
+    newShowingFormattingHelp[index] = !newShowingFormattingHelp[index];
+    setShowingFormattingHelp(newShowingFormattingHelp);
   };
 
   return (
@@ -165,6 +172,12 @@ export const MiceAuthoringComponent: React.FC<IProps> = ({initialAuthoring}) => 
                   <Field name="populations.instructions" as="textarea"
                     placeholder="Add instructions..."
                   />
+                  <div className="formatting-help">
+                    <div className="toggle-help" onClick={handleToggleFormatting(0)}>
+                      { showingFormattingHelp[0] ? "Hide formatting help" : "Formatting help" }
+                    </div>
+                    { showingFormattingHelp[0] && formattingHelp() }
+                  </div>
                   <h3>Environment and Hawks</h3>
                   <label>
                     <Field type="checkbox" name="populations.showSwitchEnvironmentsButton" />
@@ -319,6 +332,12 @@ export const MiceAuthoringComponent: React.FC<IProps> = ({initialAuthoring}) => 
                   <Field name="organisms.instructions" as="textarea"
                     placeholder="Add instructions..."
                   />
+                  <div className="formatting-help">
+                    <div className="toggle-help" onClick={handleToggleFormatting(1)}>
+                      { showingFormattingHelp[1] ? "Hide formatting help" : "Formatting help" }
+                    </div>
+                    { showingFormattingHelp[1] && formattingHelp() }
+                  </div>
                   <h3>Cell and Substance Labels</h3>
                   <div className="instruction">
                     Select to replace scientific names with masked labels.
@@ -362,6 +381,12 @@ export const MiceAuthoringComponent: React.FC<IProps> = ({initialAuthoring}) => 
                   <Field name="breeding.instructions" as="textarea"
                     placeholder="Add instructions..."
                   />
+                  <div className="formatting-help">
+                    <div className="toggle-help" onClick={handleToggleFormatting(2)}>
+                      { showingFormattingHelp[2] ? "Hide formatting help" : "Formatting help" }
+                    </div>
+                    { showingFormattingHelp[2] && formattingHelp() }
+                  </div>
                   <h3>Offspring: Mutations</h3>
                   <label>
                     <Field type="checkbox" name="breeding.breedWithMutations" />

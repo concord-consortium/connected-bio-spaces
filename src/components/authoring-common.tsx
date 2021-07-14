@@ -91,3 +91,78 @@ This will delete all your changes and restore this page to its original default 
     setModelUrl("");
   }
 };
+
+export const formattingHelp = () =>
+  <div className="formatting-help-body">
+    <h3>Formatting Help</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Markdown</th>
+          <th>Result</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            # Big heading<br/><br/>
+            ## Smaller heading
+          </td>
+          <td>
+            <h1>Big heading</h1>
+            <h2>Smaller heading</h2>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Paragraphs must be separated by an empty line.<br/><br/>
+            Second paragraph.
+          </td>
+          <td>
+            Paragraphs must be separated by an empty line.<br/><br/>
+            Second paragraph.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            **Bold text**<br/>
+            *Italic text*<br/>
+            Normal text
+          </td>
+          <td>
+            <strong>Bold text</strong><br/>
+            <em>Italic text</em><br/>
+            Normal text
+          </td>
+        </tr>
+        <tr>
+          <td>
+            1. Numbered<br/>
+            2. List<br/><br/>
+            * Bulleted<br/>
+            * List
+          </td>
+          <td>
+            <ol>
+              <li>Numbered</li>
+              <li>List</li>
+            </ol>
+            <ul>
+              <li>Bulleted</li>
+              <li>List</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            &lt;img<br/>
+            src="http://connected-bio-spaces.concord.org/<wbr/>assets/unit/mouse/mouse_field.png"<br/>
+            width="50"/&gt;
+          </td>
+          <td>
+            <img src="http://connected-bio-spaces.concord.org/assets/unit/mouse/mouse_field.png" width="50"/>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>;
