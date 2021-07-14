@@ -135,10 +135,10 @@ export const MiceAuthoringComponent: React.FC<IProps> = ({initialAuthoring}) => 
                                 <label>
                                   Genotype
                                   <Field name={`backpack.collectedMice.${index}.genotype`} as="select">
-                                    <option value="RR">RR (brown)</option>
-                                    <option value="RC">RC (tan)</option>
-                                    <option value="CR">CR (tan)</option>
-                                    <option value="CC">CC (white)</option>
+                                    <option value="RR">RᴰRᴰ (brown)</option>
+                                    <option value="RC">RᴰRᴸ (tan)</option>
+                                    <option value="CR">RᴸRᴰ (tan)</option>
+                                    <option value="CC">RᴸRᴸ (white)</option>
                                   </Field>
                                 </label>
                                 <span className="icon-button delete-mouse">
