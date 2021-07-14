@@ -54,8 +54,19 @@ function initializeModel(studentData: UserSaveDataType) {
       ), appRoot
     );
   } else if (window.location.pathname.indexOf("peas-authoring") >= 0) {
+    const peasInitialStore = {
+      ...initialStore,
+      unit: "pea",
+      leftPanel: false,
+      ui: {
+        ...initialStore.ui,
+        investigationPanelSpace: "breeding",
+        showPopulationSpace: false,
+        showOrganismSpace: false
+      }
+    } as ConnectedBioModelCreationType;
     ReactDOM.render((
-      <PeasAuthoringComponent/>
+      <PeasAuthoringComponent initialAuthoring={peasInitialStore} />
       ), appRoot
     );
   } else {
