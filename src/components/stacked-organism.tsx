@@ -26,7 +26,7 @@ export const StackedOrganism: React.SFC<IProps> = (props) => {
   const { organism, organismImages, height, flipped, showSelection, showGameteSelection, showInspect, showSex,
     showHetero, showLabel, isOffspring, ignoreHeteroStyleAdjustment } = props;
   const selectionClass = "selection-stack " + (showSelection ? "show" : "");
-  const gameteViewClass = "gamete-view-stack " + (showGameteSelection ? "show" : "");
+  const gameteViewClass = "gamete-view-stack " + ((showGameteSelection && !showSelection) ? "show" : "");
   const inspectClass = "inspect-stack";
   const heteroClass = "hetero-stack " + ((showHetero && organism.isHeterozygote) ? "show" : "");
   const sexClass = "sex-stack " + organism.sex + (showSex ? " show" : "");
@@ -55,9 +55,10 @@ export const StackedOrganism: React.SFC<IProps> = (props) => {
   return (
     <div className={`stacked-organism ${organism.species}`} style={fullSize}>
       { showGameteSelection && <div className={gameteViewClass} style={fullSize} data-test="gamete-view" /> }
-      { showInspect && <div className={inspectClass} style={fullSize} data-test="inspect-view" /> }
-      { showLabel && <div className={labelClass} dangerouslySetInnerHTML={{ __html: label }}/> }
+      { (showInspect && !showGameteSelection) &&
+        <div className={inspectClass} style={fullSize} data-test="inspect-view" /> }
       <img src={selectionImage} className={selectionClass} style={fullSize} data-test="selection-image" />
+      { showLabel && <div className={labelClass} dangerouslySetInnerHTML={{ __html: label }}/> }
       { organismImages.map((image, i) =>
           <img
             src={image}
