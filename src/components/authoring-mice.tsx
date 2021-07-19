@@ -163,293 +163,302 @@ export const MiceAuthoringComponent: React.FC<IProps> = ({initialAuthoring}) => 
                     />
                   </div>
                 </div>
-                <div className="section level population">
-                  <h2>Population Level</h2>
-                  <h3>Population Level Instructions</h3>
-                  <div className="instruction">
-                    Optional: Add instructions for this level to be displayed in the right-hand panel of the simulation.
-                  </div>
-                  <Field name="populations.instructions" as="textarea"
-                    placeholder="Add instructions..."
-                  />
-                  <div className="formatting-help">
-                    <div className="toggle-help" onClick={handleToggleFormatting(0)}>
-                      { showingFormattingHelp[0] ? "Hide formatting help" : "Formatting help" }
+                { values.ui!.showPopulationSpace &&
+                  <div className="section level population">
+                    <h2>Population Level</h2>
+                    <h3>Population Level Instructions</h3>
+                    <div className="instruction">
+                      Optional: Add instructions for this level to be displayed in the right-hand panel of the
+                      simulation.
                     </div>
-                    { showingFormattingHelp[0] && formattingHelp() }
-                  </div>
-                  <h3>Environment and Hawks</h3>
-                  <label>
-                    <Field type="checkbox" name="populations.showSwitchEnvironmentsButton" />
-                    Enable <b>Change environment</b> button
-                  </label>
-                  <label className="inset">
-                    <Field type="checkbox" name="populations.includeNeutralEnvironment" />
-                    Include mixed environment option
-                  </label>
-                  <label>
-                    Initial environment displayed
-                    <Field name="populations.environment" as="select">
-                      <option value="white">Beach</option>
-                      <option value="neutral">Mixed</option>
-                      <option value="brown">Field</option>
-                    </Field>
-                  </label>
-                  {errors.cantStartWithNeutralIfHidden ? error(errors.cantStartWithNeutralIfHidden as string) : null}
-                  <label>
-                    Number of hawks
-                    <Field name="populations.numHawks"
-                      type="number"
-                      min="0"
-                      max="10"
+                    <Field name="populations.instructions" as="textarea"
+                      placeholder="Add instructions..."
                     />
-                    <span className="instruction">(0-10)</span>
-                  </label>
-                  {errors.numHawks ? error(errors.numHawks as string) : null}
-                  <h3>Initial Mouse Population</h3>
-                  <div className="instruction">
-                    Set the percentage of each color of mouse in the initial population. Note that the percentage of
-                    dark brown mice will always fill the remainder to add up to 100%.
-                  </div>
-                  <label className="initial-population">
-                    <div className="color-swatch light" />
-                    <span>Light brown mice</span>
-                    <Field name="populations.initialPopulation.white"
-                      type="number"
-                      min="0"
-                      max="100"
-                      step="any"
-                    />
-                    %
-                  </label>
-                  <label className="initial-population">
-                    <div className="color-swatch medium" />
-                    <span>Medium brown mice</span>
-                    <Field name="populations.initialPopulation.tan"
-                      type="number"
-                      min="0"
-                      max="100"
-                      step="any"
-                    />
-                    %
-                  </label>
-                  <label className="initial-population disabled">
-                    <div className="color-swatch dark" />
-                    <span>Dark brown mice</span>
-                    <Field disabled={true}
-                      type="number"
-                      value={
-                        Math.max(0, Math.round(
-                          (100 - (values.populations!.initialPopulation!.white!
-                            + values.populations!.initialPopulation!.tan!))
-                          * 100
-                        ) / 100)
-                      }
-                    />
-                    %
-                  </label>
-                  {errors.initialPopulation ? error(errors.initialPopulation as string) : null}
-                  <h3>Genotype Labeling</h3>
-                  <label>
-                    <Field type="checkbox" name="populations.showInspectGenotype" />
-                    Show mouse genotype in the Inspect View
-                  </label>
-                  <h3>Offspring: Inheritance and Mutations</h3>
-                  <label>
-                    <Field type="checkbox" name="populations.inheritance.breedWithInheritance" />
-                    Breed with inheritance
-                  </label>
-                  <div className="instruction nested-instruction">
-                    <b>Selected:</b> Parents pass their genes for fur color to their offspring.<br/>
-                    <b>Unselected:</b> All offspring have random phenotypes.
-                  </div>
-                  <label>
-                    <Field type="checkbox" name="populations.inheritance.showStudentControlOfInheritance" />
-                    Enable <b>Inheritance</b> checkbox
-                  </label>
-                  <div className="instruction nested-instruction">
-                    Allows for inheritance to be turned on/off in the simulation
-                  </div>
-                  <hr />
-                  <label>
-                    <Field type="checkbox" name="populations.inheritance.breedWithMutations" />
-                    Breed with mutations
-                  </label>
-                  <div className="instruction nested-instruction">
-                    <b>Selected:</b> Mutations may randomly occur in offspring, and are passed down.<br/>
-                    <b>Unselected:</b> No mutations occur.
-                  </div>
-                  <label>
-                    <Field type="checkbox" name="populations.inheritance.showStudentControlOfMutations" />
-                    Enable <b>Mutations</b> checkbox
-                  </label>
-                  <div className="instruction nested-instruction">
-                    Allows for mutations to be turned on/off in the simulation
-                  </div>
-                  <label className={(!values.populations!.inheritance!.breedWithMutations! &&
-                      !values.populations!.inheritance!.showStudentControlOfMutations!) ? "disabled" : ""}>
-                    Chance of mutations
-                    <Field name="populations.inheritance.chanceOfMutations"
-                      type="number"
-                      min="0"
-                      max="100"
-                      step="any"
-                      disabled={(!values.populations!.inheritance!.breedWithMutations! &&
-                        !values.populations!.inheritance!.showStudentControlOfMutations!)}
-                    />
-                    %&nbsp;
-                    <span className="instruction">(0-100)</span>
-                  </label>
-                  {errors.popChanceOfMutations ? error(errors.popChanceOfMutations as string) : null}
-                  <h3>Data Graphs</h3>
-                  <div className="instruction">
-                    Select the graphs that can be displayed in the simulation. At least one graph must be shown.
-                  </div>
-                  <label>
-                    <Field type="checkbox" name="populations.enableColorChart" />
-                    Enable <b>Fur Colors</b> graph button
-                  </label>
-                  <label>
-                    <Field type="checkbox" name="populations.enableGenotypeChart" />
-                    Enable <b>Genotypes</b> graph button
-                  </label>
-                  <label>
-                    <Field type="checkbox" name="populations.enableAllelesChart" />
-                    Enable <b>Alleles</b> graph button
-                  </label>
-                  {errors.onePopulationChart ? error(errors.onePopulationChart as string) : null}
-                  <label>
-                    <Field type="checkbox" name="populations.enablePieChart" />
-                    Show <b>Pie Charts</b> button
-                  </label>
-                </div>
-                <div className="section level organism">
-                  <h2>Organism Level</h2>
-                  <h3>Organism Level Instructions</h3>
-                  <div className="instruction">
-                    Optional: Add instructions for this level to be displayed in the right-hand panel of the simulation.
-                  </div>
-                  <Field name="organisms.instructions" as="textarea"
-                    placeholder="Add instructions..."
-                  />
-                  <div className="formatting-help">
-                    <div className="toggle-help" onClick={handleToggleFormatting(1)}>
-                      { showingFormattingHelp[1] ? "Hide formatting help" : "Formatting help" }
+                    <div className="formatting-help">
+                      <div className="toggle-help" onClick={handleToggleFormatting(0)}>
+                        { showingFormattingHelp[0] ? "Hide formatting help" : "Formatting help" }
+                      </div>
+                      { showingFormattingHelp[0] && formattingHelp() }
                     </div>
-                    { showingFormattingHelp[1] && formattingHelp() }
-                  </div>
-                  <h3>Cell and Substance Labels</h3>
-                  <div className="instruction">
-                    Select to replace scientific names with masked labels.
-                  </div>
-                  <label>
-                    <Field type="checkbox" name="organisms.useMysteryOrganelles" />
-                    Show masked labels for the parts of the cell
-                  </label>
-                  <div className="instruction nested-instruction">
-                    For example, "Golgi" will be replaced with "Location 1."
-                  </div>
-                  <label>
-                    <Field type="checkbox" name="organisms.useMysterySubstances" />
-                    Show masked labels for substances
-                  </label>
-                  <div className="instruction nested-instruction">
-                    For example, "Pheomelanin" will be replaced with "Substance A."
-                  </div>
-                  <h3>Additional Investigations: Receptor Proteins and Nucleus</h3>
-                  <label>
-                    <Field type="checkbox" name="organisms.showZoomToReceptor" />
-                    Enable <b>Target Zoom</b> button to the cell membrane
-                  </label>
-                  <div className="instruction nested-instruction">
-                    Allows for further investigation of the receptor proteins
-                  </div>
-                  <label>
-                    <Field type="checkbox" name="organisms.showZoomToNucleus" />
-                    Enable <b>Target Zoom</b> button to the nucleus
-                  </label>
-                  <div className="instruction nested-instruction">
-                    Allows for further investigation of the chromosomes
-                  </div>
-                </div>
-                <div className="section level breeding">
-                  <h2>Heredity Level</h2>
-                  <h3>Heredity Level Instructions</h3>
-                  <div className="instruction">
-                    Optional: Add instructions for this level to be displayed in the right-hand panel of the simulation.
-                  </div>
-                  <Field name="breeding.instructions" as="textarea"
-                    placeholder="Add instructions..."
-                  />
-                  <div className="formatting-help">
-                    <div className="toggle-help" onClick={handleToggleFormatting(2)}>
-                      { showingFormattingHelp[2] ? "Hide formatting help" : "Formatting help" }
+                    <h3>Environment and Hawks</h3>
+                    <label>
+                      <Field type="checkbox" name="populations.showSwitchEnvironmentsButton" />
+                      Enable <b>Change environment</b> button
+                    </label>
+                    <label className="inset">
+                      <Field type="checkbox" name="populations.includeNeutralEnvironment" />
+                      Include mixed environment option
+                    </label>
+                    <label>
+                      Initial environment displayed
+                      <Field name="populations.environment" as="select">
+                        <option value="white">Beach</option>
+                        <option value="neutral">Mixed</option>
+                        <option value="brown">Field</option>
+                      </Field>
+                    </label>
+                    {errors.cantStartWithNeutralIfHidden ? error(errors.cantStartWithNeutralIfHidden as string) : null}
+                    <label>
+                      Number of hawks
+                      <Field name="populations.numHawks"
+                        type="number"
+                        min="0"
+                        max="10"
+                      />
+                      <span className="instruction">(0-10)</span>
+                    </label>
+                    {errors.numHawks ? error(errors.numHawks as string) : null}
+                    <h3>Initial Mouse Population</h3>
+                    <div className="instruction">
+                      Set the percentage of each color of mouse in the initial population. Note that the percentage of
+                      dark brown mice will always fill the remainder to add up to 100%.
                     </div>
-                    { showingFormattingHelp[2] && formattingHelp() }
+                    <label className="initial-population">
+                      <div className="color-swatch light" />
+                      <span>Light brown mice</span>
+                      <Field name="populations.initialPopulation.white"
+                        type="number"
+                        min="0"
+                        max="100"
+                        step="any"
+                      />
+                      %
+                    </label>
+                    <label className="initial-population">
+                      <div className="color-swatch medium" />
+                      <span>Medium brown mice</span>
+                      <Field name="populations.initialPopulation.tan"
+                        type="number"
+                        min="0"
+                        max="100"
+                        step="any"
+                      />
+                      %
+                    </label>
+                    <label className="initial-population disabled">
+                      <div className="color-swatch dark" />
+                      <span>Dark brown mice</span>
+                      <Field disabled={true}
+                        type="number"
+                        value={
+                          Math.max(0, Math.round(
+                            (100 - (values.populations!.initialPopulation!.white!
+                              + values.populations!.initialPopulation!.tan!))
+                            * 100
+                          ) / 100)
+                        }
+                      />
+                      %
+                    </label>
+                    {errors.initialPopulation ? error(errors.initialPopulation as string) : null}
+                    <h3>Genotype Labeling</h3>
+                    <label>
+                      <Field type="checkbox" name="populations.showInspectGenotype" />
+                      Show mouse genotype in the Inspect View
+                    </label>
+                    <h3>Offspring: Inheritance and Mutations</h3>
+                    <label>
+                      <Field type="checkbox" name="populations.inheritance.breedWithInheritance" />
+                      Breed with inheritance
+                    </label>
+                    <div className="instruction nested-instruction">
+                      <b>Selected:</b> Parents pass their genes for fur color to their offspring.<br/>
+                      <b>Unselected:</b> All offspring have random phenotypes.
+                    </div>
+                    <label>
+                      <Field type="checkbox" name="populations.inheritance.showStudentControlOfInheritance" />
+                      Enable <b>Inheritance</b> checkbox
+                    </label>
+                    <div className="instruction nested-instruction">
+                      Allows for inheritance to be turned on/off in the simulation
+                    </div>
+                    <hr />
+                    <label>
+                      <Field type="checkbox" name="populations.inheritance.breedWithMutations" />
+                      Breed with mutations
+                    </label>
+                    <div className="instruction nested-instruction">
+                      <b>Selected:</b> Mutations may randomly occur in offspring, and are passed down.<br/>
+                      <b>Unselected:</b> No mutations occur.
+                    </div>
+                    <label>
+                      <Field type="checkbox" name="populations.inheritance.showStudentControlOfMutations" />
+                      Enable <b>Mutations</b> checkbox
+                    </label>
+                    <div className="instruction nested-instruction">
+                      Allows for mutations to be turned on/off in the simulation
+                    </div>
+                    <label className={(!values.populations!.inheritance!.breedWithMutations! &&
+                        !values.populations!.inheritance!.showStudentControlOfMutations!) ? "disabled" : ""}>
+                      Chance of mutations
+                      <Field name="populations.inheritance.chanceOfMutations"
+                        type="number"
+                        min="0"
+                        max="100"
+                        step="any"
+                        disabled={(!values.populations!.inheritance!.breedWithMutations! &&
+                          !values.populations!.inheritance!.showStudentControlOfMutations!)}
+                      />
+                      %&nbsp;
+                      <span className="instruction">(0-100)</span>
+                    </label>
+                    {errors.popChanceOfMutations ? error(errors.popChanceOfMutations as string) : null}
+                    <h3>Data Graphs</h3>
+                    <div className="instruction">
+                      Select the graphs that can be displayed in the simulation. At least one graph must be shown.
+                    </div>
+                    <label>
+                      <Field type="checkbox" name="populations.enableColorChart" />
+                      Enable <b>Fur Colors</b> graph button
+                    </label>
+                    <label>
+                      <Field type="checkbox" name="populations.enableGenotypeChart" />
+                      Enable <b>Genotypes</b> graph button
+                    </label>
+                    <label>
+                      <Field type="checkbox" name="populations.enableAllelesChart" />
+                      Enable <b>Alleles</b> graph button
+                    </label>
+                    {errors.onePopulationChart ? error(errors.onePopulationChart as string) : null}
+                    <label>
+                      <Field type="checkbox" name="populations.enablePieChart" />
+                      Show <b>Pie Charts</b> button
+                    </label>
                   </div>
-                  <h3>Offspring: Mutations</h3>
-                  <label>
-                    <Field type="checkbox" name="breeding.breedWithMutations" />
-                    Breed with mutations
-                  </label>
-                  <div className="instruction nested-instruction">
-                    <b>Selected:</b> Mutations may randomly occur in offspring, and are passed down.<br/>
-                    <b>Unselected:</b> No mutations occur.
-                  </div>
-                  <label>
-                    <Field type="checkbox" name="breeding.enableStudentControlOfMutations" />
-                    Enable <b>Mutations</b> checkbox
-                  </label>
-                  <div className="instruction nested-instruction">
-                    Allows for mutations to be turned on/off in the simulation
-                  </div>
-                  <label className={(!values.breeding!.breedWithMutations! &&
-                      !values.breeding!.enableStudentControlOfMutations!) ? "disabled" : ""}>
-                    Chance of mutations
-                    <Field name="breeding.chanceOfMutations"
-                      type="number"
-                      min="0"
-                      max="100"
-                      step="any"
-                      disabled={(!values.breeding!.breedWithMutations! &&
-                        !values.breeding!.enableStudentControlOfMutations!)}
+                }
+                { values.ui!.showOrganismSpace &&
+                  <div className="section level organism">
+                    <h2>Organism Level</h2>
+                    <h3>Organism Level Instructions</h3>
+                    <div className="instruction">
+                      Optional: Add instructions for this level to be displayed in the right-hand panel of the
+                      simulation.
+                    </div>
+                    <Field name="organisms.instructions" as="textarea"
+                      placeholder="Add instructions..."
                     />
-                    %&nbsp;
-                    <span className="instruction">(0-100)</span>
-                  </label>
-                  {errors.breedingChanceOfMutations ? error(errors.breedingChanceOfMutations as string) : null}
-                  <h3>Inspect Gametes</h3>
-                  <label>
-                    <Field type="checkbox" name="breeding.enableInspectGametes" />
-                    Enable <b>Inspect Gametes</b> button in the Breeding View
-                  </label>
-                  <h3>Genotype Labeling</h3>
-                  <label>
-                    <Field type="checkbox" name="breeding.showParentGenotype" />
-                    Show parent genotype in the Inspect View
-                  </label>
-                  <label>
-                    <Field type="checkbox" name="breeding.showOffspringGenotype" />
-                    Show offspring genotype in the Inspect View
-                  </label>
-                  <h3>Data Graphs</h3>
-                  <div className="instruction">
-                    Select the graphs that can be displayed in the simulation. At least one graph must be shown.
+                    <div className="formatting-help">
+                      <div className="toggle-help" onClick={handleToggleFormatting(1)}>
+                        { showingFormattingHelp[1] ? "Hide formatting help" : "Formatting help" }
+                      </div>
+                      { showingFormattingHelp[1] && formattingHelp() }
+                    </div>
+                    <h3>Cell and Substance Labels</h3>
+                    <div className="instruction">
+                      Select to replace scientific names with masked labels.
+                    </div>
+                    <label>
+                      <Field type="checkbox" name="organisms.useMysteryOrganelles" />
+                      Show masked labels for the parts of the cell
+                    </label>
+                    <div className="instruction nested-instruction">
+                      For example, "Golgi" will be replaced with "Location 1."
+                    </div>
+                    <label>
+                      <Field type="checkbox" name="organisms.useMysterySubstances" />
+                      Show masked labels for substances
+                    </label>
+                    <div className="instruction nested-instruction">
+                      For example, "Pheomelanin" will be replaced with "Substance A."
+                    </div>
+                    <h3>Additional Investigations: Receptor Proteins and Nucleus</h3>
+                    <label>
+                      <Field type="checkbox" name="organisms.showZoomToReceptor" />
+                      Enable <b>Target Zoom</b> button to the cell membrane
+                    </label>
+                    <div className="instruction nested-instruction">
+                      Allows for further investigation of the receptor proteins
+                    </div>
+                    <label>
+                      <Field type="checkbox" name="organisms.showZoomToNucleus" />
+                      Enable <b>Target Zoom</b> button to the nucleus
+                    </label>
+                    <div className="instruction nested-instruction">
+                      Allows for further investigation of the chromosomes
+                    </div>
                   </div>
-                  <label>
-                    <Field type="checkbox" name="breeding.enableColorChart" />
-                    Enable <b>Fur Colors</b> graph button
-                  </label>
-                  <label>
-                    <Field type="checkbox" name="breeding.enableGenotypeChart" />
-                    Enable <b>Genotypes</b> graph button
-                  </label>
-                  <label>
-                    <Field type="checkbox" name="breeding.enableSexChart" />
-                    Enable <b>Sex</b> graph button
-                  </label>
-                  {errors.oneBreedingChart ? error(errors.oneBreedingChart as string) : null}
-                </div>
+                }
+                { values.ui!.showBreedingSpace &&
+                  <div className="section level breeding">
+                    <h2>Heredity Level</h2>
+                    <h3>Heredity Level Instructions</h3>
+                    <div className="instruction">
+                      Optional: Add instructions for this level to be displayed in the right-hand panel of the
+                      simulation.
+                    </div>
+                    <Field name="breeding.instructions" as="textarea"
+                      placeholder="Add instructions..."
+                    />
+                    <div className="formatting-help">
+                      <div className="toggle-help" onClick={handleToggleFormatting(2)}>
+                        { showingFormattingHelp[2] ? "Hide formatting help" : "Formatting help" }
+                      </div>
+                      { showingFormattingHelp[2] && formattingHelp() }
+                    </div>
+                    <h3>Offspring: Mutations</h3>
+                    <label>
+                      <Field type="checkbox" name="breeding.breedWithMutations" />
+                      Breed with mutations
+                    </label>
+                    <div className="instruction nested-instruction">
+                      <b>Selected:</b> Mutations may randomly occur in offspring, and are passed down.<br/>
+                      <b>Unselected:</b> No mutations occur.
+                    </div>
+                    <label>
+                      <Field type="checkbox" name="breeding.enableStudentControlOfMutations" />
+                      Enable <b>Mutations</b> checkbox
+                    </label>
+                    <div className="instruction nested-instruction">
+                      Allows for mutations to be turned on/off in the simulation
+                    </div>
+                    <label className={(!values.breeding!.breedWithMutations! &&
+                        !values.breeding!.enableStudentControlOfMutations!) ? "disabled" : ""}>
+                      Chance of mutations
+                      <Field name="breeding.chanceOfMutations"
+                        type="number"
+                        min="0"
+                        max="100"
+                        step="any"
+                        disabled={(!values.breeding!.breedWithMutations! &&
+                          !values.breeding!.enableStudentControlOfMutations!)}
+                      />
+                      %&nbsp;
+                      <span className="instruction">(0-100)</span>
+                    </label>
+                    {errors.breedingChanceOfMutations ? error(errors.breedingChanceOfMutations as string) : null}
+                    <h3>Inspect Gametes</h3>
+                    <label>
+                      <Field type="checkbox" name="breeding.enableInspectGametes" />
+                      Enable <b>Inspect Gametes</b> button in the Breeding View
+                    </label>
+                    <h3>Genotype Labeling</h3>
+                    <label>
+                      <Field type="checkbox" name="breeding.showParentGenotype" />
+                      Show parent genotype in the Inspect View
+                    </label>
+                    <label>
+                      <Field type="checkbox" name="breeding.showOffspringGenotype" />
+                      Show offspring genotype in the Inspect View
+                    </label>
+                    <h3>Data Graphs</h3>
+                    <div className="instruction">
+                      Select the graphs that can be displayed in the simulation. At least one graph must be shown.
+                    </div>
+                    <label>
+                      <Field type="checkbox" name="breeding.enableColorChart" />
+                      Enable <b>Fur Colors</b> graph button
+                    </label>
+                    <label>
+                      <Field type="checkbox" name="breeding.enableGenotypeChart" />
+                      Enable <b>Genotypes</b> graph button
+                    </label>
+                    <label>
+                      <Field type="checkbox" name="breeding.enableSexChart" />
+                      Enable <b>Sex</b> graph button
+                    </label>
+                    {errors.oneBreedingChart ? error(errors.oneBreedingChart as string) : null}
+                  </div>
+                }
                 <hr />
                 <div className="submit">
                   <button className="nice-button"  type="submit"
