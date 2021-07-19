@@ -87,9 +87,9 @@ export const MiceAuthoringComponent: React.FC<IProps> = ({initialAuthoring}) => 
                       Initial level displayed
                       <Field name="ui.investigationPanelSpace" as="select">
                         <option value="none">None</option>
-                        <option value="populations">Population</option>
-                        <option value="organism">Organism</option>
-                        <option value="breeding">Heredity</option>
+                        <option value="populations" disabled={!values.ui!.showPopulationSpace}>Population</option>
+                        <option value="organism" disabled={!values.ui!.showOrganismSpace}>Organism</option>
+                        <option value="breeding" disabled={!values.ui!.showBreedingSpace}>Heredity</option>
                       </Field>
                     </label>
                     {errors.showingHiddenSpace ? error(errors.showingHiddenSpace as string) : null}
