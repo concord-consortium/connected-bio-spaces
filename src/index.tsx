@@ -49,8 +49,15 @@ function initializeModel(studentData: UserSaveDataType) {
       ), appRoot
     );
   } else if (window.location.pathname.indexOf("mice-authoring") >= 0) {
+    const miceInitialStore = {
+      ...initialStore,
+      ui: {
+        ...initialStore.ui,
+        investigationPanelSpace: "populations"
+      }
+    } as ConnectedBioModelCreationType;
     ReactDOM.render((
-      <MiceAuthoringComponent initialAuthoring={initialStore} />
+      <MiceAuthoringComponent initialAuthoring={miceInitialStore} />
       ), appRoot
     );
   } else if (window.location.pathname.indexOf("peas-authoring") >= 0) {
