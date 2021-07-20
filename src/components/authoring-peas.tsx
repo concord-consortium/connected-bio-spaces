@@ -78,7 +78,7 @@ export const PeasAuthoringComponent: React.FC<IProps> = ({initialAuthoring}) => 
                     Breed with mutations
                   </label>
                   <div className="instruction nested-instruction">
-                    <b>Selected:</b> Mutations in pea shape genes may randomly occur in offspring, and are
+                    <b>Selected:</b> Mutations in pea shape genes may randomly occur in offspring and are
                     passed down.<br/>
                     <b>Unselected:</b> No mutations occur.
                   </div>
