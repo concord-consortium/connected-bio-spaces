@@ -186,7 +186,8 @@ export const MiceAuthoringComponent: React.FC<IProps> = ({initialAuthoring}) => 
                       Enable <b>Change environment</b> button
                     </label>
                     <label className="inset">
-                      <Field type="checkbox" name="populations.includeNeutralEnvironment" />
+                      <Field type="checkbox" name="populations.includeNeutralEnvironment"
+                        disabled={!values.populations!.showSwitchEnvironmentsButton} />
                       Include mixed environment option
                     </label>
                     <label>
