@@ -279,7 +279,8 @@ export const MiceAuthoringComponent: React.FC<IProps> = ({initialAuthoring}) => 
                       Breed with mutations
                     </label>
                     <div className="instruction nested-instruction">
-                      <b>Selected:</b> Mutations may randomly occur in offspring, and are passed down.<br/>
+                      <b>Selected:</b> Mutations in fur color genes may randomly occur in offspring, and are
+                      passed down.<br/>
                       <b>Unselected:</b> No mutations occur.
                     </div>
                     <label>
@@ -402,7 +403,8 @@ export const MiceAuthoringComponent: React.FC<IProps> = ({initialAuthoring}) => 
                       Breed with mutations
                     </label>
                     <div className="instruction nested-instruction">
-                      <b>Selected:</b> Mutations may randomly occur in offspring, and are passed down.<br/>
+                      <b>Selected:</b> Mutations in fur color genes may randomly occur in offspring, and are
+                      passed down.<br/>
                       <b>Unselected:</b> No mutations occur.
                     </div>
                     <label>
