@@ -64,8 +64,10 @@ export const validate = (setModelUrl: (url: string) => void) => (values: Connect
     errors.breedingChanceOfMutations = "Chance of mutations must be between 0 and 100";
   }
 
-  if (!values.breeding!.enableColorChart! &&
-    !values.breeding!.enableGenotypeChart! && !values.breeding!.enableSexChart!) {
+  if ((!values.breeding!.enableColorChart! &&
+      !values.breeding!.enableGenotypeChart! && !values.breeding!.enableSexChart!) ||
+      (values.unit === "pea" &&
+      !values.breeding!.enableColorChart! && !values.breeding!.enableGenotypeChart!)) {
     errors.oneBreedingChart = "At least on graph must be selected";
   }
 
