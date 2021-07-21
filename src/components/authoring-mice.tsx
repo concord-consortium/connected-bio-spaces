@@ -110,9 +110,9 @@ export const MiceAuthoringComponent: React.FC<IProps> = ({initialAuthoring}) => 
                   </div>
                 </div>
                 <div className="section sample">
-                  <h2>Samples Collection</h2>
+                  <h2>Sample Collection</h2>
                   <div className="instruction">
-                    Optional: Preload the Samples collection with up to 6 mice.
+                    Optional: Preload the Sample collection with up to 6 mice.
                   </div>
                   <div className="backpack-items">
                     <FieldArray
