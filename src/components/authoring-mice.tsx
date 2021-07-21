@@ -110,9 +110,9 @@ export const MiceAuthoringComponent: React.FC<IProps> = ({initialAuthoring}) => 
                   </div>
                 </div>
                 <div className="section sample">
-                  <h2>Samples Collection</h2>
+                  <h2>Sample Collection</h2>
                   <div className="instruction">
-                    Optional: Preload the Samples collection with up to 6 mice.
+                    Optional: Preload the Sample collection with up to 6 mice.
                   </div>
                   <div className="backpack-items">
                     <FieldArray
@@ -186,7 +186,8 @@ export const MiceAuthoringComponent: React.FC<IProps> = ({initialAuthoring}) => 
                       Enable <b>Change environment</b> button
                     </label>
                     <label className="inset">
-                      <Field type="checkbox" name="populations.includeNeutralEnvironment" />
+                      <Field type="checkbox" name="populations.includeNeutralEnvironment"
+                        disabled={!values.populations!.showSwitchEnvironmentsButton} />
                       Include mixed environment option
                     </label>
                     <label>
@@ -278,7 +279,8 @@ export const MiceAuthoringComponent: React.FC<IProps> = ({initialAuthoring}) => 
                       Breed with mutations
                     </label>
                     <div className="instruction nested-instruction">
-                      <b>Selected:</b> Mutations may randomly occur in offspring, and are passed down.<br/>
+                      <b>Selected:</b> Mutations in fur color genes may randomly occur in offspring and are
+                      passed down.<br/>
                       <b>Unselected:</b> No mutations occur.
                     </div>
                     <label>
@@ -401,7 +403,8 @@ export const MiceAuthoringComponent: React.FC<IProps> = ({initialAuthoring}) => 
                       Breed with mutations
                     </label>
                     <div className="instruction nested-instruction">
-                      <b>Selected:</b> Mutations may randomly occur in offspring, and are passed down.<br/>
+                      <b>Selected:</b> Mutations in fur color genes may randomly occur in offspring and are
+                      passed down.<br/>
                       <b>Unselected:</b> No mutations occur.
                     </div>
                     <label>
