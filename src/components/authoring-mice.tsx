@@ -470,7 +470,7 @@ export const MiceAuthoringComponent: React.FC<IProps> = ({initialAuthoring}) => 
                     <svg className="icon">
                       <use xlinkHref="#icon-submit" />
                     </svg>
-                    Publish & Preview
+                    Create model URL
                   </button>
                   <input value={modelUrl} />
                   <div className={`copy icon-button${modelUrl ? "" : " disabled"}`} onClick={handleCopyUrl}>
