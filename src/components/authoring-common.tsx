@@ -51,12 +51,12 @@ export const validate = (setModelUrl: (url: string) => void) => (values: Connect
   }
 
   if (values.populations!.initialPopulation!.white! + values.populations!.initialPopulation!.tan! > 100) {
-    errors.initialPopulation = "First two percentaged can't sum to more than 100%";
+    errors.initialPopulation = "First two percentages can't sum to more than 100%";
   }
 
   if (!values.populations!.enableColorChart! &&
         !values.populations!.enableGenotypeChart! && !values.populations!.enableAllelesChart!) {
-    errors.onePopulationChart = "At least on graph must be selected";
+    errors.onePopulationChart = "At least one graph must be selected";
   }
 
   if (values.breeding!.chanceOfMutations! < 0 ||
