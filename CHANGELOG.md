@@ -1,6 +1,45 @@
 # Changelog
 
-## Version 2.0.0 - released February 24 2020
+## Version 2.1.0 - released July 30, 2021
+
+### UI Features/Improvements
+- Update cursor states [178760041](https://www.pivotaltracker.com/story/show/178760041)
+- Update Arrow Alignment when Gametes Shown [178222324](https://www.pivotaltracker.com/story/show/178222324)
+- Update "Fur Colors" label and graph title in the data panel [178416878](https://www.pivotaltracker.com/story/show/178416878)
+- Update Peas Assets with Final Artwork [178222326](https://www.pivotaltracker.com/story/show/178222326)
+
+### Authoring Features/Improvements
+- Update authoring, Peas: Heredity Settings - Genotype Labeling [178502502](https://www.pivotaltracker.com/story/show/178502502)
+- Update authoring, Mouse: Explore Levels Settings [178473331](https://www.pivotaltracker.com/story/show/178473331)
+- Update authoring, Reset all settings [178473332](https://www.pivotaltracker.com/story/show/178473332)
+- Update authoring, Mouse: Population Settings - Offspring: Inheritance and Mutations [178474179](https://www.pivotaltracker.com/story/show/178474179)
+- Update authoring, Mouse: Heredity Settings - Offspring: Mutations [178474519](https://www.pivotaltracker.com/story/show/178474519)
+- Update authoring, Public Mouse & Peas Variations of Authoring Page [178222370](https://www.pivotaltracker.com/story/show/178222370)
+- Update authoring, Mouse: Sample Collection Settings [178473724](https://www.pivotaltracker.com/story/show/178473724)
+- Update authoring, Mouse: Population Settings - Genotype Labeling [178474086](https://www.pivotaltracker.com/story/show/178474086)
+- Update authoring, Mouse: Population Settings - Data Graphs [178474281](https://www.pivotaltracker.com/story/show/178474281)
+- Update authoring, Mouse: Organism Settings - Cell & Substance Labels [178474389](https://www.pivotaltracker.com/story/show/178474389)
+- Update authoring, Mouse: Heredity Settings - Inspect Gametes [178474544](https://www.pivotaltracker.com/story/show/178474544)
+- Update authoring, Mouse: Heredity Settings - Genotype Labeling [178474567](https://www.pivotaltracker.com/story/show/178474567)
+- Update authoring, Mouse: Heredity Settings - Data Graphs [178474590](https://www.pivotaltracker.com/story/show/178474590)
+- Update authoring, Peas: Heredity Settings - Inspect Gametes [178502492](https://www.pivotaltracker.com/story/show/178502492)
+- Update authoring, Publish & Preview [178474600](https://www.pivotaltracker.com/story/show/178474600)
+- Update authoring, Mouse: Population Settings - Initial Mouse Population [178474010](https://www.pivotaltracker.com/story/show/178474010)
+- Update authoring, Mouse: Organism Settings & Instructions [178474366](https://www.pivotaltracker.com/story/show/178474366)
+- Update authoring, Mouse: Population Settings - Instructions [178473986](https://www.pivotaltracker.com/story/show/178473986)
+- Update authoring, Mouse: Heredity Settings & Instructions [178474470](https://www.pivotaltracker.com/story/show/178474470)
+- Update authoring, Peas: Heredity Settings & Instructions [178502169](https://www.pivotaltracker.com/story/show/178502169)
+- Update authoring, Peas: Heredity Settings - Offspring: Mutations [178502473](https://www.pivotaltracker.com/story/show/178502473)
+- Update authoring, Mouse: Organism Settings - Additional Investigations: Receptor Proteins and Chromosomes [178474418](https://www.pivotaltracker.com/story/show/178474418)
+- Update authoring, Mouse: Population Settings - Environment & Hawks [178473793](https://www.pivotaltracker.com/story/show/178473793)
+- Update authoring, Peas: Heredity Settings - Data Graphs [178502513](https://www.pivotaltracker.com/story/show/178502513)
+- Update authoring, Additional Changes [178936935](https://www.pivotaltracker.com/story/show/178936935)
+
+### Bug Fixes
+- Travis deployment is broken [178712829](https://www.pivotaltracker.com/story/show/178712829)
+- Firefox image display [176091354](https://www.pivotaltracker.com/story/show/176091354)
+
+## Version 2.0.0 - released February 24, 2020
 
 - New Peas breeding unit
 - Many changes to support having multiple units
