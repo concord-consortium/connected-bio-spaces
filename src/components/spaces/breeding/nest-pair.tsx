@@ -48,9 +48,19 @@ export class NestPair extends BaseComponent<IProps, IState> {
     const rightMouseImages = [rightMouse.nestImage];
     if (rightMouseCollected) rightMouseImages.push(rightMouse.nestOutlineImage);
     const nestHoverImage = unitBreeding.getNestHoverImage ? unitBreeding.getNestHoverImage(positionIndex) : null;
+    const nestPlatformImage = unitBreeding.getNestPlatformImage
+      ? unitBreeding.getNestPlatformImage(positionIndex) : null;
 
     return(
       <div className={`${nestClass} ${unit}`} onClick={this.handleClickNest}>
+        { nestPlatformImage &&
+          <img
+            src={nestPlatformImage}
+            className="nest-platform"
+            data-test="nest-platform-image"
+          />
+        }
+        <div className={nestInspectClass} />
         { nestHoverImage &&
           <img
             src={nestHoverImage}
@@ -61,7 +71,6 @@ export class NestPair extends BaseComponent<IProps, IState> {
         { !nestHoverImage &&
           <div className={nestBackgroundHoverClass} />
         }
-        <div className={nestInspectClass} />
         <div className={`mouse left ${positionClass}`} onClick={this.handleClickMouse(leftMouse)}>
           <StackedOrganism
             organism={leftMouse}
@@ -70,6 +79,7 @@ export class NestPair extends BaseComponent<IProps, IState> {
             showSelection={this.props.showSelectionStack && !leftMouseCollected}
             showSex={this.props.showSexStack}
             showHetero={this.props.showHeteroStack}
+            ignoreHeteroStyleAdjustment={unit === "pea"}
           />
         </div>
         <div className={`mouse right ${positionClass}`} onClick={this.handleClickMouse(rightMouse)}>
@@ -81,6 +91,7 @@ export class NestPair extends BaseComponent<IProps, IState> {
             showSelection={this.props.showSelectionStack && !rightMouseCollected}
             showSex={this.props.showSexStack}
             showHetero={this.props.showHeteroStack}
+            ignoreHeteroStyleAdjustment={unit === "pea"}
           />
         </div>
         <div className={pairLabelClass}>{this.props.nestPair.label}</div>

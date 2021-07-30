@@ -63,8 +63,8 @@ context("Test Peas Unit UI", () => {
         .should("have.attr", "src").should("include", "unit/pea/plant_1_outline.png");
     });
 
-    it("the pair labels should read 'Exp. A'", () => {
-      cy.get(".nesting-pair-data-panel .title").contains("Exp. A").should("be.visible");
+    it("the pair labels should read 'Exp A'", () => {
+      cy.get(".nesting-pair-data-panel .title").contains("Exp A").should("be.visible");
     });
   });
 
@@ -81,7 +81,7 @@ context("Test Peas Unit UI", () => {
     });
 
     it("the parent label should be correct", () => {
-      cy.get(".parents .parent-label").contains("Exp. A").should("exist");
+      cy.get(".parents .parent-label").contains("Exp A").should("exist");
     });
 
     it("should use parent flower images for the parents", () => {

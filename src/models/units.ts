@@ -20,7 +20,7 @@ export interface UnitSpecies {
   getZoomedInParentImage?: (parent: BackpackMouseType) => string;    // if not specified, base image is used
   getOffspringImage?: (parent: BackpackMouseType) => string;         // if not specified, nest image is used
   getInspectOffspringImage?: (org: BackpackMouseType) => string;     // if not specified, base image is used
-  getInspectParentImage?: (org: BackpackMouseType) => string;
+  getInspectParentImage?: (org: BackpackMouseType, showGametes: boolean) => string;
   getInspectNestImage?: (org: BackpackMouseType) => string;
   getChartImage?: (parent: BackpackMouseType) => string;
   getChartSecondaryImage?: (parent: BackpackMouseType) => string;   // optional image below the label
@@ -77,6 +77,7 @@ interface UnitDefinition {
     showGenotypeUnderChartImage: boolean;
     getNestBackgroundImage: (backgroundType: EnvironmentColorType) => string;
     getNestHoverImage?: (nest: number) => string;
+    getNestPlatformImage?: (nest: number) => string;
   };
   dna: {
     title: string;
@@ -125,10 +126,10 @@ const flowerPotImage = (org: BackpackMouseType) => {
       return "assets/unit/pea/plant_3.png";
   }
 };
-const flowerPotZoomImage = (org: BackpackMouseType) => {
+const flowerPotZoomImage = (org: BackpackMouseType, showGametes: boolean) => {
   const lowerSnakeLabel = org.label.toLowerCase().replace(" ", "_");
   // e.g. "assets/unit/pea/plant_1_female_zoom.png"
-  return `assets/unit/pea/${lowerSnakeLabel}_${org.sex}_zoom.png`;
+  return `assets/unit/pea/${lowerSnakeLabel}_${org.sex}_${showGametes ? "gamete_" : ""}zoom.png`;
 };
 
 export const units: Units = {
@@ -150,7 +151,7 @@ export const units: Units = {
             return "tan";
         }
       },
-      phenotypeHeading: "Fur Color",
+      phenotypeHeading: "Fur Colors",
       getPhenotypeLabel: (phenotype) => {
         switch (phenotype) {
           case "white":
@@ -317,7 +318,7 @@ export const units: Units = {
               return "round";
           }
         },
-        phenotypeHeading: "Pea shape",
+        phenotypeHeading: "Pea Shape",
         getPhenotypeLabel: (phenotype) => phenotype.charAt(0).toUpperCase() + phenotype.slice(1),
         getGenotypeHTMLLabel: (genotype) => genotype.charAt(1) + genotype.charAt(0),
         getGameteHTMLLabel: (allele) => allele,
@@ -368,7 +369,7 @@ export const units: Units = {
             {genotype: "rR", label: "Plant 1"}
           ],
           label: "Experiment A",
-          chartLabel: "Exp. A",
+          chartLabel: "Exp A",
           meta: "self-fertilization",
         },
         {
@@ -377,7 +378,7 @@ export const units: Units = {
             {genotype: "RR", label: "Plant 2"}
           ],
           label: "Experiment B",
-          chartLabel: "Exp. B",
+          chartLabel: "Exp B",
         },
         {
           parents: [
@@ -385,7 +386,7 @@ export const units: Units = {
             {genotype: "RR", label: "Plant 2"}
           ],
           label: "Experiment C",
-          chartLabel: "Exp. C",
+          chartLabel: "Exp C",
           meta: "self-fertilization",
         },
         {
@@ -394,7 +395,7 @@ export const units: Units = {
             {genotype: "rr", label: "Plant 3"}
           ],
           label: "Experiment D",
-          chartLabel: "Exp. D",
+          chartLabel: "Exp D",
         },
         {
           parents: [
@@ -402,7 +403,7 @@ export const units: Units = {
             {genotype: "rr", label: "Plant 3"}
           ],
           label: "Experiment E",
-          chartLabel: "Exp. E",
+          chartLabel: "Exp E",
           meta: "self-fertilization",
         },
         {
@@ -411,7 +412,7 @@ export const units: Units = {
             {genotype: "rR", label: "Plant 1"}
           ],
           label: "Experiment F",
-          chartLabel: "Exp. F",
+          chartLabel: "Exp F",
         }
       ],
       parentSize: 94,
@@ -426,6 +427,24 @@ export const units: Units = {
       nestButtonTitle: "Greenhouse",
       showGenotypeUnderChartImage: true,
       getNestBackgroundImage: () => "assets/unit/pea/environment_greenhouse_with_shelves.png",
+      getNestPlatformImage: (nest) => {
+        switch (nest) {
+          case 1:
+            return "assets/unit/pea/shelf_A.png";
+          case 2:
+            return "assets/unit/pea/shelf_B.png";
+          case 3:
+            return "assets/unit/pea/shelf_C.png";
+          case 4:
+            return "assets/unit/pea/shelf_D.png";
+          case 5:
+            return "assets/unit/pea/shelf_E.png";
+          case 6:
+            return "assets/unit/pea/shelf_F.png";
+          default:
+            return "";
+        }
+      }
     },
     dna: {
       title: "Explore: DNA",

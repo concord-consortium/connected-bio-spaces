@@ -25,7 +25,7 @@ const dataColors = {
 };
 
 const chartNames = {
-  color: "Fur Color vs Time",
+  color: "Fur Colors vs Time",
   genotype: "Genotypes vs Time",
   alleles: "Alleles vs Time"
 };

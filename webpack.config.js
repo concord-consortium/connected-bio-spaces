@@ -83,6 +83,14 @@ module.exports = (env, argv) => {
         filename: 'index.html',
         template: 'src/index.html'
       }),
+      new HtmlWebpackPlugin({
+        filename: 'mice-authoring.html',
+        template: 'src/mice-authoring.html'
+      }),
+      new HtmlWebpackPlugin({
+        filename: 'peas-authoring.html',
+        template: 'src/peas-authoring.html'
+      }),
       new CopyWebpackPlugin([
         {from: 'src/public'}
       ]),
